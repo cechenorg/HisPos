@@ -81,6 +81,8 @@
                             BorderBrush="Transparent" FontFamily="Segoe UI SemiBold"></Button>
                     <Button Margin="5,5,0,0" Content="設定目標" Background="DarkGray" Command="{Binding MonthlyTargetSettingCommand}"
                             BorderBrush="Transparent" FontFamily="Segoe UI SemiBold" />
+                    <TextBlock Text="資料查詢時間: " Margin="20,0,0,0"/>
+                    <TextBlock Text="{Binding SearchTime, StringFormat=yyyy/MM/dd HH:mm:ss}"/>
                 </StackPanel>
                 <clossingCashSelect:ClosingCashDataGrid Grid.Row="1" Grid.Column="0" Title="慢箋張數" Source="{Binding PrescriptionCountList}"
                         Margin="10,0,5,5" />

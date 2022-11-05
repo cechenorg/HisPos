@@ -46,6 +46,16 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
         }
 
+        private DateTime searchTime;
+        public DateTime SearchTime
+        {
+            get => searchTime;
+            set
+            {
+                Set(() => SearchTime, ref searchTime, value);
+            }
+        }
+
         private DateTime startDate = DateTime.Today;
 
         public DateTime StartDate
@@ -224,6 +234,8 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                     OrderRecordListByPercent(_prescriptionCountList, tempPrescriptionCountList);
                     OrderRecordListByPercent(_otcProfitList, tempOtcProfitList);
                     OrderRecordListByPercent(_otcTurnoverList, tempOtcTurnoverList);
+
+                    SearchTime = DateTime.Now;
                 });
             };
 
