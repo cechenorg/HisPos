@@ -20,5 +20,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 Add(indexReserve);
             }
         }
+
+        
     }
 }

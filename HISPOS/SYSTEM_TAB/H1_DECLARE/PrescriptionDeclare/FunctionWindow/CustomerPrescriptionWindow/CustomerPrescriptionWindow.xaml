@@ -192,7 +192,10 @@
             </DataGrid>
         </DataTemplate>
         <DataTemplate x:Key="ReserveGrid" DataType="{x:Type local:CustomerPrescriptionViewModel}">
-            <DataGrid Margin="0,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" ItemsSource="{Binding ChronicReservePres, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPrescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Hidden">
+            <DataGrid Margin="0,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False"
+                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden"
+                      ItemsSource="{Binding ChronicReservePres, UpdateSourceTrigger=PropertyChanged}" 
+                      SelectedItem="{Binding SelectedPrescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Hidden">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding PrescriptionSelected}" />
@@ -253,17 +256,17 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                        <ContentControl Margin="10,2,0,0" Content="{Binding}">
+                                        <ContentControl Margin="10,2,0,0" Content="{Binding UpdateSourceTrigger=PropertyChanged}">
                                             <ContentControl.Style>
                                                 <Style TargetType="{x:Type ContentControl}">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="未處理">
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="未處理">
                                                             <Setter Property="ContentTemplate" Value="{StaticResource LabelNotSend}" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="已備藥">
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="已備藥">
                                                             <Setter Property="ContentTemplate" Value="{StaticResource LabelIsSend}" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="不備藥">
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="不備藥">
                                                             <Setter Property="ContentTemplate" Value="{StaticResource LabelNotPrepare}" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -271,6 +274,7 @@
                                             </ContentControl.Style>
                                         </ContentControl>
                                         <Label VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding OrderID}" FontSize="16" />
+                                        <Button Content="預約" Command="{Binding DataContext.SetReservePrepareCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }"></Button>
                                     </StackPanel>
                                     <StackPanel Grid.Row="1" Margin="0,0,0,5" Orientation="Horizontal">
                                         <Label Width="245" VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding Institution.Name}" FontSize="18" />

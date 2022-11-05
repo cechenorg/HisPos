@@ -3,6 +3,7 @@ using His_Pos.SYSTEM_TAB.INDEX;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace His_Pos.NewClass.Prescription.IndexReserve
@@ -15,6 +16,18 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[IndexReserveByDate]", parameterList);
+        }
+
+        public static IndexReserve GetDataByID(int resID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ResID", resID);
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[IndexReserveByID]", parameterList);
+
+            if (table.Rows.Count == 1)
+                return new IndexReserve(table.Rows[0]);
+
+            return null;
         }
 
         public static DataTable Save(int Id, string PhoneCallStatus, IndexPrepareMedType prepareMedStatus, string stoOrdID)

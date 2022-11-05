@@ -8,11 +8,19 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 {
     public class ChronicPreview : CusPrePreviewBase
     {
-        private int ID { get; set; }
+        public int ID { get; }
         public PrescriptionType Type { get; }
         public int ChronicSeq { get; }
         public int ChronicTotal { get; }
-        public string IsSend { get; }
+
+        private string _isSend;
+        public string IsSend { 
+            get => _isSend;
+            set
+            {
+                Set(IsSend, ref _isSend, value);
+            }
+        }
         public string OrderID { get; }
 
         public ChronicPreview(DataRow r, PrescriptionType type) : base(r)
@@ -70,6 +78,14 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             }
         }
 
+        public void SwichPrepareMed()
+        {
+            if (IsSend == "未處理")
+                IsSend = "不備藥";
+            else if (IsSend == "不備藥")
+                IsSend = "未處理";
+        }
+       
         public override void Print(bool manualPrint = false)
         {
             throw new NotImplementedException();
