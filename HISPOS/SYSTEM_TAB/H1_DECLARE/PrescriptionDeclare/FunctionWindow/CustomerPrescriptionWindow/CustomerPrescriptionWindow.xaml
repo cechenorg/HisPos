@@ -274,7 +274,7 @@
                                             </ContentControl.Style>
                                         </ContentControl>
                                         <Label VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding OrderID}" FontSize="16" />
-                                        <Button Content="預約" Command="{Binding DataContext.SetReservePrepareCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }"></Button>
+                                        <!--<Button Content="預約" Command="{Binding DataContext.SetReservePrepareCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }"></Button>-->
                                     </StackPanel>
                                     <StackPanel Grid.Row="1" Margin="0,0,0,5" Orientation="Horizontal">
                                         <Label Width="245" VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding Institution.Name}" FontSize="18" />
