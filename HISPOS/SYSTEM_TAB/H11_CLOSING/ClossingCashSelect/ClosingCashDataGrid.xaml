@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect.ClosingCashDataGrid"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect" mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ClosingCashDataGrid}">
+    <Grid Name="MyGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="{Binding Title}"/>
+        <DataGrid Grid.Row="1" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False"
+                CanUserResizeRows="False" CanUserSortColumns="False" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}"
+                ItemsSource="{Binding Source}">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Right" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+                    <Setter Property="FontSize" Value="18" />
+                    <Setter Property="Margin" Value="5,10,5,10" />
+                    <Setter Property="LayoutTransform">
+                        <Setter.Value>
+                            <TransformGroup>
+                                <RotateTransform Angle="90" />
+                            </TransformGroup>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="Foreground" Value="#FF424040" />
+                    <Setter Property="VerticalAlignment" Value="Bottom" />
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="LayoutTransform">
+                        <Setter.Value>
+                            <TransformGroup>
+                                <RotateTransform Angle="90" />
+                            </TransformGroup>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.LayoutTransform>
+                <TransformGroup>
+                    <RotateTransform Angle="-90" />
+                </TransformGroup>
+            </DataGrid.LayoutTransform>
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="Width" Value="100" />
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="15" />
+                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="15" />
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FontSize" Value="15" />
+                    <Setter Property="Height" Value="90" />
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="達成率(%)" Binding="{Binding Percent, StringFormat=P1}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="實際" Binding="{Binding Actual, StringFormat={}{0:#\,0}}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="目標" Binding="{Binding Target, StringFormat={}{0:#\,0}}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="藥局名稱" Binding="{Binding Name}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="排名" Binding="{Binding Order}" IsReadOnly="True" Foreground="Red"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

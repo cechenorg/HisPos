@@ -154,8 +154,11 @@ namespace His_Pos.Database
             return table;
         }
 
-        public DataSet ExecuteProcReturnDataSet(string procName, List<SqlParameter> parameterList = null)
+        public DataSet ExecuteProcReturnDataSet(string procName, List<SqlParameter> parameterList = null, string schema = "")
         {
+            if (string.IsNullOrWhiteSpace(schema))
+                schema = Properties.Settings.Default.SystemSerialNumber;
+
             while (isBusy)
                 Thread.Sleep(500);
 
@@ -164,7 +167,7 @@ namespace His_Pos.Database
             DataSet dataSet = new DataSet();
             try
             {
-                SqlCommand myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." + procName, connection);
+                SqlCommand myCommand = new SqlCommand("[" + schema + "]." + procName, connection);
 
                 myCommand.CommandType = CommandType.StoredProcedure;
                 myCommand.CommandTimeout = 120;

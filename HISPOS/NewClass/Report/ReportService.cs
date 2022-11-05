@@ -18,14 +18,13 @@ namespace His_Pos.NewClass.Report
     public class ReportService
     {
 
-        public static DataSet TodayCashStockEntryReport(DateTime startDAte, DateTime endDate)
+        public static DataSet TodayCashStockEntryReport(string schema, DateTime startDAte, DateTime endDate)
         {
-
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", startDAte);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", endDate);
-            var result = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList);
+            var result = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList, schema:schema);
             MainWindow.ServerConnection.CloseConnection();
 
             return result;

@@ -407,10 +407,8 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             MedTotalMeduse = NormalMeduse + PaySelfMeduse + SlowMeduse + CoopMeduse;
             MedTotalChange = NormalChange + PaySelfChange + SlowChange + CoopChange;
             
-
             MedTotalProfit = (decimal)(MedTotalIncome + 
                                        MedTotalMeduse + (double)MedTotalChange + StockTakingDetailReportSum.Price );
-
         }
 
         public void SumPrescriptionDetail(PrescriptionDetailReports prescriptionDetailReports )

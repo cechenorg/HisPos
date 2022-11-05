@@ -43,6 +43,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
     public class NewTodayCashStockEntryReportViewModel : TabBase
     {
         #region Variables
+        public readonly string schema;
 
         public override TabBase getTab()
         {
@@ -1587,7 +1588,31 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand<ReportDetailType> ViewReportDetailCommand { get; set; }
         #endregion Command
 
+        public NewTodayCashStockEntryReportViewModel(DateTime startDate, DateTime endDate, string schema)
+        {
+            InitCommands();
+
+            StartDate = startDate;
+            EndDate = endDate;
+
+            if (schema == string.Empty)
+                this.schema = Properties.Settings.Default.SystemSerialNumber;
+            else
+                this.schema = schema;
+
+            GetData();
+        }
+
         public NewTodayCashStockEntryReportViewModel()
+        {
+            schema = Properties.Settings.Default.SystemSerialNumber;
+
+            InitCommands();
+
+            GetData();
+        }
+
+        private void InitCommands()
         {
             SearchCommand = new RelayCommand(GetData);
 
@@ -1597,8 +1622,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             SelfSlowPrescriptionSelectionChangedCommand = new RelayCommand(SelfSlowPrescriptionSelectionChangedAction);
             SelfSelfPrescriptionSelectionChangedCommand = new RelayCommand(SelfSelfPrescriptionSelectionChangedAction);
             CooperativePrescriptionSelectionChangedCommand = new RelayCommand(CooperativePrescriptionSelectionChangedAction);
-
-
 
             CashDetailClickCommand = new RelayCommand(CashDetailClickAction);
 
@@ -1619,7 +1642,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             TradeProfitReportSelectionChangedCommand = new RelayCommand(TradeProfitReportSelectionChangedAction);
             TradeProfitIcomeReportSelectionChangedCommand = new RelayCommand(TradeProfitIncomeReportSelectionChangedAction);
-            TradeProfitCostCostReportSelectionChangedCommand = new RelayCommand(TradeProfitCostCostReportSelectionChangedAction);
+            TradeProfitCostCostReportSelectionChangedCommand =
+                new RelayCommand(TradeProfitCostCostReportSelectionChangedAction);
             TradeProfitAllReportSelectionChangedCommand = new RelayCommand(TradeProfitAllReportSelectionChangedAction);
             TradeProfitTicketReportSelectionChangedCommand = new RelayCommand(TradeProfitTicketReportSelectionChangedAction);
 
@@ -1635,12 +1659,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             RewardExcelCommand = new RelayCommand(RewardExcelAction);
             PrintTradeProfitDetailCommand = new RelayCommand(PrintTradeProfitDetailAction);
             ViewReportDetailCommand = new RelayCommand<ReportDetailType>(ViewReportDetailAction);
-            GetData();
         }
 
         private void ViewReportDetailAction(ReportDetailType type)
         {
-
             _currentDetailType = type;
             switch (type)
             {
@@ -2410,7 +2432,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             BusyContent = "報表查詢中";
 
-            Ds = ReportService.TodayCashStockEntryReport(StartDate, EndDate);
+            Ds = ReportService.TodayCashStockEntryReport(schema, StartDate, EndDate);
 
             PrescriptionAllDataTable = new DataTable();
             PrescriptionAllDataTable.Merge(Ds.Tables[0]);
