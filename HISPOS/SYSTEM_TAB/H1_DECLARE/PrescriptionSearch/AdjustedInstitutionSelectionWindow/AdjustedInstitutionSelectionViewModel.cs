@@ -116,6 +116,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
         {
             _window = window;
 
+            adjustedInstitutions.IsNeedReSearch = false;
             OriginInstitutions = adjustedInstitutions;
             Institutions = adjustedInstitutions.DeepCloneViaJson();
             InsCollectionViewSource = new CollectionViewSource { Source = Institutions };

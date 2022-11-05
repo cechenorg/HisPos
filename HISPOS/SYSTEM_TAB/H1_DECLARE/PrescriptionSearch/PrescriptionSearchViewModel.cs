@@ -697,6 +697,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void FilterAdjustedInstitutionAction()
         {
+            
             var insFilter = new AdjustedInstitutionSelectionWindow.AdjustedInstitutionSelectionWindow(Institutions );
             var selectCount = Institutions.Count(i => i.Selected);
             if (selectCount <= 3)
