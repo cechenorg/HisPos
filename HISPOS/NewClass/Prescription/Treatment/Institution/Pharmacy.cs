@@ -1,5 +1,7 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Dapper;
+using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Database;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Pharmacy;
 using System;
@@ -177,6 +179,22 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
                 TAXNUM= TAXNUM
             };
             return clone;
+        }
+
+        internal static DateTime GetClosingDate()
+        {
+            DateTime result = new DateTime();
+            try
+            {
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    result = conn.QueryFirst<DateTime>(string.Format("Select Isnull(CurPha_ClosingDate, GETDATE()) As CurPha_ClosingDate From [{0}].[SystemInfo].[CurrentPharmacy]",
+                        Properties.Settings.Default.SystemSerialNumber),
+                         commandType: CommandType.Text);
+                });
+            }
+            catch { }
+            return result;
         }
     }
 }

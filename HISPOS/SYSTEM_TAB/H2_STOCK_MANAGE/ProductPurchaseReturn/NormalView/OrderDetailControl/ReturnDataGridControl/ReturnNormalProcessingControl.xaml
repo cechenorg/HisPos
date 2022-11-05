@@ -382,6 +382,7 @@
                 Width="120"
                 Background="DimGray"
                 BorderThickness="0"
+                IsEnabled="{Binding IsClosed}"
                 Command="{Binding DeleteOrderCommand}"
                 Content="{Binding BtnScrapContent}"
                 FontFamily="Segoe UI Semibold"

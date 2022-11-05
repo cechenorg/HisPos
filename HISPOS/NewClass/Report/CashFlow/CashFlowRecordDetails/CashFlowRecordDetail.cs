@@ -20,8 +20,8 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
             CashFlowValue = decimal.ToInt32(r.Field<decimal>("CashFlow_Value"));
             Date = r.Field<DateTime>("CashFlow_Time");
             EmpName = r.Field<string>("Emp_Name");
-            CanEdit = ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff;
-            CanDelete = DateTime.Compare(Date, DateTime.Today) >= 0 || ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff;
+            CanEdit = (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff) && DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), Date) < 0;
+            CanDelete = (DateTime.Compare(Date, DateTime.Today) >= 0 || ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff) && DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), Date) < 0;
             Bank = r.Field<string>("BANK");
         }
 

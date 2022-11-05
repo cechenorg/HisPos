@@ -51,6 +51,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             InitializeComponent();
             DataContext = this;
             InitView();
+            dpStrikeDate.DisplayDateStart = ViewModelMainWindow.ClosingDate.AddDays(1);
         }
 
         private void InitView()

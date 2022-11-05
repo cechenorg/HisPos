@@ -439,7 +439,14 @@
                     Margin="5,0,0,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
-                    FontSize="18"/>
+                    Focusable="False"
+                    FontSize="18">
+                    <DatePicker.Resources>
+                        <Style TargetType="DatePickerTextBox">
+                            <Setter Property="IsReadOnly" Value="True"/>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
                 <Button
                     x:Name="btnBatchStrike"
                     Width="140"

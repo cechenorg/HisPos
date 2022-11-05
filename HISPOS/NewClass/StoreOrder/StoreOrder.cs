@@ -158,11 +158,6 @@ namespace His_Pos.NewClass.StoreOrder
                 IsCanDelete = true;
             //else
             //    IsCanDelete = false;
-            List<Authority> IsScrapAuthority = new List<Authority>() {Authority.Admin, Authority.AccountingStaff};
-            if (OrderStatus != OrderStatusEnum.SCRAP && IsScrapAuthority.Contains(auth))
-                IsScrap = true;
-            else
-                IsScrap = false;
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
@@ -173,7 +168,7 @@ namespace His_Pos.NewClass.StoreOrder
             initProductCount = row.Field<int>("ProductCount");
             OrderTypeIsOTC = row.Field<string>("StoOrd_IsOTCType");
             OrderIsPayCash = row.Field<bool>("StoOrd_IsPayCash") ? "下貨付現" : "一般收貨";
-            if(row.Table.Columns.Contains("StoOrd_ModifyUser"))
+            if (row.Table.Columns.Contains("StoOrd_ModifyUser"))
             {
                 if(!DBNull.Value.Equals(row["StoOrd_ModifyUser"]))
                     ModifyUser = row.Field<string>("StoOrd_ModifyUser");
@@ -202,7 +197,7 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     IsEnableVoid = "Hidden";
                 }
-                if (ID.Substring(0, 1) == "R" && (OrderStatus== OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
+                if (ID.Substring(0, 1) == "R" && (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
                 {
                     IsCanDelete = true;
                     Visibility = "Visibility";
@@ -212,6 +207,13 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 PrescriptionID = Convert.ToString(row["StoOrd_PrescriptionID"]);
             }
+            List<Authority> IsScrapAuthority = new List<Authority>() { Authority.Admin, Authority.AccountingStaff };
+
+            DateTime dt = ViewModelMainWindow.ClosingDate.AddDays(1);
+            if (OrderStatus != OrderStatusEnum.SCRAP && IsScrapAuthority.Contains(auth) && DateTime.Compare(dt, DoneDateTime is null ? DateTime.Today : (DateTime)DoneDateTime) < 0)
+                IsScrap = true;
+            else
+                IsScrap = false;
         }
 
         #region ----- Define Functions -----

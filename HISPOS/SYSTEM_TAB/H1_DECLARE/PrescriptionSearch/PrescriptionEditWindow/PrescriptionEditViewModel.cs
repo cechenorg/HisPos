@@ -36,6 +36,7 @@ using His_Pos.Extention;
 using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 using MedicineVirtual = His_Pos.NewClass.Medicine.Base.MedicineVirtual;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using His_Pos.ChromeTabViewModel;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -116,6 +117,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             set
             {
                 Set(() => IsEdit, ref isEdit, value);
+            }
+        }
+
+        private bool isCanDelete;
+        public bool IsCanDelete
+        {
+            get => isCanDelete;
+            set
+            {
+                Set(() => IsCanDelete, ref isCanDelete, value);
             }
         }
 
@@ -378,6 +389,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             InitPrescription();
             SelectedDetail = EditedPrescription.Patient.Name.Equals("匿名") ? "Option2" : "Option1";
             Messenger.Default.Register<NotificationMessage>("UpdateUsableAmountMessage", UpdateInventories);
+            IsCanDelete = DateTime.Compare(VM.ClosingDate.AddDays(1), (DateTime)EditedPrescription.AdjustDate) < 0;
         }
 
         private void UpdateInventories(NotificationMessage msg)
@@ -478,7 +490,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void DataChangedAction()
         {
-            IsEdit = true;
+            IsEdit = DateTime.Compare(VM.ClosingDate.AddDays(1), (DateTime)EditedPrescription.AdjustDate) < 0;
         }
 
         private void MakeUpAction()
@@ -800,6 +812,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void DeleteAction()
         {
+            if(DateTime.Compare((DateTime)EditedPrescription.AdjustDate, VM.ClosingDate.AddDays(1)) < 0)
+            {
+                MessageWindow.ShowMessage(string.Format("關帳日:{0}，禁止刪除處方", VM.ClosingDate.ToString("yyyy/MM/dd")), MessageType.ERROR);
+                return;
+            }
             ConfirmWindow deleteConfirm = new ConfirmWindow("確定刪除此處方?", "刪除確認");
             var delete = deleteConfirm.DialogResult;
             if ((bool)delete)

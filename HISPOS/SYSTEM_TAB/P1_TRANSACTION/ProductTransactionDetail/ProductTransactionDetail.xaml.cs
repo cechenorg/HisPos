@@ -76,11 +76,23 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             btnSubmit.IsEnabled = false;
             lblChanged.Content = "未修改";
             lblChanged.Foreground = Brushes.Black;
+
+            DateTime dt = new DateTime();
+            if (!string.IsNullOrEmpty(lblTradeTime.Content.ToString()))
+            {
+                dt = DateTime.Parse(lblTradeTime.Content.ToString());
+            }
             Authority userAuthority = ViewModelMainWindow.CurrentUser.Authority;
-            if(userAuthority == Authority.Admin)
+            if(userAuthority == Authority.Admin && DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), dt) < 0 )
+            {
                 btnDelete.IsEnabled = true;
+                btnReturn.IsEnabled = true;
+            } 
             else
+            {
                 btnDelete.IsEnabled = false;
+                btnReturn.IsEnabled = false;
+            }
         }
 
         private void GetEmployeeList()
@@ -309,9 +321,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
         private void tb_TextChanged(object sender, TextChangedEventArgs e)
         {
-            btnSubmit.IsEnabled = true;
-            lblChanged.Content = "已修改";
-            lblChanged.Foreground = Brushes.Red;
+            DateTime dt = new DateTime();
+            if(!string.IsNullOrEmpty(lblTradeTime.Content.ToString()))
+            {
+                dt = DateTime.Parse(lblTradeTime.Content.ToString());
+            }
+            if(DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), dt) < 0)
+            {
+                btnSubmit.IsEnabled = true;
+                lblChanged.Content = "已修改";
+                lblChanged.Foreground = Brushes.Red;
+            }
         }
 
         private void cbCashier_DropDownClosed(object sender, System.EventArgs e)
@@ -372,19 +392,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
                 cusID = CurrentPrescription.Patient.ID.ToString();
 
-                MainWindow.ServerConnection.OpenConnection();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("Cus_Id", int.Parse(cusID)));
-                DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCusId]", parameters);
-                MainWindow.ServerConnection.CloseConnection();
-                if (result.Rows.Count > 0)
-                {
-                    tbCusName.Text = result.Rows[0]["Person_Name"].ToString();
-                    MainWindow.ServerConnection.CloseConnection();
-                    btnSubmit.IsEnabled = true;
-                    lblChanged.Content = "已修改";
-                    lblChanged.Foreground = Brushes.Red;
-                }
+                //MainWindow.ServerConnection.OpenConnection();
+                //List<SqlParameter> parameters = new List<SqlParameter>();
+                //parameters.Add(new SqlParameter("Cus_Id", int.Parse(cusID)));
+                //DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCusId]", parameters);
+                //MainWindow.ServerConnection.CloseConnection();
+                //if (result.Rows.Count > 0)
+                //{
+                tbCusName.Text = CurrentPrescription.Patient.Name;//result.Rows[0]["Person_Name"].ToString();
+                    //MainWindow.ServerConnection.CloseConnection();
+                btnSubmit.IsEnabled = true;
+                lblChanged.Content = "已修改";
+                lblChanged.Foreground = Brushes.Red;
+                //}
             }
         }
 

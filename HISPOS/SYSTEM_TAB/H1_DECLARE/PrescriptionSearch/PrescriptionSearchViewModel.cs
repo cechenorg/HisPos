@@ -697,7 +697,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void FilterAdjustedInstitutionAction()
         {
-            var insFilter = new AdjustedInstitutionSelectionWindow.AdjustedInstitutionSelectionWindow(Institutions);
+            var insFilter = new AdjustedInstitutionSelectionWindow.AdjustedInstitutionSelectionWindow(Institutions );
             var selectCount = Institutions.Count(i => i.Selected);
             if (selectCount <= 3)
             {
@@ -711,6 +711,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
             }
+
+            if(Institutions.IsNeedReSearch)
+                SearchAction();
         }
 
         private void ShowPrescriptionEditAction()

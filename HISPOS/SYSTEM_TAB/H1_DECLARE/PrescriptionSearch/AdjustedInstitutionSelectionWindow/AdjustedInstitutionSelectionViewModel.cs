@@ -103,6 +103,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
             get => "已選 " + Institutions.Count(i => i.Selected) + " 間";
         }
         private Window _window;
+
+        public bool IsNeedResearch { get; set; }
         public RelayCommand<string> FocusUpDownCommand { get; set; }
         public RelayCommand SelectAll { get; set; }
         public RelayCommand CancelSelectAll { get; set; }
@@ -135,6 +137,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
                 OriginInstitutions[i].Selected = Institutions.Single(_ => _.ID == OriginInstitutions[i].ID).Selected;
             }
 
+            OriginInstitutions.IsNeedReSearch = true;
             _window.Close();
         }
 

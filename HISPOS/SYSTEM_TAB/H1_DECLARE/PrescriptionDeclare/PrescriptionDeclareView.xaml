@@ -148,7 +148,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="8,0,8,0" Orientation="Horizontal">
                     <Label Content="調劑日期" Style="{StaticResource BoldLabelContent18}" />
-                    <xctk:MaskedTextBox x:Name="AdjustDateTextBox" Width="170" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" CaretBrush="Black" FontSize="16" Foreground="{StaticResource ForeGround}" GotFocus="DateControl_GotFocus" InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00" PreviewKeyDown="AdjustDate_PreviewKeyDown" PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" ValueDataType="{x:Type xctk:DateTimeFormat}">
+                    <xctk:MaskedTextBox x:Name="AdjustDateTextBox" Width="170" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" CaretBrush="Black" FontSize="16" Foreground="{StaticResource ForeGround}" GotFocus="DateControl_GotFocus" InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00" PreviewKeyDown="AdjustDate_PreviewKeyDown" PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" ValueDataType="{x:Type xctk:DateTimeFormat}" LostFocus="AdjustDateTextBox_LostFocus">
                         <Binding Converter="{StaticResource NullableDateConverter}" Mode="TwoWay" NotifyOnValidationError="True" Path="CurrentPrescription.AdjustDate" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
                             <Binding.ValidationRules>
                                 <service:DateValidationRule />

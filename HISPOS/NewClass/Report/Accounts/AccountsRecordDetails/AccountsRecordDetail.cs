@@ -22,8 +22,8 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
             Date = r.Field<DateTime>("CashFlow_Time");
             InsertDate = r.Field<DateTime>("Insert_Time");
             EmpName = r.Field<string>("Emp_Name");
-            CanEdit = ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff;
-            CanDelete = ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff; ;
+            CanEdit = (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff) && DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), Date) < 0;
+            CanDelete = (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff) && DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), Date) < 0;
         }
 
         private int id;

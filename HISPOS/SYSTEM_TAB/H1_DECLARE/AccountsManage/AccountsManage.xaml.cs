@@ -1,4 +1,5 @@
-﻿using His_Pos.NewClass.Accounts;
+﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Accounts;
 using His_Pos.NewClass.Report.Accounts;
 using His_Pos.Service;
 using System;
@@ -20,6 +21,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         public AccountsManage()
         {
             InitializeComponent();
+            RecordDate.DisplayDateStart = ViewModelMainWindow.ClosingDate.AddDays(1);
         }
 
         private void StartDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
