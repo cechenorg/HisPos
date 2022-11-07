@@ -737,8 +737,8 @@ namespace His_Pos.NewClass.Prescription.Service
             //var selfcoSendCount = printSendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
             //var selfallSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
 
-            var selfPrepareAmount = printSendData.Sum(_ => _.TreatAmount - _.SendAmount);
-            var sendAmount = printSendData.Sum(_ => _.SendAmount);
+            var selfPrepareAmount = tempPrintSendData.Sum(_ => _.TreatAmount - _.SendAmount);
+            var sendAmount = tempPrintSendData.Sum(_ => _.SendAmount);
 
 
             //有自備也有傳送則列印登錄明細
