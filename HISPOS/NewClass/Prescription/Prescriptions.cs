@@ -48,7 +48,11 @@ namespace His_Pos.NewClass.Prescription
 
             for (int i = seq+1; i <= total; i++)
             {
-                var pre = new Prescription(resTable.Rows[0], PrescriptionType.Normal) { AdjustDate = null };
+                var pre = new Prescription(resTable.Rows[0], PrescriptionType.Normal)
+                {
+                    AdjustDate = null
+                };
+                pre.PrescriptionStatus.Init();
                 pre.TempMedicalNumber = p.TempMedicalNumber;
                 pre.ID = 0;
                 pre.ChronicSeq = i;
