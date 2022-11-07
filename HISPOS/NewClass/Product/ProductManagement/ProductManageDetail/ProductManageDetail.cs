@@ -19,6 +19,11 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
                 EmployeePrice = row.Field<double>("Pro_EmployeePrice");
             if (row.Table.Columns.Contains("Pro_SpecialPrice"))
                 SpecialPrice = row.Field<double>("Pro_SpecialPrice");
+            
+            if(row.Table.Columns.Contains("Pro_IsCommon"))
+                IsCommon = row.Field<bool>("Pro_IsCommon");
+            if (row.Table.Columns.Contains("Pro_IsDeposit"))
+                IsDeposit = row.Field<bool>("Pro_IsDeposit");
         }
 
         public double SingdePackagePrice { get; }
@@ -30,5 +35,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
         public double MemberPrice { get; set; }
         public double EmployeePrice { get; set; }
         public double SpecialPrice { get; set; }
+        public bool IsCommon { get; set; }
+        public bool IsDeposit { get; set; }
     }
 }

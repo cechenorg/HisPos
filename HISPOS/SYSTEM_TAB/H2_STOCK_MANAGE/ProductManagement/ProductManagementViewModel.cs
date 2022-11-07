@@ -82,6 +82,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             set { Set(() => OTCDeposit, ref oTCDeposit, value); }
         }
 
+        private Visibility manDeposit;
+
+        public Visibility ManDeposit
+        {
+            get => manDeposit;
+            set { Set(() => ManDeposit, ref manDeposit, value); }
+        }
+
         public bool IsBusy
         {
             get => isBusy;
@@ -149,6 +157,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         }
 
         public WareHouses WareHouseCollection { get; set; }
+
         public bool HasError = true;
         public double CurrentStockValue => (ProductCollectionView is null) ? 0 : ProductCollectionView.OfType<ProductManageStruct>().Sum(p => p.StockValue);
         public double CurrentShelfStockValue => (ProductCollectionView is null) ? 0 : ProductCollectionView.OfType<ProductManageStruct>().Sum(p => p.ShelfStockValue);
@@ -185,6 +194,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             set { Set(() => OTCStockValue, ref oTCStockValue, value); }
         }
 
+        private double depositShelfStockValue;
+
+        public double DepositShelfStockValue
+        {
+            get { return depositShelfStockValue; }
+            set { Set(() => DepositShelfStockValue, ref depositShelfStockValue, value); }
+        }
+
+        private double depositStockValue;
+
+        public double DepositStockValue
+        {
+            get { return depositStockValue; }
+            set { Set(() => DepositStockValue, ref depositStockValue, value); }
+        }
+
         #endregion ----- Define Variables -----
 
         public ProductManagementViewModel()
@@ -196,6 +221,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             ProductCollectionView = CollectionViewSource.GetDefaultView(SearchProductCollection);
             MEDDeposit = Visibility.Visible;
             OTCDeposit = Visibility.Collapsed;
+            ManDeposit = Visibility.Collapsed;
         }
 
         #region ----- Define Actions -----
@@ -247,8 +273,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
+                    ProductCollectionView.Filter += DepositFilter;
+                }));
+                RaisePropertyChanged(nameof(CurrentStockValue));
+                RaisePropertyChanged(nameof(CurrentShelfStockValue));
+                DepositShelfStockValue = CurrentShelfStockValue;
+                DepositStockValue = CurrentStockValue;
+
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
                     ProductCollectionView.Filter += ProductTitleFilter;
-                    
                 }));
 
                 RaisePropertyChanged(nameof(CurrentStockValue));
@@ -286,6 +320,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 case "M":
                     SearchConditionType = ProductSearchTypeEnum.Medicine;
                     break;
+
+                case "D":
+                    SearchConditionType = ProductSearchTypeEnum.Deposit;
+                    break;
             }
         }
 
@@ -313,13 +351,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             {
                 MEDDeposit = Visibility.Collapsed;
                 OTCDeposit = Visibility.Visible;
-                ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
+                //ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
             }
             else if (filterIsOTC == (ProductManageFilterEnum)9)
             {
                 MEDDeposit = Visibility.Visible;
                 OTCDeposit = Visibility.Collapsed;
-                ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
+                ManDeposit = Visibility.Collapsed;
+                //ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
+            }
+            else if (filterIsOTC == (ProductManageFilterEnum)9)
+            {
+                ManDeposit = Visibility.Visible;
+                MEDDeposit = Visibility.Collapsed;
+                OTCDeposit = Visibility.Collapsed;
+                //ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
             }
             ProductCollectionView.Filter += ProductTitleFilter;
             RaisePropertyChanged(nameof(CurrentStockValue));
@@ -351,18 +397,31 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             {
                 IsOTC = "9";
             }
+            else if (obj == "10")
+            {
+                IsOTC = "10";
+            }
 
             if (filterIsOTC == (ProductManageFilterEnum)8)
             {
                 MEDDeposit = Visibility.Collapsed;
                 OTCDeposit = Visibility.Visible;
-                ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
+                ManDeposit = Visibility.Collapsed;
+                //ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
             }
             else if (filterIsOTC == (ProductManageFilterEnum)9)
             {
                 MEDDeposit = Visibility.Visible;
                 OTCDeposit = Visibility.Collapsed;
-                ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
+                ManDeposit = Visibility.Collapsed;
+                //ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
+            }
+            else if (filterIsOTC == (ProductManageFilterEnum)10)
+            {
+                MEDDeposit = Visibility.Collapsed;
+                OTCDeposit = Visibility.Collapsed;
+                ManDeposit = Visibility.Visible;
+                //ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
             }
             ProductCollectionView.Filter += ProductTitleFilter;
             RaisePropertyChanged(nameof(CurrentStockValue));
@@ -397,13 +456,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private bool MEDFilter(object product)
         {
             var tempProduct = product as ProductManageStruct;
-            return tempProduct.ProductType != (ProductTypeEnum)2;
+            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
         }
 
         private bool OTCFilter(object product)
         {
             var tempProduct = product as ProductManageStruct;
             return tempProduct.ProductType == (ProductTypeEnum)2;
+        }
+        private bool DepositFilter(object product)
+        {
+            var tempProduct = product as ProductManageStruct;
+            return tempProduct.ProductType == (ProductTypeEnum)4;
         }
 
         private bool ProductTitleFilter(object product)
@@ -417,28 +481,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -470,6 +534,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
                     }
                 }
+                else if(filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0;
+                    }
+                }
                 return tempProduct.IsEnable == true && tempProduct.Inventory != 0;
             }
             else if (SearchIsEnable == true && SearchIsInventoryZero == false && SearchIsSingdeInventory == false && SearchHasOnWay == false)
@@ -479,28 +572,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -532,6 +625,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.Inventory != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0;
+                    }
+                }
                 return tempProduct.Inventory != 0;
             }
             else if (SearchIsEnable == true && SearchIsInventoryZero == true && SearchIsSingdeInventory == false && SearchHasOnWay == false)
@@ -541,28 +663,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -594,6 +716,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 ;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4;
+                    }
+                }
                 return true;
             }
             else if (SearchIsEnable == true && SearchIsInventoryZero == true && SearchIsSingdeInventory == true && SearchHasOnWay == false)
@@ -603,28 +754,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.SINGINV != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.SINGINV != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.SINGINV != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.SINGINV != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.SINGINV != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -656,6 +807,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.SINGINV != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.SINGINV != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.SINGINV != 0;
+                    }
+                }
                 return tempProduct.SINGINV != 0;
             }
             else if (SearchIsEnable == true && SearchIsInventoryZero == true && SearchIsSingdeInventory == true && SearchHasOnWay == true)
@@ -665,28 +845,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -718,6 +898,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                    }
+                }
                 return tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
             }
             else if (SearchIsEnable == false && SearchIsInventoryZero == true && SearchIsSingdeInventory == false && SearchHasOnWay == false)
@@ -727,28 +936,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -780,6 +989,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.IsEnable == true;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true;
+                    }
+                }
                 return tempProduct.IsEnable == true;
             }
             else if (SearchIsEnable == false && SearchIsInventoryZero == true && SearchIsSingdeInventory == true && SearchHasOnWay == false)
@@ -789,28 +1027,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -842,6 +1080,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                    }
+                }
                 return tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
             }
             else if (SearchIsEnable == false && SearchIsInventoryZero == true && SearchIsSingdeInventory == true && SearchHasOnWay == true)
@@ -851,28 +1118,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -904,6 +1171,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                    }
+                }
                 return tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
             }
             else if (SearchIsEnable == false && SearchIsInventoryZero == false && SearchIsSingdeInventory == true && SearchHasOnWay == false)
@@ -913,28 +1209,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -966,6 +1262,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                    }
+                }
                 return tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
             }
             else if (SearchIsEnable == false && SearchIsInventoryZero == false && SearchIsSingdeInventory == true && SearchHasOnWay == true)
@@ -975,28 +1300,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -1028,6 +1353,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                    }
+                }
                 return tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
             }
             else if (SearchIsEnable == true && SearchIsInventoryZero == false && SearchIsSingdeInventory == true && SearchHasOnWay == false)
@@ -1037,28 +1391,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -1090,6 +1444,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                    }
+                }
                 return tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
             }
             else if (SearchIsEnable == true && SearchIsInventoryZero == false && SearchIsSingdeInventory == false && SearchHasOnWay == true)
@@ -1099,28 +1482,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -1152,6 +1535,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                    }
+                }
                 return tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
             }
             else if (SearchIsEnable == false && SearchIsInventoryZero == true && SearchIsSingdeInventory == true && SearchHasOnWay == false)
@@ -1161,28 +1573,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -1214,6 +1626,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
+                    }
+                }
                 return tempProduct.IsEnable == true && tempProduct.SINGINV != 0;
             }
             else if (SearchIsEnable == false && SearchIsInventoryZero == true && SearchIsSingdeInventory == true && SearchHasOnWay == true)
@@ -1223,28 +1664,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -1276,6 +1717,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
+                    }
+                }
                 return tempProduct.IsEnable == true && tempProduct.SINGINV != 0 && tempProduct.AllOnTheWayAmount != 0;
             }
             else if (SearchIsEnable == false && SearchIsInventoryZero == false && SearchIsSingdeInventory == true && SearchHasOnWay == false)
@@ -1285,28 +1755,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -1338,6 +1808,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
+                    }
+                }
                 return tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.SINGINV != 0;
             }
             else if (SearchIsEnable == false && SearchIsInventoryZero == false && SearchIsSingdeInventory == false && SearchHasOnWay == true)
@@ -1347,28 +1846,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     switch (filterType)
                     {
                         case ProductManageFilterEnum.Medicine:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.COMMON:
-                            return tempProduct.IsCommon && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.CONTROL:
-                            return tempProduct.ControlLevel != null && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.FROZE:
-                            return tempProduct.IsFrozen && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.DISABLE:
-                            return !tempProduct.IsEnable && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.INV_ERROR:
-                            return tempProduct.InventoryError && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         case ProductManageFilterEnum.ZERO:
-                            return tempProduct.IsZero == 0 && tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
 
                         default:
-                            return tempProduct.ProductType != (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                            return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3) && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
                 else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -1400,6 +1899,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                             return tempProduct.ProductType == (ProductTypeEnum)2 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
                     }
                 }
+                else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.DepositMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)4 && tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
+                    }
+                }
                 return tempProduct.IsEnable == true && tempProduct.Inventory != 0 && tempProduct.AllOnTheWayAmount != 0;
             }
             else
@@ -1416,28 +1944,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 switch (filterType)
                 {
                     case ProductManageFilterEnum.Medicine:
-                        return tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3;
 
                     case ProductManageFilterEnum.COMMON:
-                        return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     case ProductManageFilterEnum.CONTROL:
-                        return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     case ProductManageFilterEnum.FROZE:
-                        return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     case ProductManageFilterEnum.DISABLE:
-                        return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     case ProductManageFilterEnum.INV_ERROR:
-                        return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     case ProductManageFilterEnum.ZERO:
-                        return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     default:
-                        return tempProduct.ProductType != (ProductTypeEnum)2;
+                        return tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3;
                 }
             }
             else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -1469,7 +1997,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                         return tempProduct.ProductType == (ProductTypeEnum)2;
                 }
             }
+            else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+            {
+                switch (filterType)
+                {
+                    case ProductManageFilterEnum.DepositMedicine:
+                        return tempProduct.ProductType == (ProductTypeEnum)4;
 
+                    case ProductManageFilterEnum.COMMON:
+                        return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    case ProductManageFilterEnum.CONTROL:
+                        return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    case ProductManageFilterEnum.FROZE:
+                        return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    case ProductManageFilterEnum.DISABLE:
+                        return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    case ProductManageFilterEnum.INV_ERROR:
+                        return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    case ProductManageFilterEnum.ZERO:
+                        return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    default:
+                        return tempProduct.ProductType == (ProductTypeEnum)4;
+                }
+            }
             return false;
         }
 
@@ -1481,28 +2037,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 switch (filterType)
                 {
                     case ProductManageFilterEnum.Medicine:
-                        return tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3;
 
                     case ProductManageFilterEnum.COMMON:
-                        return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.IsCommon && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     case ProductManageFilterEnum.CONTROL:
-                        return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.ControlLevel != null && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     case ProductManageFilterEnum.FROZE:
-                        return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.IsFrozen && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     case ProductManageFilterEnum.DISABLE:
-                        return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return !tempProduct.IsEnable && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     case ProductManageFilterEnum.INV_ERROR:
-                        return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.InventoryError && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     case ProductManageFilterEnum.ZERO:
-                        return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)1;
+                        return tempProduct.IsZero == 0 && (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
 
                     default:
-                        return tempProduct.ProductType == (ProductTypeEnum)1;
+                        return (tempProduct.ProductType == (ProductTypeEnum)1 || tempProduct.ProductType == (ProductTypeEnum)3);
                 }
             }
             else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
@@ -1534,7 +2090,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                         return tempProduct.ProductType == (ProductTypeEnum)2;
                 }
             }
+            else if (filterIsOTC == ProductManageFilterEnum.DepositMedicine)
+            {
+                switch (filterType)
+                {
+                    case ProductManageFilterEnum.DepositMedicine:
+                        return tempProduct.ProductType == (ProductTypeEnum)4;
 
+                    case ProductManageFilterEnum.COMMON:
+                        return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    case ProductManageFilterEnum.CONTROL:
+                        return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    case ProductManageFilterEnum.FROZE:
+                        return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    case ProductManageFilterEnum.DISABLE:
+                        return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    case ProductManageFilterEnum.INV_ERROR:
+                        return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    case ProductManageFilterEnum.ZERO:
+                        return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)4;
+
+                    default:
+                        return tempProduct.ProductType == (ProductTypeEnum)4;
+                }
+            }
             return false;
         }
 

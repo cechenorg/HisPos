@@ -344,6 +344,7 @@ namespace His_Pos.NewClass.Medicine.Base
                         break;
 
                     case 2:
+                    case 4:
                         medicine = new MedicineOTC(r);
                         medicine.PaySelf = true;
 

@@ -5,6 +5,6 @@
         NHIMedicine = 1,
         OTCMedicine = 2,
         SpecialMedicine = 3,
-        OTC = 4
+        Deposit = 4
     }
 }

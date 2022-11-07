@@ -52,28 +52,14 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <StackPanel
-                    Grid.Row="0"
-                    Orientation="Horizontal"
-                    Visibility="{Binding MedicineDetail.IsControl, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="26"
-                        Foreground="IndianRed"
-                        Text="管制藥 " />
-                    <TextBlock
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="26"
-                        Foreground="IndianRed"
-                        Text="{Binding MedicineDetail.ControlLevel}" />
-                </StackPanel>
                 <TextBlock
-                    Grid.Row="1"
+                    Margin="60,0,0,0"
+                    Grid.Row="0"
                     FontFamily="Segoe UI Semibold"
                     FontSize="26"
-                    Foreground="RoyalBlue"
-                    Text="冷藏藥"
-                    Visibility="{Binding MedicineDetail.IsFrozen, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Foreground="CornflowerBlue"
+                    Text="寄售"
+                    Visibility="{Binding MedicineDetail.IsDeposit, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="NoMedicineFlag" DataType="{x:Type medicineControl:MedicineControlViewModel}" />
@@ -141,7 +127,7 @@
                         <Style TargetType="{x:Type ContentControl}">
                             <Setter Property="ContentTemplate" Value="{StaticResource NoMedicineFlag}" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ProductType, UpdateSourceTrigger=PropertyChanged}" Value="NHIMedicine">
+                                <DataTrigger Binding="{Binding ProductType, UpdateSourceTrigger=PropertyChanged}" Value="Deposit">
                                     <Setter Property="ContentTemplate" Value="{StaticResource NHIMedicineFlag}" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -199,6 +185,28 @@
                     FontSize="18"
                     Foreground="Black"
                     IsChecked="{Binding Medicine.Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBoolConverter}}" />
+                <Label 
+                    Margin="180,0,0,0"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Content="商品種類"
+                    FontFamily="Segoe UI Semibold"
+                    Foreground="Black"
+                    FontSize="18" />
+                <ComboBox
+                    Width="120"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    SelectedValuePath="ID"
+                    DisplayMemberPath="Name"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    SelectionChanged="ComboBox_SelectionChanged"
+                    IsEnabled="{Binding ManageViewModel.CanEdit}"
+                    ItemsSource="{Binding Medicine.ProductTypeCollection}"
+                    SelectedItem="{Binding Medicine.SelectedProductType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                </ComboBox>
                 <!--<Label Content="條碼" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" />
                 <TextBox Text="{Binding Medicine.BarCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="260" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0">
                     <i:Interaction.Triggers>

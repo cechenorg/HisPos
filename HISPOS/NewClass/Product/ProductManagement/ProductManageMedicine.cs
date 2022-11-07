@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.ProductType;
 using His_Pos.Service;
 using System;
 using System.Data;
@@ -70,6 +71,16 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 }
             }
         }
+        public ProductType.ProductType selectedProductType;
+        public ProductTypes ProductTypeCollection { get; set; }
+        public ProductType.ProductType SelectedProductType
+        {
+            get { return selectedProductType; }
+            set
+            {
+                Set(() => SelectedProductType, ref selectedProductType, value);
+            }
+        }
 
         public bool OTCFromSingde { get; set; }
 
@@ -101,6 +112,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 OTCFromSingde = true;
             }
             OTCMemo = row.Field<string>("OTC_InvMemo");
+            ProductTypeCollection = new ProductTypes(ProductTypeDB.GetProductType());
+            SelectedProductType = ProductTypeCollection[row.Field<int>("Pro_TypeID") - 1];
         }
 
         #region ----- Define Functions -----

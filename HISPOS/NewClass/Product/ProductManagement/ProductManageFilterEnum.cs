@@ -10,6 +10,7 @@
         INV_ERROR = 6,
         ZERO = 7,
         OTCMedicine = 8,
-        Medicine = 9
+        Medicine = 9,
+        DepositMedicine = 10
     }
 }

@@ -39,17 +39,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             btnTrade.Background = Brushes.Transparent;
             btnTrade.Foreground = Brushes.DimGray;
             btnMed.Foreground = Brushes.White;
-            btnMed.Background = Brushes.DimGray;
+            btnMed.Background = Brushes.MediumSeaGreen;
+            btnDeposit.Background = Brushes.Transparent;
+            btnDeposit.Foreground = Brushes.DimGray;
             ConRB.Visibility = Visibility.Visible;
             IceRB.Visibility = Visibility.Visible;
             StopRB.Visibility = Visibility.Visible;
             ZeroRB.Visibility = Visibility.Visible;
-            MedBagAmt.Visibility = Visibility.Visible;
-            ErrorAmt.Visibility = Visibility.Visible;
-            tbMedBagAmt.Visibility = Visibility.Visible;
-            tbErrorAmt.Visibility = Visibility.Visible;
+            //MedBagAmt.Visibility = Visibility.Visible;
+            //ErrorAmt.Visibility = Visibility.Visible;
+            //tbMedBagAmt.Visibility = Visibility.Visible;
+            //tbErrorAmt.Visibility = Visibility.Visible;
             MedGroup.Visibility = Visibility.Visible;
             OTCGroup.Visibility = Visibility.Collapsed;
+            ManGroup.Visibility = Visibility.Collapsed;
         }
 
         private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -57,16 +60,39 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             btnMed.Background = Brushes.Transparent;
             btnMed.Foreground = Brushes.DimGray;
             btnTrade.Foreground = Brushes.White;
-            btnTrade.Background = Brushes.DimGray;
+            btnTrade.Background = Brushes.MediumSeaGreen;
+            btnDeposit.Background = Brushes.Transparent;
+            btnDeposit.Foreground = Brushes.DimGray;
             ConRB.Visibility = Visibility.Collapsed;
             IceRB.Visibility = Visibility.Collapsed;
             ZeroRB.Visibility = Visibility.Collapsed;
-            MedBagAmt.Visibility = Visibility.Visible;
-            ErrorAmt.Visibility = Visibility.Visible;
-            tbMedBagAmt.Visibility = Visibility.Visible;
-            tbErrorAmt.Visibility = Visibility.Visible;
+            //MedBagAmt.Visibility = Visibility.Visible;
+            //ErrorAmt.Visibility = Visibility.Visible;
+            //tbMedBagAmt.Visibility = Visibility.Visible;
+            //tbErrorAmt.Visibility = Visibility.Visible;
             OTCGroup.Visibility = Visibility.Visible;
             MedGroup.Visibility = Visibility.Collapsed;
+            ManGroup.Visibility = Visibility.Collapsed;
+        }
+
+        private void btnDeposit_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            btnMed.Background = Brushes.Transparent;
+            btnMed.Foreground = Brushes.DimGray;
+            btnTrade.Background = Brushes.Transparent;
+            btnTrade.Foreground = Brushes.DimGray;
+            btnDeposit.Foreground = Brushes.White;
+            btnDeposit.Background = Brushes.MediumSeaGreen;
+            ConRB.Visibility = Visibility.Collapsed;
+            IceRB.Visibility = Visibility.Collapsed;
+            ZeroRB.Visibility = Visibility.Collapsed;
+            //MedBagAmt.Visibility = Visibility.Visible;
+            //ErrorAmt.Visibility = Visibility.Visible;
+            //tbMedBagAmt.Visibility = Visibility.Visible;
+            //tbErrorAmt.Visibility = Visibility.Visible;
+            OTCGroup.Visibility = Visibility.Collapsed;
+            MedGroup.Visibility = Visibility.Collapsed;
+            ManGroup.Visibility = Visibility.Visible;
         }
     }
 }

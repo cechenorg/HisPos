@@ -60,6 +60,12 @@ namespace His_Pos.GeneralCustomControl
             set { SetValue(IsDisableProperty, value); }
         }
 
+        public bool IsDeposit
+        {
+            get { return (bool)GetValue(IsDepositProperty); }
+            set { SetValue(IsDepositProperty, value); }
+        }
+
         public static readonly DependencyProperty IsCommonProperty =
             DependencyProperty.Register("IsCommon", typeof(bool), typeof(ProductStatusIcon), new PropertyMetadata(false));
 
@@ -83,6 +89,9 @@ namespace His_Pos.GeneralCustomControl
 
         public static readonly DependencyProperty IsDisableProperty =
             DependencyProperty.Register("IsDisable", typeof(bool), typeof(ProductStatusIcon), new PropertyMetadata(false));
+
+        public static readonly DependencyProperty IsDepositProperty =
+            DependencyProperty.Register("IsDeposit", typeof(bool), typeof(ProductStatusIcon), new PropertyMetadata(false));
 
         private static void OnVariableChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {

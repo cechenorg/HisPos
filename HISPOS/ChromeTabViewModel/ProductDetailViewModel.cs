@@ -162,6 +162,10 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new MedicineControlViewModel(newProduct[0], type, newProduct[1]) { TabName = newProduct[0], Icon = "/Images/BlueDot.png" };
                     break;
 
+                case ProductTypeEnum.Deposit:
+                    newTab = new OTCControlViewModel(newProduct[0], type, newProduct[1]) { TabName = newProduct[0], Icon = "/Images/BlueDot.png" };
+                    break;
+
                 default:
                     return;
             }

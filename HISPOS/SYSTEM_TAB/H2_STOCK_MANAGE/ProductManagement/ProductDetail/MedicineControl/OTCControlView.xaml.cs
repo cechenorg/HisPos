@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.ProductType;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,6 +60,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
         private void Combo_Loc_DropDownClosed(object sender, System.EventArgs e)
         {
 
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox combo = sender as ComboBox;
+            OTCControlViewModel otcControl = (OTCControlViewModel)DataContext;
+
+            int comboID = (combo.SelectedItem is null) ? (int)otcControl.ProductType : ((ProductType)combo.SelectedItem).ID;
+            int otcControlID = (int)otcControl.ProductType;
+
+            if (comboID != otcControlID)
+            {
+                otcControl.IsDataChanged = true;
+            }
         }
     }
 }

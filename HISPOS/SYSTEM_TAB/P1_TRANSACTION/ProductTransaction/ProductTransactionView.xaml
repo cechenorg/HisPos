@@ -333,7 +333,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" />
+                                    <generalCustomControl:ProductStatusIcon 
+                                        IsCommon="{Binding Pro_IsCommon}"
+                                        IsDeposit="{Binding IsDeposit}"/>
                                     <Label x:Name="lblProductName" Width="320" Margin="0,0,20,0" VerticalAlignment="Center" Content="{Binding Path=Pro_ChineseName}" FontFamily="Segoe UI Semibold" FontSize="16" MouseDoubleClick="lblProductName_MouseDoubleClick" />
                                 </StackPanel>
                             </DataTemplate>

@@ -66,6 +66,59 @@
                     TextSearch.TextPath="ID" />
             </StackPanel>
         </DataTemplate>
+        <DataTemplate x:Key="DepositCondition" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
+            <StackPanel
+                Height="50"
+                Margin="0,0,0,10"
+                Background="{StaticResource GridDarkerBackGround}"
+                Orientation="Horizontal">
+                <Label
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="進階搜尋條件"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="{StaticResource ForeGround}" />
+                <Label
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="大類別"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="{StaticResource ForeGround}" />
+                <ComboBox
+                    Width="120"
+                    HorizontalContentAlignment="Center"
+                    DisplayMemberPath="FullName"
+                    FontSize="16"
+                    IsEditable="False"
+                    IsTextSearchEnabled="True"
+                    ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}"
+                    ItemsSource="{Binding Divisions}"
+                    SelectedItem="{Binding CurrentPrescription.Treatment.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    StaysOpenOnEdit="True"
+                    TextSearch.TextPath="ID" />
+                <Label
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="小類別"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="{StaticResource ForeGround}" />
+                <ComboBox
+                    Width="120"
+                    HorizontalContentAlignment="Center"
+                    DisplayMemberPath="FullName"
+                    FontSize="16"
+                    IsEditable="False"
+                    IsTextSearchEnabled="True"
+                    ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}"
+                    ItemsSource="{Binding Divisions}"
+                    SelectedItem="{Binding CurrentPrescription.Treatment.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    StaysOpenOnEdit="True"
+                    TextSearch.TextPath="ID" />
+            </StackPanel>
+        </DataTemplate>
         <DataTemplate x:Key="MedicineCondition" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
             <StackPanel
                 Height="50"
@@ -118,6 +171,9 @@
         <DataTemplate x:Key="MedicineResult" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
             <productTypeResultControl:MedicineResultControl />
         </DataTemplate>
+        <DataTemplate x:Key="DepositResult" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
+            <productTypeResultControl:OTCResultControl />
+        </DataTemplate>
     </UserControl.Resources>
     <xctk:BusyIndicator BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1365" Height="870">
@@ -127,11 +183,10 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="50" />
                 <RowDefinition />
-                <RowDefinition Height="50" />
+                <!--<RowDefinition Height="50" />-->
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
-            <StackPanel
-                Grid.Row="0"
+            <StackPanel Grid.Row="0"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <Label
@@ -245,6 +300,17 @@
                     FontSize="18"
                     GroupName="OrderType"
                     Visibility="Collapsed" />
+                <RadioButton
+                    Margin="15,0,5,0"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Command="{Binding ChangeSearchTypeCommand}"
+                    CommandParameter="D"
+                    Content="寄售"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    GroupName="OrderType"
+                    Visibility="Collapsed" />
                 <Image
                     Width="15"
                     Source="/Images/OrangeDot.png"
@@ -275,16 +341,16 @@
                     FontSize="18"
                     FontWeight="Bold" />
             </StackPanel>
-            <StackPanel
-                Grid.Row="1"
+            <StackPanel Grid.Row="1"
+                Width="1345"
                 Background="{StaticResource GridBackGround}"
                 Orientation="Horizontal">
                 <Button
                     x:Name="btnMed"
-                    Width="670"
+                    Width="442"
                     Height="25"
-                    Margin="10,10,5,5"
-                    Background="DimGray"
+                    Margin="5,0,0,0"
+                    Background="MediumSeaGreen"
                     BorderThickness="0"
                     Command="{Binding IsOTCCommand}"
                     CommandParameter="9"
@@ -294,18 +360,32 @@
                     PreviewMouseDown="btnMed_PreviewMouseDown" />
                 <Button
                     x:Name="btnTrade"
-                    Width="670"
+                    Width="442"
                     Height="25"
-                    Margin="0,10,5,5"
+                    Margin="5,0,5,0"
                     Background="Transparent"
                     BorderThickness="0"
                     Command="{Binding IsOTCCommand}"
                     CommandParameter="8"
-                    Content="OTC"
+                    Content="門市"
                     FontFamily="Segoe UI Semibold"
                     FontSize="13"
                     Foreground="DimGray"
                     PreviewMouseDown="btnTrade_PreviewMouseDown" />
+                <Button
+                    x:Name="btnDeposit"
+                    Width="442"
+                    Height="25"
+                    Margin="0,0,5,0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Command="{Binding IsOTCCommand}"
+                    CommandParameter="10"
+                    Content="寄售"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="13"
+                    Foreground="DimGray"
+                    PreviewMouseDown="btnDeposit_PreviewMouseDown" />
             </StackPanel>
             <ContentControl Grid.Row="2" Content="{Binding}">
                 <ContentControl.Style>
@@ -318,12 +398,14 @@
                             <DataTrigger Binding="{Binding SearchConditionType, UpdateSourceTrigger=PropertyChanged}" Value="OTC">
                                 <Setter Property="ContentTemplate" Value="{StaticResource OTCCondition}" />
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding SearchConditionType, UpdateSourceTrigger=PropertyChanged}" Value="Deposit">
+                                <Setter Property="ContentTemplate" Value="{StaticResource DepositCondition}" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <StackPanel
-                Grid.Row="3"
+            <StackPanel Grid.Row="3"
                 Margin="10,0,10,0"
                 Background="{StaticResource GridBackGround}"
                 Orientation="Horizontal">
@@ -414,12 +496,14 @@
                             <DataTrigger Binding="{Binding SearchType, UpdateSourceTrigger=PropertyChanged}" Value="OTC">
                                 <Setter Property="ContentTemplate" Value="{StaticResource OTCResult}" />
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding SearchType, UpdateSourceTrigger=PropertyChanged}" Value="Deposit">
+                                <Setter Property="ContentTemplate" Value="{StaticResource DepositResult}" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <StackPanel
-                Grid.Row="5"
+            <!--<StackPanel Grid.Row="5"
                 Background="{StaticResource GridBackGround}"
                 Orientation="Horizontal">
                 <Label
@@ -475,7 +559,7 @@
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding MedShelfStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
-                        Margin="20,0,0,0"
+                        Margin="0,0,0,0"
                         VerticalAlignment="Center"
                         Content="藥品庫存淨值  $"
                         FontFamily="Segoe UI Semibold"
@@ -490,10 +574,7 @@
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding MedStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
-                <StackPanel
-                    x:Name="OTCGroup"
-                    Orientation="Horizontal"
-                    Visibility="Collapsed">
+                <StackPanel x:Name="OTCGroup" Orientation="Horizontal" Visibility="Collapsed">
                     <Label
                         Margin="20,0,0,0"
                         VerticalAlignment="Center"
@@ -510,7 +591,7 @@
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding OTCShelfStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
-                        Margin="20,0,0,0"
+                        Margin="0,0,0,0"
                         VerticalAlignment="Center"
                         Content="OTC庫存淨值  $"
                         FontFamily="Segoe UI Semibold"
@@ -524,6 +605,23 @@
                         FontSize="20"
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding OTCStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel x:Name="ManGroup" Orientation="Horizontal" Visibility="Collapsed">
+                    <Label
+                        Margin="0,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="寄庫庫存淨值  $"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="{StaticResource ForeGround}" />
+                    <TextBlock
+                        Width="100"
+                        Margin="0,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="20"
+                        Foreground="{StaticResource ForeGround}"
+                        Text="{Binding DepositStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <Label
                     Margin="0,0,0,0"
@@ -542,9 +640,8 @@
                     Foreground="{StaticResource ForeGround}"
                     Text="{Binding CurrentStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}"
                     Visibility="Collapsed" />
-            </StackPanel>
-            <StackPanel
-                Grid.Row="6"
+            </StackPanel>-->
+            <StackPanel Grid.Row="5"
                 Background="{StaticResource GridBackGround}"
                 Orientation="Horizontal">
                 <Button
@@ -557,8 +654,29 @@
                     Content="新增商品"
                     FontSize="18"
                     FontWeight="Bold" />
-
                 <Label
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="共"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    Foreground="{StaticResource ForeGround}" />
+                <Label
+                    Width="80"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Content="{Binding ProductCollectionView.Count, FallbackValue=0}"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="20"
+                    Foreground="{StaticResource ForeGround}" />
+                <Label
+                    VerticalAlignment="Center"
+                    Content="筆"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    Foreground="{StaticResource ForeGround}" />
+                
+                <!--<Label
                     x:Name="ErrorAmt"
                     Margin="100,0,0,0"
                     VerticalAlignment="Center"
@@ -591,10 +709,10 @@
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
                     Foreground="{StaticResource ForeGround}"
-                    Text="{Binding MedBagStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding MedBagStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />-->
 
                 <!--<Rectangle Width="495" Visibility="{Binding HasError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />-->
-                <Label
+                <!--<Label
                     Margin="60,0,0,0"
                     VerticalAlignment="Center"
                     Content="架上量淨值  $"
@@ -608,9 +726,8 @@
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
                     Foreground="{StaticResource ForeGround}"
-                    Text="{Binding ShelfStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />
-
-                <Label
+                    Text="{Binding ShelfStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />-->
+                <!--<Label
                     x:Name="DepositAmt"
                     Margin="60,0,0,0"
                     VerticalAlignment="Center"
@@ -618,17 +735,67 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
                     Foreground="{StaticResource ForeGround}"
-                    Visibility="Collapsed" />
-
+                    Visibility="Collapsed" />-->
+                <StackPanel x:Name="MedGroup" Orientation="Horizontal">
+                    <Label
+                        Margin="530,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="藥品庫存淨值  $"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="{StaticResource ForeGround}" />
+                    <TextBlock
+                        Width="120"
+                        Margin="0,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="20"
+                        Foreground="{StaticResource ForeGround}"
+                        Text="{Binding MedStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel x:Name="OTCGroup" Orientation="Horizontal" Visibility="Collapsed">
+                    <Label
+                        Margin="530,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="門市庫存淨值  $"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="{StaticResource ForeGround}" />
+                    <TextBlock
+                        Width="120"
+                        Margin="0,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="20"
+                        Foreground="{StaticResource ForeGround}"
+                        Text="{Binding OTCStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel x:Name="ManGroup" Orientation="Horizontal" Visibility="Collapsed">
+                    <Label
+                        Margin="530,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="寄庫庫存淨值  $"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="{StaticResource ForeGround}" />
+                    <TextBlock
+                        Width="120"
+                        Margin="0,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="20"
+                        Foreground="{StaticResource ForeGround}"
+                        Text="{Binding DepositStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
                 <Label
-                    Margin="60,0,0,0"
+                    Margin="10,0,0,0"
                     VerticalAlignment="Center"
-                    Content="庫存淨值  $"
+                    Content="總庫存淨值  $"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
                     Foreground="{StaticResource ForeGround}" />
                 <TextBlock
-                    Width="100"
+                    Width="120"
                     Margin="0,0,10,0"
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"

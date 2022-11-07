@@ -176,6 +176,25 @@
                     FontSize="18"
                     Foreground="Black"
                     IsChecked="{Binding Medicine.Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBoolConverter}}" />
+                <Label 
+                    Margin="180,0,0,0"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Content="商品種類"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20" />
+                <ComboBox
+                    Width="120"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    SelectedValuePath="ID"
+                    DisplayMemberPath="Name"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    IsEnabled="{Binding ManageViewModel.CanEdit}"
+                    ItemsSource="{Binding Medicine.ProductTypeCollection}"
+                    SelectedItem="{Binding Medicine.SelectedProductType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <!--<Label Content="條碼" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" />
                 <TextBox Text="{Binding Medicine.BarCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="260" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0">
                     <i:Interaction.Triggers>

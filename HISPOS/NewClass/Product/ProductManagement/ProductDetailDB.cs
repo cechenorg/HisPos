@@ -133,7 +133,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             DataBaseFunction.AddSqlParameter(parameters, "PRO_SELFPAYPRICE", productManageMedicine.SelfPayPrice);
             parameters.Add(new SqlParameter("Pro_IsReward", productManageMedicine.IsReward));
             DataBaseFunction.AddSqlParameter(parameters, "Pro_RewardPercent", productManageMedicine.RewardPercent);
-
+            DataBaseFunction.AddSqlParameter(parameters, "Pro_TypeID", productManageMedicine.SelectedProductType.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateMedicineDetailData]", parameters);
         }
 

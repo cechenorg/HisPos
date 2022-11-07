@@ -1,9 +1,12 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.NewClass.ProductType;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PresControl;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.StockControl;
@@ -46,9 +49,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private string medicineID;
         private ProductTypeEnum productType;
         private WareHouse selectedWareHouse;
-
         public WareHouses WareHouseCollection { get; set; }
-
         public WareHouse SelectedWareHouse
         {
             get { return selectedWareHouse; }
@@ -68,6 +69,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public ProductManageLocCombos LocBindItems { get; set; }
         public int LocBind { get; set; }
 
+        private bool canEdit;
+        public bool CanEdit
+        {
+            get { return canEdit; }
+            set { Set(() => CanEdit, ref canEdit, value); }
+        }
         #endregion ----- Define Variables -----
 
         public MedicineManageViewModel()
@@ -116,7 +123,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private void StockTakingAction()
         {
             StockTakingWindow stockTakingWindow;
-            if (ProductType == ProductTypeEnum.OTCMedicine || ProductType == ProductTypeEnum.OTC)
+            if (ProductType == ProductTypeEnum.OTCMedicine)
+            {
+                stockTakingWindow = new StockTakingWindow(medicineID, selectedWareHouse, StockViewModel.StockDetail, true);
+            }
+            else if(ProductType == ProductTypeEnum.Deposit)
             {
                 stockTakingWindow = new StockTakingWindow(medicineID, selectedWareHouse, StockViewModel.StockDetail, true);
             }
@@ -198,13 +209,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
         public void ReloadData(string proID, string wareID, ProductTypeEnum type)
         {
-            if (!wareID.Equals(String.Empty))
+            if (!wareID.Equals(string.Empty))
                 selectedWareHouse = WareHouseCollection[int.Parse(wareID)];
 
             medicineID = proID;
             productType = type;
-
-            if (productType == ProductTypeEnum.OTCMedicine)
+            if (productType == ProductTypeEnum.OTCMedicine || productType == ProductTypeEnum.Deposit)
             {
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
@@ -215,6 +225,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 MainWindow.ServerConnection.CloseConnection();
             }
             ReloadData();
+            CanEdit = ViewModelMainWindow.CurrentUser.Authority == Authority.Admin && OTCStockViewModel.OTCStockDetail.TotalInventory == 0;
         }
 
         #endregion ----- Define Functions -----

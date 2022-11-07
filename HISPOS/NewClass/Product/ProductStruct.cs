@@ -1,4 +1,5 @@
 ﻿using His_Pos.NewClass.Product.ProductManagement;
+using System;
 using System.Data;
 
 namespace His_Pos.NewClass.Product
@@ -7,7 +8,24 @@ namespace His_Pos.NewClass.Product
     {
         public ProductStruct(DataRow row)
         {
-            Type = row.Field<string>("Pro_TypeID").Equals("O") ? ProductTypeEnum.OTC : ProductTypeEnum.NHIMedicine;
+            //Type = row.Field<string>("Pro_TypeID").Equals("O") ? ProductTypeEnum.OTCMedicine : ProductTypeEnum.NHIMedicine;
+
+            switch(Convert.ToString(row["Pro_TypeID"]))
+            {
+                case "O":
+                    Type = ProductTypeEnum.OTCMedicine;
+                    break;
+                case "D":
+                    Type = ProductTypeEnum.Deposit;
+                    break;
+                case "M":
+                    Type = ProductTypeEnum.NHIMedicine;
+                    break;
+                default:
+                    Type = ProductTypeEnum.SpecialMedicine;
+                    break;
+            }
+
             ID = row.Field<string>("Pro_ID");
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
