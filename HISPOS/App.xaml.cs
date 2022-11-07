@@ -21,7 +21,7 @@ namespace His_Pos
         {
             base.OnStartup(e);
 
-            //CheckAdministrator();
+            CheckAdministrator();
             StartupUri = new Uri("FunctionWindow/LoginWindow.xaml", UriKind.RelativeOrAbsolute);
 
             // Select the text in a TextBox when it receives focus.
@@ -70,10 +70,7 @@ namespace His_Pos
             }
             else
             {
-                string msg = !string.IsNullOrEmpty(e.Exception.Message) ? e.Exception.Message.ToString() : e.Exception.Message.ToString();
-                string stackTrace = !string.IsNullOrEmpty(e.Exception.StackTrace) ? e.Exception.StackTrace : e.Exception.StackTrace.ToString();
-                string detail = string.Format("錯誤訊息:{0}\r\n異常函式:{1}\r\n", msg, stackTrace);
-                MessageWindow.ShowMessage(detail, MessageType.ERROR);
+                MessageWindow.ShowMessage(e.Exception.Message, MessageType.ERROR);
                 e.Handled = true;
             }
         }
