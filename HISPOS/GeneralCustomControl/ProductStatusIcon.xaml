@@ -119,7 +119,7 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="15"
                     Foreground="White"
-                    Text="寄" />
+                    Text="寄售" />
             </StackPanel>
         </Border>
     </StackPanel>

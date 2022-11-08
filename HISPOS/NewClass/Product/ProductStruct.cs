@@ -41,7 +41,7 @@ namespace His_Pos.NewClass.Product
             ControlLevel = row.Field<byte?>("Med_Control");
             IsEnable = row.Field<bool>("Pro_IsEnable");
             OTCFromSingde = row.Field<bool>("OTCFromSingde");
-
+            IsDeposit = Type == ProductTypeEnum.Deposit;
             /*if (Type == ProductTypeEnum.OTCMedicine)
                 SellPrice = 0;*/
         }
@@ -73,5 +73,7 @@ namespace His_Pos.NewClass.Product
         public bool IsFrozen { get; set; }
         public bool IsEnable { get; set; }
         public bool OTCFromSingde { get; set; }
+
+        public bool IsDeposit { get; set; }
     }
 }

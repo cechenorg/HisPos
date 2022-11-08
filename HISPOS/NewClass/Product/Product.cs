@@ -18,7 +18,11 @@ namespace His_Pos.NewClass.Product
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
             IsCommon = row.Field<bool>("Pro_IsCommon");
-            if(row.Table.Columns.Contains("MainFlag"))
+            if(row.Table.Columns.Contains("Pro_TypeID"))
+            {
+                IsDeposit = row.Field<int>("Pro_TypeID") == 4;
+            }
+            if (row.Table.Columns.Contains("MainFlag"))
                 IsMainFlag = row.Field<bool>("MainFlag");
         }
 
@@ -107,6 +111,19 @@ namespace His_Pos.NewClass.Product
                 if (isCommon != value)
                 {
                     Set(() => IsCommon, ref isCommon, value);
+                }
+            }
+        }
+        private bool isDeposit;//常備品項
+
+        public bool IsDeposit
+        {
+            get => isDeposit;
+            set
+            {
+                if (isDeposit != value)
+                {
+                    Set(() => IsDeposit, ref isDeposit, value);
                 }
             }
         }

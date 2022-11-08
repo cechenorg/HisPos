@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using DomainModel.Enum;
+using His_Pos.ChromeTabViewModel;
+using System.Data;
 
 namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
 {
@@ -24,6 +26,8 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
                 IsCommon = row.Field<bool>("Pro_IsCommon");
             if (row.Table.Columns.Contains("Pro_IsDeposit"))
                 IsDeposit = row.Field<bool>("Pro_IsDeposit");
+
+            IsControl = !(!IsDeposit || (IsDeposit && ViewModelMainWindow.CurrentUser.Authority == Authority.Admin));
         }
 
         public double SingdePackagePrice { get; }
@@ -37,5 +41,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
         public double SpecialPrice { get; set; }
         public bool IsCommon { get; set; }
         public bool IsDeposit { get; set; }
+
+        public bool IsControl { get; set; }
     }
 }

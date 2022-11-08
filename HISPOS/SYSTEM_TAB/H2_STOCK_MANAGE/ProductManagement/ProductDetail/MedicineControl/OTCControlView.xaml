@@ -651,7 +651,8 @@
                 Command="{Binding ScrapCommand}"
                 Content="報廢"
                 FontFamily="Segoe UI Semi"
-                FontSize="20" />
+                FontSize="20" 
+                IsEnabled="{Binding DataContext.ManageViewModel.PriceViewModel.MedicineDetail.IsControl, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Converter={StaticResource InvertBoolConverter}}"/>
             <!--<Button Content="轉移庫別" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="DimGray" Margin="10,0,0,0" Command="{Binding ScrapCommand}" />-->
         </StackPanel>
         <Grid
