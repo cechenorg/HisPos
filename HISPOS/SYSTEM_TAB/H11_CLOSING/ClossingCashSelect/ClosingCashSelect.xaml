@@ -87,10 +87,10 @@
                 <clossingCashSelect:ClosingCashDataGrid Grid.Row="1" Grid.Column="0" Title="慢箋張數" Source="{Binding PrescriptionCountList}"
                         Margin="10,0,5,5" />
                 <clossingCashSelect:ClosingCashDataGrid Grid.Row="1" Grid.Column="1" Title="門市營業額" Source="{Binding OtcTurnoverList}"
-                        Margin="10,5,5,10" />
-                <clossingCashSelect:ClosingCashDataGrid Grid.Row="2" Grid.Column="0" Title="配藥 + 慢箋毛利" Source="{Binding PrescriptionProfitList}"
                         Margin="5,0,10,5" />
-                <clossingCashSelect:ClosingCashDataGrid Grid.Row="2" Grid.Column="1" Title="門市毛利" Source="{Binding OtcProfitList}" Margin="5,5,10,10" />
+                <clossingCashSelect:ClosingCashDataGrid Grid.Row="2" Grid.Column="0" Title="配藥 + 慢箋毛利" Source="{Binding PrescriptionProfitList}"
+                        Margin="10,5,5,0" />
+                <clossingCashSelect:ClosingCashDataGrid Grid.Row="2" Grid.Column="1" Title="門市毛利" Source="{Binding OtcProfitList}" Margin="5,5,10,0" />
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="其他" Margin="10,0,0,0" Visibility="Collapsed"/>
                 <DataGrid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0" AutoGenerateColumns="False" Visibility="Collapsed"
                         Background="{StaticResource GridBackGround}" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}"
