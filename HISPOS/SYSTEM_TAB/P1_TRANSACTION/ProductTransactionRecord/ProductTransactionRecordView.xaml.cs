@@ -161,7 +161,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 case 2: // 銷售明細
                     queryTab = 2;
                     ClearDataGrids();
-                    DataTable resultDetail = _tradeService.GetTradeRecord(queryInfo);
+                    DataTable resultDetail = _tradeService.GetTradeRecordDetail(queryInfo);
                     FormatData(resultDetail);
                     RecordDetailList = resultDetail.Copy();
 
@@ -175,7 +175,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
 
                     lblCount.Content = RecordDetailList.Rows.Count;
-                    lblTotal.Content = "(不含折扣):" + RecordDetailList.Compute("Sum(TraMas_PreTotal)", string.Empty);
+                    lblTotal.Content = "(不含折扣):" + RecordDetailList.Compute("Sum(TraDet_PriceSum)", string.Empty);
                     break;
 
                 case 3: // 銷售彙總

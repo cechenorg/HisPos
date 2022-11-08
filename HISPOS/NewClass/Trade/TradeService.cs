@@ -1,5 +1,6 @@
 ﻿using His_Pos.NewClass.Person.Customer.ProductTransactionCustomer;
 using His_Pos.NewClass.Person.Employee.ProductTransaction;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -58,5 +59,28 @@ namespace His_Pos.NewClass.Trade
             MainWindow.ServerConnection.CloseConnection();
             return result;
         }
+
+        public DataTable GetTradeRecordDetail(TradeQueryInfo info)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parametersDetail = new List<SqlParameter>();
+            parametersDetail.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parametersDetail.Add(new SqlParameter("MasterID", DBNull.Value));
+            parametersDetail.Add(new SqlParameter("sDate", info.StartDate));
+            parametersDetail.Add(new SqlParameter("eDate", info.EndDate));
+            parametersDetail.Add(new SqlParameter("sInvoice", info.StartInvoice));
+            parametersDetail.Add(new SqlParameter("eInvoice", info.EndInvoice));
+            parametersDetail.Add(new SqlParameter("flag", "0"));
+            parametersDetail.Add(new SqlParameter("ShowIrregular", info.ShowIrregular));
+            parametersDetail.Add(new SqlParameter("ShowReturn", info.ShowReturn));
+            parametersDetail.Add(new SqlParameter("Cashier", info.CashierID));
+            parametersDetail.Add(new SqlParameter("ProID", info.ProID));
+            parametersDetail.Add(new SqlParameter("ProName", info.ProName));
+            DataTable resultDetail = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQuery]", parametersDetail);
+            MainWindow.ServerConnection.CloseConnection();
+            return resultDetail;
+        }
+
+       
     }
 }
