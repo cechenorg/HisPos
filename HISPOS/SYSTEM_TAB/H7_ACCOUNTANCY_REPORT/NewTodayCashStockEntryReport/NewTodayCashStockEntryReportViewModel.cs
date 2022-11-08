@@ -1978,9 +1978,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             {
                 string ogTransTime = dr["TraMas_ChkoutTime"].ToString();
                 DateTime dt = DateTime.Parse(ogTransTime);
-                CultureInfo culture = new CultureInfo("zh-TW");
-                culture.DateTimeFormat.Calendar = new TaiwanCalendar();
-                dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
+                //CultureInfo culture = new CultureInfo("zh-TW");
+                //culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                //dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
+                dr["TransTime_Format"] = dt.ToString("yyyy/MM/dd HH:mm");
             }
             ProductTransactionDetail ptd = new ProductTransactionDetail(masterRow, result);
 
