@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport;
+using His_Pos.NewClass.Report.PrescriptionDetailReport;
 
 namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 {
@@ -220,7 +221,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                     tempPrescriptionCountList.Add(new ClosingCashReportData()
                     {
                         Name = data.PharmacyName,
-                        Actual = currentModel.PrescriptionDetailReportSumMain.SlowCount,
+                        Actual = currentModel.PrescriptionDetailReportSumMain.SlowCount - currentModel.PrescriptionDetailReportSum.DisableCount,
                         Target = currentTarget.PrescriptionCountTarget
                     });
 

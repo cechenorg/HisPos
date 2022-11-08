@@ -1601,6 +1601,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 this.schema = schema;
 
             GetData();
+
+            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
+            AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
+            SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
         }
 
         public NewTodayCashStockEntryReportViewModel()
