@@ -42,7 +42,7 @@
                     SelectedValuePath="content"
                     Text="{Binding ProTypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <ComboBoxItem>健保品</ComboBoxItem>
-                    <ComboBoxItem>OTC商品</ComboBoxItem>
+                    <ComboBoxItem>門市商品</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
         </StackPanel>

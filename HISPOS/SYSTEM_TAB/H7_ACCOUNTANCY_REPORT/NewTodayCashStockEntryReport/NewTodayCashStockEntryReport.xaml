@@ -126,7 +126,7 @@
                     <Border Grid.Row="6" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="10" BorderBrush="LightGray" BorderThickness="0,1,0,0" />
 
                     <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
-                        <Label Content="OTC" PreviewMouseDown="OTCTrade_PreviewMouseDown" />
+                        <Label Content="門市" PreviewMouseDown="OTCTrade_PreviewMouseDown" />
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                         <Border BorderBrush="Gray">

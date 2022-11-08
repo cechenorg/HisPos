@@ -364,7 +364,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             EmployeeCollection.Add(ViewModelMainWindow.CurrentUser);
 
             StockTakingCommonString = new List<string>() { "全部", "常備", "非常備" };
-            StockTakingTypeString = new List<string>() { "全部", "藥品", "OTC",  };
+            StockTakingTypeString = new List<string>() { "全部", "藥品", "門市商品",  };
             WhereString = new List<string>() { "全部", "一般箋", "慢箋", "自費調劑" };
 
         }
@@ -728,7 +728,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             {
                 WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => ( p.IsCommon == true)));
             }
-            else if (StockTakingCommonSelectItem == "全部" && StockTakingTypeSelectItem == "OTC")
+            else if (StockTakingCommonSelectItem == "全部" && StockTakingTypeSelectItem == "門市商品")
             {
                 WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => ( p.Type == 2)));
             }
@@ -736,7 +736,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             {
                 WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 1))); 
             }
-            else if (StockTakingCommonSelectItem == "非常備" && StockTakingTypeSelectItem == "OTC")
+            else if (StockTakingCommonSelectItem == "非常備" && StockTakingTypeSelectItem == "門市商品")
             {
                 WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 2)));
             }
@@ -752,7 +752,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             {
                 WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == true && p.Type == 1)));
             }
-            else if (StockTakingCommonSelectItem == "常備" && StockTakingTypeSelectItem == "OTC")
+            else if (StockTakingCommonSelectItem == "常備" && StockTakingTypeSelectItem == "門市商品")
             {
                 WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == true && p.Type == 2)));
             }

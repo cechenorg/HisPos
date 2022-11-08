@@ -573,7 +573,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         {
             PhoneCallStatusString = new List<string>() { "未處理", "已聯絡", "電話未接" };
             MedPrepareStatusCollection = new List<string>() { "未處理", "已備藥", "不備藥" };
-            ProductTypeCollection = new List<string>() { "藥品", "OTC" };
+            ProductTypeCollection = new List<string>() { "藥品", "門市商品" };
         }
 
         private void StatusChangedAction()
@@ -598,7 +598,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 DataTable table = new DataTable();
                 if (ProductTypeStatusSelectedItem == "藥品")
                     table = StoreOrderDB.StoreOrderCommonMedicine();//新增常備採購單//成功回傳採購單號，失敗回傳空白
-                else if(ProductTypeStatusSelectedItem == "OTC")
+                else if(ProductTypeStatusSelectedItem == "門市商品")
                     table = StoreOrderDB.StoreOrderOTCMedicine();//新增OTC採購單//成功回傳採購單號，失敗回傳空白
                 if (table != null && table.Rows.Count > 0)
                 {
@@ -612,7 +612,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                             storeOrder.GetOrderProducts();
                             if(ProductTypeStatusSelectedItem == "藥品")
                                 table = StoreOrderDB.SendStoreOrderToSingde(storeOrder);//傳送藥品
-                            else if (ProductTypeStatusSelectedItem == "OTC")
+                            else if (ProductTypeStatusSelectedItem == "門市商品")
                                 table = StoreOrderDB.SendOTCStoreOrderToSingde(storeOrder);//傳送OTC
 
                             if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
@@ -683,7 +683,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 e.Accepted = false;
             e.Accepted = false;
             CommonProduct commonProducts = ((CommonProduct)e.Item);
-            if (commonProducts.TypeID == 2 && ProductTypeStatusSelectedItem == "OTC")
+            if (commonProducts.TypeID == 2 && ProductTypeStatusSelectedItem == "門市商品")
                 e.Accepted = true;
             else if (( commonProducts.TypeID == 1 || commonProducts.TypeID == 3) && ProductTypeStatusSelectedItem == "藥品")
                 e.Accepted = true;

@@ -255,7 +255,7 @@
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18"
-                Text="OTC進貨 $"
+                Text="門市商品進貨 $"
                 TextAlignment="Center" />
             <TextBlock
                 Width="100"
@@ -437,7 +437,7 @@
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18"
-                Text="OTC退貨 $"
+                Text="門市商品退貨 $"
                 TextAlignment="Center" />
             <TextBlock
                 Width="100"
