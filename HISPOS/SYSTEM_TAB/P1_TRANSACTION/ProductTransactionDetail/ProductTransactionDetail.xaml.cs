@@ -83,14 +83,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 dt = DateTime.Parse(lblTradeTime.Content.ToString());
             }
             Authority userAuthority = ViewModelMainWindow.CurrentUser.Authority;
-            if(userAuthority == Authority.Admin && DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), dt) < 0 )
+            if(userAuthority == Authority.Admin) 
             {
                 btnDelete.IsEnabled = true;
-                btnReturn.IsEnabled = true;
             } 
             else
             {
                 btnDelete.IsEnabled = false;
+            }
+            if (DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), dt) < 0)
+            {
+                btnReturn.IsEnabled = true;
+            }
+            else
+            {
                 btnReturn.IsEnabled = false;
             }
         }
