@@ -2639,7 +2639,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void CalculateTotalRewardProfit()
         {
-            RewardReportCollection = new RewardReports(StartDate, EndDate);
+            RewardReportCollection = new RewardReports(schema, StartDate, EndDate);
             TotalRewardReport.RewardAmountSum = -RewardReportCollection.Sum(c => c.RewardAmount);
             TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
         }

@@ -7,11 +7,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTargetSettingWindow
 {
     public class ClosingAccountTargetSettingVM : ViewModelBase
     {
+        private readonly Action closeAction;
         private DateTime closingAccountMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
 
         public DateTime ClosingAccountMonth
@@ -48,8 +51,10 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand UpdateCommand { get; set; }
 
-        public ClosingAccountTargetSettingVM()
+        public ClosingAccountTargetSettingVM(Action closeAction)
         {
+            this.closeAction = closeAction;
+
             SearchCommand = new RelayCommand(SearchAction);
             UpdateCommand = new RelayCommand(UpdateAction);
 
@@ -68,6 +73,9 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
 
             repo.UpdateWorkingDaySetting(ClosingAccountMonth, CurrentMonthWorkingDayCount);
             MainWindow.ServerConnection.CloseConnection();
+
+            MessageWindow.ShowMessage("更新完畢!", MessageType.SUCCESS);
+            closeAction.Invoke();
         }
 
         private void SearchAction()

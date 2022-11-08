@@ -2527,7 +2527,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 TradeProfitReportCollection = new TradeProfitReports(StartDate, EndDate);
                 StockTakingReportCollection = new StockTakingReports(StartDate, EndDate);
                 StockTakingOTCReportCollection = new StockTakingOTCReports(StartDate, EndDate);
-                RewardReportCollection = new RewardReports(StartDate, EndDate);
+                RewardReportCollection = new RewardReports(Properties.Settings.Default.SystemSerialNumber, StartDate, EndDate);
 
                 DataTable Extra = PrescriptionProfitReportDb.GetExtraMoneyByDates(StartDate, EndDate);
                 ExtraMoney = Extra.Rows[0].Field<decimal?>("CashFlow_Value");

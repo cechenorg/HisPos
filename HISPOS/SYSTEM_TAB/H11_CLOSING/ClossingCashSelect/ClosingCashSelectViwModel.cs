@@ -146,6 +146,10 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             DailyAccountingSearchCommand = new RelayCommand(DailyAccountingSearchAction);
             MonthlyTargetSettingCommand = new RelayCommand(MonthlyTargetSettingAction);
 
+            var currentDate = DateTime.Now;
+            startDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+            endDate = currentDate;
+
             GetPharmacyInfos();
             DailyAccountingSearchAction();
         }

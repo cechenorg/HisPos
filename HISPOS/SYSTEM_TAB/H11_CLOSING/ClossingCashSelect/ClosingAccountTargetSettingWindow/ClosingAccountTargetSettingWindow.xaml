@@ -4,9 +4,6 @@
         xmlns:local="clr-namespace:His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTargetSettingWindow" mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" xmlns:service="clr-namespace:His_Pos.Service" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="業績月目標設定視窗" Height="450" Width="630">
-    <Window.DataContext>
-        <local:ClosingAccountTargetSettingVM />
-    </Window.DataContext>
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <Style TargetType="TextBlock">
@@ -85,7 +82,7 @@
             <TextBox Margin="10,0,0,0" FontSize="18" VerticalAlignment="Center" Text="{Binding CurrentMonthWorkingDayCount}" MinWidth="100"></TextBox>
         </StackPanel>
         <DockPanel Grid.Row="4">
-            <Button Background="IndianRed" Margin="5" Content="更新" Command="{Binding UpdateCommand}"></Button>
+            <Button Background="IndianRed" Margin="5" Content="更新" Command="{Binding UpdateCommand}"/>
         </DockPanel>
     </Grid>
 </Window>

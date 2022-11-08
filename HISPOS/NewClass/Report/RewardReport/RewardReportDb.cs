@@ -8,12 +8,12 @@ namespace His_Pos.NewClass.Report.RewardReport
 {
     public static class RewardReportDb
     {
-        public static DataTable GetDataByDate(DateTime sDate, DateTime eDate)
+        public static DataTable GetDataByDate(string schema, DateTime sDate, DateTime eDate)
         {
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
-            return MainWindow.ServerConnection.ExecuteProc("[POS].[RewardReportByDate]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[POS].[RewardReportByDate]", parameterList, schema);
         }
 
         public static DataTable GetPrescriptionPointEditRecordByDates(DateTime sDate, DateTime eDate)
