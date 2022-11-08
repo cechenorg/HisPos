@@ -16,7 +16,8 @@ namespace His_Pos.Database
         {
             try
             {
-                connection.Open();
+                if(connection.State == ConnectionState.Closed)
+                    connection.Open();
             }
             catch (Exception e)
             {

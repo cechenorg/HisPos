@@ -59,6 +59,8 @@ namespace His_Pos.NewClass.Prescription.Service
         }
 
         protected MedicinesSendSingdeViewModel vm { get; set; } = null;
+
+        protected IEnumerable<Prescription> PrescriptionList { get; set; }
         protected Prescription Current { get; set; }
         protected Prescription TempPre { get; set; }
         protected Prescription TempPrint { get; set; }
@@ -114,8 +116,8 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public bool StartRegister()
         {
-            MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
+            MainWindow.ServerConnection.OpenConnection();
             var result = Register();
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
@@ -732,10 +734,15 @@ namespace His_Pos.NewClass.Prescription.Service
                     }
                 }
             }
-            var selfcoSendCount = printSendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
-            var selfallSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
-            //部分傳送的品項 > 0 或是 全傳送的品項 > 0 且 < 處方總量
-            if (selfcoSendCount > 0 || (selfallSendCount < printSendData.Count && selfallSendCount > 0))
+            //var selfcoSendCount = printSendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
+            //var selfallSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
+
+            var selfPrepareAmount = tempPrintSendData.Sum(_ => _.TreatAmount - _.SendAmount);
+            var sendAmount = tempPrintSendData.Sum(_ => _.SendAmount);
+
+
+            //有自備也有傳送則列印登錄明細
+            if (selfPrepareAmount > 0 && sendAmount > 0)
             {
                 var rptViewer = new ReportViewer();
                 SetReserveMedicinesSheetReportViewer(rptViewer, tempPrintSendData);
