@@ -193,7 +193,11 @@
             </DataGrid>
         </DataTemplate>
         <DataTemplate x:Key="ReserveGrid" DataType="{x:Type local:CustomerPrescriptionViewModel}">
-            <DataGrid Margin="0,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" ItemsSource="{Binding ChronicReservePres, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPrescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Hidden">
+            <DataGrid Margin="0,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}"
+                      CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HeadersVisibility="None"
+                      HorizontalScrollBarVisibility="Hidden" 
+                      ItemsSource="{Binding ChronicReservePres, UpdateSourceTrigger=PropertyChanged}" 
+                      SelectedItem="{Binding SelectedPrescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Hidden">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding PrescriptionSelected}" />
@@ -231,7 +235,7 @@
                                             <ContentControl.Style>
                                                 <Style TargetType="{x:Type ContentControl}">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DataContext.IsSend,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="未處理">
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="未處理">
                                                             <Setter Property="ContentTemplate" Value="{StaticResource LabelNotSend}" />
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding DataContext.IsSend,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="已備藥">
