@@ -19,8 +19,25 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             set
             {
                 Set(IsSend, ref _isSend, value);
+
+                if (value == "未處理")
+                    SwitchIsSendContent = "取消預約";
+                else if (value == "不備藥")
+                    SwitchIsSendContent = "預約";
             }
         }
+
+        private string _switchIsSendContent;
+
+        public string SwitchIsSendContent
+        {
+            get => _switchIsSendContent;
+            set
+            {
+                Set(SwitchIsSendContent, ref _switchIsSendContent, value);
+            }
+        }
+
         public string OrderID { get; }
 
         public ChronicPreview(DataRow r, PrescriptionType type) : base(r)

@@ -288,6 +288,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 MainWindow.SingdeConnection.CloseConnection();
             }
 
+            //用來觸發UI更新的解法,目前沒更好的做法
+            SelectedType = CustomerPrescriptionType.Register;
+            SelectedType = CustomerPrescriptionType.Reserve;
+            //
         }
 
         private void DeleteRegisterPrescriptionAction()
