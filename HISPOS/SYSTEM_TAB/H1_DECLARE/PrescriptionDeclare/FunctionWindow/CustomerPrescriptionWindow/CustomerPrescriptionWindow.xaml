@@ -230,8 +230,13 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                        <ContentControl Margin="10,2,0,0" Content="{Binding UpdateSourceTrigger=PropertyChanged}">
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="90"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ContentControl HorizontalAlignment="Left" Margin="5,0,0,0" Content="{Binding UpdateSourceTrigger=PropertyChanged}">
                                             <ContentControl.Style>
                                                 <Style TargetType="{x:Type ContentControl}">
                                                     <Style.Triggers>
@@ -248,9 +253,9 @@
                                                 </Style>
                                             </ContentControl.Style>
                                         </ContentControl>
-                                        <Label VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding OrderID}" FontSize="16" />
-                                        <Button Content="{Binding SwitchIsSendContent,UpdateSourceTrigger=PropertyChanged}" Command="{Binding DataContext.SetReservePrepareCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }"></Button>
-                                    </StackPanel>
+                                        <Label Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding OrderID}" FontSize="16" />
+                                        <Button Grid.Column="2" Background="DarkCyan" Content="{Binding SwitchIsSendContent,UpdateSourceTrigger=PropertyChanged}" Command="{Binding DataContext.SetReservePrepareCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }"/>
+                                    </Grid>
                                     <StackPanel Grid.Row="1" Margin="0,0,0,5" Orientation="Horizontal">
                                         <Label Width="245" VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding Institution.Name}" FontSize="18" />
                                         <Label Width="81" VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding Division.Name}" FontSize="18" />
