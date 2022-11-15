@@ -1557,6 +1557,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand PrescriptionDetailClickCommand { get; set; }
         public RelayCommand PrescriptionDetailDoubleClickCommand { get; set; }
         public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
+        public RelayCommand TradeProfitDetailMedicineDoubleClickCommand { get; set; }
+        
         public RelayCommand PrintPrescriptionProfitDetailCommand { get; set; }
         public RelayCommand AllDepositReportSelectionChangedCommand { get; set; }
         public RelayCommand DepositDetailClickCommand { get; set; }
@@ -1632,6 +1634,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailClickCommand = new RelayCommand(PrescriptionDetailClickAction);
             PrescriptionDetailDoubleClickCommand = new RelayCommand(PrescriptionDetailDoubleClickAction);
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
+            TradeProfitDetailMedicineDoubleClickCommand = new RelayCommand(TradeProfitDetailMedicineDoubleClickAction);
 
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
 
@@ -1920,7 +1923,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrintService.PrintPrescriptionProfitDetailAction(StartDate, EndDate, PrescriptionDetailReportView);
         }
 
-
+        private void TradeProfitDetailMedicineDoubleClickAction()
+        {
+            if (TradeProfitDetailMedicineReportSelectItem is null) return;
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { TradeProfitDetailMedicineReportSelectItem.ProductID, "0" }, "ShowProductDetail"));
+        }
 
         private void PrescriptionDetailMedicineDoubleClickAction()
         {
