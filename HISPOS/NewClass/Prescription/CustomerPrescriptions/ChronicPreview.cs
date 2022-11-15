@@ -24,6 +24,8 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                     SwitchIsSendContent = "取消預約";
                 else if (value == "不備藥")
                     SwitchIsSendContent = "預約";
+
+                VisibleSwitchSendButton = value != "已備藥";
             }
         }
 
@@ -34,9 +36,21 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             get => _switchIsSendContent;
             set
             {
-                Set(SwitchIsSendContent, ref _switchIsSendContent, value);
+                Set(()=> SwitchIsSendContent, ref _switchIsSendContent, value);
             }
         }
+
+        private bool _visibleSwitchSendButton = false;
+
+        public bool VisibleSwitchSendButton
+        {
+            get { return _visibleSwitchSendButton;}
+            set
+            {
+                Set(() => VisibleSwitchSendButton , ref _visibleSwitchSendButton, value);
+            }
+        }
+
 
         public string OrderID { get; }
 

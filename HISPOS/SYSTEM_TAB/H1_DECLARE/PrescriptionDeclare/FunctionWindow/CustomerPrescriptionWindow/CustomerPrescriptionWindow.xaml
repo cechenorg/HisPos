@@ -254,7 +254,7 @@
                                             </ContentControl.Style>
                                         </ContentControl>
                                         <Label Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding OrderID}" FontSize="16" />
-                                        <Button Grid.Column="2" Background="DarkCyan" BorderThickness="0"
+                                        <Button Grid.Column="2" Background="DarkCyan" BorderThickness="0" Visibility="{Binding VisibleSwitchSendButton, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                 Content="{Binding SwitchIsSendContent,UpdateSourceTrigger=PropertyChanged}" Command="{Binding DataContext.SetReservePrepareCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }"/>
                                     </Grid>
                                     <StackPanel Grid.Row="1" Margin="0,0,0,5" Orientation="Horizontal">
