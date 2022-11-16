@@ -1464,6 +1464,10 @@
       <DependentUpon>InstitutionDeclarePointReport.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\InstitutionDeclarePointReport\InstitutionDeclarePointReportViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement2\NewIncomeStatement2.xaml.cs">
+      <DependentUpon>NewIncomeStatement2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement2\NewIncomeStatement2ViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement\NewIncomeStatementView.xaml.cs">
       <DependentUpon>NewIncomeStatementView.xaml</DependentUpon>
     </Compile>
@@ -2475,6 +2479,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\InstitutionDeclarePointReport\InstitutionDeclarePointReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement2\NewIncomeStatement2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

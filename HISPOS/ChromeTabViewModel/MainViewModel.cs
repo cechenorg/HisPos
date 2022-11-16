@@ -48,6 +48,7 @@ using System.Collections.Generic;
 using System;
 using System.Diagnostics;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -398,7 +399,7 @@ namespace His_Pos.ChromeTabViewModel
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.會計報表)).Icon };
                     break;
                 case nameof(FeatureItem.新損益報表):
-                    newTab = new NewIncomeStatementViewModel()
+                    newTab = new NewIncomeStatement2ViewModel()
                     {
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.會計報表)).Icon
                     };
