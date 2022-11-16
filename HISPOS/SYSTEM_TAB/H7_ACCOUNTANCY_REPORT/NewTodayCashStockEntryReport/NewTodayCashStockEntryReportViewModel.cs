@@ -1558,7 +1558,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand PrescriptionDetailDoubleClickCommand { get; set; }
         public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
         public RelayCommand TradeProfitDetailMedicineDoubleClickCommand { get; set; }
-        
+        public RelayCommand StockTakingOTCDetailMedicineDoubleClickCommand { get; set; }
+
         public RelayCommand PrintPrescriptionProfitDetailCommand { get; set; }
         public RelayCommand AllDepositReportSelectionChangedCommand { get; set; }
         public RelayCommand DepositDetailClickCommand { get; set; }
@@ -1635,6 +1636,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailDoubleClickCommand = new RelayCommand(PrescriptionDetailDoubleClickAction);
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
             TradeProfitDetailMedicineDoubleClickCommand = new RelayCommand(TradeProfitDetailMedicineDoubleClickAction);
+            StockTakingOTCDetailMedicineDoubleClickCommand = new RelayCommand(StockTakingDetailDoubleClickAction);
 
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
 
@@ -1921,6 +1923,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         private void PrintPrescriptionProfitDetailAction()
         {
             PrintService.PrintPrescriptionProfitDetailAction(StartDate, EndDate, PrescriptionDetailReportView);
+        }
+
+        private void StockTakingDetailDoubleClickAction()
+        {
+            if (StockTakingOTCDetailMedicineReportSelectItem is null) return;
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { StockTakingOTCDetailMedicineReportSelectItem.ID, "0" }, "ShowProductDetail"));
         }
 
         private void TradeProfitDetailMedicineDoubleClickAction()

@@ -6,7 +6,11 @@ namespace His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecor
 {
     public class StockTakingDetailRecordReport : ObservableObject
     {
-       
+
+        public StockTakingDetailRecordReport()
+        {
+
+        }
         public string ID { get; set; }
 
         public string Pro_ChineseName { get; set; }
