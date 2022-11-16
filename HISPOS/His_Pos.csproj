@@ -362,6 +362,7 @@
     <Compile Include="NewClass\ProductType\ProductTypes.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositReportData.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\IncomeStatementRawData.cs" />
     <Compile Include="NewClass\Report\ReportService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
