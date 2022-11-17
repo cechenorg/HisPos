@@ -309,6 +309,7 @@ namespace His_Pos.NewClass.StoreOrder
                     switch (row.Field<string>("TYPE"))
                     {
                         case "O":
+                        case "D":
                             tempProduct = new ReturnOTC(row);
                             break;
 

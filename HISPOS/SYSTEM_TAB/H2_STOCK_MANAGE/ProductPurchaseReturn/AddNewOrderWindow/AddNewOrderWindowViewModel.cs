@@ -77,7 +77,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
             ConfirmAddCommand = new RelayCommand(ConfirmAddAction);
             TypeCollection = new List<string>();
             TypeCollection.Add("藥品");
-            TypeCollection.Add("OTC");
+            TypeCollection.Add("門市商品");
             SelectedType = "藥品";
 
             InitVariables();

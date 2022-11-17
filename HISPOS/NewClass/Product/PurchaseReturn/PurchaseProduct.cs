@@ -164,7 +164,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public DateTime? ValidDate { get; set; }
         public string BatchNumber { get; set; }
         public string Note { get; set; }
-
+        public WareHouse.WareHouse OrderDetailWarehouse { get; set; }
         public bool IsFirstBatch { get; set; } = true;
         public int SingdePackageAmount { get; }
         public double SingdePackagePrice { get; }
@@ -202,6 +202,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             ValidDate = dataRow.Field<DateTime?>("StoOrdDet_ValidDate");
             BatchNumber = dataRow.Field<string>("StoOrdDet_BatchNumber");
             Note = dataRow.Field<string>("StoOrdDet_Note");
+            if(dataRow.Table.Columns.Contains("War_ID") && dataRow.Table.Columns.Contains("War_Name"))
+            {
+                OrderDetailWarehouse = new WareHouse.WareHouse(dataRow);
+            }
             OriginPrice = (double)dataRow.Field<decimal>("StoOrdDet_OriginPrice");
             SingdePackageAmount = dataRow.Field<int>("SinData_PackageAmount");
             SingdePackagePrice = (double)dataRow.Field<decimal>("SinData_PackagePrice");

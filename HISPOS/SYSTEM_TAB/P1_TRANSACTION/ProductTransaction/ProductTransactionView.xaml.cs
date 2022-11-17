@@ -327,6 +327,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         DataColumn deposit = new DataColumn("Deposit", typeof(int));
                         deposit.DefaultValue = 0;
                         ProductList.Columns.Add(deposit);
+
                     }
 
                     DataRow newRow = ProductList.NewRow();
@@ -511,6 +512,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             dt.Columns.Add("TraDet_PriceSum", typeof(int));
             dt.Columns.Add("TraDet_IsGift", typeof(int));
             dt.Columns.Add("TraDet_DepositAmount", typeof(int));
+            //dt.Columns.Add("War_ID", typeof(int));
             foreach (DataRow dr in ProductList.Rows)
             {
                 dt.Rows.Add(
@@ -522,6 +524,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     dr["Calc"],
                     dr["IsGift"],
                     dr["Deposit"]);
+                    //,
+                    //dr["War_ID"]);
             }
             return dt;
         }
@@ -834,7 +838,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 string proID = ProductList.Rows[index]["Pro_ID"].ToString();
                 ProductDetailWindow.ShowProductDetailWindow();
-                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
+                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, ProductList.Rows[index]["War_ID"].ToString() }, "ShowProductDetail"));
                 await Task.Delay(20);
                 ProductDetailWindow.ActivateProductDetailWindow();
             }

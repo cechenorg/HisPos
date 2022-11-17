@@ -20,6 +20,7 @@ namespace His_Pos.NewClass.StoreOrder
         private Product.Product selectedItem;
         private OrderStatusEnum orderStatus;
         private double totalPrice;
+        private double depositPrice;
         private StoreOrderHistorys storeOrderHistory;
 
         protected int initProductCount;
@@ -54,6 +55,14 @@ namespace His_Pos.NewClass.StoreOrder
         {
             get { return orderTypeIsOTC; }
             set { Set(() => OrderTypeIsOTC, ref orderTypeIsOTC, value); }
+        }
+
+        private string displayType;
+
+        public string DisplayType
+        {
+            get { return displayType; }
+            set { Set(() => DisplayType, ref displayType, value); }
         }
 
         private string orderIsPayCash;
@@ -101,6 +110,11 @@ namespace His_Pos.NewClass.StoreOrder
         {
             get { return totalPrice; }
             set { Set(() => TotalPrice, ref totalPrice, value); }
+        }
+        public double DepositPrice
+        {
+            get { return depositPrice; }
+            set { Set(() => DepositPrice, ref depositPrice, value); }
         }
         private string prescriptionID;
         public string PrescriptionID
@@ -167,6 +181,7 @@ namespace His_Pos.NewClass.StoreOrder
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
             initProductCount = row.Field<int>("ProductCount");
             OrderTypeIsOTC = row.Field<string>("StoOrd_IsOTCType");
+            DisplayType = (OrderTypeIsOTC == "OTC") ? "門市" : "藥品";
             OrderIsPayCash = row.Field<bool>("StoOrd_IsPayCash") ? "下貨付現" : "一般收貨";
             if (row.Table.Columns.Contains("StoOrd_ModifyUser"))
             {
@@ -724,6 +739,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID, string type)
         {
+            type = (type == "門市商品") ? "OTC" : "藥品";
             DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID, wareHouseID, type);
 
             switch (orderType)

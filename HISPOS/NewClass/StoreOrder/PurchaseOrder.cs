@@ -171,11 +171,11 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
                     return false;
                 }
-                else if (product.Type == 2)
+                else if (product.Type == 2 || product.Type == 4)
                 {
                     flagOTC = 1;
                 }
-                else if (product.Type != 2)
+                else if (product.Type == 1 || product.Type == 3)
                 {
                     flagNotOTC = 1;
                 }
@@ -298,7 +298,8 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void CalculateTotalPrice()
         {
-            TotalPrice = Math.Round(OrderProducts.Where(w=>w.IsDone == 0).Sum(p => Math.Round(p.SubTotal,0,MidpointRounding.AwayFromZero)));
+            TotalPrice = Math.Round(OrderProducts.Where(w=>w.IsDone == 0 && w.Type != 4).Sum(p => Math.Round(p.SubTotal,0,MidpointRounding.AwayFromZero)));
+            DepositPrice = Math.Round(OrderProducts.Where(w => w.IsDone == 0 && w.Type == 4).Sum(p => Math.Round(p.SubTotal, 0, MidpointRounding.AwayFromZero)));
         }
 
         public override void SetProductToProcessingStatus()
@@ -350,6 +351,10 @@ namespace His_Pos.NewClass.StoreOrder
                     purchaseProduct = new PurchaseMedicine(dataTable.Rows[0], OrderStatus);
                     break;
 
+                case "D":
+                    purchaseProduct = new PurchaseOTC(dataTable.Rows[0], OrderStatus);
+                    break;
+
                 default:
                     purchaseProduct = null;
                     break;
@@ -366,7 +371,9 @@ namespace His_Pos.NewClass.StoreOrder
                 OrderProducts[selectedProductIndex] = purchaseProduct;
             }
             else
+            {
                 OrderProducts.Add(purchaseProduct);
+            }
 
             RaisePropertyChanged(nameof(ProductCount));
         }
@@ -441,7 +448,7 @@ namespace His_Pos.NewClass.StoreOrder
             newProduct.ChineseName = purchaseProduct.ChineseName;
             newProduct.EnglishName = purchaseProduct.EnglishName;
             newProduct.IsCommon = purchaseProduct.IsCommon;
-
+            
             newProduct.UnitName = purchaseProduct.UnitName;
             newProduct.UnitAmount = purchaseProduct.UnitAmount;
 
@@ -455,7 +462,9 @@ namespace His_Pos.NewClass.StoreOrder
 
             newProduct.RealAmount = ((int)purchaseProduct.RealAmount) / 2;
             purchaseProduct.RealAmount = ((int)purchaseProduct.RealAmount) / 2 + leftAmount;
-
+            newProduct.OrderDetailWarehouse = purchaseProduct.OrderDetailWarehouse;
+            newProduct.IsDeposit = purchaseProduct.IsDeposit;
+            newProduct.Type = purchaseProduct.Type;
             RaisePropertyChanged(nameof(ProductCount));
 
             return newProduct;
