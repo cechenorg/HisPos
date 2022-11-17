@@ -24,14 +24,12 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         {
 
         }
+        public int YYYY { get; set; }
+        public int MM { get; set; }
+
+        public int AccID { get; set; }
         public string Name { get; set; }
-
-        public DateTime DT { get; set; }
-
         public int Value { get; set; }
 
-        public string Note { get; set; }
-
-        public string Source { get; set; }
     }
 }

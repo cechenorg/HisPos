@@ -4,9 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2"
+             d:DataContext="{d:DesignInstance Type=local:NewIncomeStatement2ViewModel}"
+             d:Background="White"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            <Button ></Button>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock FontSize="20" VerticalAlignment="Center" Text="查詢年份"/>
+            <TextBox Width="150" VerticalAlignment="Center" Text="{Binding Year,UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Margin="10,0" Content="查詢" Background="DarkCyan" Command="{Binding SearchCommand}"/>
+        </StackPanel>
+
+        <Expander Grid.Row="1" Header="費用" Background="Transparent">
+            <DataGrid Background="Transparent"></DataGrid>
+        </Expander>
     </Grid>
 </UserControl>
