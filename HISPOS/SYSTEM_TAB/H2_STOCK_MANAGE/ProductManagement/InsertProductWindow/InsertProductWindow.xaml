@@ -36,13 +36,13 @@
                     HorizontalContentAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="18"
-                    IsEnabled="False"
                     ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                     SelectedIndex="1"
                     SelectedValuePath="content"
                     Text="{Binding ProTypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <ComboBoxItem>健保品</ComboBoxItem>
                     <ComboBoxItem>門市商品</ComboBoxItem>
+                    <ComboBoxItem>寄售商品</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
         </StackPanel>

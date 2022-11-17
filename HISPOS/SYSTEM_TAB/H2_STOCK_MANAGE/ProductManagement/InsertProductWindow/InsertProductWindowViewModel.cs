@@ -85,6 +85,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
                 case "門市商品":
                     typeID = "2";
                     break;
+
+                case "寄售商品":
+                    typeID = "4";
+                    break;
             }
             if (!string.IsNullOrEmpty(typeID))
             {
