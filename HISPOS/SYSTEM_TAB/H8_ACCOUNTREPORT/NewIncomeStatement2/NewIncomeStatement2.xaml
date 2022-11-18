@@ -15,13 +15,32 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock FontSize="20" VerticalAlignment="Center" Text="查詢年份"/>
-            <TextBox Width="150" VerticalAlignment="Center" Text="{Binding Year,UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock FontSize="20" VerticalAlignment="Center" Text="查詢年份" Margin="10,0,0,0"/>
+            <TextBox Width="70" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
+                     Text="{Binding Year,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
             <Button Margin="10,0" Content="查詢" Background="DarkCyan" Command="{Binding SearchCommand}"/>
         </StackPanel>
 
         <Expander Grid.Row="1" Header="費用" Background="Transparent">
-            <DataGrid Background="Transparent"></DataGrid>
+            <DataGrid ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn IsReadOnly="True"  Header="會計科目"  Binding="{Binding Name}"/>
+                    
+                    <DataGridTextColumn IsReadOnly="True" Header="1月"  Binding="{Binding MonthlyValues[1]}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="2月"  Binding="{Binding MonthlyValues[0]}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="3月"  Binding="{Binding MonthlyValues[2]}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="4月" Binding="{Binding MonthlyValues[3]}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="5月" Binding="{Binding MonthlyValues[4]}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="6月" Binding="{Binding MonthlyValues[5]}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="7月" Binding="{Binding MonthlyValues[6]}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="8月" Binding="{Binding MonthlyValues[7]}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="9月" Binding="{Binding MonthlyValues[8]}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="10月" Binding="{Binding MonthlyValues[9]}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="11月" Binding="{Binding MonthlyValues[10]}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="12月" Binding="{Binding MonthlyValues[11]}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="總和" Binding="{Binding MonthlySum}" />
+                </DataGrid.Columns>
+            </DataGrid>
         </Expander>
     </Grid>
 </UserControl>

@@ -100,7 +100,7 @@ namespace His_Pos.NewClass.Report
             return result;
         }
 
-        public static IEnumerable<IncomeStatementRawData> GetIncomeStatementRawData(int year, string accID = null)
+        public static IEnumerable<IncomeStatementRawData> GetIncomeExpense(int year, string accID = null)
         {
             IEnumerable<IncomeStatementRawData> result = default;
             SQLServerConnection.DapperQuery((conn) =>
