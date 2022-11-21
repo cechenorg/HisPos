@@ -16,6 +16,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         public int[] MonthlyValues { get; set; } = new int[12];
         public int MonthlySum { get => MonthlyValues.Sum(); }
 
+     
         public ObservableCollection<IncomeStatementDisplayData> Childs { get; set; }
     }
 
@@ -29,6 +30,8 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         public int MM { get; set; }
 
         public int AccID { get; set; }
+
+        public string Type { get; set; }
         public string Name { get; set; }
         public int Value { get; set; }
 

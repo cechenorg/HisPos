@@ -1,46 +1,103 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2.NewIncomeStatement2"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2"
-             d:DataContext="{d:DesignInstance Type=local:NewIncomeStatement2ViewModel}"
-             d:Background="White"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2.NewIncomeStatement2" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2" d:DataContext="{d:DesignInstance Type=local:NewIncomeStatement2ViewModel}" d:Background="White" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition/>
+            <RowDefinition Height="70" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock FontSize="20" VerticalAlignment="Center" Text="查詢年份" Margin="10,0,0,0"/>
-            <TextBox Width="70" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
-                     Text="{Binding Year,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <Button Margin="10,0" Content="查詢" Background="DarkCyan" Command="{Binding SearchCommand}"/>
+            <TextBlock FontSize="20" VerticalAlignment="Center" Text="查詢年份" Margin="10,0,0,0" />
+            <TextBox Width="70" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding Year,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" />
+            <Button Margin="10,0" Content="查詢" Background="DarkCyan" Command="{Binding SearchCommand}" />
         </StackPanel>
 
-        <Expander Grid.Row="1" Header="費用" Background="Transparent">
-            <DataGrid ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">
+        <Viewbox Grid.Row="1" VerticalAlignment="Top">
+            <DataGrid ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}"
+                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible" CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn IsReadOnly="True"  Header="會計科目"  Binding="{Binding Name}"/>
-                    
-                    <DataGridTextColumn IsReadOnly="True" Header="1月"  Binding="{Binding MonthlyValues[1]}"/>
-                    <DataGridTextColumn IsReadOnly="True" Header="2月"  Binding="{Binding MonthlyValues[0]}"/>
-                    <DataGridTextColumn IsReadOnly="True" Header="3月"  Binding="{Binding MonthlyValues[2]}"/>
-                    <DataGridTextColumn IsReadOnly="True" Header="4月" Binding="{Binding MonthlyValues[3]}" />
-                    <DataGridTextColumn IsReadOnly="True" Header="5月" Binding="{Binding MonthlyValues[4]}" />
-                    <DataGridTextColumn IsReadOnly="True" Header="6月" Binding="{Binding MonthlyValues[5]}" />
-                    <DataGridTextColumn IsReadOnly="True" Header="7月" Binding="{Binding MonthlyValues[6]}" />
-                    <DataGridTextColumn IsReadOnly="True" Header="8月" Binding="{Binding MonthlyValues[7]}" />
-                    <DataGridTextColumn IsReadOnly="True" Header="9月" Binding="{Binding MonthlyValues[8]}" />
-                    <DataGridTextColumn IsReadOnly="True" Header="10月" Binding="{Binding MonthlyValues[9]}" />
-                    <DataGridTextColumn IsReadOnly="True" Header="11月" Binding="{Binding MonthlyValues[10]}" />
-                    <DataGridTextColumn IsReadOnly="True" Header="12月" Binding="{Binding MonthlyValues[11]}" />
-                    <DataGridTextColumn IsReadOnly="True" Header="總和" Binding="{Binding MonthlySum}" />
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="會計科目" />
+                                <TextBlock Grid.Column="1" Text="1月" />
+                                <TextBlock Grid.Column="2" Text="2月" />
+                                <TextBlock Grid.Column="3" Text="3月" />
+                                <TextBlock Grid.Column="4" Text="4月" />
+                                <TextBlock Grid.Column="5" Text="5月" />
+                                <TextBlock Grid.Column="6" Text="6月" />
+                                <TextBlock Grid.Column="7" Text="7月" />
+                                <TextBlock Grid.Column="8" Text="8月" />
+                                <TextBlock Grid.Column="9" Text="9月" />
+                                <TextBlock Grid.Column="10" Text="10月" />
+                                <TextBlock Grid.Column="11" Text="11月" />
+                                <TextBlock Grid.Column="12" Text="12月" />
+                                <TextBlock Grid.Column="13" Text="總計" />
+                            </Grid>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Expander>
+                                    <Expander.Header>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="120" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="80" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Name}" />
+                                            <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0]}" />
+                                            <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1]}" />
+                                            <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2]}" />
+                                            <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3]}" />
+                                            <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4]}" />
+                                            <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5]}" />
+                                            <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6]}" />
+                                            <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7]}" />
+                                            <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8]}" />
+                                            <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9]}" />
+                                            <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10]}" />
+                                            <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11]}" />
+                                            <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
+                                        </Grid>
+
+                                    </Expander.Header>
+
+
+                                </Expander>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                 </DataGrid.Columns>
             </DataGrid>
-        </Expander>
+        </Viewbox>
+
     </Grid>
 </UserControl>
