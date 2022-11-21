@@ -16,8 +16,14 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         public int[] MonthlyValues { get; set; } = new int[12];
         public int MonthlySum { get => MonthlyValues.Sum(); }
 
-     
-        public ObservableCollection<IncomeStatementDisplayData> Childs { get; set; }
+
+        public ObservableCollection<IncomeStatementDisplayData> Childs { get; set; } =
+            new ObservableCollection<IncomeStatementDisplayData>();
+
+        public bool EnableExpand
+        {
+            get => Childs.Count > 0;
+        }
     }
 
     public class IncomeStatementRawData

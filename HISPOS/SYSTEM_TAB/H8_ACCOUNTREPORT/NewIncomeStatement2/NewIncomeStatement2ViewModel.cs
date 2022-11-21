@@ -74,6 +74,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                     displayData.MonthlyValues[fdata.MM-1] = fdata.Value;
                 }
 
+                //displayData.Childs.Add(displayData);
+
                 IncomeStatementData.Add(displayData);
             }
 
@@ -84,6 +86,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                 totalSumData.MonthlyValues[i] = IncomeStatementData.Select(_ => _.MonthlyValues[i]).Sum();
             }
             IncomeStatementData.Add(totalSumData);
+
+            
         }
     }
 }
