@@ -303,7 +303,7 @@
                 Background="IndianRed"
                 BorderThickness="0"
                 Command="{Binding ToNextStatusCommand}"
-                Content="完成退貨"
+                Content="確認應收金額"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" 
                 PreviewMouseDown="Button_PreviewMouseDown" Cursor="Hand"/>
