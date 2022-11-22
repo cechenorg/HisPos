@@ -117,7 +117,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
             WareHouseCollection = new WareHouses(WareHouseDb.Init());
             //DonePurchaseOrders = new StoreOrders(StoreOrderDB.GetDonePurchaseOrdersInOneWeek());
             MainWindow.ServerConnection.CloseConnection();
-
+            int i = 0;
+            foreach(WareHouse wareHouse in WareHouseCollection)
+            {
+                if(wareHouse.ID == "9")
+                {
+                    break;
+                }
+                i++;
+            }
+            WareHouseCollection.RemoveAt(i);
             PurchaseOrderManufactory = ManufactoryCollection[0];
             ReturnOrderManufactory = ManufactoryCollection[0];
 

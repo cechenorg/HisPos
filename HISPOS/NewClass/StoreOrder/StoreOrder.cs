@@ -245,7 +245,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public abstract void DeleteSelectedProduct();
 
-        public abstract void CalculateTotalPrice();
+        public abstract void CalculateTotalPrice(int isDone);
 
         public abstract void SetProductToProcessingStatus();
 

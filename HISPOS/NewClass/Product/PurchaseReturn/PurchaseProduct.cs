@@ -184,7 +184,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             OrderStatus = orderStatus;
 
             Type = dataRow.Field<int>("Pro_TypeID");
-            WareHouseID = dataRow.Field<int>("ProInv_WareHouseID");
+            //WareHouseID = dataRow.Field<int>("ProInv_WareHouseID");
+            WareHouseID = dataRow.Field<int>("War_ID");
             Inventory = dataRow.Field<double>("Inv_Inventory");
             SafeAmount = dataRow.Field<int>("Inv_SafeAmount");
             BasicAmount = dataRow.Field<int>("Inv_BasicAmount");

@@ -18,9 +18,9 @@ namespace His_Pos.NewClass.Product
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
             IsCommon = row.Field<bool>("Pro_IsCommon");
-            if(row.Table.Columns.Contains("Pro_TypeID"))
+            if(row.Table.Columns.Contains("War_ID"))
             {
-                IsDeposit = row.Field<int>("Pro_TypeID") == 4;
+                IsDeposit = row.Field<int>("War_ID") == 9;
             }
             if (row.Table.Columns.Contains("MainFlag"))
                 IsMainFlag = row.Field<bool>("MainFlag");

@@ -350,7 +350,21 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         {
             RegisterCommand();
             WordsView = new ObservableCollection<StockTakingPlanProduct>();
-            WareHouses = VM.WareHouses;
+            WareHouses = new WareHouses(WareHouseDb.Init());
+            
+            if(VM.CurrentUser.Authority != DomainModel.Enum.Authority.Admin)
+            {
+                WareHouse wareHouse = new WareHouse("", "");
+                foreach (WareHouse ware in WareHouses)
+                {
+                    if (ware.ID.Equals("9"))
+                    {
+                        wareHouse = ware;
+                    }
+                }
+                WareHouses.Remove(wareHouse);
+            }
+            
             CurrentPlan.WareHouse = WareHouses[0];
             EmployeeCollection.Init();
             for (int i = 0; i < EmployeeCollection.Count; i++)

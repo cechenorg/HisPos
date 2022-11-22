@@ -53,7 +53,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             if (row.Table.Columns.Contains("Record_Amt") && row["Record_Amt"] != DBNull.Value)
                 returnStockValue = Convert.ToDouble(row["Record_Amt"]) * ReturnAmount;
             if(ReturnAmount != 0)
-                ReceiveAmount = ReturnStockValue / ReturnAmount;
+            {
+                ReceiveAmount = TypeOTC != 4 ? ReturnStockValue / ReturnAmount : 0;
+            }
         }
 
         #region ----- Define Functions -----
