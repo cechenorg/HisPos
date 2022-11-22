@@ -51,6 +51,10 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             }
         }
 
+        public bool IsExpired
+        {
+            get { return  TreatDate.AddDays(90) < DateTime.Today; }
+        }
 
         public string OrderID { get; }
 

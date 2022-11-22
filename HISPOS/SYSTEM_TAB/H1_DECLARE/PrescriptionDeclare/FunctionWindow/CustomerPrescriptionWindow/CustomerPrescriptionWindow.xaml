@@ -104,7 +104,12 @@
             </DataGrid>
         </DataTemplate>
         <DataTemplate x:Key="RegisterGrid" DataType="{x:Type local:CustomerPrescriptionViewModel}">
-            <DataGrid Margin="0,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" ItemsSource="{Binding ChronicRegisterPres, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPrescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Hidden">
+            <DataGrid Margin="0,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" 
+                      CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" 
+                      HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" 
+                      ItemsSource="{Binding ChronicRegisterPres, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedPrescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                      VerticalScrollBarVisibility="Hidden">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding PrescriptionSelected}" />
@@ -145,7 +150,7 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                    <DockPanel Grid.Row="0" >
                                         <ContentControl Margin="10,2,0,0" Content="{Binding}">
                                             <ContentControl.Style>
                                                 <Style TargetType="{x:Type ContentControl}">
@@ -171,7 +176,12 @@
                                         </ContentControl>
                                         <Label VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="單號:" FontSize="16" />
                                         <Label VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding OrderID}" FontSize="16" />
-                                    </StackPanel>
+                                        <Label VerticalContentAlignment="Center" HorizontalAlignment="Right" 
+                                               Visibility="{Binding IsExpired,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                               BorderBrush="OrangeRed" BorderThickness="2" Content="已過期"  
+                                               FontFamily="Segoe UI Semibold" FontSize="16" Foreground="OrangeRed" Style="{StaticResource MyLabelStyle}" />
+                                        
+                                    </DockPanel>
                                     <StackPanel Grid.Row="1" Margin="0,5,0,5" Orientation="Horizontal">
                                         <Label Width="245" VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding Institution.Name}" FontSize="19" />
                                         <Label Width="81" VerticalAlignment="Center" HorizontalContentAlignment="Left" Content="{Binding Division.Name}" FontSize="19" />
