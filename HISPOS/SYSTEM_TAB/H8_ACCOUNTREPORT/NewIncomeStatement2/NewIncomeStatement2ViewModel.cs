@@ -74,7 +74,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                     displayData.MonthlyValues[fdata.MM-1] = fdata.Value;
                 }
 
-                //displayData.Childs.Add(displayData);
+                displayData.Childs.Add(displayData);
 
                 IncomeStatementData.Add(displayData);
             }
