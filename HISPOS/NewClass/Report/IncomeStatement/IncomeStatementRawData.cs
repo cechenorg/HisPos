@@ -35,11 +35,15 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         public int YYYY { get; set; }
         public int MM { get; set; }
 
-        public int AccID { get; set; }
+        public int ISTypeNo { get; set; }
+        public string ISType { get; set; }
+        public int ISGroupNo { get; set; }
+        public string ISGroup { get; set; }
 
-        public string Type { get; set; }
-        public string Name { get; set; }
-        public int Value { get; set; }
+        public int AcctID { get; set; }
+        public string ActcName { get; set; }
+
+        public int AcctValue { get; set; }
 
     }
 }

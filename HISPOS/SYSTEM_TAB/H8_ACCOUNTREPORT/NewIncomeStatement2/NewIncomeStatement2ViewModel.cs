@@ -53,7 +53,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
         private void Search()
         {
 
-            var expenseDatas = ReportService.GetIncomeExpense(_year);
+            var expenseDatas = ReportService.GetIncomeStatement(_year);
             GetExpenseData(expenseDatas);
 
         }
@@ -62,21 +62,42 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
         {
             IncomeStatementData = new ObservableCollection<IncomeStatementDisplayData>();
           
-            foreach (var raw in rawData.GroupBy(_ => _.Name).Select(_=> _.Key))
+            foreach (var typeName in rawData.Select(_ => _.ISType).Distinct())
             {
-                IncomeStatementDisplayData displayData = new IncomeStatementDisplayData(){Name = raw};
+                IncomeStatementDisplayData typeIncomeData = new IncomeStatementDisplayData() { Name = typeName };
+                IncomeStatementData.Add(typeIncomeData);
 
-                var filterData = rawData.Where(_ => _.Name == raw).OrderBy(_ => _.MM);
-
-
-                foreach (var fdata in filterData)
+                foreach (var groupNo in rawData.Where(_ => _.ISType == typeName).Select(_ => _.ISGroupNo).Distinct())
                 {
-                    displayData.MonthlyValues[fdata.MM-1] = fdata.Value;
+
+                    string groupName = rawData.First(_ => _.ISGroupNo == groupNo).ISGroup;
+                    IncomeStatementDisplayData groupIncomeData = new IncomeStatementDisplayData() { Name = groupName };
+                    typeIncomeData.Childs.Add(groupIncomeData);
+
+                    foreach (var accID in rawData.Where(_ => _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
+                    {
+                        string accName = rawData.First(_ => _.AcctID == accID).ActcName;
+                        IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName };
+                        groupIncomeData.Childs.Add(accIncomeData);
+
+                        var accfilterData = rawData.Where(_ => _.AcctID == accID).OrderBy(_ => _.MM);
+
+                        foreach (var fdata in accfilterData)
+                        {
+                            accIncomeData.MonthlyValues[fdata.MM - 1] = fdata.AcctValue;
+                        }
+                    }
+
+                    for (int i = 0; i < 12; i++)
+                    {
+                        groupIncomeData.MonthlyValues[i] = groupIncomeData.Childs.Sum(_ => _.MonthlyValues[i]);
+                    }
+
                 }
-
-                displayData.Childs.Add(displayData);
-
-                IncomeStatementData.Add(displayData);
+                for (int i = 0; i < 12; i++)
+                {
+                    typeIncomeData.MonthlyValues[i] = typeIncomeData.Childs.Sum(_ => _.MonthlyValues[i]);
+                }
             }
 
             IncomeStatementDisplayData totalSumData = new IncomeStatementDisplayData() { Name = "總和" };
