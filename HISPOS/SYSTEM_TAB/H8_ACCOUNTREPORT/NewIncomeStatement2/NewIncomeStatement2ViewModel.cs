@@ -70,28 +70,55 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                 foreach (var groupNo in rawData.Where(_ => _.ISType == typeName).Select(_ => _.ISGroupNo).Distinct())
                 {
 
-                    string groupName = rawData.First(_ => _.ISGroupNo == groupNo).ISGroup;
-                    IncomeStatementDisplayData groupIncomeData = new IncomeStatementDisplayData() { Name = groupName };
-                    typeIncomeData.Childs.Add(groupIncomeData);
-
-                    foreach (var accID in rawData.Where(_ => _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
+                    if (groupNo == 0)
                     {
-                        string accName = rawData.First(_ => _.AcctID == accID).ActcName;
-                        IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName };
-                        groupIncomeData.Childs.Add(accIncomeData);
-
-                        var accfilterData = rawData.Where(_ => _.AcctID == accID).OrderBy(_ => _.MM);
-
-                        foreach (var fdata in accfilterData)
+                        typeIncomeData.DisplayLayerCount = 2;
+                        foreach (var accID in rawData.Where(_ => _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
                         {
-                            accIncomeData.MonthlyValues[fdata.MM - 1] = fdata.AcctValue;
+                            string accName = rawData.First(_ => _.AcctID == accID).ActcName;
+                            IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName };
+                            typeIncomeData.Childs.Add(accIncomeData);
+
+                            var accfilterData = rawData.Where(_ => _.AcctID == accID).OrderBy(_ => _.MM);
+
+                            foreach (var fdata in accfilterData)
+                            {
+                                accIncomeData.MonthlyValues[fdata.MM - 1] = fdata.AcctValue;
+                            }
+                        }
+                        for (int i = 0; i < 12; i++)
+                        {
+                            typeIncomeData.MonthlyValues[i] = typeIncomeData.Childs.Sum(_ => _.MonthlyValues[i]);
+                        }
+                    }
+                    else
+                    {
+                        typeIncomeData.DisplayLayerCount = 3;
+                        string groupName = rawData.First(_ => _.ISGroupNo == groupNo).ISGroup;
+                        IncomeStatementDisplayData groupIncomeData = new IncomeStatementDisplayData() { Name = groupName };
+                        typeIncomeData.Childs.Add(groupIncomeData);
+
+                        foreach (var accID in rawData.Where(_ => _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
+                        {
+                            string accName = rawData.First(_ => _.AcctID == accID).ActcName;
+                            IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName };
+                            groupIncomeData.Childs.Add(accIncomeData);
+
+                            var accfilterData = rawData.Where(_ => _.AcctID == accID).OrderBy(_ => _.MM);
+
+                            foreach (var fdata in accfilterData)
+                            {
+                                accIncomeData.MonthlyValues[fdata.MM - 1] = fdata.AcctValue;
+                            }
+                        }
+
+                        for (int i = 0; i < 12; i++)
+                        {
+                            groupIncomeData.MonthlyValues[i] = groupIncomeData.Childs.Sum(_ => _.MonthlyValues[i]);
                         }
                     }
 
-                    for (int i = 0; i < 12; i++)
-                    {
-                        groupIncomeData.MonthlyValues[i] = groupIncomeData.Childs.Sum(_ => _.MonthlyValues[i]);
-                    }
+                   
 
                 }
                 for (int i = 0; i < 12; i++)
@@ -100,7 +127,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                 }
             }
 
-            IncomeStatementDisplayData totalSumData = new IncomeStatementDisplayData() { Name = "總和" };
+            IncomeStatementDisplayData totalSumData = new IncomeStatementDisplayData() { Name = "總和",DisplayLayerCount = 1};
 
             for (int i = 0; i < 12; i++)
             {
