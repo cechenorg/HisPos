@@ -46,7 +46,7 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer2">
-            <Expander >
+            <Expander  IsExpanded="True">
                 <Expander.Header>
                     <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
                         <Grid.ColumnDefinitions>
@@ -128,7 +128,7 @@
             </Expander>
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer3">
-            <Expander Background="Transparent">
+            <Expander Background="Transparent" IsExpanded="True">
                 <Expander.Header>
                     <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
                         <Grid.ColumnDefinitions>
