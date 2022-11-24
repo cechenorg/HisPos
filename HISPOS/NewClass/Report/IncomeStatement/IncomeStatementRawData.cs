@@ -46,7 +46,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         public string ISGroup { get; set; }
 
         public int AcctID { get; set; }
-        public string ActcName { get; set; }
+        public string AcctName { get; set; }
 
         public int AcctValue { get; set; }
 
