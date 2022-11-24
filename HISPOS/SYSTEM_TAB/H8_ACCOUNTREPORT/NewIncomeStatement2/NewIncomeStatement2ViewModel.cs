@@ -73,7 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                     if (groupNo == 0)
                     {
                         typeIncomeData.DisplayLayerCount = 2;
-                        foreach (var accID in rawData.Where(_ => _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
+                        foreach (var accID in rawData.Where(_ => _.ISType == typeName && _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
                         {
                             string accName = rawData.First(_ => _.AcctID == accID).ActcName;
                             IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName };
@@ -94,11 +94,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                     else
                     {
                         typeIncomeData.DisplayLayerCount = 3;
-                        string groupName = rawData.First(_ => _.ISGroupNo == groupNo).ISGroup;
+                        string groupName = rawData.First(_ => _.ISType == typeName && _.ISGroupNo == groupNo).ISGroup;
                         IncomeStatementDisplayData groupIncomeData = new IncomeStatementDisplayData() { Name = groupName };
                         typeIncomeData.Childs.Add(groupIncomeData);
 
-                        foreach (var accID in rawData.Where(_ => _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
+                        foreach (var accID in rawData.Where(_ => _.ISType == typeName && _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
                         {
                             string accName = rawData.First(_ => _.AcctID == accID).ActcName;
                             IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName };

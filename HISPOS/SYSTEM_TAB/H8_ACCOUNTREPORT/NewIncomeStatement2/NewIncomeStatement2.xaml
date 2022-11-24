@@ -8,8 +8,9 @@
              d:DataContext="{d:DesignInstance Type=local:NewIncomeStatement2ViewModel}"
              d:Background="White" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+       
         <DataTemplate x:Key="IncomeLyaer1">
-            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
+            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Margin="20,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="140" />
                     <ColumnDefinition Width="85" />
@@ -43,7 +44,7 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer2">
-            <Expander Background="Transparent">
+            <Expander Background="Transparent" IsExpanded="True">
                 <Expander.Header>
                     <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
                         <Grid.ColumnDefinitions>
@@ -128,11 +129,11 @@
             </Expander>
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer3">
-            <Expander Background="Transparent">
+            <Expander Background="Transparent" IsExpanded="True" HorizontalAlignment="Stretch" >
                 <Expander.Header>
-                    <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
+                    <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Height="20" >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="120" />
                             <ColumnDefinition Width="85" />
                             <ColumnDefinition Width="85" />
                             <ColumnDefinition Width="85" />
@@ -147,7 +148,7 @@
                             <ColumnDefinition Width="85" />
                             <ColumnDefinition Width="85" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}" />
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Top" />
                         <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0]}" />
                         <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1]}" />
                         <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2]}" />
@@ -160,7 +161,7 @@
                         <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9]}" />
                         <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10]}" />
                         <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11]}" />
-                        <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
+                        <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" TextWrapping="Wrap" />
                     </Grid>
                 </Expander.Header>
                 <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" AutoGenerateColumns="False" CanUserAddRows="False"
