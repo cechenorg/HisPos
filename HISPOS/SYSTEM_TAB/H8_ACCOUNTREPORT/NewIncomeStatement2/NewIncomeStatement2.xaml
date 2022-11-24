@@ -8,11 +8,13 @@
              d:DataContext="{d:DesignInstance Type=local:NewIncomeStatement2ViewModel}"
              d:Background="White" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-       
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+        </Style>
         <DataTemplate x:Key="IncomeLyaer1">
-            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Margin="20,0,0,0">
+            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Margin="25,0,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="120" />
                     <ColumnDefinition Width="85" />
                     <ColumnDefinition Width="85" />
                     <ColumnDefinition Width="85" />
@@ -44,11 +46,11 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer2">
-            <Expander Background="Transparent" IsExpanded="True">
+            <Expander Background="White" Margin="0,0,50,0">
                 <Expander.Header>
                     <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="120" />
                             <ColumnDefinition Width="85" />
                             <ColumnDefinition Width="85" />
                             <ColumnDefinition Width="85" />
@@ -79,19 +81,16 @@
                         <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
                     </Grid>
                 </Expander.Header>
-                <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="10,0,0,0" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="10,0,0,0"
+                          Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
-                                        <Grid.Resources>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Margin" Value="25,0,0,0"></Setter>
-                                            </Style>
-                                        </Grid.Resources>
+                                        
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="140" />
+                                            <ColumnDefinition Width="120" />
                                             <ColumnDefinition Width="85" />
                                             <ColumnDefinition Width="85" />
                                             <ColumnDefinition Width="85" />
@@ -129,9 +128,9 @@
             </Expander>
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer3">
-            <Expander Background="Transparent" IsExpanded="True" HorizontalAlignment="Stretch" >
+            <Expander Background="Transparent" Margin="0,0,50,0">
                 <Expander.Header>
-                    <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Height="20" >
+                    <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="120" />
                             <ColumnDefinition Width="85" />
@@ -148,7 +147,7 @@
                             <ColumnDefinition Width="85" />
                             <ColumnDefinition Width="85" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}" VerticalAlignment="Top" />
+                        <TextBlock Text="{Binding Name}" />
                         <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0]}" />
                         <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1]}" />
                         <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2]}" />
@@ -161,11 +160,12 @@
                         <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9]}" />
                         <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10]}" />
                         <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11]}" />
-                        <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" TextWrapping="Wrap" />
+                        <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
                     </Grid>
                 </Expander.Header>
-                <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" AutoGenerateColumns="False" CanUserAddRows="False"
-                          Margin="10,0,0,0" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}"
+                           AutoGenerateColumns="False" CanUserAddRows="False"
+                           Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
@@ -174,7 +174,7 @@
                                         <Expander.Header>
                                             <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="140" />
+                                                    <ColumnDefinition Width="120" />
                                                     <ColumnDefinition Width="85" />
                                                     <ColumnDefinition Width="85" />
                                                     <ColumnDefinition Width="85" />
@@ -207,20 +207,15 @@
                                         </Expander.Header>
 
                                         <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" 
-                                                  AutoGenerateColumns="False" CanUserAddRows="False" Margin="10,0,0,0" Background="Transparent" 
+                                                  AutoGenerateColumns="False" CanUserAddRows="False"  Background="Transparent" 
                                                   ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                                             <DataGrid.Columns>
                                                 <DataGridTemplateColumn IsReadOnly="True">
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
-                                                                <Grid.Resources>
-                                                                    <Style TargetType="TextBlock">
-                                                                        <Setter Property="Margin" Value="25,0,0,0"></Setter>
-                                                                    </Style>
-                                                                </Grid.Resources>
                                                                 <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition Width="140" />
+                                                                    <ColumnDefinition Width="130" />
                                                                     <ColumnDefinition Width="85" />
                                                                     <ColumnDefinition Width="85" />
                                                                     <ColumnDefinition Width="85" />
@@ -269,7 +264,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
-            <RowDefinition />
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
@@ -279,68 +274,70 @@
             <Button Margin="10,0" Content="查詢" Background="DarkCyan" Command="{Binding SearchCommand}" />
         </StackPanel>
 
-        <DataGrid Grid.Row="1" ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible" CanUserAddRows="False" Background="Transparent">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.Header>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="140" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                                <ColumnDefinition Width="85" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="會計科目" Margin="20,0,0,0" />
-                            <TextBlock Grid.Column="1" Text="1月" />
-                            <TextBlock Grid.Column="2" Text="2月" />
-                            <TextBlock Grid.Column="3" Text="3月" />
-                            <TextBlock Grid.Column="4" Text="4月" />
-                            <TextBlock Grid.Column="5" Text="5月" />
-                            <TextBlock Grid.Column="6" Text="6月" />
-                            <TextBlock Grid.Column="7" Text="7月" />
-                            <TextBlock Grid.Column="8" Text="8月" />
-                            <TextBlock Grid.Column="9" Text="9月" />
-                            <TextBlock Grid.Column="10" Text="10月" />
-                            <TextBlock Grid.Column="11" Text="11月" />
-                            <TextBlock Grid.Column="12" Text="12月" />
-                            <TextBlock Grid.Column="13" Text="總計" />
-                        </Grid>
-                    </DataGridTemplateColumn.Header>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ContentControl Content="{Binding}">
-                                <ContentControl.Style>
-                                    <Style TargetType="{x:Type ContentControl}">
-                                        <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer1}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding DisplayLayerCount,UpdateSourceTrigger=PropertyChanged}" Value="2">
-                                                <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer2}" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding DisplayLayerCount,UpdateSourceTrigger=PropertyChanged}" Value="3">
-                                                <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer3}" />
-                                            </DataTrigger>
+            <DataGrid Grid.Row="1" Margin="10,0" ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}" 
+                      AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" Background="White">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <Grid Margin="20,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="85" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="會計科目" />
+                                <TextBlock Grid.Column="1" Text="1月" />
+                                <TextBlock Grid.Column="2" Text="2月" />
+                                <TextBlock Grid.Column="3" Text="3月" />
+                                <TextBlock Grid.Column="4" Text="4月" />
+                                <TextBlock Grid.Column="5" Text="5月" />
+                                <TextBlock Grid.Column="6" Text="6月" />
+                                <TextBlock Grid.Column="7" Text="7月" />
+                                <TextBlock Grid.Column="8" Text="8月" />
+                                <TextBlock Grid.Column="9" Text="9月" />
+                                <TextBlock Grid.Column="10" Text="10月" />
+                                <TextBlock Grid.Column="11" Text="11月" />
+                                <TextBlock Grid.Column="12" Text="12月" />
+                                <TextBlock Grid.Column="13" Text="總計" />
+                            </Grid>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding}">
+                                    <ContentControl.Style>
+                                        <Style TargetType="{x:Type ContentControl}">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer1}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DisplayLayerCount,UpdateSourceTrigger=PropertyChanged}" Value="2">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer2}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding DisplayLayerCount,UpdateSourceTrigger=PropertyChanged}" Value="3">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer3}" />
+                                                </DataTrigger>
 
-                                        </Style.Triggers>
-                                    </Style>
-                                </ContentControl.Style>
-                            </ContentControl>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
 
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-            </DataGrid.Columns>
-        </DataGrid>
+                </DataGrid.Columns>
+            </DataGrid>
+     
 
     </Grid>
 </UserControl>
