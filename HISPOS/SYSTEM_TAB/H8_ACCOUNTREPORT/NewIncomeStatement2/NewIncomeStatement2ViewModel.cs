@@ -44,12 +44,30 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
 
 
         public ICommand SearchCommand { get; set; }
+        public ICommand YearMinusCommand { get; set; }
+        public ICommand YearAddCommand { get; set; }
 
         public NewIncomeStatement2ViewModel()
         {
             SearchCommand = new RelayCommand(Search);
+            YearAddCommand = new RelayCommand(YearAdd);
+            YearMinusCommand = new RelayCommand(YearMinus);
+
             Search();
         }
+
+        private void YearAdd()
+        {
+            Year++;
+            Search();
+        }
+
+        private void YearMinus()
+        {
+            Year--;
+            Search();
+        }
+
 
         private void Search()
         {
