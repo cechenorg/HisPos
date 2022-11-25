@@ -22,19 +22,19 @@
                     <ColumnDefinition Width="85" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Name}" />
-                <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0]}" />
-                <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1]}" />
-                <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2]}" />
-                <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3]}" />
-                <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4]}" />
-                <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5]}" />
-                <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6]}" />
-                <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7]}" />
-                <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8]}" />
-                <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9]}" />
-                <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10]}" />
-                <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11]}" />
-                <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
+                <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
+                <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
+                <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3], StringFormat=N0}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4], StringFormat=N0}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5], StringFormat=N0}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6], StringFormat=N0}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7], StringFormat=N0}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8], StringFormat=N0}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9], StringFormat=N0}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10], StringFormat=N0}" HorizontalAlignment="Right" />
+                <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11], StringFormat=N0}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer2">
@@ -59,19 +59,19 @@
                                 <ColumnDefinition Width="85" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding Name}" />
-                            <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0]}" />
-                            <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1]}" />
-                            <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2]}" />
-                            <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3]}" />
-                            <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4]}" />
-                            <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5]}" />
-                            <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6]}" />
-                            <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7]}" />
-                            <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8]}" />
-                            <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9]}" />
-                            <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10]}" />
-                            <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11]}" />
-                            <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
+                            <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" />
                         </Grid>
                     </Expander.Header>
                     <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
@@ -99,19 +99,19 @@
                                                 <ColumnDefinition Width="85" />
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Text="{Binding Name}" />
-                                            <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0]}" />
-                                            <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1]}" />
-                                            <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2]}" />
-                                            <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3]}" />
-                                            <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4]}" />
-                                            <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5]}" />
-                                            <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6]}" />
-                                            <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7]}" />
-                                            <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8]}" />
-                                            <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9]}" />
-                                            <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10]}" />
-                                            <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11]}" />
-                                            <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
+                                            <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11], StringFormat=N0}" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" />
                                         </Grid>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -144,19 +144,19 @@
                                 <ColumnDefinition Width="85" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding Name}" />
-                            <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0]}" />
-                            <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1]}" />
-                            <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2]}" />
-                            <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3]}" />
-                            <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4]}" />
-                            <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5]}" />
-                            <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6]}" />
-                            <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7]}" />
-                            <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8]}" />
-                            <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9]}" />
-                            <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10]}" />
-                            <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11]}" />
-                            <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
+                            <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11], StringFormat=N0}" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" />
                         </Grid>
                     </Expander.Header>
                     <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
@@ -185,19 +185,19 @@
                                                         <ColumnDefinition Width="85" />
                                                     </Grid.ColumnDefinitions>
                                                     <TextBlock Text="{Binding Name}" />
-                                                    <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0]}" />
-                                                    <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1]}" />
-                                                    <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2]}" />
-                                                    <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3]}" />
-                                                    <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4]}" />
-                                                    <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5]}" />
-                                                    <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6]}" />
-                                                    <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7]}" />
-                                                    <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8]}" />
-                                                    <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9]}" />
-                                                    <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10]}" />
-                                                    <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11]}" />
-                                                    <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
+                                                    <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                    <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" />
                                                 </Grid>
                                             </Expander.Header>
 
@@ -225,19 +225,19 @@
                                                                         <ColumnDefinition Width="85" />
                                                                     </Grid.ColumnDefinitions>
                                                                     <TextBlock Text="{Binding Name}" />
-                                                                    <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0]}" />
-                                                                    <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1]}" />
-                                                                    <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2]}" />
-                                                                    <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3]}" />
-                                                                    <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4]}" />
-                                                                    <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5]}" />
-                                                                    <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6]}" />
-                                                                    <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7]}" />
-                                                                    <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8]}" />
-                                                                    <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9]}" />
-                                                                    <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10]}" />
-                                                                    <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11]}" />
-                                                                    <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
+                                                                    <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" />
                                                                 </Grid>
                                                             </DataTemplate>
                                                         </DataGridTemplateColumn.CellTemplate>
@@ -268,7 +268,7 @@
                 <Button Width="30" Padding="0" Background="Transparent" BorderThickness="0" Command="{Binding YearMinusCommand}">
                     <Image Height="16" Source="/Images/left.png" />
                 </Button>
-                <TextBox Width="70" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding Year,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" />
+                <TextBox Width="70" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding Year,UpdateSourceTrigger=PropertyChanged}"  />
                 <Button x:Name="btnRight" Width="30" Padding="0" Background="Transparent" BorderThickness="0" Command="{Binding YearAddCommand}">
                     <Image Height="16" Source="/Images/right.png" />
                 </Button>
@@ -283,7 +283,7 @@
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.Header>
-                            <Grid Margin="20,0,0,0">
+                            <Grid Margin="0,0,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="140" />
                                     <ColumnDefinition Width="85" />
@@ -300,20 +300,20 @@
                                     <ColumnDefinition Width="85" />
                                     <ColumnDefinition Width="85" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="會計科目" />
-                                <TextBlock Grid.Column="1" Text="1月" />
-                                <TextBlock Grid.Column="2" Text="2月" />
-                                <TextBlock Grid.Column="3" Text="3月" />
-                                <TextBlock Grid.Column="4" Text="4月" />
-                                <TextBlock Grid.Column="5" Text="5月" />
-                                <TextBlock Grid.Column="6" Text="6月" />
-                                <TextBlock Grid.Column="7" Text="7月" />
-                                <TextBlock Grid.Column="8" Text="8月" />
-                                <TextBlock Grid.Column="9" Text="9月" />
-                                <TextBlock Grid.Column="10" Text="10月" />
-                                <TextBlock Grid.Column="11" Text="11月" />
-                                <TextBlock Grid.Column="12" Text="12月" />
-                                <TextBlock Grid.Column="13" Text="總計" />
+                                <TextBlock Text="會計科目" Margin="20,0,0,0"/>
+                                <TextBlock Grid.Column="1" Text="1月" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Column="2" Text="2月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="3" Text="3月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="4" Text="4月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="5" Text="5月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="6" Text="6月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="7" Text="7月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="8" Text="8月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="9" Text="9月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="10" Text="10月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="11" Text="11月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="12" Text="12月" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="13" Text="總計" HorizontalAlignment="Right" />
                             </Grid>
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
