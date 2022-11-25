@@ -24,5 +24,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
         {
             InitializeComponent();
         }
+
+        private void dg_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            scrollviewer.ScrollToVerticalOffset(scrollviewer.VerticalOffset - e.Delta);
+        }
     }
 }

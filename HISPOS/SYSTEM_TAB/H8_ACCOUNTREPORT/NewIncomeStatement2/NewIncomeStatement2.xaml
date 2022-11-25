@@ -4,7 +4,7 @@
             <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         </Style>
         <DataTemplate x:Key="IncomeLyaer1">
-            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Margin="25,0,0,0">
+            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Margin="25,0,0,0" PreviewMouseWheel="dg_PreviewMouseWheel">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
                     <ColumnDefinition Width="85" />
@@ -74,7 +74,8 @@
                             <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
                         </Grid>
                     </Expander.Header>
-                    <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="10,0,0,0" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
+                              AutoGenerateColumns="False" CanUserAddRows="False" Margin="10,0,0,0" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -122,7 +123,7 @@
             
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer3">
-            <Grid>
+            <Grid PreviewMouseWheel="dg_PreviewMouseWheel">
                 <Expander Background="Transparent" IsExpanded="True">
                     <Expander.Header>
                         <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
@@ -158,7 +159,8 @@
                             <TextBlock Grid.Column="13" Text="{Binding MonthlySum}" />
                         </Grid>
                     </Expander.Header>
-                    <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
+                              AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -199,7 +201,8 @@
                                                 </Grid>
                                             </Expander.Header>
 
-                                            <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" Margin="10,0,0,0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                                            <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
+                                                      AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" Margin="10,0,0,0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                                                 <DataGrid.Columns>
                                                     <DataGridTemplateColumn IsReadOnly="True">
                                                         <DataGridTemplateColumn.CellTemplate>
@@ -252,7 +255,7 @@
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
-    <ScrollViewer>
+    <ScrollViewer x:Name="scrollviewer">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="70" />
