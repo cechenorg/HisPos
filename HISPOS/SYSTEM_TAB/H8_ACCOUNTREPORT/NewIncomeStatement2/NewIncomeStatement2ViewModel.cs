@@ -43,25 +43,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
         }
 
 
-        public IncomeStatementDisplayData SellProfitData
-        {
-            get => IncomeStatementData.Single(_ => _.Name == "營業毛利");
-        }
-        public IncomeStatementDisplayData SellCostData
-        {
-            get => IncomeStatementData.Single(_ => _.Name == "營業費用");
-        }
-        public IncomeStatementDisplayData NonSellProfitData
-        {
-            get => IncomeStatementData.Single(_ => _.Name == "非營業收益");
-        }
-        public IncomeStatementDisplayData TotalIncomeStatementData
-        {
-            get => IncomeStatementData.Single(_ => _.Name == "總和");
-        }
-
-
-
         public ICommand SearchCommand { get; set; }
 
         public NewIncomeStatement2ViewModel()

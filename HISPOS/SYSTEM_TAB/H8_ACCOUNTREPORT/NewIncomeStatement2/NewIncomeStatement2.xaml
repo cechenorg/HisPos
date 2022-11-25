@@ -252,20 +252,21 @@
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="70" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="30" />
-        </Grid.RowDefinitions>
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <TextBlock FontSize="20" VerticalAlignment="Center" Text="查詢年份" Margin="10,0,0,0" />
-            <TextBox Width="70" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding Year,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" />
-            <Button Margin="10,0" Content="查詢" Background="DarkCyan" Command="{Binding SearchCommand}" />
-        </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock FontSize="20" VerticalAlignment="Center" Text="查詢年份" Margin="10,0,0,0" />
+                <TextBox Width="70" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding Year,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" />
+                <Button Margin="10,0" Content="查詢" Background="DarkCyan" Command="{Binding SearchCommand}" />
+            </StackPanel>
 
-        <!--<DataGrid Grid.Row="1" Margin="10,0" 
+            <DataGrid Grid.Row="1" Margin="10,0" 
                       ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}" 
                       AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" 
                        CanUserDeleteRows="False" VerticalContentAlignment="Top">
@@ -329,87 +330,11 @@
                     </DataGridTemplateColumn>
 
                 </DataGrid.Columns>
-            </DataGrid>-->
+            </DataGrid>
 
-        <ScrollViewer Grid.Row="1">
-            <StackPanel>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
 
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="140" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                            <ColumnDefinition Width="85" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="會計科目" Margin="25,0,0,0" />
-                        <TextBlock Grid.Column="1" Text="1月" />
-                        <TextBlock Grid.Column="2" Text="2月" />
-                        <TextBlock Grid.Column="3" Text="3月" />
-                        <TextBlock Grid.Column="4" Text="4月" />
-                        <TextBlock Grid.Column="5" Text="5月" />
-                        <TextBlock Grid.Column="6" Text="6月" />
-                        <TextBlock Grid.Column="7" Text="7月" />
-                        <TextBlock Grid.Column="8" Text="8月" />
-                        <TextBlock Grid.Column="9" Text="9月" />
-                        <TextBlock Grid.Column="10" Text="10月" />
-                        <TextBlock Grid.Column="11" Text="11月" />
-                        <TextBlock Grid.Column="12" Text="12月" />
-                        <TextBlock Grid.Column="13" Text="總計" />
-                    </Grid>
-
-                    <ContentControl Grid.Row="1" Content="{Binding}" DataContext="{Binding SellProfitData}">
-                        <ContentControl.Style>
-                            <Style TargetType="{x:Type ContentControl}">
-                                <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer3}" />
-                            </Style>
-                        </ContentControl.Style>
-                    </ContentControl>
-
-                    <ContentControl Grid.Row="2" Content="{Binding}" DataContext="{Binding SellCostData}">
-                        <ContentControl.Style>
-                            <Style TargetType="{x:Type ContentControl}">
-                                <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer2}" />
-                            </Style>
-                        </ContentControl.Style>
-                    </ContentControl>
-
-                    <ContentControl Grid.Row="3" Content="{Binding}" DataContext="{Binding NonSellProfitData}">
-                        <ContentControl.Style>
-                            <Style TargetType="{x:Type ContentControl}">
-                                <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer2}" />
-                            </Style>
-                        </ContentControl.Style>
-                    </ContentControl>
-
-                    <ContentControl Grid.Row="4" Content="{Binding}" DataContext="{Binding TotalIncomeStatementData}">
-                        <ContentControl.Style>
-                            <Style TargetType="{x:Type ContentControl}">
-                                <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer1}" />
-                            </Style>
-                        </ContentControl.Style>
-                    </ContentControl>
-
-                </Grid>
-            </StackPanel>
-          
-        </ScrollViewer>
-    </Grid>
+           
+        </Grid>
+    </ScrollViewer>
+ 
 </UserControl>
