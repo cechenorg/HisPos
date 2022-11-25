@@ -42,6 +42,26 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
             }
         }
 
+
+        public IncomeStatementDisplayData SellProfitData
+        {
+            get => IncomeStatementData.Single(_ => _.Name == "營業毛利");
+        }
+        public IncomeStatementDisplayData SellCostData
+        {
+            get => IncomeStatementData.Single(_ => _.Name == "營業費用");
+        }
+        public IncomeStatementDisplayData NonSellProfitData
+        {
+            get => IncomeStatementData.Single(_ => _.Name == "非營業收益");
+        }
+        public IncomeStatementDisplayData TotalIncomeStatementData
+        {
+            get => IncomeStatementData.Single(_ => _.Name == "總和");
+        }
+
+
+
         public ICommand SearchCommand { get; set; }
 
         public NewIncomeStatement2ViewModel()
@@ -75,7 +95,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                         typeIncomeData.DisplayLayerCount = 2;
                         foreach (var accID in rawData.Where(_ => _.ISType == typeName && _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
                         {
-                            string accName = rawData.First(_ => _.AcctID == accID).ActcName;
+                            string accName = rawData.First(_ => _.AcctID == accID).AcctName;
                             IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName };
                             typeIncomeData.Childs.Add(accIncomeData);
 
@@ -100,7 +120,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
 
                         foreach (var accID in rawData.Where(_ => _.ISType == typeName && _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
                         {
-                            string accName = rawData.First(_ => _.AcctID == accID).ActcName;
+                            string accName = rawData.First(_ => _.AcctID == accID).AcctName;
                             IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName };
                             groupIncomeData.Childs.Add(accIncomeData);
 
