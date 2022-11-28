@@ -39,7 +39,7 @@
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer2">
             <Grid>
-                <Expander IsExpanded="True" Background="Transparent">
+                <Expander IsExpanded="True" Background="Transparent" Height="40" VerticalAlignment="Top" VerticalContentAlignment="Top">
                     <Expander.Header>
                         <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
                             <Grid.ColumnDefinitions>
@@ -98,7 +98,7 @@
                                                 <ColumnDefinition Width="85" />
                                                 <ColumnDefinition Width="85" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding Name}" />
+                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Top" />
                                             <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
                                             <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
                                             <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right" />
@@ -124,7 +124,7 @@
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer3">
             <Grid PreviewMouseWheel="dg_PreviewMouseWheel">
-                <Expander Background="Transparent" IsExpanded="True">
+                <Expander Background="Transparent" IsExpanded="True" Height="40" >
                     <Expander.Header>
                         <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
                             <Grid.ColumnDefinitions>
