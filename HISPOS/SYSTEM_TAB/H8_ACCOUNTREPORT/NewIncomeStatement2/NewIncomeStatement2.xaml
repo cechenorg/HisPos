@@ -76,8 +76,8 @@
                         </Grid>
                     </Expander.Header>
                     <Grid Background="#E2EFDA" Margin="0,0,0,0">
-                        <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" CanUserAddRows="False" 
-                                  VerticalAlignment="Center" Margin="20,10,0,10" Background="#E2EFDA"  ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" CanUserAddRows="False" VerticalAlignment="Center" Margin="20,10,0,10" 
+                                  Background="#E2EFDA" ColumnHeaderHeight="0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                             <DataGrid.CellStyle>
                                 <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
                                     <Setter Property="Padding" Value="0" />
@@ -169,7 +169,7 @@
                         </Grid>
                     </Expander.Header>
                     <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" 
-                              CanUserAddRows="False" CanUserDeleteRows="False" Background="#E2EFDA"
+                              CanUserAddRows="False" CanUserDeleteRows="False" Background="#E2EFDA" ColumnHeaderHeight="0"
                               ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
@@ -217,7 +217,7 @@
                                             </Expander.Header>
 
                                             <Grid Background="#F1F7ED">
-                                                <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" CanUserAddRows="False" Background="#F1F7ED" Margin="25,0,0,0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                                                <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" ColumnHeaderHeight="0" PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" CanUserAddRows="False" Background="#F1F7ED" Margin="25,0,0,0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                                                     <DataGrid.CellStyle>
                                                         <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
                                                             <Setter Property="Padding" Value="0" />
