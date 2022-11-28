@@ -4,7 +4,8 @@
             <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         </Style>
         <DataTemplate x:Key="IncomeLyaer1">
-            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Margin="25,0,0,0" PreviewMouseWheel="dg_PreviewMouseWheel">
+            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Height="15"
+                  Margin="25,0,0,0" PreviewMouseWheel="dg_PreviewMouseWheel">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
                     <ColumnDefinition Width="85" />
@@ -38,10 +39,10 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer2">
-            <Grid>
+            <Grid Background="MediumSeaGreen">
                 <Expander IsExpanded="True" Background="Transparent">
                     <Expander.Header>
-                        <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
+                        <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Height="15" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120" />
                                 <ColumnDefinition Width="85" />
@@ -75,7 +76,8 @@
                         </Grid>
                     </Expander.Header>
                     <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
-                              AutoGenerateColumns="False" CanUserAddRows="False" Margin="10,0,0,0" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                              AutoGenerateColumns="False" CanUserAddRows="False" Margin="10,0,0,0"
+                              Background="PaleGreen" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -126,7 +128,7 @@
             <Grid PreviewMouseWheel="dg_PreviewMouseWheel">
                 <Expander Background="Transparent" IsExpanded="True">
                     <Expander.Header>
-                        <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
+                        <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Height="15">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120" />
                                 <ColumnDefinition Width="85" />
@@ -276,10 +278,10 @@
                 <Button Margin="10,0" Content="查詢" Background="DarkCyan" Command="{Binding SearchCommand}" />
             </StackPanel>
 
-            <DataGrid Grid.Row="1" Margin="10,0" 
+            <DataGrid Grid.Row="1" Margin="10,0" RowHeight="60"
                       ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}" 
-                      AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" 
-                       CanUserDeleteRows="False" VerticalContentAlignment="Top">
+                      AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False"  
+                      CanUserDeleteRows="False" VerticalContentAlignment="Top">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.Header>
@@ -318,7 +320,7 @@
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ContentControl Content="{Binding}" Margin="0,-5,2000,-5">
+                                <ContentControl Background="MediumSeaGreen" Content="{Binding}" Margin="0,0,2000,0">
                                     <ContentControl.Style>
                                         <Style TargetType="{x:Type ContentControl}">
                                             <Setter Property="ContentTemplate" Value="{StaticResource IncomeLyaer1}" />
