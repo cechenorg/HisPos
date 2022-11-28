@@ -4,7 +4,8 @@
             <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         </Style>
         <DataTemplate x:Key="IncomeLyaer1">
-            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Margin="25,5,0,5" PreviewMouseWheel="dg_PreviewMouseWheel">
+            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}"
+                  Margin="25,10,0,10" PreviewMouseWheel="dg_PreviewMouseWheel">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
                     <ColumnDefinition Width="85" />
@@ -38,10 +39,10 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer2">
-            <Grid>
-                <Expander IsExpanded="True" Background="Transparent">
-                    <Expander.Header>
-                        <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
+            <Grid >
+                <Expander IsExpanded="True" Background="#A9D08E">
+                    <Expander.Header >
+                        <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120" />
                                 <ColumnDefinition Width="85" />
@@ -74,64 +75,67 @@
                             <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" FontWeight="Heavy" />
                         </Grid>
                     </Expander.Header>
-                    <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
-                              AutoGenerateColumns="False" CanUserAddRows="False" VerticalAlignment="Center" Margin="25,10,0,10" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
-                        <DataGrid.CellStyle>
-                            <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
-                                <Setter Property="Padding" Value="0" />
-                            </Style>
-                        </DataGrid.CellStyle>
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
+                    <Grid Background="#E2EFDA" Margin="0,0,0,0">
+                        <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                  VerticalAlignment="Center" Margin="20,10,0,10" Background="#E2EFDA"  ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
+                                    <Setter Property="Padding" Value="0" />
+                                </Style>
+                            </DataGrid.CellStyle>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
 
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="120" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                                <ColumnDefinition Width="85" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding Name}" />
-                                            <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11], StringFormat=N0}" HorizontalAlignment="Right" />
-                                            <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="120" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                    <ColumnDefinition Width="85" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Name}" />
+                                                <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                 
                 </Expander>
             </Grid>
             
         </DataTemplate>
         <DataTemplate x:Key="IncomeLyaer3">
-            <Grid PreviewMouseWheel="dg_PreviewMouseWheel">
-                <Expander Background="Transparent" IsExpanded="True">
+            <Grid PreviewMouseWheel="dg_PreviewMouseWheel" >
+                <Expander IsExpanded="True" Background="#A9D08E">
                     <Expander.Header>
-                        <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
+                        <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120" />
                                 <ColumnDefinition Width="85" />
@@ -164,8 +168,9 @@
                             <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" FontWeight="Heavy" />
                         </Grid>
                     </Expander.Header>
-                    <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
-                              AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" 
+                              CanUserAddRows="False" CanUserDeleteRows="False" Background="#E2EFDA"
+                              ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
                                 <Setter Property="Padding" Value="0" />
@@ -175,7 +180,7 @@
                             <DataGridTemplateColumn IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Expander Background="Transparent">
+                                        <Expander Background="#E2EFDA">
                                             <Expander.Header>
                                                 <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
                                                     <Grid.ColumnDefinitions>
@@ -211,54 +216,56 @@
                                                 </Grid>
                                             </Expander.Header>
 
-                                            <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
-                                                      AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" Margin="25,0,0,0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
-                                                <DataGrid.CellStyle>
-                                                    <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
-                                                        <Setter Property="Padding" Value="0" />
-                                                    </Style>
-                                                </DataGrid.CellStyle>
-                                                <DataGrid.Columns>
-                                                    <DataGridTemplateColumn IsReadOnly="True">
-                                                        <DataGridTemplateColumn.CellTemplate>
-                                                            <DataTemplate>
-                                                                <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
-                                                                    <Grid.ColumnDefinitions>
-                                                                        <ColumnDefinition Width="120" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                        <ColumnDefinition Width="85" />
-                                                                    </Grid.ColumnDefinitions>
-                                                                    <TextBlock Text="{Binding Name}" />
-                                                                    <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11], StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                    <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" />
-                                                                </Grid>
-                                                            </DataTemplate>
-                                                        </DataGridTemplateColumn.CellTemplate>
-                                                    </DataGridTemplateColumn>
-                                                </DataGrid.Columns>
-                                            </DataGrid>
+                                            <Grid Background="#F1F7ED">
+                                                <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" CanUserAddRows="False" Background="#F1F7ED" Margin="25,0,0,0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                                                    <DataGrid.CellStyle>
+                                                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
+                                                            <Setter Property="Padding" Value="0" />
+                                                        </Style>
+                                                    </DataGrid.CellStyle>
+                                                    <DataGrid.Columns>
+                                                        <DataGridTemplateColumn IsReadOnly="True">
+                                                            <DataGridTemplateColumn.CellTemplate>
+                                                                <DataTemplate>
+                                                                    <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}">
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="120" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                            <ColumnDefinition Width="85" />
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <TextBlock Text="{Binding Name}" />
+                                                                        <TextBlock Grid.Column="1" Text="{Binding MonthlyValues[0], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="2" Text="{Binding MonthlyValues[1], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="3" Text="{Binding MonthlyValues[2], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="4" Text="{Binding MonthlyValues[3], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="5" Text="{Binding MonthlyValues[4], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="6" Text="{Binding MonthlyValues[5], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="7" Text="{Binding MonthlyValues[6], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="8" Text="{Binding MonthlyValues[7], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="9" Text="{Binding MonthlyValues[8], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="10" Text="{Binding MonthlyValues[9], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="11" Text="{Binding MonthlyValues[10], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="12" Text="{Binding MonthlyValues[11], StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                        <TextBlock Grid.Column="13" Text="{Binding MonthlySum, StringFormat=N0}" HorizontalAlignment="Right" />
+                                                                    </Grid>
+                                                                </DataTemplate>
+                                                            </DataGridTemplateColumn.CellTemplate>
+                                                        </DataGridTemplateColumn>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+                                            </Grid>
+                                           
                                         </Expander>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -291,7 +298,7 @@
                 <Button Margin="10,0" Content="查詢" Background="DarkCyan" Command="{Binding SearchCommand}" />
             </StackPanel>
 
-            <DataGrid Grid.Row="1" Margin="10,0" 
+            <DataGrid Grid.Row="1" Margin="10,0" RowBackground="#A9D08E"
                       ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}" 
                       AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" 
                        CanUserDeleteRows="False" VerticalContentAlignment="Top">
