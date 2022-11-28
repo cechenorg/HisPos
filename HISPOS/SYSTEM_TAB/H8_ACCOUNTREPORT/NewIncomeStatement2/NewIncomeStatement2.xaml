@@ -4,7 +4,7 @@
             <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         </Style>
         <DataTemplate x:Key="IncomeLyaer1">
-            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Margin="25,0,0,0" PreviewMouseWheel="dg_PreviewMouseWheel">
+            <Grid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" Margin="25,5,0,5" PreviewMouseWheel="dg_PreviewMouseWheel">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
                     <ColumnDefinition Width="85" />
@@ -75,7 +75,12 @@
                         </Grid>
                     </Expander.Header>
                     <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
-                              AutoGenerateColumns="False" CanUserAddRows="False" Margin="10,0,0,0" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                              AutoGenerateColumns="False" CanUserAddRows="False" VerticalAlignment="Center" Margin="25,10,0,10" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
+                                <Setter Property="Padding" Value="0" />
+                            </Style>
+                        </DataGrid.CellStyle>
                         <DataGrid.Columns>
                             <DataGridTemplateColumn IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -161,6 +166,11 @@
                     </Expander.Header>
                     <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
                               AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Background="Transparent" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
+                                <Setter Property="Padding" Value="0" />
+                            </Style>
+                        </DataGrid.CellStyle>
                         <DataGrid.Columns>
                             <DataGridTemplateColumn IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -202,7 +212,12 @@
                                             </Expander.Header>
 
                                             <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel"
-                                                      AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" Margin="10,0,0,0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                                                      AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" Margin="25,0,0,0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                                                <DataGrid.CellStyle>
+                                                    <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
+                                                        <Setter Property="Padding" Value="0" />
+                                                    </Style>
+                                                </DataGrid.CellStyle>
                                                 <DataGrid.Columns>
                                                     <DataGridTemplateColumn IsReadOnly="True">
                                                         <DataGridTemplateColumn.CellTemplate>
@@ -280,6 +295,11 @@
                       ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}" 
                       AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" 
                        CanUserDeleteRows="False" VerticalContentAlignment="Top">
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
+                        <Setter Property="Padding" Value="0" />
+                    </Style>
+                </DataGrid.CellStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.Header>
