@@ -207,15 +207,18 @@ namespace His_Pos.NewClass.StoreOrder
             if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
             {
                 ReturnStockValue = ReturnProducts.Where(w => w.IsChecked && w.TypeOTC != 4).Sum(p => p.ReturnStockValue);
+                TotalPrice = ReturnProducts.Where(w => w.IsChecked && w.TypeOTC != 4).Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
+                TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
             }
             else
             {
                 ReturnStockValue = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => p.ReturnStockValue);
+                TotalPrice = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
+                TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
             }
                 
 
-            TotalPrice = ReturnProducts.Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
-            TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
+            
             RaisePropertyChanged(nameof(ReturnDiff));
         }
 
