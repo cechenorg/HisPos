@@ -690,7 +690,9 @@ namespace His_Pos.NewClass.Medicine.Base
                     }
                     var controlLevel = m is MedicineNHI nhiMed ? nhiMed.ControlLevel : null;
                     //notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID, m.FullName, m.Amount - m.UsableAmount, m.IsCommon, m.Frozen, controlLevel, m.AveragePrice, m.Amount - m.UsableAmount));
-                    notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID, m.FullName, m.Amount - m.UsableAmount, m.IsCommon, m.Frozen, controlLevel, m.AveragePrice, m.Amount - m.UsableAmount, m.UsableAmount, m.Amount,m.SingdeInv));
+                    if (m.Amount > m.UsableAmount)  { 
+                        notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID, m.FullName, m.Amount - m.UsableAmount, m.IsCommon, m.Frozen, controlLevel, m.AveragePrice, m.Amount - m.UsableAmount, m.UsableAmount, m.Amount,m.SingdeInv));
+                    }                    
                 }
                 negativeStock = this.Where(med => !(med is MedicineVirtual))
                     .Where(med => (med.InventoryID.Equals(inv.ID) && med.BuckleAmount>med.UsableAmount))
