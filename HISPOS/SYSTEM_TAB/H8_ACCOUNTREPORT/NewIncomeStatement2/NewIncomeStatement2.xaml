@@ -303,8 +303,8 @@
             </StackPanel>
 
             <DataGrid Grid.Row="1" Margin="10,0" RowBackground="#A9D08E"
-                      ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}" 
-                      AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" 
+                      ItemsSource="{Binding IncomeStatementData,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"
+                      HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" Background="#E2EFDA"
                        CanUserDeleteRows="False" VerticalContentAlignment="Top">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
