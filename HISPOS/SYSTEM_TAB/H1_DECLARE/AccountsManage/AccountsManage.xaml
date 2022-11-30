@@ -129,14 +129,14 @@
                 Margin="5,0,0,0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                Text="{Binding RecordDate}"
+                Text="{Binding RecordDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Focusable="False"
                 FontSize="16">
-                <DatePicker.Resources>
+                <!--<DatePicker.Resources>
                     <Style TargetType="DatePickerTextBox">
                         <Setter Property="IsReadOnly" Value="True"/>
                     </Style>
-                </DatePicker.Resources>
+                </DatePicker.Resources>-->
             </DatePicker>
             <Button
                 x:Name="btnAdd"
