@@ -103,7 +103,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             BasicAmount = row.Field<int?>("Inv_BasicAmount");
             MinOrderAmount = row.Field<int>("Pro_MinOrder");
             SelfPayType = row.Field<string>("Pro_SelfPayType").Equals("D") ? SelfPayTypeEnum.Default : SelfPayTypeEnum.Customize;
-            SelfPayPrice = (double?)row.Field<decimal?>("Pro_SelfPayPrice");
+            SelfPayPrice = (double?)row.Field<double>("Pro_SelfPayPrice");
             SelfPayMultiplier = row.Field<double>("SysPar_Value");
             RewardPercent = row.Field<double>("Pro_RewardPercent").ToString();
             OTCFromSingde = row.Field<bool>("OTCFromSingde");

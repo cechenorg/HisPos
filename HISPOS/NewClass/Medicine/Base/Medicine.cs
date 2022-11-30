@@ -1,6 +1,8 @@
 ﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.MedBag;
+using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.Service;
 using System;
 using System.Data;
@@ -305,6 +307,24 @@ namespace His_Pos.NewClass.Medicine.Base
                     if (this is MedicineOTC) return;
                 }
                 Set(() => PaySelf, ref paySelf, value);
+
+
+                //
+                if (value == true && Price == 0)
+                {
+                    MainWindow.ServerConnection.OpenConnection();                   
+                    DataTable manageMedicineDataTable = ProductDetailDB.GetProductManageMedicineDataByID(ID);
+                    MainWindow.ServerConnection.CloseConnection();
+
+                    if ( manageMedicineDataTable.Rows.Count > 0)
+                    {
+                        var tempMed = new ProductManageMedicine(manageMedicineDataTable.Rows[0]);
+                        Price = (double)tempMed.SelfPayPrice;
+                    }
+
+                   
+                }
+
                 CountTotalPrice();
             }
         }

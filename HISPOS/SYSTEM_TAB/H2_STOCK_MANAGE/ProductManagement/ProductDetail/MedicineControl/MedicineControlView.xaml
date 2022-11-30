@@ -1,4 +1,17 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.MedicineControlView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:groupControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.GroupControl" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:medicineControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl" xmlns:presControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PresControl" xmlns:priceControl1="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl" xmlns:recordControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.RecordControl" xmlns:service="clr-namespace:His_Pos.Service" xmlns:stockControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.StockControl" mc:Ignorable="d">
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.MedicineControlView" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:groupControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.GroupControl" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:medicineControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl" 
+             xmlns:presControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PresControl" 
+             xmlns:priceControl1="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl" 
+             xmlns:recordControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.RecordControl"
+             xmlns:service="clr-namespace:His_Pos.Service" 
+             xmlns:stockControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.StockControl" 
+             d:DataContext="{d:DesignInstance Type=medicineControl:MedicineControlViewModel}"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <service:InvertBoolConverter x:Key="InvertBoolConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -139,23 +152,28 @@
                     </TextBox>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,10,10,0" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}" Orientation="Horizontal" Visibility="{Binding DataContext.IsNHIProduct, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,10,10,0" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}" 
+                        Orientation="Horizontal" Visibility="{Binding DataContext.IsNHIProduct, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="自費價" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" />
-                <RadioButton Margin="15,0,0,0" VerticalContentAlignment="Center" Content="自訂" FontFamily="Segoe UI Semibold" FontSize="18" IsChecked="{Binding IsSelfPayTypeDefault, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBoolConverter}}">
+                <RadioButton Margin="15,0,0,0" VerticalContentAlignment="Center" Content="自訂" FontFamily="Segoe UI Semibold" FontSize="18" 
+                             IsChecked="{Binding IsSelfPayTypeDefault, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBoolConverter}}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Checked">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </RadioButton>
-                <TextBox Width="70" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" Foreground="Black" GotFocus="TextBox_OnGotFocus" IsEnabled="{Binding IsSelfPayTypeDefault, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBoolConverter}}" PreviewMouseLeftButtonDown="TextBox_OnPreviewMouseLeftButtonDown" Text="{Binding SelfPayPrice, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}">
+                <TextBox Width="70" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14"
+                         Foreground="Black" GotFocus="TextBox_OnGotFocus" 
+                         IsEnabled="{Binding IsSelfPayTypeDefault, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBoolConverter}}" PreviewMouseLeftButtonDown="TextBox_OnPreviewMouseLeftButtonDown" Text="{Binding SelfPayPrice, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
-                <RadioButton Margin="15,0,0,0" VerticalContentAlignment="Center" Content="健保價/上次進價 * " FontFamily="Segoe UI Semibold" FontSize="18" IsChecked="{Binding IsSelfPayTypeDefault, UpdateSourceTrigger=PropertyChanged}">
+                <RadioButton Margin="15,0,0,0" VerticalContentAlignment="Center" Content="健保價/上次進價 * " FontFamily="Segoe UI Semibold" FontSize="18"
+                             IsChecked="{Binding IsSelfPayTypeDefault, UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Checked">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
