@@ -234,6 +234,11 @@
                                                           PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" CanUserAddRows="False"
                                                           Background="#F1F7ED" Margin="25,0,0,0" 
                                                           ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                                            <i:InvokeCommandAction Command="{Binding DataContext.OpenDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
                                                     <DataGrid.CellStyle>
                                                         <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
                                                             <Setter Property="Padding" Value="0" />
