@@ -9,7 +9,7 @@ using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
-    public class IncomeStatementDisplayData :ObservableObject
+    public class IncomeStatementDisplayData : ObservableObject
     {
         public string Name { get; set; }
 
@@ -29,7 +29,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         public ObservableCollection<IncomeStatementDisplayData> Childs { get; set; } =
             new ObservableCollection<IncomeStatementDisplayData>();
 
-          }
+        public int TypeID { get; set; }
+        public int AccID { get; set; }
+    }
 
     public class IncomeStatementRawData
     {
@@ -50,5 +52,23 @@ namespace His_Pos.NewClass.Report.IncomeStatement
 
         public int AcctValue { get; set; }
 
+    }
+
+    public class IncomeStatementDetailData
+    {
+        public IncomeStatementDetailData()
+        {
+
+        }
+
+        public string AcctName { get; set; }
+
+        public DateTime AcctDate { get; set; }
+
+        public int AcctValue { get; set; }
+
+        public string AcctNote { get; set; }
+
+        public string AcctSource { get; set; }
     }
 }

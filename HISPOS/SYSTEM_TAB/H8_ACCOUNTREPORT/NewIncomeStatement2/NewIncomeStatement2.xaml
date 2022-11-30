@@ -1,4 +1,10 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2.NewIncomeStatement2" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2" xmlns:incomeStatement="clr-namespace:His_Pos.NewClass.Report.IncomeStatement" d:DataContext="{d:DesignInstance Type=local:NewIncomeStatement2ViewModel}" d:Background="White" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2.NewIncomeStatement2" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2"
+             xmlns:incomeStatement="clr-namespace:His_Pos.NewClass.Report.IncomeStatement"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             d:DataContext="{d:DesignInstance Type=local:NewIncomeStatement2ViewModel}"
+             d:Background="White" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe UI Semibold" />
@@ -78,12 +84,18 @@
                     </Expander.Header>
                     <Grid Background="#E2EFDA">
                         <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" CanUserAddRows="False" VerticalAlignment="Center" Margin="20,0,0,0" 
-                                  Background="#E2EFDA" ColumnHeaderHeight="0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
+                                  Background="#E2EFDA" ColumnHeaderHeight="0" ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding DataContext.SelectedIncomeStatementData, RelativeSource={RelativeSource AncestorType=UserControl}}">
                             <DataGrid.CellStyle>
                                 <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
                                     <Setter Property="Padding" Value="0" />
                                 </Style>
                             </DataGrid.CellStyle>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.OpenDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>

@@ -42,18 +42,51 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
             }
         }
 
+        private IncomeStatementDisplayData _selectedIncomeStatementData;
+
+        public IncomeStatementDisplayData SelectedIncomeStatementData
+        {
+            get => _selectedIncomeStatementData;
+            set
+            {
+                Set(() => SelectedIncomeStatementData, ref _selectedIncomeStatementData, value);
+            }
+        }
+
 
         public ICommand SearchCommand { get; set; }
         public ICommand YearMinusCommand { get; set; }
         public ICommand YearAddCommand { get; set; }
+
+        public ICommand OpenDetailCommand { get; set; }
 
         public NewIncomeStatement2ViewModel()
         {
             SearchCommand = new RelayCommand(Search);
             YearAddCommand = new RelayCommand(YearAdd);
             YearMinusCommand = new RelayCommand(YearMinus);
+            OpenDetailCommand = new RelayCommand(OpenDetail);
 
             Search();
+        }
+
+        private void OpenDetail()
+        {
+            if(SelectedIncomeStatementData is null)
+                return;
+
+            var expenseDatas = ReportService.GetIncomeStatementDetail(_year,_selectedIncomeStatementData.TypeID,_selectedIncomeStatementData.AccID).ToList();
+
+
+            if (expenseDatas.Count > 0)
+            {
+                AccountDetailWindow accountDetailWindow = new AccountDetailWindow()
+                {
+                    DataContext = new AccountDetailViewModel(expenseDatas)
+                };
+                accountDetailWindow.ShowDialog();
+            }
+          
         }
 
         private void YearAdd()
@@ -83,7 +116,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
           
             foreach (var typeName in rawData.Select(_ => _.ISType).Distinct())
             {
-                IncomeStatementDisplayData typeIncomeData = new IncomeStatementDisplayData() { Name = typeName };
+
+                var typeID = rawData.First(_ => _.ISType == typeName).ISTypeNo;
+
+                IncomeStatementDisplayData typeIncomeData = new IncomeStatementDisplayData() { Name = typeName,TypeID = typeID };
                 IncomeStatementData.Add(typeIncomeData);
 
                 foreach (var groupNo in rawData.Where(_ => _.ISType == typeName).Select(_ => _.ISGroupNo).Distinct())
@@ -95,7 +131,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                         foreach (var accID in rawData.Where(_ => _.ISType == typeName && _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
                         {
                             string accName = rawData.First(_ => _.AcctID == accID).AcctName;
-                            IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName };
+                            IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData()
+                            {
+                                Name = accName,AccID = accID, TypeID = typeIncomeData.TypeID
+
+                            };
                             typeIncomeData.Childs.Add(accIncomeData);
 
                             var accfilterData = rawData.Where(_ => _.AcctID == accID).OrderBy(_ => _.MM);
@@ -114,13 +154,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                     {
                         typeIncomeData.DisplayLayerCount = 3;
                         string groupName = rawData.First(_ => _.ISType == typeName && _.ISGroupNo == groupNo).ISGroup;
-                        IncomeStatementDisplayData groupIncomeData = new IncomeStatementDisplayData() { Name = groupName };
+                        IncomeStatementDisplayData groupIncomeData = new IncomeStatementDisplayData() { Name = groupName, };
                         typeIncomeData.Childs.Add(groupIncomeData);
 
                         foreach (var accID in rawData.Where(_ => _.ISType == typeName && _.ISGroupNo == groupNo).Select(_ => _.AcctID).Distinct())
                         {
                             string accName = rawData.First(_ => _.AcctID == accID).AcctName;
-                            IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName };
+                            IncomeStatementDisplayData accIncomeData = new IncomeStatementDisplayData() { Name = accName, AccID = accID, TypeID = typeIncomeData.TypeID };
                             groupIncomeData.Childs.Add(accIncomeData);
 
                             var accfilterData = rawData.Where(_ => _.AcctID == accID).OrderBy(_ => _.MM);
