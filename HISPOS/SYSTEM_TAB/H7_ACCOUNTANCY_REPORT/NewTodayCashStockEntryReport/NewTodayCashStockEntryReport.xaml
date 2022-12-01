@@ -278,7 +278,7 @@
                                             <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.MedTotalVirtualMedUse,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
                                                 <Setter Property="Content" >
                                                     <Setter.Value>
-                                                        <TextBlock>
+                                                        <TextBlock FontSize="14">
                                                             <Run Text="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse}"></Run>
                                                             <Run Text="(" Foreground="Red"/>
                                                             <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.MedTotalVirtualMedUse}"/>
@@ -373,7 +373,7 @@
                                             <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.CoopVirtualMeduse,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
                                                 <Setter Property="Content">
                                                     <Setter.Value>
-                                                        <TextBlock>
+                                                        <TextBlock FontSize="14">
                                                             <Run Text="{Binding PrescriptionDetailReportSumMain.CoopMeduse}"></Run>
                                                             <Run Text="(" Foreground="Red" />
                                                             <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.CoopVirtualMeduse,UpdateSourceTrigger=PropertyChanged}" />
@@ -464,7 +464,7 @@
                                             <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.SlowVirtuaMeduse,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
                                                 <Setter Property="Content">
                                                     <Setter.Value>
-                                                        <TextBlock>
+                                                        <TextBlock FontSize="14">
                                                             <Run Text="{Binding PrescriptionDetailReportSumMain.SlowMeduse,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></Run>
                                                             <Run Text="(" Foreground="Red" />
                                                             <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.SlowVirtuaMeduse,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -556,7 +556,7 @@
                                             <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.NormalVirtuaMeduse,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
                                                 <Setter Property="Content">
                                                     <Setter.Value>
-                                                        <TextBlock>
+                                                        <TextBlock FontSize="14">
                                                             <Run Text="{Binding PrescriptionDetailReportSumMain.NormalMeduse,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></Run>
                                                             <Run Text="(" Foreground="Red" />
                                                             <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.NormalVirtuaMeduse}" />
@@ -644,9 +644,9 @@
                                         <Setter Property="Content" Value="{Binding PrescriptionDetailReportSumMain.PaySelfMeduse,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.PaySelfVirtuaMeduse, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
-                                                <Setter Property="Content">
+                                                <Setter Property="Content" >
                                                     <Setter.Value>
-                                                        <TextBlock>
+                                                        <TextBlock FontSize="14">
                                                             <Run Text="{Binding PrescriptionDetailReportSumMain.PaySelfMeduse}"></Run>
                                                             <Run Text="(" Foreground="Red" />
                                                             <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.PaySelfVirtuaMeduse}" />
