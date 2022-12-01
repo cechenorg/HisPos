@@ -338,8 +338,13 @@ namespace His_Pos.NewClass.StoreOrder
 
         private static DataTable SetPurchaseOrderDetail(DataTable table, string storeOrderID)
         {
-            int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
+            DataTable OrgStoreDetailTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrderID);
+            int detailId = 1;
+            int maxdetId = OrgStoreDetailTable != null ? Convert.ToInt32(OrgStoreDetailTable.Compute("Max(StoOrdDet_ID)", string.Empty))+1 : 0;
+            DataView dv = table.DefaultView;
+            dv.Sort = "rep_no";
+            table = dv.ToTable();
             foreach (DataRow row in table.Rows)
             {
                 string dateString = row.Field<string>("VALIDDATE");
@@ -358,7 +363,38 @@ namespace His_Pos.NewClass.StoreOrder
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", realProductID);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                if(OrgStoreDetailTable != null && OrgStoreDetailTable.Rows.Count > 0)
+                {
+                    //如果原始訂單沒有杏德傳送回來的品項，StoOrdDet_ID取Max(StoOrdDet_ID)+1
+                    if (OrgStoreDetailTable.Select(string.Format("Pro_ID = '{0}'", realProductID)).Count() == 0)
+                    {
+                        DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", maxdetId);
+                        maxdetId++;
+                    }
+                    else
+                    {
+                        int rep_no = 0;
+                        try
+                        {
+                            rep_no = row["rep_no"] != null ? Convert.ToInt32(row["rep_no"]) : 0;
+                        }
+                        catch { }
+                        
+                        if (rep_no != 0)
+                        {
+                            DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", rep_no);
+                        }
+                        else
+                        {
+                            DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                        }
+                    }
+                }
+                else
+                {
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                }
+                
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", Math.Abs(double.Parse(row["AMOUNT"].ToString())));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "基本單位");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
