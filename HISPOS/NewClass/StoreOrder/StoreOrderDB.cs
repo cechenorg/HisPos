@@ -342,6 +342,9 @@ namespace His_Pos.NewClass.StoreOrder
             DataTable OrgStoreDetailTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrderID);
             int detailId = 1;
             int maxdetId = OrgStoreDetailTable != null ? Convert.ToInt32(OrgStoreDetailTable.Compute("Max(StoOrdDet_ID)", string.Empty))+1 : 0;
+            DataView dv = table.DefaultView;
+            dv.Sort = "rep_no";
+            table = dv.ToTable();
             foreach (DataRow row in table.Rows)
             {
                 string dateString = row.Field<string>("VALIDDATE");
@@ -370,7 +373,21 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                     else
                     {
-                        DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                        int rep_no = 0;
+                        try
+                        {
+                            rep_no = row["rep_no"] != null ? Convert.ToInt32(row["rep_no"]) : 0;
+                        }
+                        catch { }
+                        
+                        if (rep_no != 0)
+                        {
+                            DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", rep_no);
+                        }
+                        else
+                        {
+                            DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                        }
                     }
                 }
                 else
