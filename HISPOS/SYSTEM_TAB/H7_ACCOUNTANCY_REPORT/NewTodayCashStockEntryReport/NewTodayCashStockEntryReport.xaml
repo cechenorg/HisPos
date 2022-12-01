@@ -269,7 +269,27 @@
                             <MouseBinding Command="{Binding ViewReportDetailCommand}" CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.AllPrescription_Cost}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray">
-                            <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" />
+                            <Label Width="130" HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" >
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                                        <Setter Property="Content" Value="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.MedTotalVirtualMedUse,Converter={StaticResource EqualityToVisibilityConverter},ConverterParameter=0}" Value="False">
+                                                <Setter Property="Content" >
+                                                    <Setter.Value>
+                                                        <TextBlock>
+                                                            <Run Text="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse}"></Run>
+                                                            <Run Text="(" Foreground="Red"/>
+                                                            <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.MedTotalVirtualMedUse}"/>
+                                                            <Run Foreground="Red" Text=")"></Run>
+                                                        </TextBlock>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
                         </Border>
                     </StackPanel>
                     <StackPanel x:Name="PREChange" Grid.Row="2" Grid.Column="4" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="PREChange_PreviewMouseDown">

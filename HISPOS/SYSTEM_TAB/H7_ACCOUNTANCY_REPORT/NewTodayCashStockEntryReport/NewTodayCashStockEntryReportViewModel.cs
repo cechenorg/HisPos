@@ -2484,6 +2484,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReports tempCooperativePres = new PrescriptionDetailReports(Ds.Tables[0]);
             PrescriptionDetailReportSumMain.CoopCount = tempCooperativePres.Count();
             PrescriptionDetailReportSumMain.CoopMeduse = (int)tempCooperativePres.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.CoopVirtualMeduse = tempCooperativePres.Sum(s => s.VirtualMeduse);
             PrescriptionDetailReportSumMain.CoopIncome = (int)tempCooperativePres.Sum(s => s.MedicalPoint) +
                                                          (int)tempCooperativePres.Sum(s => s.MedicalServicePoint) +
                                                          (int)tempCooperativePres.Sum(s => s.PaySelfPoint);
