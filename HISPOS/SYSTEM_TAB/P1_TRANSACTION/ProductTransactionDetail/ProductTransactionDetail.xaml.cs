@@ -170,7 +170,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lbVoucher.Content = masterRow["TraMas_VoucherAmount"].ToString();
             lbCashCoupon.Content = masterRow["TraMas_CashCoupon"].ToString();
             lbPrepay.Content = masterRow["TraMas_Prepay"].ToString();
-            lblTradeTime.Content = masterRow["TransTime_Format"];
+            lblTradeTime.Content = Convert.ToDateTime(masterRow["TraMas_ChkoutTime"]).ToString("yyyy/MM/dd");//TransTime_Format
             tbNote.Text = masterRow["TraMas_Note"].ToString();
             tbPhone.Content= masterRow["Cus_Phone"].ToString();
 
@@ -180,7 +180,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
             if (masterRow["TraMas_UpdateTime"] != DBNull.Value)
             {
-                lblUpdateTime.Content = Convert.ToDateTime(masterRow["TraMas_UpdateTime"]).ToString("MM/dd/yyyy h:mm tt");
+                lblUpdateTime.Content = Convert.ToDateTime(masterRow["TraMas_UpdateTime"]).ToString("yyyy/MM/dd HH:mm");
             }
             else
             {
