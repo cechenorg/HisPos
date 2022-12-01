@@ -24,7 +24,9 @@
             <!--<RadioButton Margin="15,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="收入" FontFamily="Segoe UI Semibold" FontSize="18" IsChecked="{Binding GainCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="3" />
             <RadioButton Margin="10,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="支出" FontFamily="Segoe UI Semibold" FontSize="18" IsChecked="{Binding PayCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="4" />-->
             <Label VerticalAlignment="Center" Content="支出科目" Margin="10,0,0,0" FontSize="18" />
-            <ComboBox Width="230" Margin="10,0,0,0" DisplayMemberPath="AccountName" FontSize="16" ItemsSource="{Binding CashFlowAccounts, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedCashFlowAccount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <ComboBox Width="230" Margin="10,0,0,0" DisplayMemberPath="AccountName" FontSize="16" 
+                      ItemsSource="{Binding CashFlowAccounts, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedCashFlowAccount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="金額" FontSize="18" />
             <TextBox Width="80" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="16" PreviewTextInput="NumberValidationTextBox" Text="{Binding CashFlowValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" />
             <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="來源" FontSize="20" />
