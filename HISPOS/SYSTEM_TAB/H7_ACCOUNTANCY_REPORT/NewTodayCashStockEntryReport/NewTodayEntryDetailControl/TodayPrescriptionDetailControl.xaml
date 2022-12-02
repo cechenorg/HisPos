@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:newTodayCashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport"
+    xmlns:service="clr-namespace:His_Pos.Service"
     d:DesignHeight="600" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type=newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}"
     mc:Ignorable="d">
     <Grid>
@@ -60,6 +61,7 @@
             </i:Interaction.Triggers>
 
             <DataGrid.Resources>
+                <service:EqualInverseParameterConverter x:Key="EqualInverseParameterConverter" />
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
                     <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -201,25 +203,34 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="ttt" Width="70" Binding="{Binding Meduse, StringFormat=N0}" FontFamily="Segoe UI Semi" Header="耗用" IsReadOnly="True" Visibility="{Binding DataContext.CostVis, Source={x:Reference dummyElement}}">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="HorizontalAlignment" Value="Right" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderBrush" Value="Transparent" />
-                            <Setter Property="FontSize" Value="18" />
-                            <Setter Property="FontFamily" Value="Segoe UI Semibold" />
-                            <Setter Property="Height" Value="41" />
-                        </Style>
-                    </DataGridTextColumn.HeaderStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Right" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                <DataGridTemplateColumn Width="110"  Header="耗用" IsReadOnly="True"
+                                        Visibility="{Binding DataContext.CostVis, Source={x:Reference dummyElement}}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Width="130" HorizontalContentAlignment="Right" VerticalAlignment="Center" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" >
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                                        <Setter Property="Content" Value="{Binding Meduse,StringFormat=N0}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding VirtualMeduse,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
+                                                <Setter Property="Content" >
+                                                    <Setter.Value>
+                                                        <TextBlock FontSize="14"  VerticalAlignment="Center">
+                                                            <Run Text="{Binding Meduse,StringFormat=N0}"></Run>
+                                                            <Run Text="(" Foreground="Red"/>
+                                                            <Run Foreground="Red" Text="{Binding VirtualMeduse,StringFormat=N0}"/>
+                                                            <Run Foreground="Red" Text=")"></Run>
+                                                        </TextBlock>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>                           
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Width="70" Binding="{Binding Profit, StringFormat=N0}" FontFamily="Segoe UI Semi" Header="毛利" IsReadOnly="True" Visibility="{Binding DataContext.ProfitVis, Source={x:Reference dummyElement}}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -250,7 +261,7 @@
                 <TextBlock Width="70" Margin="0,0,0,0" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
                 <TextBlock Width="70" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.MedicalPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
                 <TextBlock Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.PaySelfPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
-                <TextBlock Width="70" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.Meduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.CostVis, Source={x:Reference dummyElement}}" />
+                <TextBlock Width="100" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.Meduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.CostVis, Source={x:Reference dummyElement}}" />
                 <TextBlock Width="70" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.Profit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.ProfitVis, Source={x:Reference dummyElement}}" />
             </StackPanel>
         </Border>
