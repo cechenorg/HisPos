@@ -207,7 +207,7 @@ namespace His_Pos.NewClass.StoreOrder
         protected override bool CheckNormalProcessingOrder()
         {
             bool hasControlMed = false;
-            bool IsRepBatch = false;
+            //bool IsRepBatch = false;
             foreach (var product in OrderProducts)
             {
                 if(product.IsDone == 1)
@@ -221,13 +221,13 @@ namespace His_Pos.NewClass.StoreOrder
                     return false;
                 }
 
-                if(!string.IsNullOrEmpty(product.BatchNumber))
-                {
-                    if (OrderProducts.Count(s => !string.IsNullOrEmpty(s.BatchNumber) && s.BatchNumber.ToString().Trim() == product.BatchNumber.ToString().Trim() && s.ID == product.ID && s.IsDone == 0) > 1)
-                    {
-                        IsRepBatch = true;
-                    }
-                }
+                //if(!string.IsNullOrEmpty(product.BatchNumber))
+                //{
+                //    if (OrderProducts.Count(s => !string.IsNullOrEmpty(s.BatchNumber) && s.BatchNumber.ToString().Trim() == product.BatchNumber.ToString().Trim() && s.ID == product.ID && s.IsDone == 0) > 1)
+                //    {
+                //        IsRepBatch = true;
+                //    }
+                //}
 
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null)
                 {
@@ -241,11 +241,11 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            if (IsRepBatch)
-            {
-                MessageWindow.ShowMessage("批號重覆!", MessageType.ERROR);
-                return false;
-            }
+            //if (IsRepBatch)
+            //{
+            //    MessageWindow.ShowMessage("批號重覆!", MessageType.ERROR);
+            //    return false;
+            //}
 
             if (hasControlMed)
             {
@@ -537,13 +537,13 @@ namespace His_Pos.NewClass.StoreOrder
                     StoreOrderDB.StoreOrderToWaiting(newstoordId);
                     return true;
                 }
-                StoreOrderDB.RemoveStoreOrderByID(newstoordId,"");
+                StoreOrderDB.RemoveStoreOrderByID(newstoordId, "傳送訂單至藥健康失敗");
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
                 return false;
             }
             catch (Exception)
             {
-                StoreOrderDB.RemoveStoreOrderByID(newstoordId,"");
+                StoreOrderDB.RemoveStoreOrderByID(newstoordId, "傳送訂單至藥健康失敗");
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
                 return false;
             }

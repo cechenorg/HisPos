@@ -622,7 +622,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                             }
                             else
                             {
-                                StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID, "");
+                                StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID, "傳送失敗");
                                 MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
                             }
                         }
