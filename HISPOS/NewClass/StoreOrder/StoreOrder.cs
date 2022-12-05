@@ -223,9 +223,9 @@ namespace His_Pos.NewClass.StoreOrder
                 PrescriptionID = Convert.ToString(row["StoOrd_PrescriptionID"]);
             }
             List<Authority> IsScrapAuthority = new List<Authority>() { Authority.Admin, Authority.AccountingStaff };
-
+            int tramasID = row.Table.Columns.Contains("StoOrd_TraMasID") ? Convert.ToInt32(row["StoOrd_TraMasID"]) : 0;
             DateTime dt = ViewModelMainWindow.ClosingDate.AddDays(1);
-            if (OrderStatus != OrderStatusEnum.SCRAP && IsScrapAuthority.Contains(auth) && DateTime.Compare(dt, DoneDateTime is null ? DateTime.Today : (DateTime)DoneDateTime) < 0)
+            if (OrderStatus != OrderStatusEnum.SCRAP && IsScrapAuthority.Contains(auth) && DateTime.Compare(dt, DoneDateTime is null ? DateTime.Today : (DateTime)DoneDateTime) < 0 && ((ViewModelMainWindow.CurrentUser.Authority == Authority.Admin) || tramasID == 0))
                 IsScrap = true;
             else
                 IsScrap = false;
