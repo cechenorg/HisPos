@@ -33,10 +33,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                         purchaseProduct = new PurchaseMedicine(row, orderStatus);
                         break;
 
-                    case "D":
-                        purchaseProduct = new PurchaseOTC(row, orderStatus);
-                        break;
-
                     default:
                         purchaseProduct = null;
                         break;
