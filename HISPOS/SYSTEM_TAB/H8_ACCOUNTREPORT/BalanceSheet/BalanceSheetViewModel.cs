@@ -602,8 +602,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 { "105", "代收-代付" },
                 { "201", "資本-股本(登記)" },
                 { "202", "公積及盈餘-本期損益" },
-                { "203", "公積及盈餘-未分配損益" },
-                { "204", "公積及盈餘-累積盈虧" }
+                { "203", "公積及盈餘-未分配損益" }
+                //{ "204", "公積及盈餘-累積盈虧" }
             };
 
             foreach (KeyValuePair<string, string> pair in rightAccount)
