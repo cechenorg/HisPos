@@ -340,7 +340,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     e.Accepted = true;
             }
             else if (OrderTypeIsOTC == "藥品") {
-                if (((ProductStruct)e.Item).Type == ProductTypeEnum.OTCMedicine)
+                if (((ProductStruct)e.Item).Type == ProductTypeEnum.OTCMedicine || ((ProductStruct)e.Item).Type == ProductTypeEnum.Deposit)
                     e.Accepted = false;
                 else
                     e.Accepted = true;

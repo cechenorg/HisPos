@@ -205,7 +205,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
             ProductDetailWindow.ShowProductDetailWindow();
 
-            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).WareHouseID.ToString() }, "ShowProductDetail"));
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).OrderDetailWarehouse.ID.ToString() }, "ShowProductDetail"));
         }
 
         #endregion ----- Define Functions -----
@@ -268,12 +268,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
         private void MoveFocusNext(object sender, FocusNavigationDirection direction)
         {
             int i = ProductDataGrid.Columns.IndexOf(ProductDataGrid.CurrentColumn);
-            List<PurchaseMedicine> detail = new List<PurchaseMedicine>();
-            foreach (PurchaseMedicine item in ProductDataGrid.ItemsSource)
+            List<object> detail = new List<object>();
+            foreach (var item in ProductDataGrid.ItemsSource)
             {
                 detail.Add(item);
             }
-            int currentIndex = detail.IndexOf((PurchaseMedicine)ProductDataGrid.CurrentCell.Item);
+            int currentIndex = 0;
+            var Type = ProductDataGrid.CurrentCell.Item.GetType().Name;
+            if (Type == "PurchaseMedicine")
+            {
+                currentIndex = detail.IndexOf((PurchaseMedicine)ProductDataGrid.CurrentCell.Item);
+            }
+            else if (Type == "PurchaseOTC")
+            {
+                currentIndex = detail.IndexOf((PurchaseOTC)ProductDataGrid.CurrentCell.Item);
+            }
             if(i == 5 && currentIndex == 0 && (direction == FocusNavigationDirection.Left || direction == FocusNavigationDirection.Up))
             {
                 return;
@@ -306,12 +315,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                     TextBox box = (TextBox)sender;
                     if (box.Parent is StackPanel)
                     {
-                        var focusedPanelCell = ProductDataGrid.Columns[i+1].GetCellContent(ProductDataGrid.CurrentCell.Item);
+                        var focusedPanelCell = ProductDataGrid.Columns[i + 2].GetCellContent(ProductDataGrid.CurrentCell.Item);
                         switch (direction)
                         {
                             case FocusNavigationDirection.Next:
                             case FocusNavigationDirection.Right:
-                                focusedPanelCell = ProductDataGrid.Columns[i + 1].GetCellContent(ProductDataGrid.CurrentCell.Item);
+                                focusedPanelCell = ProductDataGrid.Columns[i + 2].GetCellContent(ProductDataGrid.CurrentCell.Item);
                                 break;
                             case FocusNavigationDirection.Left:
                                 focusedPanelCell = ProductDataGrid.Columns[i - 1].GetCellContent(ProductDataGrid.CurrentCell.Item);

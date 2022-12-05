@@ -250,7 +250,8 @@
                                     CommonSafeAmount="{Binding SafeAmount}"
                                     ControlLevel="{Binding IsControl}"
                                     IsCommon="{Binding IsCommon}"
-                                    IsFrozen="{Binding IsFrozen}" />
+                                    IsFrozen="{Binding IsFrozen}" 
+                                    IsDeposit="{Binding IsDeposit}"/>
                                 <Label
                                     Margin="-5,0,0,0"
                                     VerticalAlignment="Center"
@@ -364,6 +365,19 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="100"
+                    Binding="{Binding OrderDetailWarehouse.Name}"
+                    FontFamily="Segoe UI Semi"
+                    Header="庫別"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel
@@ -394,6 +408,7 @@
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Label
+                Width="68"
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
                 Content="總計 $"
@@ -401,7 +416,7 @@
                 FontSize="20"
                 Foreground="Black" />
             <TextBlock
-                Width="100"
+                Width="50"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -411,13 +426,28 @@
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
+                Content="寄售 $"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <TextBlock
+                Width="50"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="Black"
+                Text="{Binding DepositPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
                 Content="共"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
-                Width="50"
+                Width="40"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
                 Content="{Binding ProductCount, FallbackValue=0}"
@@ -434,7 +464,7 @@
                 Foreground="Black" />
             <Label
                 x:Name="lbNormalPay"
-                Margin="190,0,0,0"
+                Margin="100,0,0,0"
                 VerticalAlignment="Center"
                 Content="{Binding OrderIsPayCash}"
                 FontFamily="Segoe UI Semibold"

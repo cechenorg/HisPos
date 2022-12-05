@@ -210,7 +210,8 @@
                                     CommonSafeAmount="{Binding SafeAmount}"
                                     ControlLevel="{Binding IsControl}"
                                     IsCommon="{Binding IsCommon}"
-                                    IsFrozen="{Binding IsFrozen}" />
+                                    IsFrozen="{Binding IsFrozen}" 
+                                    IsDeposit="{Binding IsDeposit}"/>
                                 <Label
                                     Margin="-5,0,0,0"
                                     VerticalAlignment="Center"

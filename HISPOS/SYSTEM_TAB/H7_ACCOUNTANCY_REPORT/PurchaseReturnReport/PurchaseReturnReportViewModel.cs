@@ -2,6 +2,7 @@
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.StoreOrder.Report;
 using His_Pos.NewClass.WareHouse;
 using System;
@@ -34,9 +35,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
         private DateTime? startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
         private DateTime? endDate = DateTime.Today;
-        private string manufactoryName = "";
+        //private string manufactoryName = "";
         private WareHouse selectedWareHouse;
-
+        public Manufactories ManufacturerCollection { get; set; }
+        public Manufactory Manufacturer { get; set; }
         public DateTime? StartDate
         {
             get { return startDate; }
@@ -49,11 +51,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             set { Set(() => EndDate, ref endDate, value); }
         }
 
-        public string ManufactoryName
-        {
-            get { return manufactoryName; }
-            set { Set(() => ManufactoryName, ref manufactoryName, value); }
-        }
+        //public string ManufactoryName
+        //{
+        //    get { return manufactoryName; }
+        //    set { Set(() => ManufactoryName, ref manufactoryName, value); }
+        //}
 
         public WareHouse SelectedWareHouse
         {
@@ -132,6 +134,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             RegisterCommands();
 
             WareHouseCollection = new WareHouses(WareHouseDb.Init());
+            ManufacturerCollection = new Manufactories(ManufactoryDB.GetAllManufactories());
             SelectedWareHouse = WareHouseCollection[0];
         }
 
@@ -142,7 +145,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             if (!IsSearchConditionValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            ManufactoryOrderCollection = ManufactoryOrders.GetManufactoryOrdersBySearchCondition(StartDate, EndDate, ManufactoryName, SelectedWareHouse.ID);
+            ManufactoryOrderCollection = ManufactoryOrders.GetManufactoryOrdersBySearchCondition(StartDate, EndDate, Manufacturer is null ? string.Empty : Manufacturer.Name, SelectedWareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             SearchStartDate = (DateTime)StartDate;
@@ -165,7 +168,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             fdlg.Title = "進退貨報表存檔";
             fdlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             fdlg.Filter = "報表格式|*.csv";
-            fdlg.FileName = $"{ManufactoryName}進退貨報表_{SearchStartDate.ToString("yyyyMMdd")}-{SearchEndDate.ToString("yyyyMMdd")}";
+            fdlg.FileName = $"{(Manufacturer is null ? string.Empty : Manufacturer.Name)}進退貨報表_{SearchStartDate.ToString("yyyyMMdd")}-{SearchEndDate.ToString("yyyyMMdd")}";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)

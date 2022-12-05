@@ -210,7 +210,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public void ReloadData(string proID, string wareID, ProductTypeEnum type)
         {
             if (!wareID.Equals(string.Empty))
-                selectedWareHouse = WareHouseCollection[int.Parse(wareID)];
+            {
+                int index = 0, i = 0;
+                
+                foreach(WareHouse ware in WareHouseCollection)
+                {
+                    if(ware.ID.Equals(wareID))
+                    {
+                        index = i;
+                    }
+                    i++;
+                }
+
+                selectedWareHouse = WareHouseCollection[int.Parse(index.ToString())];
+            }
+                
 
             medicineID = proID;
             productType = type;
@@ -225,7 +239,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 MainWindow.ServerConnection.CloseConnection();
             }
             ReloadData();
-            CanEdit = ViewModelMainWindow.CurrentUser.Authority == Authority.Admin && OTCStockViewModel.OTCStockDetail.TotalInventory == 0;
+            CanEdit = ViewModelMainWindow.CurrentUser.Authority == Authority.Admin && OTCStockViewModel.OTCStockDetail.TotalInventory == 0 && OTCStockViewModel.OTCStockDetail.OnTheWayAmount == 0;
         }
 
         #endregion ----- Define Functions -----

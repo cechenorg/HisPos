@@ -246,7 +246,7 @@
                         <RadioButton Grid.Column="1"
                         IsChecked="{Binding IsOTC}"
                         Command="{Binding FilterOrderCommand}"
-                        CommandParameter="5" Content="OTC"
+                        CommandParameter="5" Content="門市商品"
                         GroupName="MedType" Tag="1"/>
                     </Grid>
                 </StackPanel>
@@ -378,7 +378,7 @@
                                                         Margin ="5,0,0,0"
                                                         Width="60"
                                                         VerticalAlignment="Center"
-                                                        Content="{Binding OrderTypeIsOTC}"
+                                                        Content="{Binding DisplayType}"
                                                         FontFamily="Segoe UI Semibold"
                                                         FontSize="14"
                                                         Foreground="{StaticResource ForeGround}" />

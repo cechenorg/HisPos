@@ -283,7 +283,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                         {
                             case FocusNavigationDirection.Next:
                             case FocusNavigationDirection.Right:
-                                focusedPanelCell = ProductDataGrid.Columns[i + 1].GetCellContent(ProductDataGrid.CurrentCell.Item);
+                                focusedPanelCell = ProductDataGrid.Columns[i + 2].GetCellContent(ProductDataGrid.CurrentCell.Item);
                                 break;
                             case FocusNavigationDirection.Left:
                             case FocusNavigationDirection.Up:

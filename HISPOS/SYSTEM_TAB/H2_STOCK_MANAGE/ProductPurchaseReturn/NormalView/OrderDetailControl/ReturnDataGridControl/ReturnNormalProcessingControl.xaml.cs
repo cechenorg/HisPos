@@ -158,12 +158,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up && e.Key != Key.Left && e.Key != Key.Right) 
                 return;
             int i = ProductDataGrid.Columns.IndexOf(ProductDataGrid.CurrentColumn);
-            List<ReturnMedicine> detail = new List<ReturnMedicine>();
-            foreach (ReturnMedicine item in ProductDataGrid.ItemsSource)
+            var Type = ProductDataGrid.CurrentCell.Item.GetType().Name;
+            List<object> detail = new List<object>();
+            foreach (var item in ProductDataGrid.ItemsSource)
             {
                 detail.Add(item);
             }
-            int currentIndex = detail.IndexOf((ReturnMedicine)ProductDataGrid.CurrentCell.Item);
+            int currentIndex = 0;
+            if (Type == "ReturnMedicine")
+            {
+                currentIndex = detail.IndexOf((ReturnMedicine)ProductDataGrid.CurrentCell.Item);
+            }
+            else
+            {
+                currentIndex = detail.IndexOf((ReturnOTC)ProductDataGrid.CurrentCell.Item);
+            }
             if (i == 4 && e.Key == Key.Left)
             {
                 return;
@@ -191,19 +200,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             var uie = e.OriginalSource as UIElement;
             uie.MoveFocus(new TraversalRequest(key));
             var focusedCell = ProductDataGrid.CurrentCell.Column?.GetCellContent(ProductDataGrid.CurrentCell.Item);
-            if(i == 6)
+            if(i == 7)
             {
-                focusedCell = ProductDataGrid.Columns[4].GetCellContent(ProductDataGrid.CurrentCell.Item);
+                focusedCell = ProductDataGrid.Columns[5].GetCellContent(ProductDataGrid.CurrentCell.Item);
             }
-            if (e.Key == Key.Enter && currentIndex == ProductDataGrid.Items.Count - 1 && i == 6)
+            if (e.Key == Key.Right && i == 5)
+            {
+                focusedCell = ProductDataGrid.Columns[7].GetCellContent(ProductDataGrid.CurrentCell.Item);
+            }
+            if (e.Key == Key.Enter && currentIndex == ProductDataGrid.Items.Count - 1 && i == 7)
                 return;
-            var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
-            if ((firstChild is TextBox || firstChild is TextBlock) && firstChild.Focusable)
+            try
             {
-                firstChild.Focus();
-                if (firstChild is TextBox t)
-                    t.SelectAll();
+                var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                if ((firstChild is TextBox || firstChild is TextBlock) && firstChild.Focusable)
+                {
+                    firstChild.Focus();
+                    if (firstChild is TextBox t)
+                        t.SelectAll();
+                }
             }
+            catch
+            { }
         }
 
         private void ProductSubTotalTextbox_LostFocus(object sender, RoutedEventArgs e)

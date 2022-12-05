@@ -203,6 +203,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("MasterID", masID));
+                parameters.Add(new SqlParameter("Emp", ViewModelMainWindow.CurrentUser.ID));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDelete]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
 
@@ -214,6 +215,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 else if (result.Rows[0].Field<string>("RESULT").Equals("NORETURN"))
                 {
                     MessageWindow.ShowMessage("訂金餘額不足！", MessageType.ERROR);
+                }
+                else if (result.Rows[0].Field<string>("RESULT").Equals("Strike"))
+                {
+                    MessageWindow.ShowMessage("寄售品已沖帳", MessageType.ERROR);
                 }
                 else { MessageWindow.ShowMessage("刪除失敗！", MessageType.ERROR); }
             }
@@ -228,6 +233,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("MasterID", masID));
+                parameters.Add(new SqlParameter("Emp", ViewModelMainWindow.CurrentUser.ID));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordReturn]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
 
@@ -235,6 +241,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 {
                     MessageWindow.ShowMessage("退貨成功！", MessageType.SUCCESS);
                     Close();
+                }
+                else if (result.Rows[0].Field<string>("RESULT").Equals("Strike"))
+                {
+                    MessageWindow.ShowMessage("寄售品已沖帳", MessageType.ERROR);
                 }
                 else { MessageWindow.ShowMessage("退貨失敗！", MessageType.ERROR); }
             }

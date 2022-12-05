@@ -108,12 +108,32 @@
                 Content="供應商"
                 FontFamily="Segoe UI Semibold"
                 FontSize="25" />
-            <TextBox
+            <ComboBox
+                x:Name="CobMan"
+                Margin="10,0,0,5"
+                Width="150"
+                Height="45"
+                VerticalContentAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                IsEditable="True"
+                KeyUp="ComboBox_KeyUp"
+                SelectedIndex="-1"
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding ManufacturerCollection}"
+                SelectedItem="{Binding Manufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
+            <!--<TextBox
                 Width="150"
                 Margin="10,0,0,5"
                 FontFamily="Segoe UI Semi"
                 FontSize="25"
-                Text="{Binding ManufactoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding ManufactoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
             <Label
                 Margin="20,0,0,0"
                 VerticalContentAlignment="Center"
@@ -121,12 +141,19 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="25" />
             <ComboBox
+                Name="CobWare"
                 Width="120"
                 HorizontalContentAlignment="Center"
                 DisplayMemberPath="Name"
-                FontSize="25"
+                FontSize="18"
                 ItemsSource="{Binding WareHouseCollection}"
-                SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
             <Button
                 Width="120"
                 Height="35"

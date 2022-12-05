@@ -203,7 +203,8 @@
                                     CommonSafeAmount="{Binding SafeAmount}"
                                     ControlLevel="{Binding IsControl}"
                                     IsCommon="{Binding IsCommon}"
-                                    IsFrozen="{Binding IsFrozen}" />
+                                    IsFrozen="{Binding IsFrozen}"
+                                    IsDeposit="{Binding IsDeposit}" />
                                 <Label
                                     Margin="-5,0,0,0"
                                     VerticalAlignment="Center"
@@ -253,6 +254,19 @@
                     Binding="{Binding SubTotal}"
                     FontFamily="Segoe UI Semi"
                     Header="小計"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="100"
+                    Binding="{Binding OrderDetailWarehouse.Name}"
+                    FontFamily="Segoe UI Semi"
+                    Header="庫別"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
