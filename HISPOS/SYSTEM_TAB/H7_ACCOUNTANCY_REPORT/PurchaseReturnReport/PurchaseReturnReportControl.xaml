@@ -133,7 +133,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="50"
+                    Width="80"
                     Binding="{Binding OTCType}"
                     FontFamily="Segoe UI Semibold"
                     Header="類別"

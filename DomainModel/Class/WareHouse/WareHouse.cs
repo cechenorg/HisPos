@@ -32,6 +32,12 @@ namespace His_Pos.NewClass.WareHouse
             ID = row.Field<int>("War_ID").ToString();
             Name = row.Field<string>("War_Name");
         }
+        public WareHouse(string id, string name)
+        {
+            WareHouse wareHouse = new WareHouse();
+            wareHouse.ID = id;
+            wareHouse.Name = name;
+        }
 
         public object Clone()
         {

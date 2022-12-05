@@ -15,6 +15,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using DomainModel.Enum;
 using System.Windows.Threading;
+using His_Pos.NewClass.WareHouse;
+using His_Pos.NewClass.Manufactory;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
@@ -45,8 +47,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         private DateTime? searchEndDate = DateTime.Today;
         private string searchOrderID = "";
         private string searchProductID = "";
-        private string searchManufactoryID = "";
-        private string searchWareName = "";
+        //private string searchManufactoryID = "";
+        //private string searchWareName = "";
+        public WareHouses WareHouseCollection { get; set; }
+        public WareHouse WareHouse { get; set; }
+
+        public Manufactories ManufacturerCollection { get; set; }
+
+        public Manufactory Manufacturer { get; set; }
 
         public DateTime? SearchStartDate
         {
@@ -72,17 +80,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             set { Set(() => SearchProductID, ref searchProductID, value); }
         }
 
-        public string SearchManufactoryID
-        {
-            get { return searchManufactoryID; }
-            set { Set(() => SearchManufactoryID, ref searchManufactoryID, value); }
-        }
+        //public string SearchManufactoryID
+        //{
+        //    get { return searchManufactoryID; }
+        //    set { Set(() => SearchManufactoryID, ref searchManufactoryID, value); }
+        //}
 
-        public string SearchWareName
-        {
-            get { return searchWareName; }
-            set { Set(() => SearchWareName, ref searchWareName, value); }
-        }
+        //public string SearchWareName
+        //{
+        //    get { return searchWareName; }
+        //    set { Set(() => SearchWareName, ref searchWareName, value); }
+        //}
 
         #endregion ///// Search Variables /////
 
@@ -121,11 +129,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
                 if(value is PurchaseOrder)
                 {
-                    CurrentStoreOrder.TotalPrice = Convert.ToInt32(((PurchaseOrder)value).OrderProducts.Sum(T => T.SubTotal));
+                    CurrentStoreOrder.TotalPrice = Convert.ToInt32(((PurchaseOrder)value).OrderProducts.Where(W => !W.IsDeposit).Sum(T => T.SubTotal));
+                    //CurrentStoreOrder.DepositPrice = Convert.ToInt32(((PurchaseOrder)value).OrderProducts.Where(W=>W.IsDeposit).Sum(T => T.SubTotal));
                 }
                 else if(value is ReturnOrder)
                 {
-                    CurrentStoreOrder.TotalPrice = Convert.ToInt32(((ReturnOrder)value).ReturnProducts.Sum(T => T.SubTotal));
+                    CurrentStoreOrder.TotalPrice = Convert.ToInt32(((ReturnOrder)value).ReturnProducts.Where(W => !W.IsDeposit).Sum(T => T.SubTotal));
+                    //CurrentStoreOrder.DepositPrice = Convert.ToInt32(((PurchaseOrder)value).OrderProducts.Where(W => W.IsDeposit).Sum(T => T.SubTotal));
                 }
             }
         }
@@ -142,6 +152,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         {
             RegisterCommands();
             RegisterMessengers();
+            InitData();
+        }
+        private void InitData()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            WareHouseCollection = new WareHouses(WareHouseDb.Init());
+            ManufacturerCollection = new Manufactories(ManufactoryDB.GetAllManufactories());
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (WareHouseCollection is null || WareHouseCollection.Count == 0 || ManufacturerCollection is null || ManufacturerCollection.Count == 0)
+            {
+                MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
+                return;
+            }
+
+            //WareHouse = WareHouseCollection[0];
+            //Manufacturer = ManufacturerCollection[0];
         }
 
         #region ----- Define Actions -----
@@ -151,13 +178,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             if (!IsSearchConditionValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, SearchManufactoryID, SearchProductID, SearchWareName);
+            StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, Manufacturer is null ? string.Empty : Manufacturer.Name, SearchProductID, WareHouse is null ? string.Empty : WareHouse.Name);
             MainWindow.ServerConnection.CloseConnection();
 
             if (StoreOrderCollection.Count > 0)
             {
-                CurrentStoreOrder = StoreOrderCollection[0];
-
+                int i = 0;
+                if (SearchOrderID != string.Empty)
+                {
+                    foreach (StoreOrder order in StoreOrderCollection)
+                    {
+                        if (order.ID == SearchOrderID)
+                            continue;
+                        i++;
+                    }
+                    if (i == StoreOrderCollection.Count)
+                        i = 0;
+                }
+                if(CurrentStoreOrder is null)
+                {
+                    CurrentStoreOrder = StoreOrderCollection[i];
+                }
+                
                 double purchaseSum = StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP && s.OrderType == OrderTypeEnum.PURCHASE).Sum(s => s.TotalPrice);
                 double returnSum = StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP && s.OrderType == OrderTypeEnum.RETURN).Sum(s => s.TotalPrice);
 
@@ -179,7 +221,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             SearchStartDate = null;
             SearchEndDate = null;
             SearchOrderID = "";
-            SearchManufactoryID = "";
+            //SearchManufactoryID = "";
             SearchProductID = "";
         }
 
@@ -194,7 +236,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             }
             catch{}
             MainWindow.ServerConnection.OpenConnection();
-            StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, SearchManufactoryID, SearchProductID, SearchWareName);
+            StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, Manufacturer is null ? string.Empty : Manufacturer.Name, SearchProductID, WareHouse is null ? string.Empty : WareHouse.Name);
             MainWindow.ServerConnection.CloseConnection();
             CurrentStoreOrder = StoreOrderCollection[index];
         }
@@ -315,7 +357,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             }
 
             if (SearchStartDate is null && SearchEndDate is null && SearchProductID == "" &&
-                SearchManufactoryID == "" && SearchOrderID == "")
+                (Manufacturer is null ? string.Empty : Manufacturer.Name) == "" && SearchOrderID == "")
             {
                 MessageWindow.ShowMessage("必須輸入至少一種查詢條件!", MessageType.ERROR);
                 return false;

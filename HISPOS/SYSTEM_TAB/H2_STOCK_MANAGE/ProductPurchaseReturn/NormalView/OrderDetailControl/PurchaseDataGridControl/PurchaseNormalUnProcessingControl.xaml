@@ -551,6 +551,7 @@
                 FontFamily="Segoe UI Semibold"
                 Foreground="Black" />
             <Label
+                Width="Auto"
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="總計 $"
@@ -558,7 +559,7 @@
                 FontSize="20"
                 Foreground="Black" />
             <TextBlock
-                Width="100"
+                Width="60"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -566,6 +567,22 @@
                 Foreground="Black"
                 Text="{Binding CurrentStoreOrder.TotalPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" />
             <Label
+                Margin="5,0,0,0"
+                VerticalAlignment="Center"
+                Content="寄售$"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <TextBlock
+                Width="60"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="Black"
+                Text="{Binding CurrentStoreOrder.DepositPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                Width="Auto"
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
                 Content="共"
@@ -574,7 +591,7 @@
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
-                Width="80"
+                Width="50"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
                 Content="{Binding CurrentStoreOrder.ProductCount, UpdateSourceTrigger=PropertyChanged, FallbackValue=0}"
@@ -600,7 +617,7 @@
                 Foreground="Black" />
             <Label
                 Margin="5,0,0,0"
-                Width="230"
+                Width="170"
                 VerticalAlignment="Center"
                 Content="{Binding CurrentStoreOrder.CreateDateTime, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
                 FontFamily="Segoe UI Semibold"

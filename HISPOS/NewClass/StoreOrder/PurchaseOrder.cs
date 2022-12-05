@@ -296,10 +296,10 @@ namespace His_Pos.NewClass.StoreOrder
 
         #region ///// Product Function /////
 
-        public override void CalculateTotalPrice()
+        public override void CalculateTotalPrice(int isDone = 0)
         {
-            TotalPrice = Math.Round(OrderProducts.Where(w=>w.IsDone == 0 && w.Type != 4).Sum(p => Math.Round(p.SubTotal,0,MidpointRounding.AwayFromZero)));
-            DepositPrice = Math.Round(OrderProducts.Where(w => w.IsDone == 0 && w.Type == 4).Sum(p => Math.Round(p.SubTotal, 0, MidpointRounding.AwayFromZero)));
+            TotalPrice = Math.Round(OrderProducts.Where(w=>w.IsDone == isDone && w.WareHouseID != 9).Sum(p => Math.Round(p.SubTotal,0,MidpointRounding.AwayFromZero)));
+            DepositPrice = Math.Round(OrderProducts.Where(w => w.IsDone == isDone && w.WareHouseID == 9).Sum(p => Math.Round(p.SubTotal, 0, MidpointRounding.AwayFromZero)));
         }
 
         public override void SetProductToProcessingStatus()
@@ -308,7 +308,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
 
         public override int GetOrderProductsIsOTC()
-        { 
+        {
             PurchaseProducts purchaseProductsOTC = PurchaseProducts.GetProductsByStoreOrderID(ID, OrderStatus);
             int type = purchaseProductsOTC[0].Type;
             return type;
@@ -325,8 +325,12 @@ namespace His_Pos.NewClass.StoreOrder
                     OrderProducts.SetToProcessing();
 
             OrderProducts.SetStartEditToPrice();
-
-            CalculateTotalPrice();
+            int isDone = 0;
+            if(OrderStatus == OrderStatusEnum.DONE || OrderStatus == OrderStatusEnum.SCRAP)
+            {
+                isDone = 1;
+            }
+            CalculateTotalPrice(isDone);
         }
 
         public override void AddProductByID(string iD, bool isFromAddButton)

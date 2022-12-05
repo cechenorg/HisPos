@@ -230,7 +230,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         private void CalculateTotalPriceAction()
         {
-            CurrentStoreOrder.CalculateTotalPrice();
+            CurrentStoreOrder.CalculateTotalPrice(0);
         }
 
         public void AddOrderByMinus()
@@ -611,7 +611,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                         }
                     }
                 }
-                CurrentStoreOrder.CalculateTotalPrice();
+                CurrentStoreOrder.CalculateTotalPrice(0);
             }
         }
         /// <summary>
@@ -639,7 +639,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     }
                     IsAllSelected = undo ? true : false;
                 }
-                CurrentStoreOrder.CalculateTotalPrice();
+                CurrentStoreOrder.CalculateTotalPrice(0);
             }
         }
 
