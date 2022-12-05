@@ -60,8 +60,11 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         {
 
         }
+        public int YYYY { get; set; }
+        public int MM { get; set; }
 
         public string AcctName { get; set; }
+        public string AcctSubName { get; set; }
 
         public DateTime AcctDate { get; set; }
 

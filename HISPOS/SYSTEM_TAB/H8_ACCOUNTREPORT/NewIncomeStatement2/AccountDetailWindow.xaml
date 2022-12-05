@@ -15,11 +15,16 @@
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="名稱" Binding="{Binding AcctName}"/>
+                <DataGridTextColumn Header="年" Binding="{Binding YYYY}" IsReadOnly="True" />
+                <DataGridTextColumn Header="月" Binding="{Binding MM}" IsReadOnly="True" />
+                <DataGridTextColumn Header="分類" Binding="{Binding AcctName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="科目" Binding="{Binding AcctSubName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="金額" Binding="{Binding AcctValue}" IsReadOnly="True" />
+                <!--<DataGridTextColumn Header="名稱" Binding="{Binding AcctName}"/>
                 <DataGridTextColumn Header="日期" Binding="{Binding AcctDate,StringFormat='{}{0:yyyy/MM/dd hh:mm:ss}'}" />
                 <DataGridTextColumn Header="金額" Binding="{Binding AcctValue}" />
                 <DataGridTextColumn Header="備註" Binding="{Binding AcctNote}" />
-                <DataGridTextColumn Header="來源" Binding="{Binding AcctSource}" />
+                <DataGridTextColumn Header="來源" Binding="{Binding AcctSource}" />-->
 
             </DataGrid.Columns>
         </DataGrid>
