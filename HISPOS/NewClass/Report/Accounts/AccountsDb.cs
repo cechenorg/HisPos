@@ -1,11 +1,14 @@
-﻿using His_Pos.ChromeTabViewModel;
+﻿using Dapper;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Database;
+using His_Pos.NewClass.Accounts;
 using His_Pos.NewClass.Report.Accounts.AccountsRecordDetails;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Transactions;
 
 namespace His_Pos.NewClass.Report.Accounts
 {
@@ -115,6 +118,144 @@ namespace His_Pos.NewClass.Report.Accounts
             ds.Tables.Add(expanse);
             ds.Tables.Add(closed);
             return ds;
+        }
+
+        public static IEnumerable<JournalAccount> GetJournalAccount()
+        {
+            IEnumerable<JournalAccount> result = default;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<JournalAccount>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[AccountsCommonItems]",
+                    param: new
+                    {
+                        Item = "立帳作業"
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+            });
+            return result;
+        }
+
+        public static IEnumerable<JournalMaster> GetJournalData(DateTime sdate, DateTime edate, string jouMas_ID, string keyword)
+        {
+            IEnumerable<JournalMaster> result = default;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<JournalMaster>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[JournalRecord]",
+                    param: new
+                    {
+                        sdate,
+                        edate,
+                        jouMas_ID,
+                        keyword
+                    },
+                    commandType: CommandType.StoredProcedure);
+            });
+            return result;
+        }
+        public static IEnumerable<JournalDetail> GetJournalData(string jouMas_ID)
+        {
+            string sql = string.Format("Select JouDet_ID, JouDet_Type,JouDet_Number,JouDet_AcctLvl1,JouDet_AcctLvl2,JouDet_AcctLvl3,Cast(JouDet_Amount As int) As JouDet_Amount,JouDet_Memo From {0}.dbo.JournalDetail Where JouDet_ID = '{1}'", Properties.Settings.Default.SystemSerialNumber, jouMas_ID);
+            IEnumerable<JournalDetail> result = default;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<JournalDetail>(sql,
+                    commandType: CommandType.Text);
+            });
+            return result;
+        }
+
+        public static string InsertTempJournal()
+        {
+            string date = DateTime.Today.ToString("yyyy-MM-dd");
+            int emp = ViewModelMainWindow.CurrentUser.ID;
+            #region 新單號
+            string cntSQL = string.Format("Select Count(JouMas_ID)+1 From [{0}].[dbo].[JournalMaster] Where Cast(JouMas_InsertTime As Date) = Cast(GetDate() As Date)", Properties.Settings.Default.SystemSerialNumber);
+            string cnt = "1";
+            IEnumerable<string> cntQuery = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                cntQuery = conn.Query<string>(cntSQL,
+                    commandType: CommandType.Text);
+            });
+            foreach (var item in cntQuery)
+            {
+                cnt = item;
+            }
+            string newID = DateTime.Today.ToString("yyyyMMdd") + "-" + cnt.PadLeft(3, '0');
+            #endregion
+            #region 新增暫存
+            string sql = string.Format(@"Insert Into [{0}].[dbo].[JournalMaster] Values('{1}', '{2}', 'T', 1, null, null, GetDate(), {3}, null, null)",
+                                        Properties.Settings.Default.SystemSerialNumber, newID, date, emp);
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                _ = conn.Query<int>(sql, commandType: CommandType.Text);
+            });
+            #endregion
+            return newID;
+        }
+        public static void UpdateJournalData(string undo, JournalMaster master)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                int emp = ViewModelMainWindow.CurrentUser.ID;
+                string sql = string.Empty;
+                string sqlDetail = string.Empty;
+                int i = 1, j = 1;
+                if (undo.Equals("修改"))
+                {
+                    sql = string.Format(@"Update [{0}].[dbo].[JournalMaster] Set JouMas_Memo = '{1}', JouMas_ModifyTime = GETDATE(), JouMas_ModifyEmpID = {2}, JouMas_Date = '{3}' Where JouMas_ID = '{4}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_Memo, emp, master.JouMas_Date.Value.ToString("yyyy-MM-dd"), master.JouMas_ID);
+                    sqlDetail = string.Format("Delete [{0}].[dbo].[JournalDetail] Where JouDet_ID = '{1}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_ID);
+                    sql = sql + "\r\n" + sqlDetail;
+                }
+                else//新增
+                {
+                    sql = string.Format(@"Update [{0}].[dbo].[JournalMaster] Set JouMas_Status = 'F', JouMas_Memo = '{1}', JouMas_ModifyTime = GETDATE(), JouMas_ModifyEmpID = {2}, JouMas_Date = '{3}' Where JouMas_ID = '{4}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_Memo, emp, master.JouMas_Date.Value.ToString("yyyy-MM-dd"), master.JouMas_ID);
+                }
+
+                foreach (JournalDetail item in master.DebitDetails)
+                {
+                    sqlDetail = string.Format(@"Insert Into [{0}].[dbo].[JournalDetail] (JouDet_ID, JouDet_Type, JouDet_Number, JouDet_AcctLvl1, JouDet_AcctLvl2, JouDet_AcctLvl3, JouDet_Amount, JouDet_Memo) Values('{1}', 'D', {2}, '{3}', '{4}','{5}', {6}, '{7}')", Properties.Settings.Default.SystemSerialNumber,
+                        master.JouMas_ID,
+                        i,
+                        item.Account.acctLevel1,
+                        item.Account.acctLevel2,
+                        item.Account.acctLevel3,
+                        item.JouDet_Amount,
+                        item.JouDet_Memo);
+                    sql = sql + "\r\n" + sqlDetail;
+                    i++;
+                }
+
+                foreach (JournalDetail item in master.CreditDetails)
+                {
+                    sqlDetail = string.Format(@"Insert Into [{0}].[dbo].[JournalDetail] (JouDet_ID, JouDet_Type, JouDet_Number, JouDet_AcctLvl1, JouDet_AcctLvl2, JouDet_AcctLvl3, JouDet_Amount, JouDet_Memo) Values('{1}', 'C', {2}, '{3}', '{4}', '{5}', {6}, '{7}')", Properties.Settings.Default.SystemSerialNumber,
+                        master.JouMas_ID,
+                        j,
+                        item.Account.acctLevel1,
+                        item.Account.acctLevel2,
+                        item.Account.acctLevel3,
+                        item.JouDet_Amount,
+                        item.JouDet_Memo);
+                    sql = sql + "\r\n" + sqlDetail;
+                    j++;
+                }
+
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    _ = conn.Query<int>(sql, commandType: CommandType.Text);
+                });
+                scope.Complete();
+            }
+        }
+        public static void InvalidJournalData(string jouMas_ID)
+        {
+            int emp = ViewModelMainWindow.CurrentUser.ID;
+            string sql = string.Format(@"Update [{0}].[dbo].[JournalMaster] Set JouMas_IsEnable = 0, JouMas_ModifyTime = GETDATE(), JouMas_ModifyEmpID = {1} Where JouMas_ID = '{2}'", Properties.Settings.Default.SystemSerialNumber, emp, jouMas_ID);
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                _ = conn.Query<int>(sql, commandType: CommandType.Text);
+            });
         }
     }
 }

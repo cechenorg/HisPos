@@ -49,6 +49,7 @@ using System;
 using System.Diagnostics;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -187,6 +188,7 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.匯出申報檔):
                 case nameof(FeatureItem.額外收支):
                 case nameof(FeatureItem.立帳作業):
+                case nameof(FeatureItem.新立帳作業):
                 case nameof(FeatureItem.商品查詢):
                 case nameof(FeatureItem.庫存盤點紀錄):
                 case nameof(FeatureItem.商品類別管理):
@@ -377,6 +379,13 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.立帳作業):
                     newTab = new AccountsManageViewModel() { 
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.會計作業)).Icon };
+                    break;
+
+                case nameof(FeatureItem.新立帳作業):
+                    newTab = new AccountVoucherViewModel()
+                    {
+                        Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.會計作業)).Icon
+                    };
                     break;
 
                 //會計報表 

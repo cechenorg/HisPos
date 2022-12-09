@@ -119,7 +119,8 @@ namespace His_Pos
             HisFeatures.Add(new Feature(@"..\Images\SystemManage.png", nameof(FeatureTab.會計作業),
                             new[] { 
                                 nameof(FeatureItem.沖帳作業), 
-                                nameof(FeatureItem.立帳作業) }));
+                                nameof(FeatureItem.立帳作業),
+                                nameof(FeatureItem.新立帳作業),}));
 
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", nameof(FeatureTab.會計報表) ,
                             new[] { 
