@@ -136,7 +136,7 @@ namespace His_Pos.NewClass.Report.Accounts
             return result;
         }
 
-        public static IEnumerable<JournalMaster> GetJournalData(DateTime sdate, DateTime edate, string jouMas_ID, string keyword)
+        public static IEnumerable<JournalMaster> GetJournalData(DateTime sdate, DateTime edate, string jouMas_ID, string acct1ID, string acct2ID, string acct3ID, string keyword)
         {
             IEnumerable<JournalMaster> result = default;
             SQLServerConnection.DapperQuery((conn) =>
@@ -147,6 +147,9 @@ namespace His_Pos.NewClass.Report.Accounts
                         sdate,
                         edate,
                         jouMas_ID,
+                        acct1ID,
+                        acct2ID,
+                        acct3ID,
                         keyword
                     },
                     commandType: CommandType.StoredProcedure);
@@ -208,9 +211,15 @@ namespace His_Pos.NewClass.Report.Accounts
                     sqlDetail = string.Format("Delete [{0}].[dbo].[JournalDetail] Where JouDet_ID = '{1}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_ID);
                     sql = sql + "\r\n" + sqlDetail;
                 }
-                else//新增
+                else if(undo.Equals("新增"))
                 {
                     sql = string.Format(@"Update [{0}].[dbo].[JournalMaster] Set JouMas_Status = 'F', JouMas_Memo = '{1}', JouMas_ModifyTime = GETDATE(), JouMas_ModifyEmpID = {2}, JouMas_Date = '{3}' Where JouMas_ID = '{4}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_Memo, emp, master.JouMas_Date.Value.ToString("yyyy-MM-dd"), master.JouMas_ID);
+                }
+                else//保存
+                {
+                    sql = string.Format(@"Update [{0}].[dbo].[JournalMaster] Set JouMas_Memo = '{1}', JouMas_Date = '{2}' Where JouMas_ID = '{3}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_Memo, master.JouMas_Date.Value.ToString("yyyy-MM-dd"), master.JouMas_ID);
+                    sqlDetail = string.Format("Delete [{0}].[dbo].[JournalDetail] Where JouDet_ID = '{1}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_ID);
+                    sql = sql + "\r\n" + sqlDetail;
                 }
 
                 foreach (JournalDetail item in master.DebitDetails)
