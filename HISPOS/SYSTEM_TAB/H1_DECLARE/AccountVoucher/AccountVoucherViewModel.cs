@@ -149,6 +149,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 {
                     if(CurrentVoucher.JouMas_ID != null)
                     {
+                        if(CurrentVoucher.DebitDetails != null && CurrentVoucher.CreditDetails != null && CurrentVoucher.JouMas_IsEnable == 1)
+                        {
+                            AccountsDb.UpdateJournalData("保存", CurrentVoucher);
+                        }
                         GetDetailData(CurrentVoucher.JouMas_ID);
                     }
                 }
@@ -158,7 +162,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         #region Function
         private void SubmitAction()
         {
-            VoucherCollectionView = CollectionViewSource.GetDefaultView(AccountsDb.GetJournalData(beginDate, endDate, string.IsNullOrEmpty(searchID)? string.Empty : searchID, string.IsNullOrEmpty(keyWord) ? string.Empty : keyWord));
+            VoucherCollectionView = CollectionViewSource.GetDefaultView(AccountsDb.GetJournalData(beginDate, endDate, string.IsNullOrEmpty(searchID)? string.Empty : searchID, Account.acctLevel1, Account.acctLevel2, Account.acctLevel3, string.IsNullOrEmpty(keyWord) ? string.Empty : keyWord));
             CurrentVoucher = new JournalMaster();
             CurrentVoucher = VoucherCollectionView.CurrentItem as JournalMaster;
             if (CurrentVoucher != null && (CurrentVoucher.JouMas_ID != null || CurrentVoucher.JouMas_ID != ""))
@@ -188,28 +192,40 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void DeleteDetailAction(string gridCondition)
         {
-            switch(gridCondition)
+            if (CurrentVoucher != null)
             {
-                case "0":
-                    CurrentVoucher.DebitDetails.Remove(CurrentVoucher.SelectedDebitDetail);
-                    break;
-                case "1":
-                    CurrentVoucher.CreditDetails.Remove(CurrentVoucher.SelectedCreditDetail);
-                    break;
+                if(CurrentVoucher.JouMas_IsEnable == 1)
+                {
+                    switch (gridCondition)
+                    {
+                        case "0":
+                            CurrentVoucher.DebitDetails.Remove(CurrentVoucher.SelectedDebitDetail);
+                            break;
+                        case "1":
+                            CurrentVoucher.CreditDetails.Remove(CurrentVoucher.SelectedCreditDetail);
+                            break;
+                    }
+                }
             }
         }
         private void AddNewDetailAction(string gridCondition)
         {
-            JournalDetail detail = new JournalDetail();
-            detail.Accounts = AccountsDb.GetJournalAccount();
-            switch (gridCondition)
+            if(CurrentVoucher != null)
             {
-                case "0":
-                    CurrentVoucher.DebitDetails.Add(detail);
-                    break;
-                case "1":
-                    CurrentVoucher.CreditDetails.Add(detail);
-                    break;
+                if(CurrentVoucher.JouMas_IsEnable == 1)
+                {
+                    JournalDetail detail = new JournalDetail();
+                    detail.Accounts = AccountsDb.GetJournalAccount();
+                    switch (gridCondition)
+                    {
+                        case "0":
+                            CurrentVoucher.DebitDetails.Add(detail);
+                            break;
+                        case "1":
+                            CurrentVoucher.CreditDetails.Add(detail);
+                            break;
+                    }
+                }
             }
         }
         private bool VoucherFilter(object journal)
@@ -243,9 +259,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void SaveAction()
         {
-            if(CheckData())
+            if (CurrentVoucher != null)
             {
-                AccountsDb.UpdateJournalData(btnName, CurrentVoucher);
+                if (CurrentVoucher.JouMas_IsEnable == 1)
+                {
+                    if (CheckData())
+                    {
+                        AccountsDb.UpdateJournalData(btnName, CurrentVoucher);
+                        MessageWindow.ShowMessage(string.Format("{0}已{1}", CurrentVoucher.JouMas_ID, btnName), MessageType.SUCCESS);
+                        CurrentVoucher.JouMas_Status = "F";
+                        VoucherCollectionView.Filter += VoucherFilter;
+                    }
+                }
             }
         }
         private bool CheckData()
@@ -268,7 +293,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 SearchID = string.Empty;
                 KeyWord = string.Empty;
                 IsTemp = true;
-                IEnumerable<JournalMaster> journals = AccountsDb.GetJournalData(BeginDate, EndDate, SearchID, KeyWord);
+                IEnumerable<JournalMaster> journals = AccountsDb.GetJournalData(BeginDate, EndDate, SearchID, null, null, null, KeyWord);
                 VoucherCollectionView = CollectionViewSource.GetDefaultView(journals);
                 foreach (var item in journals)
                 {
@@ -288,19 +313,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void InvalidAction()
         {
-            AccountsDb.InvalidJournalData(CurrentVoucher.JouMas_ID);
-            CurrentVoucher.JouMas_IsEnable = 0;
-            VoucherCollectionView.Filter += VoucherFilter;
+            if (CurrentVoucher != null)
+            {
+                if (CurrentVoucher.JouMas_IsEnable == 1)
+                {
+                    AccountsDb.InvalidJournalData(CurrentVoucher.JouMas_ID);
+                    CurrentVoucher.JouMas_IsEnable = 0;
+                    VoucherCollectionView.Filter += VoucherFilter;
+                }
+            }
         }
         private void GetData()
         {
             Accounts = AccountsDb.GetJournalAccount();
             JournalAccount empty = new JournalAccount();
             Accounts.ToList().Add(empty);
-            if (Accounts.ToList().Count > 0)
-            {
-                Account = Accounts.ToList()[0];
-            }
+            Account = new JournalAccount();
         }
         private void GetDetailData(string id)
         {

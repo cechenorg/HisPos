@@ -61,7 +61,7 @@
                 SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Label Margin="20,0,0,0" VerticalAlignment="Center" Content="關鍵字:" FontSize="18" />
             <TextBox Width="150" FontSize="16" TextAlignment="Left" HorizontalAlignment="Left" VerticalAlignment="Center"
-                Text="{Binding SearchID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding KeyWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
             <Grid>
@@ -263,7 +263,7 @@
                                                 HorizontalContentAlignment="Center" 
                                                 FontFamily="Segoe UI Semibold" 
                                                 Text="{Binding JouDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                                                KeyUp="DebitGrid_TextBox_KeyUp">
+                                                KeyUp="DebitGrid_TextBox_KeyUp" MouseDoubleClick="DebitGrid_TextBox_MouseDoubleClick">
                                             </TextBox>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -363,7 +363,7 @@
                                             <TextBox 
                                                 HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" 
                                                 Text="{Binding JouDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                                                KeyUp="CreditGrid_TextBox_KeyUp">
+                                                KeyUp="CreditGrid_TextBox_KeyUp" MouseDoubleClick="CreditGrid_TextBox_MouseDoubleClick">
                                             </TextBox>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
