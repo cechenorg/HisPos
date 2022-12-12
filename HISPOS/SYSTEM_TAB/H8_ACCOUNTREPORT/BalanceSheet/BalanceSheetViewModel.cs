@@ -17,6 +17,8 @@ using System.ComponentModel;
 using His_Pos.NewClass.Report.Accounts;
 using His_Pos.NewClass.StockValue;
 using System.Windows.Threading;
+using His_Pos.NewClass.Report;
+using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 {
@@ -57,7 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
-
+        private DataTable balanceData;
         private BalanceSheetTypeEnum balanceSheetType = BalanceSheetTypeEnum.NoDetail;
         private BalanceSheetData leftSelectedData;
         private BalanceSheetData rightSelectedData;
@@ -351,31 +353,33 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 Dispatcher.CurrentDispatcher.Invoke(delegate()
                 {
                     BusyContent = "報表查詢中...";
-                    DataSet dataSet = GetBalanceSheet();
-                    if (dataSet.Tables.Count != 4)
-                    {
-                        MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
-                        return;
-                    }
-                    else
-                    {
-                        if (dataSet.Tables[0] != null)
-                        {
-                            LeftBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[0]);
-                        }
-                        if (dataSet.Tables[1] != null)
-                        {
-                            RightBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[1]);
-                        }
-                        if (dataSet.Tables[2] != null && dataSet.Tables[2].Rows.Count > 0)
-                        {
-                            LeftTotal = (double)dataSet.Tables[2].Rows[0].Field<decimal>("Value");
-                        }
-                        if (dataSet.Tables[3] != null && dataSet.Tables[3].Rows.Count > 0)
-                        {
-                            RightTotal = (double)dataSet.Tables[3].Rows[0].Field<decimal>("Value");
-                        }
-                    }
+                    NewGetBalanceSheet();
+                    //DataSet dataSet = NewGetBalanceSheet();
+                    //DataSet dataSet = GetBalanceSheet();
+                    //if (dataSet.Tables.Count != 4)
+                    //{
+                    //    MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
+                    //    return;
+                    //}
+                    //else
+                    //{
+                    //    if (dataSet.Tables[0] != null)
+                    //    {
+                    //        LeftBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[0]);
+                    //    }
+                    //    if (dataSet.Tables[1] != null)
+                    //    {
+                    //        RightBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[1]);
+                    //    }
+                    //    if (dataSet.Tables[2] != null && dataSet.Tables[2].Rows.Count > 0)
+                    //    {
+                    //        LeftTotal = (double)dataSet.Tables[2].Rows[0].Field<decimal>("Value");
+                    //    }
+                    //    if (dataSet.Tables[3] != null && dataSet.Tables[3].Rows.Count > 0)
+                    //    {
+                    //        RightTotal = (double)dataSet.Tables[3].Rows[0].Field<decimal>("Value");
+                    //    }
+                    //}
                 });
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -408,102 +412,129 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         {
             if (LeftSelectedData != null)
             {
-                if (LeftSelectedData.Name.Contains("現金"))
+                if(LeftSelectedData.ID == "1000")
                 {
-                    NormalViewModel = new NormalViewModel("001", _endDate);
                     BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                    BalanceSheetType = BalanceSheetTypeEnum.Normal;
+                    return;
                 }
-                else if (LeftSelectedData.Name.Contains("銀行"))
-                {
-                    BalanceSheetType = BalanceSheetTypeEnum.Transfer;
-                    TransferViewModel.Target = "現金";
-                    TransferViewModel.MaxValue = LeftSelectedData.Value;
-                    BankViewModel = new BankViewModel(LeftSelectedData.ID, _endDate);
-                    BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                    BalanceSheetType = BalanceSheetTypeEnum.Bank;
-                }
-                else if (LeftSelectedData.Name.Contains("申報應收帳款"))
-                BalanceSheetType = BalanceSheetTypeEnum.MedPoint;
-                else
-                {
-                    if (LeftSelectedData.ID.Length == 3)
-                    {
-                        if (LeftSelectedData.ID == "006")
-                        {
-                            ProductViewModel = new ProductViewModel(LeftSelectedData.ID, _endDate);
-                            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                            BalanceSheetType = BalanceSheetTypeEnum.Product;
-                        }
-                        else if (LeftSelectedData.ID == "007")
-                        {
-                            BankViewModel = new BankViewModel(LeftSelectedData.ID,_endDate);
-                            BalanceSheetType = BalanceSheetTypeEnum.Normal;
-                            BalanceSheetType = BalanceSheetTypeEnum.Bank;
-                        }
-                        else if (LeftSelectedData.ID == "104")
-                        {
-                            ProductViewModel_104 = new ProductViewModel(LeftSelectedData.ID, _endDate);
-                            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                            BalanceSheetType = BalanceSheetTypeEnum.Product;
-                        }
-                        else if (LeftSelectedData.ID == "105")
-                        {
-                            NormalNoEditViewModel = new NormalNoEditViewModel(LeftSelectedData.ID,_endDate);
-                            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                            BalanceSheetType = BalanceSheetTypeEnum.NormalNoEdit;
-                        }
-                        else
-                        {
-                            NormalViewModel = new NormalViewModel(LeftSelectedData.ID, _endDate);
-                            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                            BalanceSheetType = BalanceSheetTypeEnum.Normal;
-                        }
-                    }
-                    else
-                    {
-                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                    }
-                }
+                ProductViewModel = new ProductViewModel(balanceData, LeftSelectedData.ID);
+                BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                BalanceSheetType = BalanceSheetTypeEnum.Product;
             }
-            else if (RightSelectedData != null)
+            else if(RightSelectedData != null)
             {
-                if (RightSelectedData.Name.Contains("應付帳款"))
+                if (RightSelectedData.ID == "2000" || RightSelectedData.ID == "3000")
                 {
-                    NormalViewModel = new NormalViewModel(RightSelectedData.ID, _endDate);
                     BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                    BalanceSheetType = BalanceSheetTypeEnum.Normal;
+                    return;
                 }
-                else if (RightSelectedData.Name.Contains("代付"))
-                {
-                    NormalViewModel = new NormalViewModel(RightSelectedData.ID, _endDate);
-                    BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                    BalanceSheetType = BalanceSheetTypeEnum.Normal;
-                }
-                else
-                {
-                    if (RightSelectedData.ID == "105")
-                    {
-                        NormalViewModel = new NormalViewModel(RightSelectedData.ID, _endDate);
-                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                        BalanceSheetType = BalanceSheetTypeEnum.Normal;
-                    }
-                    else if (RightSelectedData.ID == "201" || RightSelectedData.ID == "202" || RightSelectedData.ID == "204")
-                    {
-                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                    }
-                    else if (RightSelectedData.ID.Length == 3)
-                    {
-                        NormalViewModel = new NormalViewModel(RightSelectedData.ID,_endDate);
-                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                        BalanceSheetType = BalanceSheetTypeEnum.Normal;
-                    }
-                    else
-                    {
-                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                    }
-                }
+                ProductViewModel = new ProductViewModel(balanceData, RightSelectedData.ID);
+                BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                BalanceSheetType = BalanceSheetTypeEnum.Product;
             }
+            else
+            {
+                BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                return;
+            }
+            //if (LeftSelectedData != null)
+            //{
+            //    if (LeftSelectedData.Name.Contains("現金"))
+            //    {
+            //        NormalViewModel = new NormalViewModel("001", _endDate);
+            //        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //        BalanceSheetType = BalanceSheetTypeEnum.Normal;
+            //    }
+            //    else if (LeftSelectedData.Name.Contains("銀行"))
+            //    {
+            //        BalanceSheetType = BalanceSheetTypeEnum.Transfer;
+            //        TransferViewModel.Target = "現金";
+            //        TransferViewModel.MaxValue = LeftSelectedData.Value;
+            //        BankViewModel = new BankViewModel(LeftSelectedData.ID, _endDate);
+            //        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //        BalanceSheetType = BalanceSheetTypeEnum.Bank;
+            //    }
+            //    else if (LeftSelectedData.Name.Contains("申報應收帳款"))
+            //    BalanceSheetType = BalanceSheetTypeEnum.MedPoint;
+            //    else
+            //    {
+            //        if (LeftSelectedData.ID.Length == 3)
+            //        {
+            //            if (LeftSelectedData.ID == "006")
+            //            {
+            //                ProductViewModel = new ProductViewModel(LeftSelectedData.ID, _endDate);
+            //                BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //                BalanceSheetType = BalanceSheetTypeEnum.Product;
+            //            }
+            //            else if (LeftSelectedData.ID == "007")
+            //            {
+            //                BankViewModel = new BankViewModel(LeftSelectedData.ID,_endDate);
+            //                BalanceSheetType = BalanceSheetTypeEnum.Normal;
+            //                BalanceSheetType = BalanceSheetTypeEnum.Bank;
+            //            }
+            //            else if (LeftSelectedData.ID == "104")
+            //            {
+            //                ProductViewModel_104 = new ProductViewModel(LeftSelectedData.ID, _endDate);
+            //                BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //                BalanceSheetType = BalanceSheetTypeEnum.Product;
+            //            }
+            //            else if (LeftSelectedData.ID == "105")
+            //            {
+            //                NormalNoEditViewModel = new NormalNoEditViewModel(LeftSelectedData.ID,_endDate);
+            //                BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //                BalanceSheetType = BalanceSheetTypeEnum.NormalNoEdit;
+            //            }
+            //            else
+            //            {
+            //                NormalViewModel = new NormalViewModel(LeftSelectedData.ID, _endDate);
+            //                BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //                BalanceSheetType = BalanceSheetTypeEnum.Normal;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //        }
+            //    }
+            //}
+            //else if (RightSelectedData != null)
+            //{
+            //    if (RightSelectedData.Name.Contains("應付帳款"))
+            //    {
+            //        NormalViewModel = new NormalViewModel(RightSelectedData.ID, _endDate);
+            //        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //        BalanceSheetType = BalanceSheetTypeEnum.Normal;
+            //    }
+            //    else if (RightSelectedData.Name.Contains("代付"))
+            //    {
+            //        NormalViewModel = new NormalViewModel(RightSelectedData.ID, _endDate);
+            //        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //        BalanceSheetType = BalanceSheetTypeEnum.Normal;
+            //    }
+            //    else
+            //    {
+            //        if (RightSelectedData.ID == "105")
+            //        {
+            //            NormalViewModel = new NormalViewModel(RightSelectedData.ID, _endDate);
+            //            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //            BalanceSheetType = BalanceSheetTypeEnum.Normal;
+            //        }
+            //        else if (RightSelectedData.ID == "201" || RightSelectedData.ID == "202" || RightSelectedData.ID == "204")
+            //        {
+            //            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //        }
+            //        else if (RightSelectedData.ID.Length == 3)
+            //        {
+            //            NormalViewModel = new NormalViewModel(RightSelectedData.ID,_endDate);
+            //            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //            BalanceSheetType = BalanceSheetTypeEnum.Normal;
+            //        }
+            //        else
+            //        {
+            //            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            //        }
+            //    }
+            //}
         }
 
         #endregion ----- Define Functions -----
@@ -693,6 +724,113 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             #endregion
             return ds;
         }
+
+
+        private void NewGetBalanceSheet()
+        {
+            balanceData = AccountsDb.GetBalanceSheet(_endDate);
+            DataTable tbLeftGrid = balanceData.Clone();
+            DataTable tbRightGrid = balanceData.Clone();
+
+            foreach (DataRow dr in balanceData.Rows)
+            {
+                int acctLevel1 = Convert.ToInt32(dr["acctLevel1"]);
+                int acctLevel2 = Convert.ToInt32(dr["acctLevel2"]);
+                if (acctLevel1 == 1)
+                {
+                    DataRow newRow = tbLeftGrid.NewRow();
+                    if (tbLeftGrid.Select(string.Format("acctLevel2 = {0}", acctLevel2)).Length > 0)
+                    {
+                        continue;
+                    }
+                    newRow["acctLevel1"] = acctLevel1;
+                    newRow["acctLevel2"] = acctLevel2;
+                    newRow["acctName2"] = dr["acctName2"];
+                    if(acctLevel2 == 1130)
+                    {
+                        DataTable tbStockDB = StockValueDb.GetStockVale(new DateTime(_endDate.Year, _endDate.Month,1), _endDate);//直接取庫存現值報表
+                        if(tbStockDB != null && tbStockDB.Rows.Count > 0)
+                        {
+                            newRow["acctValue"] = Convert.ToInt32(tbStockDB.Compute("Sum(Value)", string.Empty));
+                        }
+                        else
+                        {
+                            newRow["acctValue"] = 0;
+                        }
+                    }
+                    else
+                    {
+                        newRow["acctValue"] = Convert.ToInt32(balanceData.Compute("Sum(acctValue)", string.Format("acctLevel1 = {0} And acctLevel2 = {1}", acctLevel1, acctLevel2)));
+                    }
+                    
+                    tbLeftGrid.Rows.Add(newRow);
+                }
+                else
+                {
+                    DataRow newRow = tbRightGrid.NewRow();
+                    newRow["acctLevel1"] = acctLevel1;
+                    newRow["acctLevel2"] = acctLevel2;
+                    newRow["acctName2"] = dr["acctName2"];
+
+                    if (tbRightGrid.Select(string.Format("acctLevel2 = {0}", acctLevel2)).Length > 0)
+                    {
+                        continue;
+                    }
+                    else if(acctLevel2 == 3430)
+                    {
+                        var expenseDatas = ReportService.GetIncomeStatementDetail(_endDate.Year).ToList();
+                        int total = Convert.ToInt32(expenseDatas.Sum(s=>s.AcctValue));
+                        newRow["acctValue"] = total;
+                    }
+                    else if (acctLevel2 == 3440)
+                    {
+                        var expenseDatas = ReportService.GetIncomeStatementDetail(_endDate.AddYears(-1).Year).ToList();
+                        int total = Convert.ToInt32(expenseDatas.Sum(s => s.AcctValue));
+                        newRow["acctValue"] = total;
+                    }
+                    else
+                    {
+                        newRow["acctValue"] = Convert.ToInt32(balanceData.Compute("Sum(acctValue)", string.Format("acctLevel1 = {0} And acctLevel2 = {1}", acctLevel1, acctLevel2)));
+                    }
+                    tbRightGrid.Rows.Add(newRow);
+                }
+            }
+            
+
+            #region 預設彙總
+            DataRow newrow1 = tbLeftGrid.NewRow();
+            newrow1["acctLevel1"] = 1;
+            newrow1["acctLevel2"] = "1000";
+            newrow1["acctName2"] = "+資產類";
+            newrow1["acctValue"] = Convert.ToInt32(tbLeftGrid.Compute("Sum(acctValue)", "acctLevel1 = 1"));
+            tbLeftGrid.Rows.Add(newrow1);
+            DataRow newrow2 = tbRightGrid.NewRow();
+            newrow2["acctLevel1"] = 2;
+            newrow2["acctLevel2"] = "2000";
+            newrow2["acctName2"] = "-負債類";
+            newrow2["acctValue"] = Convert.ToInt32(tbRightGrid.Compute("Sum(acctValue)", "acctLevel1 = 2"));
+            tbRightGrid.Rows.Add(newrow2);
+            DataRow newrow3 = tbRightGrid.NewRow();
+            newrow3["acctLevel1"] = 3;
+            newrow3["acctLevel2"] = "3000";
+            newrow3["acctName2"] = "-股東權益";
+            newrow3["acctValue"] = Convert.ToInt32(tbRightGrid.Compute("Sum(acctValue)", "acctLevel1 = 3"));
+            tbRightGrid.Rows.Add(newrow3);
+            #endregion
+            DataView dv = new DataView(tbLeftGrid);
+            dv.Sort = "acctLevel1,acctLevel2";
+            tbLeftGrid = dv.ToTable();
+            DataView dv2 = new DataView(tbRightGrid);
+            dv2.Sort = "acctLevel1,acctLevel2";
+            tbRightGrid = dv2.ToTable();
+
+            LeftBalanceSheetDatas = new BalanceSheetDatas(tbLeftGrid);
+            RightBalanceSheetDatas = new BalanceSheetDatas(tbRightGrid);
+            LeftTotal = Convert.ToInt32(tbLeftGrid.Compute("Sum(acctValue)", "acctLevel2 = 1000"));
+            RightTotal = Convert.ToInt32(tbRightGrid.Compute("Sum(acctValue)", "acctLevel2 = 2000 Or acctLevel2 = 3000"));
+            //return ds;
+        }
+
         #endregion
     }
 }
