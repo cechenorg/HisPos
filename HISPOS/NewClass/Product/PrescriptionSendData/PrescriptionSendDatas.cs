@@ -91,6 +91,17 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                         }
                     }
                 }
+                Inventorys inventories = Inventorys.GetAllInventoryByProIDs(meds);
+                foreach (var inv in inventories)
+                {
+                    for (int i = 0; i < tempMeds.Count; i++)
+                    {
+                        if (tempMeds[i].ID == inv.InvID)
+                        {
+                            tempMeds[i].Amount += inv.OnTheWayAmount ;
+                        }
+                    }
+                }
             }
 
             for (int i = 0; i < tempMeds.Count; i++)
