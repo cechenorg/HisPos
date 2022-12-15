@@ -200,7 +200,7 @@ namespace His_Pos.NewClass.Person.Employee
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("AuthValue", AuthValue));
-
+            ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName = "SD_MainServer";
             var table = string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName)
                  ? MainWindow.ServerConnection.ExecuteProc("[Get].[TabAuth]", parameterList)
                  : MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[TabAuth]", parameterList);
