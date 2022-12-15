@@ -75,7 +75,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
             if(SelectedIncomeStatementData is null)
                 return;
 
-            var expenseDatas = ReportService.GetIncomeStatementDetail(_year,_selectedIncomeStatementData.TypeID,_selectedIncomeStatementData.AccID).ToList();
+            var expenseDatas = ReportService.GetIncomeStatementDetail(_year, Convert.ToString(_selectedIncomeStatementData.TypeID), Convert.ToString(_selectedIncomeStatementData.AccID)).ToList();
 
 
             if (expenseDatas.Count > 0)

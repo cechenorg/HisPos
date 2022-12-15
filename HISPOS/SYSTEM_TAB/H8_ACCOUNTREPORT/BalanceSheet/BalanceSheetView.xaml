@@ -200,7 +200,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
+                        <!--<DataGridTextColumn
                             Width="50"
                             Binding="{Binding Type}"
                             FontFamily="Segoe UI Semi"
@@ -212,15 +212,16 @@
                                     <Setter Property="VerticalAlignment" Value="Center" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
+                        </DataGridTextColumn>-->
                         <DataGridTextColumn
-                            Width="140"
+                            Width="190"
                             Binding="{Binding Value, StringFormat=N0}"
                             FontFamily="Segoe UI Semi"
                             Header="金額"
                             IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Margin" Value="0,0,50,0" />
                                     <Setter Property="HorizontalAlignment" Value="Right" />
                                     <Setter Property="VerticalAlignment" Value="Center" />
                                 </Style>
@@ -293,7 +294,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
+                        <!--<DataGridTextColumn
                             Width="50"
                             Binding="{Binding Type}"
                             FontFamily="Segoe UI Semi"
@@ -305,15 +306,16 @@
                                     <Setter Property="VerticalAlignment" Value="Center" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
+                        </DataGridTextColumn>-->
                         <DataGridTextColumn
-                            Width="140"
+                            Width="190"
                             Binding="{Binding Value, StringFormat=N0}"
                             FontFamily="Segoe UI Semi"
                             Header="金額"
                             IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Margin" Value="0,0,50,0" />
                                     <Setter Property="HorizontalAlignment" Value="Right" />
                                     <Setter Property="VerticalAlignment" Value="Center" />
                                 </Style>

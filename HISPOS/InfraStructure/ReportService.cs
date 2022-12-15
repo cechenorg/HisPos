@@ -133,7 +133,7 @@ namespace His_Pos.NewClass.Report
             return result;
         }
 
-        public static IEnumerable<IncomeStatementDetailData> GetIncomeStatementDetail(int year,int iSTypeNo,int acctID )
+        public static IEnumerable<IncomeStatementDetailData> GetIncomeStatementDetail(int year,string iSTypeNo = null,string acctID = null)
         {
             IEnumerable<IncomeStatementDetailData> result = default;
             SQLServerConnection.DapperQuery((conn) =>

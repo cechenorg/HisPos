@@ -266,5 +266,15 @@ namespace His_Pos.NewClass.Report.Accounts
                 _ = conn.Query<int>(sql, commandType: CommandType.Text);
             });
         }
+
+        public static DataTable GetBalanceSheet(DateTime edate)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("eDate", edate));
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[BalanceSheet]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
     }
 }
