@@ -416,7 +416,7 @@
                 FontSize="20"
                 Foreground="Black" />
             <TextBlock
-                Width="70"
+                Width="85"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -431,7 +431,7 @@
                 FontSize="20"
                 Foreground="Black" />
             <TextBlock
-                Width="60"
+                Width="85"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -464,7 +464,7 @@
                 Foreground="Black" />
             <Label
                 x:Name="lbNormalPay"
-                Margin="100,0,0,0"
+                Margin="65,0,0,0"
                 VerticalAlignment="Center"
                 Content="{Binding OrderIsPayCash}"
                 FontFamily="Segoe UI Semibold"
