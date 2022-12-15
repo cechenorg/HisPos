@@ -553,7 +553,7 @@
             <Grid Width="1340" Height="800">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="45" />
-                    <RowDefinition Height="165" />
+                    <RowDefinition Height="220" />
                     <RowDefinition />
                     <RowDefinition Height="250" />
                 </Grid.RowDefinitions>
@@ -604,6 +604,7 @@
                 </StackPanel>
                 <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                     <Grid.RowDefinitions>
+                        <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
@@ -984,6 +985,11 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Margin="10" Orientation="Horizontal">
+                        <Label Content="原就醫識別碼" Style="{StaticResource BoldLabelContent18}" />
+                        <TextBox x:Name="MedIDCode1" Width="220" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" CharacterCasing="Upper" 
+                                 FontSize="17" Foreground="{StaticResource ForeGround}" MaxLength="20"/>
                     </StackPanel>
                 </Grid>
                 <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="1320"
