@@ -409,14 +409,14 @@
             Orientation="Horizontal">
             <Label
                 Width="68"
-                Margin="20,0,0,0"
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="總計 $"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 Foreground="Black" />
             <TextBlock
-                Width="50"
+                Width="85"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -424,14 +424,14 @@
                 Foreground="Black"
                 Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
             <Label
-                Margin="20,0,0,0"
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="寄售 $"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 Foreground="Black" />
             <TextBlock
-                Width="50"
+                Width="85"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -439,7 +439,7 @@
                 Foreground="Black"
                 Text="{Binding DepositPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
             <Label
-                Margin="20,0,0,0"
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="共"
                 FontFamily="Segoe UI Semibold"
@@ -464,7 +464,7 @@
                 Foreground="Black" />
             <Label
                 x:Name="lbNormalPay"
-                Margin="100,0,0,0"
+                Margin="65,0,0,0"
                 VerticalAlignment="Center"
                 Content="{Binding OrderIsPayCash}"
                 FontFamily="Segoe UI Semibold"

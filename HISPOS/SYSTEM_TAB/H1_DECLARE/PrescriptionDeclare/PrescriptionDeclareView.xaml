@@ -100,9 +100,10 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8,0,8,0" Orientation="Horizontal">
                     <Label Content="釋出院所" Style="{StaticResource BoldLabelContent18}" />
@@ -255,6 +256,12 @@
                 <StackPanel Grid.Row="2" Grid.Column="4" Margin="8,0,8,0" Orientation="Horizontal">
                     <Label Content="特定治療" Style="{StaticResource BoldLabelContent18}" />
                     <ComboBox x:Name="SpecialTreatCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" FontSize="16" InputScope="AlphanumericHalfWidth" IsEditable="False" IsTextSearchEnabled="True" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" ItemsSource="{Binding SpecialTreats}" PreviewKeyDown="SpecialTreatCombo_PreviewKeyDown" SelectedItem="{Binding CurrentPrescription.SpecialTreat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" StaysOpenOnEdit="False" />
+                </StackPanel>
+                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="8,0,8,0" Orientation="Horizontal">
+                    <Label Content="原就醫識別碼" Style="{StaticResource BoldLabelContent18}" />
+                    <TextBox x:Name="MedIDCode1" Width="220" Height="35" HorizontalContentAlignment="Center" CaretBrush="Black" CharacterCasing="Upper" FontSize="16" 
+                             InputMethod.IsInputMethodEnabled="False" InputScope="AlphanumericHalfWidth" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                             MaxLength="20"/>
                 </StackPanel>
             </Grid>
             <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" AllowDrop="True" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="False" FrozenColumnCount="3" GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentPrescription.Medicines}" SelectedItem="{Binding CurrentPrescription.SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}">
