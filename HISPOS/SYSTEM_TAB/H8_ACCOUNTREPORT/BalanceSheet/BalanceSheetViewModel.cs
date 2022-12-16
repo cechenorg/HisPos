@@ -778,13 +778,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     }
                     else if(acctLevel2 == 3430)
                     {
-                        var expenseDatas = ReportService.GetIncomeStatementDetail(_endDate.Year).ToList();
+                        var expenseDatas = ReportService.GetIncomeStatementDetail(_endDate.AddYears(-1).Year).ToList();
                         int total = Convert.ToInt32(expenseDatas.Sum(s=>s.AcctValue));
+                        total += Convert.ToInt32(balanceData.Compute("Sum(acctValue)", string.Format("acctLevel1 = {0} And acctLevel2 = {1}", acctLevel1, acctLevel2)));
                         newRow["acctValue"] = total;
                     }
                     else if (acctLevel2 == 3440)
-                    {
-                        var expenseDatas = ReportService.GetIncomeStatementDetail(_endDate.AddYears(-1).Year).ToList();
+                    {                        
+                        var expenseDatas = ReportService.GetIncomeStatementDetail(_endDate.Year).ToList();
                         int total = Convert.ToInt32(expenseDatas.Sum(s => s.AcctValue));
                         newRow["acctValue"] = total;
                     }
