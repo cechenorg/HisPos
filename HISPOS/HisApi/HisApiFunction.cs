@@ -306,7 +306,7 @@ namespace His_Pos.HisApi
             byte[] pBuffer = new byte[316];
             var res = HisApiBase.hisGetSeqNumber256N1(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
             IcCard card = new IcCard();
-            card.MedicalNumberData = new SeqNumber(pBuffer);
+            card.MedicalNumberData = new SeqNumber(new DateTime(), Function.ByteArrayToString(4, pBuffer, 13).Trim(), null, null, null, false, null);
             return card.MedicalNumberData;
         }
     }
