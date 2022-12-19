@@ -132,7 +132,7 @@ namespace His_Pos.NewClass.Prescription.ICCard
                     case 0:
                         MedicalNumberData = new SeqNumber(pBuffer);
                         IsGetMedicalNumber = true;
-                        TreatDateTime = DateTimeExtensions.ToStringWithSecond(MedicalNumberData.TreatDateTime);
+                        TreatDateTime = MedicalNumberData.TreatDateTime;
                         break;
 
                     case 5003:

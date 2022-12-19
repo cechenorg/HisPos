@@ -226,7 +226,7 @@ namespace His_Pos.HisApi
 
         [DllImport("CSHIS.dll", EntryPoint = "hisGetTreatNumICCard")]
         //1.56 hisGetTreatNumICCard(單獨取得就醫識別碼)
-        public static extern int hisGetTreatNumICCard(byte[] cTreatItem);
+        public static extern int hisGetTreatNumICCard(byte[] pDateTime, byte[] cTreatItem, int iBufferLen);
 
         // 2.1 安全模組認證
         [DllImport("CSHIS.dll", EntryPoint = "csVerifySAMDC")]

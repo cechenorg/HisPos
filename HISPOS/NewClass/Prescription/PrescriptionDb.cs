@@ -666,7 +666,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", p.PrescriptionStatus.IsDeposit);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsAdjust", p.PrescriptionStatus.IsAdjust);
 
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_OrigTreatmentDT", DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0'));
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_OrigTreatmentDT", p.OrigTreatmentDT.PadRight(13, '0'));
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode1", p.OrigTreatmentCode);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode2", p.TreatmentCode);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CardNo", p.Card != null ? p.Card.CardNumber : string.Empty);

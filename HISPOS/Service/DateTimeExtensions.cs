@@ -125,12 +125,25 @@ namespace His_Pos.Service
 
         public static DateTime TWDateStringToDateTime(string date)
         {
-            var year = int.Parse(date.Substring(0, 3)) + 1911;
-            var month = int.Parse(date.Substring(3, 2));
-            var day = int.Parse(date.Substring(5, 2));
-            var hour = int.Parse(date.Substring(7, 2));
-            var min = int.Parse(date.Substring(9, 2));
-            var sec = int.Parse(date.Substring(11, 2));
+            var year = 0;
+            var month = 0;
+            var day = 0;
+            var hour = 0;
+            var min = 0;
+            var sec = 0;
+            try
+            {
+                year = int.Parse(date.Substring(0, 3)) + 1911;
+                month = int.Parse(date.Substring(3, 2));
+                day = int.Parse(date.Substring(5, 2));
+                hour = int.Parse(date.Substring(7, 2));
+                min = int.Parse(date.Substring(9, 2));
+                sec = int.Parse(date.Substring(11, 2));
+            }
+            catch
+            {
+                return new DateTime();
+            }
             return new DateTime(year, month, day, hour, min, sec);
         }
 
