@@ -365,6 +365,7 @@
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInLog.cs" />
     <Compile Include="InfraStructure\EmployeeService.cs" />
     <Compile Include="NewClass\Pharmacy\PharmacyDBService.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadService2.cs" />
     <Compile Include="NewClass\ProductType\ProductTypes.cs" />
     <Compile Include="NewClass\Report\Accounts\AccountsCommonItem.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositDetailRecordReport.cs" />

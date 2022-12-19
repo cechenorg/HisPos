@@ -343,6 +343,27 @@ namespace His_Pos.NewClass.Prescription
             set { Set(() => Patient, ref patient, value); }
         }
 
+        private string treatmentCode;
+        public string TreatmentCode//就醫識別碼
+        {
+            get => treatmentCode;
+            set { Set(() => TreatmentCode, ref treatmentCode, value); }
+        }
+
+        private string origTreatmentCode;
+        public string OrigTreatmentCode//原就醫識別碼
+        {
+            get => origTreatmentCode;
+            set { Set(() => OrigTreatmentCode, ref origTreatmentCode, value); }
+        }
+
+        private string origTreatmentDT;
+
+        public string OrigTreatmentDT//原就醫日期
+        {
+            get => origTreatmentDT;
+            set { Set(() => OrigTreatmentDT, ref origTreatmentDT, value); }
+        }
         private Institution institution;//釋出院所 D21
 
         public Institution Institution

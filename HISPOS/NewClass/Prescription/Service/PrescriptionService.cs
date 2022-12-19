@@ -631,6 +631,10 @@ namespace His_Pos.NewClass.Prescription.Service
             else
                 Current.PrescriptionStatus.IsCreateSign = true;
         }
+        public static List<string> GetPrescriptionSign(Prescription p)
+        {
+            return HisAPI.WritePrescriptionData(p);
+        }
 
         public void Print(bool noCard)
         {

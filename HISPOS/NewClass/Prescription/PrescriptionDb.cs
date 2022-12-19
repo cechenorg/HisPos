@@ -22,6 +22,7 @@ using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
+using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 
 // ReSharper disable TooManyArguments
 
@@ -39,6 +40,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescriptionDetails));
+            DataBaseFunction.AddSqlParameter(parameterList, "Emp", ViewModelMainWindow.CurrentUser.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
         }
 
@@ -664,6 +666,10 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", p.PrescriptionStatus.IsDeposit);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsAdjust", p.PrescriptionStatus.IsAdjust);
 
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_OrigTreatmentDT", DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0'));
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode1", p.OrigTreatmentCode);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode2", p.TreatmentCode);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_CardNo", p.Card != null ? p.Card.CardNumber : string.Empty);
             prescriptionMasterTable.Rows.Add(newRow);
             return prescriptionMasterTable;
         }
@@ -750,6 +756,10 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_IsDeclare", typeof(bool));
             masterTable.Columns.Add("PreMas_IsDeposit", typeof(bool));
             masterTable.Columns.Add("PreMas_IsAdjust", typeof(bool));
+            masterTable.Columns.Add("PreMas_OrigTreatmentDT", typeof(string));
+            masterTable.Columns.Add("PreMas_MedIDCode1", typeof(string));
+            masterTable.Columns.Add("PreMas_MedIDCode2", typeof(string));
+            masterTable.Columns.Add("PreMas_CardNo", typeof(string));
             return masterTable;
         }
 

@@ -25,6 +25,9 @@ namespace His_Pos.NewClass.Prescription.ICCard
         [Index(5)]
         public bool SameDayTreat;
 
+        [Index(6)]
+        public string TreatmentCode;
+
         public SeqNumber(byte[] pBuffer)
         {
             var treatDateTimeString = Function.ByteArrayToString(13, pBuffer, 0);
@@ -34,9 +37,10 @@ namespace His_Pos.NewClass.Prescription.ICCard
             SecuritySignature = Function.ByteArrayToString(256, pBuffer, 27);
             SamId = Function.ByteArrayToString(12, pBuffer, 283);
             SameDayTreat = Function.ByteArrayToString(1, pBuffer, 295).Equals("Y");
+            TreatmentCode = Function.ByteArrayToString(20, pBuffer, 296);
         }
 
-        public SeqNumber(DateTime treat, string medicalNum, string insID, string secSig, string samID, bool samDateTreat)
+        public SeqNumber(DateTime treat, string medicalNum, string insID, string secSig, string samID, bool samDateTreat, string treatmentCode)
         {
             TreatDateTime = treat;
             MedicalNumber = medicalNum;
@@ -44,6 +48,7 @@ namespace His_Pos.NewClass.Prescription.ICCard
             SecuritySignature = secSig;
             SamId = samID;
             SameDayTreat = samDateTreat;
+            TreatmentCode = treatmentCode;
         }
     }
 }

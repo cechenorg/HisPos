@@ -122,8 +122,8 @@ namespace His_Pos.NewClass.Prescription.ICCard
             byte[] cTreatItem = ConvertData.StringToBytes("AF\0", 3);//就醫類別長度3個char;
             byte[] cBabyTreat = ConvertData.StringToBytes(" ", 2);//新生兒就醫註記,長度2個char
             byte[] cTreatAfterCheck = { makeUp };//補卡註記
-            int iBufferLen = 296;
-            byte[] pBuffer = new byte[296];
+            int iBufferLen = 316;
+            byte[] pBuffer = new byte[316];
             if (HisApiFunction.OpenCom())
             {
                 var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
