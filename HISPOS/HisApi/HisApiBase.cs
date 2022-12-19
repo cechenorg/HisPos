@@ -212,6 +212,22 @@ namespace His_Pos.HisApi
         //1.52 提供His重置讀卡機或卡片的API
         public static extern int csSoftwareReset(int iType);
 
+        [DllImport("CSHIS.dll", EntryPoint = "hisGetSeqNumber256N1")]
+        //1.53 取得就醫序號新版-就醫識別碼
+        public static extern int hisGetSeqNumber256N1(byte[] cTreatItem, byte[] cBabyTreat, byte[] cTreatAfterCheck, byte[] pBuffer, ref int iBufferLen);
+
+        [DllImport("CSHIS.dll", EntryPoint = "hisGetTreatNumNoICCard")]
+        //1.54 異常時取得就醫識別碼
+        public static extern int hisGetTreatNumNoICCard(byte[] pPatientID, byte[] cTreatHospCode, byte[] pBuffer, int iBufferLen);
+
+        [DllImport("CSHIS.dll", EntryPoint = "hisQuickInsurence")]
+        //1.55 在保狀態查核
+        public static extern int hisQuickInsurence(byte[] cTreatItem);
+
+        [DllImport("CSHIS.dll", EntryPoint = "hisGetTreatNumICCard")]
+        //1.56 hisGetTreatNumICCard(單獨取得就醫識別碼)
+        public static extern int hisGetTreatNumICCard(byte[] cTreatItem);
+
         // 2.1 安全模組認證
         [DllImport("CSHIS.dll", EntryPoint = "csVerifySAMDC")]
         public static extern int csVerifySAMDC();
@@ -219,6 +235,14 @@ namespace His_Pos.HisApi
         [DllImport("CSHIS.dll", EntryPoint = "csGetHospID")]
         //2.2 讀取SAM院所代碼
         public static extern int csGetHospID(byte[] pBuffer, ref int iBufferLen);
+
+        [DllImport("CSHIS.dll", EntryPoint = "csGetHospName")]
+        //2.3 讀取SAM 院所名稱
+        public static extern int csGetHospName(byte[] pBuffer, ref int iBufferLen);
+
+        [DllImport("CSHIS.dll", EntryPoint = "csGetHospAbbName")]
+        //2.4  (讀取 SAM 院所簡稱)
+        public static extern int csGetHospAbbName(byte[] pBuffer, ref int iBufferLen);
 
         // 3.1 資料上傳
         [DllImport("CSHIS.dll", EntryPoint = "csUploadData")]
@@ -263,6 +287,10 @@ namespace His_Pos.HisApi
         // 4.8 取得醫事人員卡英文姓名
         [DllImport("CSHIS.dll", EntryPoint = "hpcGetHPCENAME")]
         public static extern int hpcGetHPCENAME(byte[] pBuffer, ref int iBufferLen);
+
+        // 4.9 虛擬醫師卡登出
+        [DllImport("CSHIS.dll", EntryPoint = "hpcVHPCLogout")]
+        public static extern int hpcVHPCLogout();
 
         [DllImport("CSHIS.dll", EntryPoint = "hisGetICD10EnC")]
         //5.1 進行疾病診斷碼押碼

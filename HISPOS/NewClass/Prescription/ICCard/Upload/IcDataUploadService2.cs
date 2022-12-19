@@ -4,6 +4,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Medicine.Base;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.Properties;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 
 namespace His_Pos.NewClass.Prescription.ICCard.Upload
 {
-    public class IcDataUploadService
+    public class IcDataUploadService2
     {
         [XmlRoot(ElementName = "RECS")]
         public class Recs
@@ -35,10 +36,10 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             public Rec(Prescription p, bool isMakeUp, ErrorUploadWindowViewModel.IcErrorCode e = null)
             {
                 HeaderMessage = new Header();
-                HeaderMessage.DataFormat = "1";
-                HeaderMessage.DataFormat = e is null ? "1" : "2";
+                HeaderMessage.DataFormat = "A";
+                HeaderMessage.DataFormat = e is null ? "A" : e.Content;
 
-                HeaderMessage.UploadVersion = "1.0";
+                //HeaderMessage.UploadVersion = "1.0";
                 MainMessage = new MainMessage(p, e, isMakeUp);
             }
 
@@ -65,7 +66,7 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             }
 
             //V
-            [XmlElement(ElementName = "A00")]
+            [XmlElement(ElementName = "H00")]
             public string DataType { get; set; } = "1";//資料型態
 
             /*
@@ -78,12 +79,12 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
              */
 
             //V
-            [XmlElement(ElementName = "A01")]
+            [XmlElement(ElementName = "H01")]
             public string DataFormat { get; set; }//資料格式
 
             //V
-            [XmlElement(ElementName = "A02")]
-            public string UploadVersion { get; set; } = "1.0";//上傳版本 (就醫上傳版本現階段均為1.0)
+            //[XmlElement(ElementName = "A02")]
+            //public string UploadVersion { get; set; } = "2.0";//上傳版本 (就醫上傳版本現階段均為1.0)
         }
 
         [XmlRoot(ElementName = "MB")]
@@ -100,6 +101,10 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
 
             public MainMessage(Prescription p, ErrorUploadWindowViewModel.IcErrorCode e, bool makeUp)
             {
+                if(p.PrescriptionSign == null)
+                {
+                    p.PrescriptionSign = PrescriptionService.GetPrescriptionSign(p);
+                }
                 IcMessage = new IcData(p, e, makeUp);
                 MedicalMessageList = new List<MedicalData>();
                 var treatDateTime = IcMessage.TreatmentDateTime;
@@ -131,11 +136,11 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                 var seq = p.Card.MedicalNumberData;
                 if (!string.IsNullOrEmpty(p.Card.TreatDateTime))
                 {
-                    TreatmentDateTime = p.Card.TreatDateTime;
+                    TreatmentDateTime = p.Card.TreatDateTime.PadRight(13, '0');
                 }
                 else
                 {
-                    TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
+                    TreatmentDateTime = DateTimeEx.ToStringWithSecond(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
                     try
                     {
                         if (HisApiFunction.OpenCom() && HisApiBase.hisGetCardStatus(1) == 2)
@@ -145,12 +150,12 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                             var res = HisApiBase.csGetDateTime(pBuffer, ref iBufferLength);
                             TreatmentDateTime = res == 0 ?
                                 ConvertData.ByToString(pBuffer, 0, 13) :
-                                DateTimeEx.ToStringWithSecond(DateTime.Now);
+                                DateTimeEx.ToStringWithSecond(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
                             HisApiFunction.CloseCom();
                         }
                         else
                         {
-                            TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
+                            TreatmentDateTime = DateTimeEx.ToStringWithSecond(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
                         }
                     }
                     catch (Exception ex)
@@ -159,28 +164,54 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                         MessageWindow.ShowMessage(Resources.控制軟體異常, MessageType.ERROR);
                     }
                 }
+                List<string> category = new List<string>() { "01", "02", "03", "04", "05", "06", "07", "08", "09", "AC", "AD", "BE", "CA", "DA", "DB"};
                 if (e is null)
                 {
                     CardNo = p.Card.CardNumber;
                     SamCode = seq.SamId;
                     SecuritySignature = seq.SecuritySignature;
                     IDNumber = p.Card.IDNumber;
-                    BirthDay = DateTimeEx.ConvertToTaiwanCalender(p.Card.PatientBasicData.Birthday);
-                    MedicalNumber = string.Empty;
+                    BirthDay = p.Card.PatientBasicData.Birthday != null && p.Card.PatientBasicData.Birthday != new DateTime() ? p.Card.PatientBasicData.Birthday.ToString("yyyMMdd") : DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.Patient.Birthday));
+                    TreatmentCategory = p.Division.ID;
+                    if (!category.Contains(TreatmentCategory))
+                    {
+                        MedicalNumber = p.Card.MedicalNumberData.MedicalNumber;
+                    }
                     PharmacyId = seq.InstitutionId;
+                    TreatmentCode = seq.TreatmentCode != null ? seq.TreatmentCode : string.Empty;
+                    AdjustDay = p.AdjustDay;
+                    OrTreatmentDateTime = DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
+                    PaymentCategory = p.PaymentCategory.ID;
+                    OrTreatmentCode = p.TreatmentCode != null ? p.TreatmentCode : TreatmentCode;
+                    CuOrgCode = p.Institution.ID;
                 }
                 else
                 {
                     try
                     {
+                        CardNo = p.Card.CardNumber;
+                        SamCode = seq.SamId;
+                        TreatmentCategory = p.Division.ID;
+                        
+                        if(!category.Contains(TreatmentCategory))
+                        {
+                            MedicalNumber = p.Card.MedicalNumberData.MedicalNumber;
+                        }
+                        SecuritySignature = seq.SecuritySignature;
                         IDNumber = p.Patient.IDNumber;
-                        BirthDay = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday);
-                        MedicalNumber = e.ID;
+                        BirthDay = p.Card.PatientBasicData.Birthday != null ? p.Card.PatientBasicData.Birthday.ToString("yyyMMdd") : DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.Patient.Birthday));
+                        
                         PharmacyId = ViewModelMainWindow.CurrentPharmacy.ID;
+                        PaymentCategory = p.PaymentCategory.ID;
+                        TreatmentCode = seq.TreatmentCode != null ? seq.TreatmentCode : string.Empty;
+                        AdjustDay = p.AdjustDay;
+                        OrTreatmentDateTime = DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
+                        OrTreatmentCode = p.TreatmentCode != null ? p.TreatmentCode : TreatmentCode;//***
+                        CuOrgCode = p.Institution.ID;
                     }
                     catch (Exception ex)
                     {
-                        MessageWindow.ShowMessage(Resources.生日空值, MessageType.ERROR);
+                        MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                     }
                 }
                 if (makeUp || DateTime.Compare(((DateTime)p.AdjustDate).Date, DateTime.Now.Date) < 0)
@@ -197,91 +228,155 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             }
 
             //1,3 V  2,4 ~
-            [XmlElement(ElementName = "A11")]
+            [XmlElement(ElementName = "M01")]
+            public string SamCode { get; set; }//安全模組代碼
+
+            //1,3 V  2,4 ~
+            [XmlElement(ElementName = "M02")]
             public string CardNo { get; set; }//卡片號碼 (get by HISAPI : csGetCardNo)
 
             //V
-            [XmlElement(ElementName = "A12")]
+            [XmlElement(ElementName = "M03")]
             public string IDNumber { get; set; }//身分證號或 身分證明文件號碼
 
             //V
-            [XmlElement(ElementName = "A13")]
+            [XmlElement(ElementName = "M04")]
             public string BirthDay { get; set; }//出生日期
 
             //V
-            [XmlElement(ElementName = "A14")]
+            [XmlElement(ElementName = "M05")]
             public string PharmacyId { get; set; }//健保資料段 8-6.醫療院所代碼
 
             //V
-            [XmlElement(ElementName = "A15")]
+            [XmlElement(ElementName = "M06")]
             public string MedicalPersonIcNumber { get; set; }//健保資料段 8-7-1.醫事人員身分證號
 
-            //1,3 V  2,4 ~
-            [XmlElement(ElementName = "A16")]
-            public string SamCode { get; set; }//安全模組代碼
-
             //V
-            [XmlElement(ElementName = "A17")]
-            public string TreatmentDateTime { get; set; } //健保資料段 8-3.就診日期時間 (get by HISAPI : hisGetSeqNumber256)
-
-            //*
-            [XmlElement(ElementName = "A18")]
-            public string MedicalNumber { get; set; }//健保資料段 8-5.就醫序號(get by HISAPI : hisGetSeqNumber256)
-
-            //V
-            [XmlElement(ElementName = "A19")]
-            public string MakeUpMark { get; set; } = "1";//健保資料段 8-4.補卡註記(get by HISAPI : hisGetTreatmentNoNeedHPC)
-
-            //*
-            [XmlElement(ElementName = "A20")]
-            public string NewbornBirthDay { get; set; }//健保資料段 7-1.新生兒出生日期
-
-            //*
-            [XmlElement(ElementName = "A21")]
-            public string NewbornBabyMark { get; set; }//健保資料段 7-2.新生兒胞胎註記
-
-            //V
-            [XmlElement(ElementName = "A23")]
+            [XmlElement(ElementName = "M07")]
             public string TreatmentCategory { get; set; } = "AF";//健保資料段 8-1.就醫類別
 
             //*
-            [XmlElement(ElementName = "A24")]
+            [XmlElement(ElementName = "M08")]
+            public string NewbornBirthDay { get; set; }//健保資料段 7-1.新生兒出生日期
+
+            //*
+            [XmlElement(ElementName = "M09")]
+            public string NewbornBabyMark { get; set; }//健保資料段 7-2.新生兒胞胎註記
+
+            //*
+            [XmlElement(ElementName = "M10")]
             public string NewbornTreatmentMark { get; set; }//健保資料段 8-2.新生兒就醫註記
 
-            //1,3 V  2,4 ~
-            [XmlElement(ElementName = "A22")]
-            public string SecuritySignature { get; set; }//健保資料段 8-7-2安全簽章
+            //V
+            [XmlElement(ElementName = "M11")]
+            public string TreatmentDateTime { get; set; } //健保資料段 8-3.就診日期時間 (get by HISAPI : hisGetSeqNumber256)
 
             //V
-            [XmlElement(ElementName = "A25")]
+            [XmlElement(ElementName = "M12")]
+            public string MakeUpMark { get; set; } = "1";//健保資料段 8-4.補卡註記(get by HISAPI : hisGetTreatmentNoNeedHPC)
+
+            //*
+            [XmlElement(ElementName = "M13")]
+            public string MedicalNumber { get; set; }//健保資料段 8-5.就醫序號(get by HISAPI : hisGetSeqNumber256)
+
+            //1,3 V  2,4 ~
+            [XmlElement(ElementName = "M14")]
+            public string SecuritySignature { get; set; }//健保資料段 8-7-2安全簽章
+
+            
+            [XmlElement(ElementName = "M15")]
+            public string TreatmentCode { get; set; }//健保資料段 8-7-2就醫識別碼
+
+            [XmlElement(ElementName = "M16")]
+            public string OrTreatmentCode { get; set; }//健保資料段 8-7-2原就醫識別碼
+
+            [XmlElement(ElementName = "M17")]
+            public string CuOrgCode { get; set; }//健保資料段 8-7-2原處方服務機構代號 
+
+            [XmlElement(ElementName = "M18")]
+            public string OrMedicalNumber { get; set; }//健保資料段 8-7-2原處方就醫序號
+
+            [XmlElement(ElementName = "M19")]
+            public string OrTreatmentDateTime { get; set; }//健保資料段 8-7-2原就診日期時間
+
+            [XmlElement(ElementName = "M20")]
+            public string AdjustDay { get; set; }//健保資料段 8-7-2給藥天數 
+
+            [XmlElement(ElementName = "M21")]
+            public string ChronicGiveDay { get; set; }//健保資料段 8-7-2慢性病連續處方箋總給藥天數
+                                                      //
+            [XmlElement(ElementName = "M22")]
+            public string ControlChronicGiveDay { get; set; }//健保資料段 8-7-2管制藥品專用處方箋(慢連箋)總給藥天數
+
+            [XmlElement(ElementName = "M23")]
+            public string AdjustmentMethod { get; set; }//健保資料段 8-8.處方調劑方式
+
+            [XmlElement(ElementName = "M24")]
+            public string AdjustCountA { get; set; }//健保資料段 8-8.可調劑次數_A-⼀般處方箋
+
+            [XmlElement(ElementName = "M25")]
+            public string AdjustCountB { get; set; }//健保資料段 8-8.可調劑次數_B-慢性病處方箋
+
+            [XmlElement(ElementName = "M26")]
+            public string AdjustCountC { get; set; }//健保資料段 8-8.連續處方箋可調劑次數_C-慢性病連續處方箋
+
+            [XmlElement(ElementName = "M27")]
+            public string AdjustCountD { get; set; }//健保資料段 8-8.可調劑次數_D-管制藥品專用處方箋(⼀般)
+
+            [XmlElement(ElementName = "M28")]
+            public string AdjustCountE { get; set; }//可調劑次數_E-管制藥品專用處方箋(慢箋)
+
+            [XmlElement(ElementName = "M29")]
+            public string AdjustCountF { get; set; }//連續處方箋可調劑次數_F-管制藥品專用處方箋(慢連箋) 
+
+            [XmlElement(ElementName = "M30")]
+            public string TreatmentCountA { get; set; }//物理治療數量/已執⾏數量 
+
+            [XmlElement(ElementName = "M31")]
+            public string TreatmentCountB { get; set; }//職能治療數量/已執⾏數量
+
+            [XmlElement(ElementName = "M32")]
+            public string TreatmentCountC { get; set; }//語言治療數量/已執⾏數量
+
+            [XmlElement(ElementName = "M33")]
+            public string AdjuctRowC { get; set; }//當次調劑連續處方箋次數/序號_C-慢性病 連續處方箋 
+
+            [XmlElement(ElementName = "M34")]
+            public string AdjuctRowD { get; set; }//當次調劑連續處方箋次數/序號_F-管制藥 品專用處方箋(慢連箋) 
+
+            //V
+            [XmlElement(ElementName = "M35")]
             public string MainDiagnosisCode { get; set; }//健保資料段 8-8.主要診斷碼
 
             //*
-            [XmlElement(ElementName = "A26")]
+            [XmlElement(ElementName = "M36")]
             public string SecondDiagnosisCode { get; set; }//健保資料段 8-8.主要診斷碼
 
             //V
-            [XmlElement(ElementName = "A31")]
+            [XmlElement(ElementName = "M44")]
             public string MedicalFee { get; set; }//健保資料段 8-10-1.門診醫療費用 （當次） (get by HISAPI : hisGetTreatmentNoNeedHPC)
 
             //*
-            [XmlElement(ElementName = "A32")]
+            [XmlElement(ElementName = "M45")]
             public string CopaymentFee { get; set; }//健保資料段 8-10-2.門診部分負擔費用（當次）(get by HISAPI : hisGetTreatmentNoNeedHPC)
 
             //*
-            [XmlElement(ElementName = "A33")]
+            [XmlElement(ElementName = "M46")]
             public string HospitalizationFee { get; set; }//健保資料段 8-10-3.住院醫療費用(當次)(get by HISAPI : hisGetTreatmentNoNeedHPC)
 
             //*
-            [XmlElement(ElementName = "A34")]
+            [XmlElement(ElementName = "M47")]
             public string HospitalizationCopaymentFeeLess { get; set; }// 健保資料段 8-10-4.住院部分負擔費用（當次急性30天、慢性180天以下）(get by HISAPI : hisGetTreatmentNoNeedHPC)
 
             //*
-            [XmlElement(ElementName = "A35")]
+            [XmlElement(ElementName = "M48")]
             public string HospitalizationCopaymentFeeMore { get; set; }//健保資料段8-10-5.住院部分負擔費用（當次急性31天、慢性181天以上）(get by HISAPI : hisGetTreatmentNoNeedHPC)
 
-            [XmlElement(ElementName = "A54")]
+            [XmlElement(ElementName = "M49")]
             public string ActualTreatDate { get; set; }//健保資料段8-10-5.住院部分負擔費用（當次急性31天、慢性181天以上）(get by HISAPI : hisGetTreatmentNoNeedHPC)
+
+            [XmlElement(ElementName = "M51")]
+            public string PaymentCategory { get; set; }//健保資料段8-10-5 給付類別
         }
 
         [XmlRoot(ElementName = "MB2")]
@@ -301,34 +396,37 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                 Usage = med.UsageName;
                 Days = med.Days.ToString();
                 TotalAmount = $"{med.Amount:00000.0}";
+                PositionID = med.PositionID;
+
+                MedicalCategory = "A";
                 switch (MedicalOrderCategory)
                 {
                     case "1":
-                        PrescriptionDeliveryMark = "01";
+                        PrescriptionDeliveryMark = "1";
                         break;
 
                     case "A":
-                        PrescriptionDeliveryMark = "02";
+                        PrescriptionDeliveryMark = "2";
                         break;
 
                     case "2":
-                        PrescriptionDeliveryMark = "05";
+                        PrescriptionDeliveryMark = "5";
                         break;
 
                     case "B":
-                        PrescriptionDeliveryMark = "06";
+                        PrescriptionDeliveryMark = "6";
                         break;
 
                     case "3":
                     case "4":
                     case "5":
-                        PrescriptionDeliveryMark = "03";
+                        PrescriptionDeliveryMark = "3";
                         break;
 
                     case "C":
                     case "D":
                     case "E":
-                        PrescriptionDeliveryMark = "04";
+                        PrescriptionDeliveryMark = "4";
                         break;
                 }
                 if (!string.IsNullOrEmpty(preSig))
@@ -336,47 +434,57 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             }
 
             //V
-            [XmlElement(ElementName = "A71")]
+            [XmlElement(ElementName = "D01")]
             public string MedicalOrderTreatDateTime { get; set; }//醫療專區 1-1.醫令就診日期時間
 
             //V
-            [XmlElement(ElementName = "A72")]
+            [XmlElement(ElementName = "D02")]
             public string MedicalOrderCategory { get; set; }//醫療專區 1-2-1醫令類別
 
             //V
-            [XmlElement(ElementName = "A73")]
+            [XmlElement(ElementName = "D03")]
+            public int MedicalRow { get; set; }//醫療專區 1-2-1醫令序號
+
+            [XmlElement(ElementName = "D04")]
+            public string MedicalCategory { get; set; }//醫療專區 1-2-1醫令序號
+
+            //V
+            [XmlElement(ElementName = "D05")]
+            public string PrescriptionDeliveryMark { get; set; }//醫療專區 1-2-7交付處方註記
+
+            //V
+            [XmlElement(ElementName = "D06")]
             public string TreatmentProjectCode { get; set; }//醫療專區 1-2-2.診療項目代號
 
             //*
-            [XmlElement(ElementName = "A74")]
+            [XmlElement(ElementName = "D07")]
             public string TreatmentPosition { get; set; }//醫療專區 1-2-3診療部位
 
             //V
-            [XmlElement(ElementName = "A75")]
+            [XmlElement(ElementName = "D08")]
             public string Usage { get; set; }//醫療專區 1-2-4.用法
 
             //V
-            [XmlElement(ElementName = "A76")]
+            [XmlElement(ElementName = "D09")]
             public string Days { get; set; }// 醫療專區 1-2-5天數
 
             //V
-            [XmlElement(ElementName = "A77")]
+            [XmlElement(ElementName = "D10")]
             public string TotalAmount { get; set; }//醫療專區 1-2-6.總量
 
-            //V
-            [XmlElement(ElementName = "A78")]
-            public string PrescriptionDeliveryMark { get; set; }//醫療專區 1-2-7交付處方註記
-
             //1,3 V 2,4 ~
-            [XmlElement(ElementName = "A79")]
+            [XmlElement(ElementName = "D11")]
             public string PrescriptionSignature { get; set; }//醫療專區 1-2-8處方簽章
 
+            [XmlElement(ElementName = "D14")]
+            public string PositionID { get; set; }//醫療專區 1-2-6.用途
+
             //*
-            [XmlElement(ElementName = "A80")]
+            [XmlElement(ElementName = "E01")]
             public string AllergyMedicineUploadMark { get; set; }//醫療專區 過敏藥物上傳註記
 
             //*
-            [XmlElement(ElementName = "A81")]
+            [XmlElement(ElementName = "E04")]
             public string AllergyMedicine { get; set; }//過敏藥物
         }
     }
