@@ -29,7 +29,7 @@ namespace His_Pos.HisApi
             var iWriteCount = medList.Count;
             var iBufferLength = 40 * iWriteCount;
             p.Card.Read();
-            var treatDateTime = DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
+            var treatDateTime = p.Card.MedicalNumberData.TreatDateTime;// DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
             var pDataWriteStr = p.Medicines.CreateMedicalData(treatDateTime);
             byte[] pDateTime = ConvertData.StringToBytes(treatDateTime + "\0", (treatDateTime + "\0").Length);
             byte[] pPatientID = ConvertData.StringToBytes(p.Card.PatientBasicData.IDNumber + "\0", (p.Card.PatientBasicData.IDNumber + "\0").Length);
@@ -61,7 +61,8 @@ namespace His_Pos.HisApi
             IcDataUploadService.Rec rec1 = new IcDataUploadService.Rec(p, isMakeUp);
             var uploadData1 = rec1.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
-            table = InsertUploadData(p, uploadData1, p.Card.MedicalNumberData.TreatDateTime);
+            table = InsertUploadData(p, uploadData1, DateTimeExtensions.TWDateStringToDateTime(p.Card.MedicalNumberData.TreatDateTime));
+            UpdPrescription2(p);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
@@ -74,6 +75,7 @@ namespace His_Pos.HisApi
             var uploadData1 = rec1.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
             table = InsertUploadData(p, uploadData1, DateTime.Now);
+            UpdPrescription2(p);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
@@ -297,17 +299,39 @@ namespace His_Pos.HisApi
             return uploadData2;
         }
 
-        public static SeqNumber GetSeqNumber256N1()
+        //public static SeqNumber GetSeqNumber256N1()
+        //{
+        //    IcCard card = new IcCard();
+        //    card.MedicalNumberData = new SeqNumber();
+        //    if (OpenCom())
+        //    {
+        //        byte[] cTreatItem = ConvertData.StringToBytes("AF\0", 3);
+        //        byte[] cBabyTreat = ConvertData.StringToBytes(" ", 2);
+        //        byte[] cTreatAfterCheck = { new byte() };
+        //        int iBufferLen = 316;
+        //        byte[] pBuffer = new byte[316];
+        //        var res = HisApiBase.hisGetSeqNumber256N1(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
+        //        card.MedicalNumberData = new SeqNumber(pBuffer);
+        //        CloseCom();
+        //    }   
+        //    return card.MedicalNumberData;
+        //}
+        private static void UpdPrescription2(Prescription p)
         {
-            byte[] cTreatItem = ConvertData.StringToBytes("AF\0", 3);
-            byte[] cBabyTreat = ConvertData.StringToBytes(" ", 2);
-            byte[] cTreatAfterCheck = { new byte() };
-            int iBufferLen = 316;
-            byte[] pBuffer = new byte[316];
-            var res = HisApiBase.hisGetSeqNumber256N1(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
-            IcCard card = new IcCard();
-            card.MedicalNumberData = new SeqNumber(new DateTime(), Function.ByteArrayToString(4, pBuffer, 13).Trim(), null, null, null, false, null);
-            return card.MedicalNumberData;
+            if(p.Card!= null)
+            {
+                try
+                {
+                    p.TreatmentCode = p.Card.MedicalNumberData.TreatmentCode;
+                    p.OrigTreatmentDT = p.Card.MedicalNumberData.TreatDateTime;
+                    p.SecuritySignature = p.Card.MedicalNumberData.SecuritySignature;
+                }
+                catch
+                {
+
+                }
+            }
+            PrescriptionDb.UploadData2(p);
         }
     }
 }

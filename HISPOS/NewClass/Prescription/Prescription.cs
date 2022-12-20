@@ -182,6 +182,25 @@ namespace His_Pos.NewClass.Prescription
             }
             Type = type;
             MedicineDays = Medicines.CountMedicineDays();
+
+            Card = new IcCard();
+            Card.Name = Patient.Name;
+            if (r.Table.Columns.Contains("PreMas_CardNo"))
+            {
+                Card.CardNumber = Convert.ToString(r["PreMas_CardNo"]);
+            }
+            if (r.Table.Columns.Contains("PreMas_OrigTreatmentDT"))
+            {
+                Card.TreatDateTime = Convert.ToString(r["PreMas_OrigTreatmentDT"]);
+            }
+            if (r.Table.Columns.Contains("PreMas_MedIDCode1"))
+            {
+                OrigTreatmentCode = Convert.ToString(r["PreMas_MedIDCode1"]);
+            }
+            if (r.Table.Columns.Contains("PreMas_MedIDCode2"))
+            {
+                TreatmentCode = Convert.ToString(r["PreMas_MedIDCode2"]);
+            }
         }
 
         public Prescription(OrthopedicsPrescription c)
@@ -364,6 +383,14 @@ namespace His_Pos.NewClass.Prescription
             get => origTreatmentDT;
             set { Set(() => OrigTreatmentDT, ref origTreatmentDT, value); }
         }
+
+        private string securitySignature;
+        public string SecuritySignature
+        {
+            get => securitySignature;
+            set { Set(() => SecuritySignature, ref securitySignature, value); }
+        }
+
         private Institution institution;//釋出院所 D21
 
         public Institution Institution

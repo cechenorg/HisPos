@@ -8,7 +8,7 @@ namespace His_Pos.NewClass.Prescription.ICCard
     public struct SeqNumber
     {
         [Index(0)]
-        public DateTime TreatDateTime;
+        public string TreatDateTime;
 
         [Index(1)]
         public string MedicalNumber;
@@ -31,7 +31,7 @@ namespace His_Pos.NewClass.Prescription.ICCard
         public SeqNumber(byte[] pBuffer)
         {
             var treatDateTimeString = Function.ByteArrayToString(13, pBuffer, 0);
-            TreatDateTime = DateTimeExtensions.TWDateStringToDateTime(treatDateTimeString);
+            TreatDateTime = treatDateTimeString;//DateTimeExtensions.TWDateStringToDateTime(treatDateTimeString);
             MedicalNumber = Function.ByteArrayToString(4, pBuffer, 13).Trim();
             InstitutionId = Function.ByteArrayToString(10, pBuffer, 17);
             SecuritySignature = Function.ByteArrayToString(256, pBuffer, 27);
@@ -40,7 +40,7 @@ namespace His_Pos.NewClass.Prescription.ICCard
             TreatmentCode = Function.ByteArrayToString(20, pBuffer, 296);
         }
 
-        public SeqNumber(DateTime treat, string medicalNum, string insID, string secSig, string samID, bool samDateTreat, string treatmentCode)
+        public SeqNumber(string treat, string medicalNum, string insID, string secSig, string samID, bool samDateTreat, string treatmentCode)
         {
             TreatDateTime = treat;
             MedicalNumber = medicalNum;
