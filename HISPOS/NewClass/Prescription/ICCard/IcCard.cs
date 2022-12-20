@@ -126,7 +126,7 @@ namespace His_Pos.NewClass.Prescription.ICCard
             byte[] pBuffer = new byte[316];
             if (HisApiFunction.OpenCom())
             {
-                var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
+                var res = HisApiBase.hisGetSeqNumber256N1(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
                 switch (res)
                 {
                     case 0:

@@ -1,5 +1,7 @@
-﻿using His_Pos.ChromeTabViewModel;
+﻿using Dapper;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
+using His_Pos.HisApi;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
@@ -18,6 +20,7 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Transactions;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
@@ -40,7 +43,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescriptionDetails));
-            DataBaseFunction.AddSqlParameter(parameterList, "Emp", ViewModelMainWindow.CurrentUser.ID);
+            //DataBaseFunction.AddSqlParameter(parameterList, "Emp", ViewModelMainWindow.CurrentUser.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
         }
 
@@ -666,10 +669,10 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", p.PrescriptionStatus.IsDeposit);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsAdjust", p.PrescriptionStatus.IsAdjust);
 
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_OrigTreatmentDT", p.OrigTreatmentDT.PadRight(13, '0'));
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode1", p.OrigTreatmentCode);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode2", p.TreatmentCode);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_CardNo", p.Card != null ? p.Card.CardNumber : string.Empty);
+            //DataBaseFunction.AddColumnValue(newRow, "PreMas_OrigTreatmentDT", p.OrigTreatmentDT.PadRight(13, '0'));
+            //DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode1", p.OrigTreatmentCode);
+            //DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode2", p.TreatmentCode);
+            //DataBaseFunction.AddColumnValue(newRow, "PreMas_CardNo", p.Card != null ? p.Card.CardNumber : string.Empty);
             prescriptionMasterTable.Rows.Add(newRow);
             return prescriptionMasterTable;
         }
@@ -756,10 +759,10 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_IsDeclare", typeof(bool));
             masterTable.Columns.Add("PreMas_IsDeposit", typeof(bool));
             masterTable.Columns.Add("PreMas_IsAdjust", typeof(bool));
-            masterTable.Columns.Add("PreMas_OrigTreatmentDT", typeof(string));
-            masterTable.Columns.Add("PreMas_MedIDCode1", typeof(string));
-            masterTable.Columns.Add("PreMas_MedIDCode2", typeof(string));
-            masterTable.Columns.Add("PreMas_CardNo", typeof(string));
+            //masterTable.Columns.Add("PreMas_OrigTreatmentDT", typeof(string));
+            //masterTable.Columns.Add("PreMas_MedIDCode1", typeof(string));
+            //masterTable.Columns.Add("PreMas_MedIDCode2", typeof(string));
+            //masterTable.Columns.Add("PreMas_CardNo", typeof(string));
             return masterTable;
         }
 
@@ -1177,6 +1180,21 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "StoOrd_PrescriptionID", iD);
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderByPrescriptionID]", parameterList);
+        }
+
+        public static void UploadData2(Prescription p)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                string sql = string.Empty;
+                sql = string.Format("Update [{0}].[HIS].[PrescriptionMaster] Set [PreMas_OrigTreatmentDT] = '{1}', [PreMas_MedIDCode1] = '{2}', [PreMas_MedIDCode2] = '{3}', [PreMas_CardNo] = '{4}', [PreMas_ModifyEmpID] = '{5}', [PreMas_ModifyTime] = GETDATE(), PreMas_SecuritySign = '{6}' Where [PreMas_ID] = {7}", Properties.Settings.Default.SystemSerialNumber, p.OrigTreatmentDT, p.OrigTreatmentCode, p.TreatmentCode, p.Card.CardNumber, ViewModelMainWindow.CurrentUser.ID, p.Card.MedicalNumberData.SecuritySignature, p.ID);
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    _ = conn.Query<int>(sql, commandType: CommandType.Text);
+                });
+                scope.Complete();
+            }
+                
         }
     }
 }

@@ -1165,16 +1165,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
 
         private void AdjustAction()
-        {
-            try
-            {
-                SeqNumber seq = HisApiFunction.GetSeqNumber256N1();
-                CurrentPrescription.TreatmentCode = seq.TreatmentCode;
-                CurrentPrescription.OrigTreatmentDT = seq.TreatDateTime;
-                CurrentPrescription.SecuritySignature = seq.SecuritySignature;
-            }
-            catch { }
-            
+        {            
             CheckCustomerValid();
             currentService = PrescriptionService.CreateService(CurrentPrescription);
             if (!currentService.CheckCustomerSelected())
