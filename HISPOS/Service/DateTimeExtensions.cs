@@ -125,6 +125,7 @@ namespace His_Pos.Service
 
         public static DateTime TWDateStringToDateTime(string date)
         {
+            date = date.PadRight(13, '0');
             var year = 0;
             var month = 0;
             var day = 0;

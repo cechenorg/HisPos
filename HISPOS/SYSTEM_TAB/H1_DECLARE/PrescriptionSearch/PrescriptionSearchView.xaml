@@ -82,6 +82,7 @@
                     <TextBox Name="SearchMedicineText" Width="120" Height="35" HorizontalContentAlignment="Center" CaretBrush="Black" CharacterCasing="Upper" FontSize="16" Text="{Binding MedicineCondition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Button Height="35" Margin="10" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding FilterAdjustedInstitution}" Content="篩選院所" FontSize="16" />
                     <Label Height="35" Margin="10" Content="{Binding SelectedInstitutionCount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" />
+                    <Button Width="130" Margin="10,0,0,0" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding GetIcData2Commad}" Content="匯出2.0 XML" FontSize="16" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                     <CheckBox Content="顯示未調劑" FontSize="16" IsChecked="{Binding FilterNotAdjust, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NoBuckleFilterEnable, UpdateSourceTrigger=PropertyChanged}" />

@@ -201,6 +201,10 @@ namespace His_Pos.NewClass.Prescription
             {
                 TreatmentCode = Convert.ToString(r["PreMas_MedIDCode2"]);
             }
+            if(r.Table.Columns.Contains("PreMas_SecuritySign"))
+            {
+                SecuritySignature = Convert.ToString(r["PreMas_SecuritySign"]);
+            }
         }
 
         public Prescription(OrthopedicsPrescription c)

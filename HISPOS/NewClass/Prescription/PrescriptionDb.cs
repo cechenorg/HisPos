@@ -43,7 +43,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescriptionDetails));
-            //DataBaseFunction.AddSqlParameter(parameterList, "Emp", ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "Emp", ViewModelMainWindow.CurrentUser.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
         }
 
@@ -669,10 +669,10 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", p.PrescriptionStatus.IsDeposit);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsAdjust", p.PrescriptionStatus.IsAdjust);
 
-            //DataBaseFunction.AddColumnValue(newRow, "PreMas_OrigTreatmentDT", p.OrigTreatmentDT.PadRight(13, '0'));
-            //DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode1", p.OrigTreatmentCode);
-            //DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode2", p.TreatmentCode);
-            //DataBaseFunction.AddColumnValue(newRow, "PreMas_CardNo", p.Card != null ? p.Card.CardNumber : string.Empty);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_OrigTreatmentDT", null);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode1", p.OrigTreatmentCode);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode2", null);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_CardNo", null);
             prescriptionMasterTable.Rows.Add(newRow);
             return prescriptionMasterTable;
         }
@@ -759,10 +759,10 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_IsDeclare", typeof(bool));
             masterTable.Columns.Add("PreMas_IsDeposit", typeof(bool));
             masterTable.Columns.Add("PreMas_IsAdjust", typeof(bool));
-            //masterTable.Columns.Add("PreMas_OrigTreatmentDT", typeof(string));
-            //masterTable.Columns.Add("PreMas_MedIDCode1", typeof(string));
-            //masterTable.Columns.Add("PreMas_MedIDCode2", typeof(string));
-            //masterTable.Columns.Add("PreMas_CardNo", typeof(string));
+            masterTable.Columns.Add("PreMas_OrigTreatmentDT", typeof(string));
+            masterTable.Columns.Add("PreMas_MedIDCode1", typeof(string));
+            masterTable.Columns.Add("PreMas_MedIDCode2", typeof(string));
+            masterTable.Columns.Add("PreMas_CardNo", typeof(string));
             return masterTable;
         }
 
@@ -1195,6 +1195,17 @@ namespace His_Pos.NewClass.Prescription
                 scope.Complete();
             }
                 
+        }
+        public static string GetSignXml(int id)
+        {
+            string result = string.Empty;
+            string sql = string.Format("Select UplData_Content From {0}.His.UploadData Where UplData_PrescriptionID = {1}", 
+                Properties.Settings.Default.SystemSerialNumber, id);
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.QueryFirst<string>(sql, commandType: CommandType.Text);
+            });
+            return result;
         }
     }
 }
