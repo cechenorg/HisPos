@@ -440,6 +440,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
             }
             EditedPrescription.OrderContent = OriginalPrescription.OrderContent;
+            EditedPrescription.OrigTreatmentCode = OriginalPrescription.OrigTreatmentCode;
             RaisePropertyChanged("CanMakeUp");
         }
 

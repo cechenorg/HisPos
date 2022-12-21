@@ -39,7 +39,6 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                 HeaderMessage.DataFormat = "A";
                 HeaderMessage.DataFormat = e is null ? "A" : e.Content;
 
-                //HeaderMessage.UploadVersion = "1.0";
                 MainMessage = new MainMessage(p, e, isMakeUp);
             }
 
@@ -101,10 +100,6 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
 
             public MainMessage(Prescription p, ErrorUploadWindowViewModel.IcErrorCode e, bool makeUp)
             {
-                if(p.PrescriptionSign == null)
-                {
-                    p.PrescriptionSign = PrescriptionService.GetPrescriptionSign(p);
-                }
                 IcMessage = new IcData(p, e, makeUp);
                 MedicalMessageList = new List<MedicalData>();
                 var treatDateTime = IcMessage.TreatmentDateTime;
@@ -164,56 +159,22 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                         MessageWindow.ShowMessage(Resources.控制軟體異常, MessageType.ERROR);
                     }
                 }
-                List<string> category = new List<string>() { "01", "02", "03", "04", "05", "06", "07", "08", "09", "AC", "AD", "BE", "CA", "DA", "DB"};
-                if (e is null)
-                {
-                    CardNo = p.Card.CardNumber;
-                    SamCode = seq.SamId;
-                    SecuritySignature = seq.SecuritySignature;
-                    IDNumber = p.Card.IDNumber;
-                    BirthDay = p.Card.PatientBasicData.Birthday != null && p.Card.PatientBasicData.Birthday != new DateTime() ? p.Card.PatientBasicData.Birthday.ToString("yyyMMdd") : DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.Patient.Birthday));
-                    TreatmentCategory = p.Division.ID;
-                    if (!category.Contains(TreatmentCategory))
-                    {
-                        MedicalNumber = p.Card.MedicalNumberData.MedicalNumber;
-                    }
-                    PharmacyId = seq.InstitutionId;
-                    TreatmentCode = seq.TreatmentCode != null ? seq.TreatmentCode : string.Empty;
-                    AdjustDay = p.AdjustDay;
-                    OrTreatmentDateTime = DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
-                    PaymentCategory = p.PaymentCategory.ID;
-                    OrTreatmentCode = p.TreatmentCode != null ? p.TreatmentCode : TreatmentCode;
-                    CuOrgCode = p.Institution.ID;
-                }
-                else
-                {
-                    try
-                    {
-                        CardNo = p.Card.CardNumber;
-                        SamCode = seq.SamId;
-                        TreatmentCategory = p.Division.ID;
-                        
-                        if(!category.Contains(TreatmentCategory))
-                        {
-                            MedicalNumber = p.Card.MedicalNumberData.MedicalNumber;
-                        }
-                        SecuritySignature = seq.SecuritySignature;
-                        IDNumber = p.Patient.IDNumber;
-                        BirthDay = p.Card.PatientBasicData.Birthday != null ? p.Card.PatientBasicData.Birthday.ToString("yyyMMdd") : DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.Patient.Birthday));
-                        
-                        PharmacyId = ViewModelMainWindow.CurrentPharmacy.ID;
-                        PaymentCategory = p.PaymentCategory.ID;
-                        TreatmentCode = seq.TreatmentCode != null ? seq.TreatmentCode : string.Empty;
-                        AdjustDay = p.AdjustDay;
-                        OrTreatmentDateTime = DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
-                        OrTreatmentCode = p.TreatmentCode != null ? p.TreatmentCode : TreatmentCode;//***
-                        CuOrgCode = p.Institution.ID;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                    }
-                }
+
+                CardNo = p.Card.CardNumber;
+                SamCode = seq.SamId;
+                SecuritySignature = seq.SecuritySignature;
+                IDNumber = p.Card.IDNumber;
+                BirthDay = p.Card.PatientBasicData.Birthday != null && p.Card.PatientBasicData.Birthday != new DateTime() ? p.Card.PatientBasicData.Birthday.ToString("yyyMMdd") : DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.Patient.Birthday));
+                PharmacyId = ViewModelMainWindow.CurrentPharmacy.ID;
+
+                AdjustDay = p.AdjustDay;
+                OrTreatmentDateTime = DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
+                PaymentCategory = p.PaymentCategory.ID;
+
+                TreatmentCode = p.TreatmentCode;
+                OrTreatmentCode = string.IsNullOrEmpty(p.OrigTreatmentCode) ? "99999999999999999999" : p.OrigTreatmentCode;
+                CuOrgCode = p.Institution.ID;
+
                 if (makeUp || DateTime.Compare(((DateTime)p.AdjustDate).Date, DateTime.Now.Date) < 0)
                     MakeUpMark = "2";
                 MedicalPersonIcNumber = p.Pharmacist.IDNumber;
