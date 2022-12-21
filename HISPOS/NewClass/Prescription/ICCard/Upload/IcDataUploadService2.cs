@@ -129,37 +129,7 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             public IcData(Prescription p, ErrorUploadWindowViewModel.IcErrorCode e, bool makeUp)
             {
                 var seq = p.Card.MedicalNumberData;
-                if (!string.IsNullOrEmpty(p.Card.TreatDateTime))
-                {
-                    TreatmentDateTime = p.Card.TreatDateTime.PadRight(13, '0');
-                }
-                else
-                {
-                    TreatmentDateTime = DateTimeEx.ToStringWithSecond(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
-                    try
-                    {
-                        if (HisApiFunction.OpenCom() && HisApiBase.hisGetCardStatus(1) == 2)
-                        {
-                            var iBufferLength = 13;
-                            var pBuffer = new byte[iBufferLength];
-                            var res = HisApiBase.csGetDateTime(pBuffer, ref iBufferLength);
-                            TreatmentDateTime = res == 0 ?
-                                ConvertData.ByToString(pBuffer, 0, 13) :
-                                DateTimeEx.ToStringWithSecond(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
-                            HisApiFunction.CloseCom();
-                        }
-                        else
-                        {
-                            TreatmentDateTime = DateTimeEx.ToStringWithSecond(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        //(20220513)處方調劑讀取健保卡閃退
-                        MessageWindow.ShowMessage(Resources.控制軟體異常, MessageType.ERROR);
-                    }
-                }
-
+                TreatmentDateTime = p.Card.TreatDateTime.PadRight(13, '0');
                 CardNo = p.Card.CardNumber;
                 SamCode = seq.SamId;
                 SecuritySignature = seq.SecuritySignature;
@@ -169,7 +139,10 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
 
                 AdjustDay = p.AdjustDay;
                 OrTreatmentDateTime = DateTimeEx.ConvertToTaiwanCalender(Convert.ToDateTime(p.TreatDate)).PadRight(13, '0');
-                PaymentCategory = p.PaymentCategory.ID;
+                if(p.PaymentCategory != null)
+                {
+                    PaymentCategory = p.PaymentCategory.ID;
+                }
 
                 TreatmentCode = p.TreatmentCode;
                 OrTreatmentCode = string.IsNullOrEmpty(p.OrigTreatmentCode) ? "99999999999999999999" : p.OrigTreatmentCode;
@@ -185,7 +158,7 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                                  p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.MedicalServicePoint).ToString();
                 CopaymentFee = p.PrescriptionPoint.CopaymentPoint.ToString();
                 if (makeUp || DateTime.Compare(((DateTime)p.AdjustDate).Date, DateTime.Now.Date) < 0)
-                    ActualTreatDate = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.AdjustDate);
+                    ActualTreatDate = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.AdjustDate).PadRight(13, '0');
             }
 
             //1,3 V  2,4 ~
