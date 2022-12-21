@@ -1009,10 +1009,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 DataTable tbPre = PrescriptionDb.GetPrescriptionByID(SelectedPrescription.ID);
                 Prescription p = new Prescription();
+
+                if (tbPre != null && tbPre.Rows.Count > 0)
+                {
+                    bool isAdjust = Convert.ToBoolean(tbPre.Rows[0]["IsAdjust"]);
+                    if(!isAdjust)
+                    {
+                        MessageWindow.ShowMessage("此筆處方未調劑\r\n無法匯出2.0XML檔案", MessageType.ERROR);
+                        return;
+                    }
+                }
+
                 foreach (DataRow dr in tbPre.Rows)
                 {
                     p = new Prescription(dr, searchType);
                 }
+
+                if(string.IsNullOrEmpty(p.TreatmentCode))
+                {
+                    MessageWindow.ShowMessage("此筆處方無就醫識別碼\r\n無法匯出2.0XML檔案", MessageType.ERROR);
+                    return;
+                }
+
                 p = GetIcCardData(p);
 
                 var uploadData2 = HisApiFunction.GetIcData2(p, false);
@@ -1036,6 +1054,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             p.Card.MedicalNumberData = new SeqNumber();
             List<string> listSign = new List<string>();
             string xml = PrescriptionDb.GetSignXml(p.ID);
+
             DataSet ds = CXmlToDataSet(xml);
             SeqNumber seq = new SeqNumber();
             foreach (DataTable tb in ds.Tables)
