@@ -6,6 +6,7 @@ using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
+using His_Pos.NewClass.Prescription.ICCard.Upload;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -1182,12 +1183,27 @@ namespace His_Pos.NewClass.Prescription
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderByPrescriptionID]", parameterList);
         }
 
-        public static void UploadData2(Prescription p)
+        public static void UploadData2(Prescription p, IcDataUploadService.Rec rec1)
         {
             using (TransactionScope scope = new TransactionScope())
             {
                 string sql = string.Empty;
-                sql = string.Format("Update [{0}].[HIS].[PrescriptionMaster] Set [PreMas_OrigTreatmentDT] = '{1}', [PreMas_MedIDCode1] = '{2}', [PreMas_MedIDCode2] = '{3}', [PreMas_CardNo] = '{4}', [PreMas_ModifyEmpID] = '{5}', [PreMas_ModifyTime] = GETDATE(), PreMas_SecuritySign = '{6}' Where [PreMas_ID] = {7}", Properties.Settings.Default.SystemSerialNumber, p.OrigTreatmentDT, p.OrigTreatmentCode, p.TreatmentCode, p.Card.CardNumber, ViewModelMainWindow.CurrentUser.ID, p.Card.MedicalNumberData.SecuritySignature, p.ID);
+                sql = string.Format("Update [{0}].[HIS].[PrescriptionMaster] Set [PreMas_OrigTreatmentDT] = '{1}', [PreMas_MedIDCode1] = '{2}', [PreMas_MedIDCode2] = '{3}', [PreMas_CardNo] = '{4}', [PreMas_ModifyEmpID] = '{5}', [PreMas_ModifyTime] = GETDATE(), PreMas_SecuritySign = '{6}' Where [PreMas_ID] = {7} \n", Properties.Settings.Default.SystemSerialNumber, p.OrigTreatmentDT, p.OrigTreatmentCode, p.TreatmentCode, p.Card.CardNumber, ViewModelMainWindow.CurrentUser.ID, p.Card.MedicalNumberData.SecuritySignature, p.ID);
+                
+                if (p.PrescriptionSign != null)
+                {
+                    for (int i = 0; i < p.Medicines.Count; i++)
+                    {
+                        sql += string.Format("Update [{0}].[HIS].[PrescriptionDetail] Set PreDet_SecuritySign = '{1}' Where PreDet_PrescriptionID = {2} And PreDet_Number = {3} \n", Properties.Settings.Default.SystemSerialNumber,
+                                   p.PrescriptionSign[i],
+                                   p.ID,
+                                   i + 1
+                                   );
+                    }
+                }
+                
+                
+                
                 SQLServerConnection.DapperQuery((conn) =>
                 {
                     _ = conn.Query<int>(sql, commandType: CommandType.Text);

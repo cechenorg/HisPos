@@ -62,7 +62,7 @@ namespace His_Pos.HisApi
             var uploadData1 = rec1.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
             table = InsertUploadData(p, uploadData1, DateTimeExtensions.TWDateStringToDateTime(p.Card.MedicalNumberData.TreatDateTime));
-            UpdPrescription2(p);
+            UpdPrescription2(p, rec1);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
@@ -75,7 +75,7 @@ namespace His_Pos.HisApi
             var uploadData1 = rec1.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
             table = InsertUploadData(p, uploadData1, DateTime.Now);
-            UpdPrescription2(p);
+            UpdPrescription2(p, rec1);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
@@ -316,22 +316,22 @@ namespace His_Pos.HisApi
         //    }   
         //    return card.MedicalNumberData;
         //}
-        private static void UpdPrescription2(Prescription p)
+        private static void UpdPrescription2(Prescription p, IcDataUploadService.Rec rec1)
         {
-            if(p.Card!= null)
+            if(p.Card != null)
             {
                 try
                 {
                     p.TreatmentCode = p.Card.MedicalNumberData.TreatmentCode;
                     p.OrigTreatmentDT = p.Card.MedicalNumberData.TreatDateTime;
                     p.SecuritySignature = p.Card.MedicalNumberData.SecuritySignature;
+                    PrescriptionDb.UploadData2(p, rec1);
                 }
                 catch
                 {
 
                 }
             }
-            PrescriptionDb.UploadData2(p);
         }
     }
 }
