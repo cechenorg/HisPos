@@ -22,10 +22,20 @@
             <Label x:Name="lblRecord" Content="銷售紀錄" FontFamily="Segoe UI Semibold" FontSize="25" />
             <Label x:Name="lblEmp" Content="人員業績" FontFamily="Segoe UI Semibold" FontSize="25" Visibility="Collapsed" />
             <StackPanel x:Name="spRecord" Width="400" Orientation="Horizontal">
-                <Label Margin="20,0,0,0" Content="共" FontFamily="Segoe UI Semibold" FontSize="25" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <Label Content="{Binding TradeDetailReportSum.Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <Label Content="筆" FontFamily="Segoe UI Semibold" FontSize="25" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <Label Margin="20,0,0,0" Content="銷售案件" FontFamily="Segoe UI Semibold" FontSize="25" Visibility="{Binding ChangeVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Label Margin="20,0,0,0" Content="銷售" FontFamily="Segoe UI Semibold" FontSize="23" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Label Content="{Binding TradeDetailReportSum.Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="23" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Label Content="筆" FontFamily="Segoe UI Semibold" FontSize="23" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Label Margin="20,0,0,0" Content="退貨" FontFamily="Segoe UI Semibold" FontSize="23" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Label Content="{Binding TradeDetailReportSum.DisableCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="23" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Label Content="筆" FontFamily="Segoe UI Semibold" FontSize="23" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Label Margin="20,0,0,0" Content="共" FontFamily="Segoe UI Semibold" FontSize="23" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Label Content="{Binding TradeDetailReportSum.TotalCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="23" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Label Content="筆" FontFamily="Segoe UI Semibold" FontSize="23" Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+
+<Label Margin="20,0,0,0" Content="銷售案件" FontFamily="Segoe UI Semibold" FontSize="25" Visibility="{Binding ChangeVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <ComboBox Width="100" Margin="10,0,0,0" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding ChangeString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding TradeChangeSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ChangeVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <StackPanel x:Name="spEmp" Width="200" Orientation="Horizontal" Visibility="Collapsed">
@@ -73,6 +83,12 @@
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnable}" Value="False">
+                            <Setter Property="Background" Value="IndianRed"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsEnable}" Value="True">
+                            <Setter Property="Background" Value="Transparent"></Setter>
+                        </DataTrigger>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource GridSelected}" />
                         </Trigger>
