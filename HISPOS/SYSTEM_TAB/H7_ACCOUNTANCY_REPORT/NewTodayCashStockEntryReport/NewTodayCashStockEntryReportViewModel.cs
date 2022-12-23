@@ -2607,7 +2607,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void SumAllProfit()
         {
-            TotalCashFlow.AllCount = TradeDetailReportSum.Count + PrescriptionDetailReportSumMain.MedTotalCount;
+            TotalCashFlow.AllCount = TradeDetailReportSum.TotalCount + PrescriptionDetailReportSumMain.MedTotalCount;
             TotalCashFlow.AllIncome = (int)(TradeDetailReportSum.RealTotal + PrescriptionDetailReportSumMain.MedTotalIncome);
 
             TotalCashFlow.AllCost = (int)(TradeDetailReportSum.TotalCost + PrescriptionDetailReportSumMain.MedTotalMeduse);

@@ -212,7 +212,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else
             {
-                ReturnStockValue = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => p.InventoryDetailCollection.Sum(s => s.ReturnStockValue));
+                ReturnStockValue = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => p.ReceiveAmount);//Sum(p => p.InventoryDetailCollection.Sum(s => s.ReturnStockValue));
                 TotalPrice = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
                 TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
             }

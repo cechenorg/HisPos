@@ -341,7 +341,12 @@ namespace His_Pos.NewClass.StoreOrder
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
             DataTable OrgStoreDetailTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrderID);
             int detailId = 1;
-            int maxdetId = OrgStoreDetailTable != null ? Convert.ToInt32(OrgStoreDetailTable.Compute("Max(StoOrdDet_ID)", string.Empty))+1 : 0;
+            int maxdetId = 1;
+            if(OrgStoreDetailTable != null && OrgStoreDetailTable.Rows.Count > 0)
+            {
+                maxdetId = OrgStoreDetailTable != null ? Convert.ToInt32(OrgStoreDetailTable.Compute("Max(StoOrdDet_ID)", string.Empty)) + 1 : 0;
+            }
+                
             DataView dv = table.DefaultView;
             dv.Sort = "rep_no";
             table = dv.ToTable();

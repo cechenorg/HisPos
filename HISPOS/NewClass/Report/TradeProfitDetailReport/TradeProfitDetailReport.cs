@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing.Printing;
 using System.Linq;
 
 namespace His_Pos.NewClass.Report.TradeProfitDetailReport
@@ -26,8 +27,10 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             CardFee = r.Field<decimal>("CardFee");
             CashCoupon = r.Field<int>("CashCoupon");
             PrePay = r.Field<int>("PrePay");
+            IsEnable = r.Field<Byte>("TraMas_IsEnable") == 1;
         }
 
+        private bool isEnable;
         private int id;
         private string name;
         private int realTotal;
@@ -38,7 +41,9 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
         private int prePay;
         private int discountAmt;
         private string typeId;
+        private int disableCount; //退貨
         private int count;
+        private int totalCount;
         private decimal cardFee;
         private int totalCost;
         private int cashCoupon;
@@ -46,6 +51,14 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
         private int totalProfit;
         private int discountAmtMinus;
 
+        public bool IsEnable
+        {
+            get => isEnable;
+            set
+            {
+                Set(() => IsEnable, ref isEnable, value);
+            }
+        }
 
         public string TypeId
         {
@@ -62,6 +75,25 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             set
             {
                 Set(() => Id, ref id, value);
+            }
+        }
+
+
+        public int TotalCount
+        {
+            get => totalCount;
+            set
+            {
+                Set(() => TotalCount, ref totalCount, value);
+            }
+        }
+
+        public int DisableCount
+        {
+            get => disableCount;
+            set
+            {
+                Set(() => DisableCount, ref disableCount, value);
             }
         }
 
@@ -207,7 +239,9 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             Profit = tradeProfitDetails.Sum(s => s.Profit); 
             ValueDifference = tradeProfitDetails.Sum(s => s.ValueDifference);
             CardFee = tradeProfitDetails.Sum(s => s.CardFee);
-            Count = tradeProfitDetails.Count();
+            DisableCount = tradeProfitDetails.Count(_ => _.IsEnable == false);
+            Count = tradeProfitDetails.Count(_ => _.IsEnable);
+            TotalCount = DisableCount + Count;
             TotalCost = (int)tradeProfitDetails.Sum(s => s.ValueDifference);
             DiscountAmtMinus = DiscountAmt * -1;
              

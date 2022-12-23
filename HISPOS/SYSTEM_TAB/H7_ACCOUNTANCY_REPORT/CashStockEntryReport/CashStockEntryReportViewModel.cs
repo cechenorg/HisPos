@@ -2789,7 +2789,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             TradeDetailReportSum.RealTotal = tempCollection.Sum(s => s.RealTotal);
             TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
             TradeDetailReportSum.CardFee = tempCollection.Sum(s => s.CardFee);
-            TradeDetailReportSum.Count = tempCollection.Count();
+            TradeDetailReportSum.Count = tempCollection.Count(_ => _.IsEnable);
+
+            TradeDetailReportSum.DisableCount = tempCollection.Count(_ => _.IsEnable == false);
+
+            TradeDetailReportSum.TotalCount = TradeDetailReportSum.DisableCount + TradeDetailReportSum.Count;
+
         }
 
         private void SumStockTakingOTCDetailReport()

@@ -131,7 +131,7 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 DisplayDateStart="{Binding DisplayDateStart}"
-                Text="{Binding RecordDate}"
+                Text="{Binding RecordDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"
                 Focusable="False"
                 FontSize="16">
                 <DatePicker.Resources>

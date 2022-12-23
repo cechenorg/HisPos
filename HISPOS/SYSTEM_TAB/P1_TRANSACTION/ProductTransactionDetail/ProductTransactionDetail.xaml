@@ -657,6 +657,16 @@
                 Content=""
                 FontFamily="Segoe UI Semibold"
                 FontSize="18" />
+            <Label
+                x:Name="DelContent"
+                Margin="80,0,0,0"
+                Foreground="Red"
+                Visibility="Hidden"
+                Width="250"
+                HorizontalAlignment="Left"
+                Content="已退貨刪單"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18" />
         </StackPanel>
         <StackPanel
             Grid.Row="3"
