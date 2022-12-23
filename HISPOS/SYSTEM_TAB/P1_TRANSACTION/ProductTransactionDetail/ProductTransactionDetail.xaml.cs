@@ -109,6 +109,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                     tbCardNum.IsEnabled = false;
                     tbTaxNum.IsEnabled = false;
                     tbCusName.IsEnabled = false;
+                    DelContent.Visibility = Visibility.Visible;
                 }
             }
         }
