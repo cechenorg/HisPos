@@ -99,6 +99,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             {
                 btnReturn.IsEnabled = false;
             }
+            if(masterRow.Table.Columns.Contains("TraMas_IsEnable"))
+            {
+                int isEnable = Convert.ToInt32(masterRow["TraMas_IsEnable"]);
+                if(isEnable == 0)
+                {
+                    btnDelete.IsEnabled = false;
+                    btnReturn.IsEnabled = false;
+                    tbCardNum.IsEnabled = false;
+                    tbTaxNum.IsEnabled = false;
+                    tbCusName.IsEnabled = false;
+                }
+            }
         }
 
         private void GetEmployeeList()
