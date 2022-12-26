@@ -34,8 +34,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 using His_Pos.NewClass.Report.DepositReport;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
@@ -2325,26 +2327,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CoopVis = Visibility.Collapsed;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = "報表查詢中";
-                PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
-                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-
-                AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
-                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-                SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
-                IsBusy = false;
-            };
+            
             IsBusy = true;
-            worker.RunWorkerAsync();
+            BusyContent = "報表查詢中";
             CooperativePrescriptionSelectedItem = null;
             StockTakingSelectedItem = null;
+            Task.Run(() =>
+            {
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
+
+                Dispatcher.CurrentDispatcher.Invoke(() =>
+                {
+                    PrescriptionDetailReportViewSource = new CollectionViewSource
+                        { Source = PrescriptionDetailReportCollection };
+                    PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+
+                    AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
+                    PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                    SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
+                    IsBusy = false;
+                });
+            });
         }
 
         private void SelfSelfPrescriptionSelectionChangedAction()
