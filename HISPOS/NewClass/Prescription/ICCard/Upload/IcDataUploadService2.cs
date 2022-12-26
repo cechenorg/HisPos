@@ -148,8 +148,8 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                 OrTreatmentCode = string.IsNullOrEmpty(p.OrigTreatmentCode) ? "99999999999999999999" : p.OrigTreatmentCode;
                 CuOrgCode = p.Institution.ID;
 
-                if (makeUp || DateTime.Compare(((DateTime)p.AdjustDate).Date, DateTime.Now.Date) < 0)
-                    MakeUpMark = "2";
+                //if (makeUp || DateTime.Compare(((DateTime)p.AdjustDate).Date, DateTime.Now.Date) < 0)
+                //    MakeUpMark = "2";
                 MedicalPersonIcNumber = p.Pharmacist.IDNumber;
                 MainDiagnosisCode = p.MainDisease.ID;
                 if (!string.IsNullOrEmpty(p.SubDisease?.ID))
