@@ -345,7 +345,17 @@ namespace His_Pos.ChromeTabViewModel
                                             {
                                                 continue;
                                             }
-                                            GetTxtFiles(filePath);
+                                            if (!NewFunction.IsFileInUse(filePath))
+                                            {
+                                                try
+                                                {
+                                                    NewFunction.GetTxtFiles(filePath);
+                                                }
+                                                catch
+                                                {
+
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -384,7 +394,7 @@ namespace His_Pos.ChromeTabViewModel
                                         isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString().Trim();
                                         isRePost = string.IsNullOrEmpty(isRePost) ? "0" : isRePost;
                                     }
-                                    if (isRePost != "0" )
+                                    if (isRePost != "0")
                                     {
                                         isRe = true;
                                     }
@@ -434,6 +444,7 @@ namespace His_Pos.ChromeTabViewModel
             }
             CooperativeClinicSettings.FilePurge();//打包檔案
         }
+        
         public static void GetTxtFiles(string path)
         {
             int counter = 0;
