@@ -123,24 +123,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private void StockTakingAction()
         {
             StockTakingWindow stockTakingWindow;
-            if (ProductType == ProductTypeEnum.OTCMedicine)
-            {
-                stockTakingWindow = new StockTakingWindow(medicineID, selectedWareHouse, StockViewModel.StockDetail, true);
-            }
-            else if(ProductType == ProductTypeEnum.Deposit)
-            {
-                stockTakingWindow = new StockTakingWindow(medicineID, selectedWareHouse, StockViewModel.StockDetail, true);
-            }
-            else
-            {
-                stockTakingWindow = new StockTakingWindow(medicineID, selectedWareHouse, StockViewModel.StockDetail, false);
-            }
+            bool isOTC = true;
+            if (ProductType == ProductTypeEnum.NHIMedicine || ProductType == ProductTypeEnum.SpecialMedicine)
+                isOTC = false;
+
+
+            stockTakingWindow = new StockTakingWindow(medicineID, selectedWareHouse, StockViewModel.StockDetail, isOTC, ProductType);
             stockTakingWindow.ShowDialog();
 
             if (stockTakingWindow.DialogResult != null && (bool)stockTakingWindow.DialogResult)
             {
                 ReloadData();
-                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
+                Messenger.Default.Send(new NotificationMessage("UpdateUsableAmountMessage"));
             }
         }
 
