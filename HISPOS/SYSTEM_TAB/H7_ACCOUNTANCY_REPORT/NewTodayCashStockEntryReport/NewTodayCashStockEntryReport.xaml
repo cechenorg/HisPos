@@ -278,12 +278,14 @@
                                             <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.MedTotalVirtualMedUse,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
                                                 <Setter Property="Content" >
                                                     <Setter.Value>
-                                                        <TextBlock FontSize="14">
-                                                            <Run Text="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse}"></Run>
-                                                            <Run Text="(" Foreground="Red"/>
-                                                            <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.MedTotalVirtualMedUse}"/>
-                                                            <Run Foreground="Red" Text=")"></Run>
-                                                        </TextBlock>
+                                                    <StackPanel>
+                                                            <TextBlock FontSize="14" Text="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse,StringFormat={}{0:N0}}"/>
+                                                           <TextBlock FontSize="14">
+                                                               <Run Text="(" Foreground="Red" />
+                                                               <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.MedTotalVirtualMedUse,StringFormat={}{0:N0}}" />
+                                                               <Run Foreground="Red" Text=")"></Run>
+                                                           </TextBlock>
+                                                    </StackPanel>
                                                     </Setter.Value>
                                                 </Setter>
                                             </DataTrigger>
@@ -373,12 +375,14 @@
                                             <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.CoopVirtualMeduse,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
                                                 <Setter Property="Content">
                                                     <Setter.Value>
-                                                        <TextBlock FontSize="14">
-                                                            <Run Text="{Binding PrescriptionDetailReportSumMain.CoopMeduse}"></Run>
-                                                            <Run Text="(" Foreground="Red" />
-                                                            <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.CoopVirtualMeduse,UpdateSourceTrigger=PropertyChanged}" />
-                                                            <Run Foreground="Red" Text=")"></Run>
-                                                        </TextBlock>
+                                                        <StackPanel>
+                                                            <TextBlock FontSize="14" Text="{Binding PrescriptionDetailReportSumMain.CoopMeduse,StringFormat={}{0:N0}}" />
+                                                            <TextBlock FontSize="14">
+                                                                <Run Text="(" Foreground="Red" />
+                                                                <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.CoopVirtualMeduse,StringFormat={}{0:N0}}" />
+                                                                <Run Foreground="Red" Text=")"></Run>
+                                                            </TextBlock>
+                                                        </StackPanel> 
                                                     </Setter.Value>
                                                 </Setter>
                                             </DataTrigger>
@@ -464,12 +468,14 @@
                                             <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.SlowVirtuaMeduse,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
                                                 <Setter Property="Content">
                                                     <Setter.Value>
-                                                        <TextBlock FontSize="14">
-                                                            <Run Text="{Binding PrescriptionDetailReportSumMain.SlowMeduse,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></Run>
-                                                            <Run Text="(" Foreground="Red" />
-                                                            <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.SlowVirtuaMeduse,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                                            <Run Foreground="Red" Text=")"></Run>
-                                                        </TextBlock>
+                                                        <StackPanel>
+                                                            <TextBlock FontSize="14" Text="{Binding PrescriptionDetailReportSumMain.SlowMeduse,StringFormat={}{0:N0}}" />
+                                                            <TextBlock FontSize="14">
+                                                                <Run Text="(" Foreground="Red" />
+                                                                <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.SlowVirtuaMeduse,StringFormat={}{0:N0}}" />
+                                                                <Run Foreground="Red" Text=")"></Run>
+                                                            </TextBlock>
+                                                        </StackPanel>
                                                     </Setter.Value>
                                                 </Setter>
                                             </DataTrigger>
@@ -556,12 +562,14 @@
                                             <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.NormalVirtuaMeduse,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
                                                 <Setter Property="Content">
                                                     <Setter.Value>
-                                                        <TextBlock FontSize="14">
-                                                            <Run Text="{Binding PrescriptionDetailReportSumMain.NormalMeduse,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></Run>
-                                                            <Run Text="(" Foreground="Red" />
-                                                            <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.NormalVirtuaMeduse}" />
-                                                            <Run Foreground="Red" Text=")"></Run>
-                                                        </TextBlock>
+                                                        <StackPanel>
+                                                            <TextBlock FontSize="14" Text="{Binding PrescriptionDetailReportSumMain.NormalMeduse,StringFormat={}{0:N0}}" />
+                                                            <TextBlock FontSize="14">
+                                                                <Run Text="(" Foreground="Red" />
+                                                                <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.NormalVirtuaMeduse,StringFormat={}{0:N0}}" />
+                                                                <Run Foreground="Red" Text=")"></Run>
+                                                            </TextBlock>
+                                                        </StackPanel>
                                                     </Setter.Value>
                                                 </Setter>
                                             </DataTrigger>
@@ -646,12 +654,14 @@
                                             <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.PaySelfVirtuaMeduse, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
                                                 <Setter Property="Content" >
                                                     <Setter.Value>
-                                                        <TextBlock FontSize="14">
-                                                            <Run Text="{Binding PrescriptionDetailReportSumMain.PaySelfMeduse}"></Run>
-                                                            <Run Text="(" Foreground="Red" />
-                                                            <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.PaySelfVirtuaMeduse}" />
-                                                            <Run Foreground="Red" Text=")"></Run>
-                                                        </TextBlock>
+                                                        <StackPanel>
+                                                            <TextBlock FontSize="14" Text="{Binding PrescriptionDetailReportSumMain.PaySelfMeduse,StringFormat={}{0:N0}}" />
+                                                            <TextBlock FontSize="14">
+                                                                <Run Text="(" Foreground="Red" />
+                                                                <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.PaySelfVirtuaMeduse,StringFormat={}{0:N0}}" />
+                                                                <Run Foreground="Red" Text=")"></Run>
+                                                            </TextBlock>
+                                                        </StackPanel>
                                                     </Setter.Value>
                                                 </Setter>
                                             </DataTrigger>

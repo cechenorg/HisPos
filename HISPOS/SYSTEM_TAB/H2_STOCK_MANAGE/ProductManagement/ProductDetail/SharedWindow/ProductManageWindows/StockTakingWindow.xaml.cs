@@ -25,6 +25,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         private double medInventory;
         private int autoHeight;
         private int autoGridHeight;
+        private ProductTypeEnum productType;
         public string NewPrice { get; set; }
 
         public double NewInventory
@@ -68,26 +69,33 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             get
             {
-                if (NewInventory > stockDetail.ShelfInventory) return true;
+                if (NewInventory > stockDetail.ShelfInventory && productType != ProductTypeEnum.Deposit) return true;
                 else return false;
             }
         }
 
+        public ProductTypeEnum ProductType
+        {
+            get { return productType; }
+            set { productType = value; }
+        }
+
         #endregion ----- Define Variables -----
 
-        public StockTakingWindow(string proID, WareHouse ware, MedicineStockDetail stock, bool isOTCType)
+        public StockTakingWindow(string proID, WareHouse ware, MedicineStockDetail stock, bool isOTCType, ProductTypeEnum productType)
         {
             InitializeComponent();
             DataContext = this;
             productID = proID;
             wareHouse = ware;
             stockDetail = stock;
-            NewPrice = stock.LastPrice.ToString("0.##");
+            NewPrice = productType == ProductTypeEnum.Deposit ? "0.00" : stock.LastPrice.ToString("0.##");
             newInventory = stock.ShelfInventory + stock.MedBagInventory;
             shelfInventory = stock.ShelfInventory;
             MedInventory = stock.MedBagInventory;
             AutoHeight = isOTCType ? 60 : 200;
             AutoGridHeight = isOTCType ? 0 : 50;
+            ProductType = productType;
         }
 
         #region ----- Define Functions -----
@@ -138,6 +146,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             MainWindow.ServerConnection.OpenConnection();
             StockTaking stockTaking = new StockTaking();
+            if (ProductType == ProductTypeEnum.Deposit)
+                NewPrice = "0";
             stockTaking.SingleStockTaking(productID, stockDetail.TotalInventory, NewInventory, double.Parse(NewPrice), wareHouse);
             MainWindow.ServerConnection.CloseConnection();
 

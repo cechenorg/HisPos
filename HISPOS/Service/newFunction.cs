@@ -331,11 +331,21 @@ namespace His_Pos.Service
                                     if (date == file[1])//如果是今日的處方，再轉成xml
                                     {
                                         DataRow[] drs = table.Select(string.Format("Cooli_FilePath= '{0}'", filePath + ".xml"));
-                                        if((drs!=null && drs.Length > 0) || Directory.Exists(path + ".xml"))
+                                        if ((drs != null && drs.Length > 0) || Directory.Exists(path + ".xml"))
                                         {
                                             continue;
                                         }
-                                        GetTxtFiles(filePath);
+                                        if (!IsFileInUse(filePath))
+                                        {
+                                            try
+                                            {
+                                                GetTxtFiles(filePath);
+                                            }
+                                            catch
+                                            {
+
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -412,6 +422,25 @@ namespace His_Pos.Service
                     ExceptionLog(ex.Message);
                 }
             }
+        }
+        public static bool IsFileInUse(string fileName)
+        {
+            bool inUse = true;
+            FileStream fs = null;
+            try
+            {
+                fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
+                inUse = false;
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if (fs != null)
+                    fs.Close();
+            }
+            return inUse;//true表示正在使用,false沒有使用  
         }
         public static void GetTxtFiles(string path)
         {
