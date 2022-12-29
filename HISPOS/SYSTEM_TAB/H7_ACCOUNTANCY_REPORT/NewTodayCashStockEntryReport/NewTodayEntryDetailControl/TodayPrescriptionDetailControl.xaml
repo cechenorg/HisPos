@@ -133,9 +133,9 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="100" Binding="{Binding CusName}" ElementStyle="{StaticResource TextBlockCenterElementStyle}" FontFamily="Segoe UI Semi" Header="姓名" IsReadOnly="True" />
-                <DataGridTextColumn Width="100" Binding="{Binding AdjustDate,StringFormat=yyyy-MM-dd}" HeaderStyle="{StaticResource TextBlockLeftHeaderStyle}" ElementStyle="{StaticResource TextBlockLeftElementStyle}" FontFamily="Segoe UI Semi" Header="調劑日" IsReadOnly="True" />
-                <DataGridTextColumn Width="90" Binding="{Binding InsName}" HeaderStyle="{StaticResource TextBlockLeftHeaderStyle}" ElementStyle="{StaticResource TextBlockLeftElementStyle}" FontFamily="Segoe UI Semi" Header="醫療院所" IsReadOnly="True" />
+                <DataGridTextColumn Width="80" Binding="{Binding CusName}" ElementStyle="{StaticResource TextBlockCenterElementStyle}" FontFamily="Segoe UI Semi" Header="姓名" IsReadOnly="True" />
+                <DataGridTextColumn Width="80" Binding="{Binding AdjustDate,StringFormat=yyyy-MM-dd}" HeaderStyle="{StaticResource TextBlockLeftHeaderStyle}" ElementStyle="{StaticResource TextBlockLeftElementStyle}" FontFamily="Segoe UI Semi" Header="調劑日" IsReadOnly="True" />
+                <DataGridTextColumn Width="75" Binding="{Binding InsName}" HeaderStyle="{StaticResource TextBlockLeftHeaderStyle}" ElementStyle="{StaticResource TextBlockLeftElementStyle}" FontFamily="Segoe UI Semi" Header="醫療院所" IsReadOnly="True" />
 
                 <DataGridTextColumn Width="75" Binding="{Binding MedicalServicePoint, StringFormat=N0}" ElementStyle="{StaticResource TextBlockRightElementStyle}" HeaderStyle="{StaticResource TextBlockRightHeaderStyle}" FontFamily="Segoe UI Semi" Header="藥服(估)" IsReadOnly="True" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
 
@@ -177,8 +177,8 @@
         <Border Grid.Row="2" Grid.Column="0" BorderBrush="DarkSeaGreen" BorderThickness="2">
             <StackPanel Grid.Row="2" Grid.Column="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
 
-                <Label Width="110" Margin="0,0,0,0" VerticalAlignment="Center" Content="" FontFamily="Segoe UI Semibold" FontSize="20" />
-                <Label Width="180" Margin="0,0,0,0" VerticalAlignment="Center" Content="{Binding PrescriptionDetailReportSum.InsName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" />
+                <Label Width="160" Margin="0,0,0,0" VerticalAlignment="Center" Content="" FontFamily="Segoe UI Semibold" FontSize="20" />
+                <Label Width="75" Margin="0,0,0,0" VerticalAlignment="Center" Content="{Binding PrescriptionDetailReportSum.InsName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" />
                 <TextBlock Width="70" Margin="0,0,0,0" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
                 <TextBlock Width="70" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.MedicalPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
                 <TextBlock Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.PaySelfPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
