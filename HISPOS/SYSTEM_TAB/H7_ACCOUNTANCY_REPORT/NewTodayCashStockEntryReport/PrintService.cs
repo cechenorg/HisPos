@@ -147,7 +147,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             {
                 DataRow row = insertDataTable.NewRow();
 
-                row["銷售時間"] = DateTime.Now;
+                row["銷售時間"] = rawData.CheckoutTime;
                 row["姓名"] = rawData.Name;
                 row["現金"] = rawData.CashAmount;
                 row["刷卡"] = rawData.CardAmount;
@@ -156,7 +156,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 row["現金券"] = rawData.CashCoupon;
                 row["耗用"] = rawData.ValueDifference;
                 row["毛利"] = rawData.Profit;
-                row["銷售員"] = "";
+                row["銷售員"] = rawData.EmpName;
 
                 insertDataTable.Rows.Add(row);
             }
@@ -176,7 +176,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
                 var ws = GetProfitDetailXlsx(wb);
 
-                var rangeWithData = ws.Cell(3, 1).InsertData(dataList.AsEnumerable());
+                var rangeWithData = ws.Cell(3, 1).InsertData(insertDataTable.AsEnumerable());
 
                 rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                 rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;

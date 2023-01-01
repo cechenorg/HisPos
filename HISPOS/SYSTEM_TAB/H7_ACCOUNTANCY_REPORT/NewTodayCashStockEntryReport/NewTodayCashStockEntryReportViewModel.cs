@@ -1902,8 +1902,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void PrintTradeProfitDetailAction()
         {
-            PrintService.PrintTradeProfitDetail(StartDate, EndDate);
-            //PrintService.PrintTradeProfitDetail(TradeProfitDetailReportCollection, StartDate, EndDate);
+            //PrintService.PrintTradeProfitDetail(StartDate, EndDate);
+            PrintService.PrintTradeProfitDetail(TradeProfitDetailReportCollection, StartDate, EndDate);
         }
 
         private void CashDetailMouseDoubleClickAction()

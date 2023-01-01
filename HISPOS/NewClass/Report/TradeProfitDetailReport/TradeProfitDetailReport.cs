@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing.Printing;
 using System.Linq;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 namespace His_Pos.NewClass.Report.TradeProfitDetailReport
 {
@@ -28,6 +29,8 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             CashCoupon = r.Field<int>("CashCoupon");
             PrePay = r.Field<int>("PrePay");
             IsEnable = r.Field<Byte>("TraMas_IsEnable") == 1;
+            EmpName = r.Field<string>("Emp_Name");
+            CheckoutTime = r.Field<DateTime>("TraMas_ChkoutTime");
         }
 
         private bool isEnable;
@@ -50,6 +53,8 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
         private int totalChange;
         private int totalProfit;
         private int discountAmtMinus;
+        private string empName;
+        private DateTime checkoutTime;
 
         public bool IsEnable
         {
@@ -226,6 +231,25 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             set
             {
                 Set(() => TotalProfit, ref totalProfit, value);
+            }
+        }
+
+        public string EmpName
+        {
+            get => empName;
+            set
+            {
+                Set(() => EmpName, ref empName, value);
+            }
+        }
+
+
+        public DateTime CheckoutTime
+        {
+            get => checkoutTime;
+            set
+            {
+                Set(() => CheckoutTime, ref checkoutTime, value);
             }
         }
 
