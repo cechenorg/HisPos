@@ -132,13 +132,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             {
                 new DataColumn("銷售時間"),
                 new DataColumn("姓名"),
-                new DataColumn("現金"),
-                new DataColumn("刷卡"),
-                new DataColumn("訂金沖銷"),
-                new DataColumn("禮券"),
-                new DataColumn("現金券"),
-                new DataColumn("耗用"),
-                new DataColumn("毛利"),
+                new DataColumn("現金"){DataType = typeof(int)},
+                new DataColumn("刷卡"){DataType = typeof(int)},
+                new DataColumn("訂金沖銷"){DataType = typeof(int)},
+                new DataColumn("禮券"){DataType = typeof(int)},
+                new DataColumn("現金券"){DataType = typeof(int)},
+                new DataColumn("耗用"){DataType = typeof(int)},
+                new DataColumn("毛利"){DataType = typeof(int)},
                 new DataColumn("銷售員"),
 
             });
@@ -147,7 +147,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             {
                 DataRow row = insertDataTable.NewRow();
 
-                row["銷售時間"] = rawData.CheckoutTime;
+                row["銷售時間"] = rawData.CheckoutTime.ToString("yyyy/MM/dd HH:mm");
                 row["姓名"] = rawData.Name;
                 row["現金"] = rawData.CashAmount;
                 row["刷卡"] = rawData.CardAmount;
