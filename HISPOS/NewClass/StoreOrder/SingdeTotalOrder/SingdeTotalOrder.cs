@@ -107,6 +107,19 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                         PurchaseOrder.InsertLowerOrder(order.ID, order.RecID, order.Status);
                     }
 
+                    Dictionary<string, decimal> lastAmt = new Dictionary<string, decimal>();
+                    DataTable table = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
+                    if (table != null && table.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in table.Rows)
+                        {
+                            if (!lastAmt.ContainsKey(Convert.ToString(dr["Pro_ID"])))
+                            {
+                                lastAmt.Add(Convert.ToString(dr["Pro_ID"]), Convert.ToDecimal(dr["Inv_LastPrice"]));
+                            }
+                        }
+                    }
+
                     DataTable result = new DataTable();
 
                     switch (order.Type)
@@ -120,7 +133,46 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                             break;
                     }
                     if(result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                    {
                         order.Status = OrderStatusEnum.DONE;
+                        table = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
+                        if (table != null && table.Rows.Count > 0)
+                        {
+                            string msg = string.Empty;
+                            string msgPurchase = string.Empty;
+                            string msgSell = string.Empty;
+                            foreach (DataRow dr in table.Rows)
+                            {
+                                string proID = Convert.ToString(dr["Pro_ID"]);
+                                decimal lastPrice = Math.Round(lastAmt[Convert.ToString(dr["Pro_ID"])], 2);//舊進價
+                                decimal currentPrice = Math.Round(Convert.ToDecimal(dr["Inv_LastPrice"]), 2);//現在進價
+                                decimal sellPrice = Math.Round(Convert.ToDecimal(dr["Pro_RetailPrice"]), 2);//售價
+                                if (currentPrice > lastPrice)
+                                {
+                                    msgPurchase += string.Format("{0} 貴{1}元" + "\r\n", proID, currentPrice - lastPrice);
+                                }
+                                if (currentPrice > sellPrice)//進價>售價
+                                {
+                                    msgSell += string.Format("{0} 貴{1}元" + "\r\n", proID, currentPrice - sellPrice);
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(msgPurchase))
+                            {
+                                msgPurchase = !string.IsNullOrEmpty(msgPurchase) ? "此次進價比【上次進價】貴：" + "\r\n" + msgPurchase : msgPurchase;
+                                msg += msgPurchase;
+                                msg += "\r\n";
+                            }
+                            if (!string.IsNullOrEmpty(msgSell))
+                            {
+                                msgSell = !string.IsNullOrEmpty(msgSell) ? "此次進價比【售價】貴，建議至商品設定修改售價：" + "\r\n" + msgSell : msgSell;
+                                msg += msgSell;
+                            }
+                            if (!string.IsNullOrEmpty(msg))
+                            {
+                                MessageWindow.ShowMessage(msg, MessageType.SUCCESS);
+                            }
+                        }
+                    }
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                         MessageWindow.ShowMessage((order.Type == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
                     break;
@@ -173,11 +225,17 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                 }
                 if (succesOrder.Count > 0)
                 {
-                    Application.Current.Dispatcher.Invoke(() => {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
                         MessageWindow.ShowMessage(string.Format("已新增收貨單 {0}{1}", "\r\n", String.Join("\r\n", succesOrder.ToArray())), MessageType.SUCCESS);
                     });
                 }
             }
+
+            Dictionary<string, decimal> lastAmt = new Dictionary<string, decimal>();
+            string msg = string.Empty;
+            string msgPurchase = string.Empty;
+            string msgSell = string.Empty;
 
             foreach (var order in StoreOrders)
             {
@@ -187,6 +245,17 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                     switch (order.Type)
                     {
                         case OrderTypeEnum.PURCHASE:
+                            DataTable table = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
+                            if (table != null && table.Rows.Count > 0)
+                            {
+                                foreach (DataRow dr in table.Rows)
+                                {
+                                    if (!lastAmt.ContainsKey(Convert.ToString(dr["Pro_ID"])))
+                                    {
+                                        lastAmt.Add(Convert.ToString(dr["Pro_ID"]), Convert.ToDecimal(dr["Inv_LastPrice"]));
+                                    }
+                                }
+                            }
                             result = StoreOrderDB.PurchaseStoreOrderToDone(order.ID, false);
                             break;
 
@@ -200,7 +269,8 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 
                     if (result != null && result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("FAIL") && !returnOrderNoDone.Contains(order.ID))
                     {
-                        Application.Current.Dispatcher.Invoke(() => {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
                             MessageWindow.ShowMessage((order.Type == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
                         });
 
@@ -213,10 +283,45 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                     else
                     {
                         order.Status = OrderStatusEnum.DONE;
+                        DataTable table = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
+                        if (table != null && table.Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in table.Rows)
+                            {
+                                string proID = Convert.ToString(dr["Pro_ID"]);
+                                decimal lastPrice = Math.Round(lastAmt[Convert.ToString(dr["Pro_ID"])], 2);//舊進價
+                                decimal currentPrice = Math.Round(Convert.ToDecimal(dr["Inv_LastPrice"]), 2);//現在進價
+                                decimal sellPrice = Math.Round(Convert.ToDecimal(dr["Pro_RetailPrice"]), 2);//售價
+                                if (currentPrice > lastPrice)
+                                {
+                                    msgPurchase += string.Format("{0} 貴{1}元" + "\r\n", proID, currentPrice - lastPrice);
+                                }
+                                if (currentPrice > sellPrice)//進價>售價
+                                {
+                                    msgSell += string.Format("{0} 貴{1}元" + "\r\n", proID, currentPrice - sellPrice);
+                                }
+                            }
+                        }
                     }
                 }
             }
-
+            if (!string.IsNullOrEmpty(msgPurchase) || !string.IsNullOrEmpty(msgSell))
+            {
+                if (!string.IsNullOrEmpty(msgPurchase))
+                {
+                    msgPurchase = !string.IsNullOrEmpty(msgPurchase) ? "此次進價比【上次進價】貴：" + "\r\n" + msgPurchase : msgPurchase;
+                    msg += msgPurchase;
+                }
+                if (!string.IsNullOrEmpty(msgSell))
+                {
+                    msgSell = !string.IsNullOrEmpty(msgSell) ? "此次進價比【售價】貴，建議至商品設定修改售價：" + "\r\n" + msgSell : msgSell;
+                    msg += msgSell;
+                }
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    MessageWindow.ShowMessage(msg, MessageType.SUCCESS);
+                });
+            }
             RaisePropertyChanged(nameof(IsAllDone));
         }
 
