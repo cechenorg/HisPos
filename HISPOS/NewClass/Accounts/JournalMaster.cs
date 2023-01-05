@@ -31,6 +31,7 @@ namespace His_Pos.NewClass.Accounts
         public int JouMas_ModifyEmpID { get; set; }
         public string JouMas_ModifyEmpName { get; set; }
         public string JouMas_Memo { get; set; }
+        public int JouMas_Source { get; set; }//輸入來源
         public int DebitTotalAmount
         {
             get => debitTotalAmount;
@@ -91,7 +92,6 @@ namespace His_Pos.NewClass.Accounts
             }
         }
         private JournalDetail selectedCreditDetail;//當下選擇貸方明細
-
 
         public void CalculateTotal(string type)
         {

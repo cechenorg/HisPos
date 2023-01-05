@@ -31,5 +31,9 @@ namespace His_Pos.NewClass.Accounts
         public string JouDet_Memo { get; set; }
         public IEnumerable<JournalAccount> Accounts { get; set; }
         public JournalAccount Account { get; set; }
+        public string JouDet_Source { get; set; }
+        public string JouDet_SourceID { get; set; }
+        public string JouDet_WriteOffID { get; set; }
+        public int JouDet_WriteOffNumber { get; set; }
     }
 }

@@ -20,7 +20,7 @@ using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 {
-    public class AccountVoucherViewModel: TabBase
+    public class AccountVoucherViewModel : TabBase
     {
         public override TabBase getTab()
         {
@@ -33,6 +33,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             AddCommand = new RelayCommand(AddAction);
             InvalidCommand = new RelayCommand(InvalidAction);
             SaveCommand = new RelayCommand(SaveAction);
+            ClickSourceCommand = new RelayCommand(ClickSourceAction);
+            CopyDataCommand = new RelayCommand(CopyDataAction);
+            StrikeCommand = new RelayCommand(StrikeAction);
             FilterCommand = new RelayCommand<string>(FilterAction);
             DeleteDetailCommand = new RelayCommand<string>(DeleteDetailAction);
             AddNewDetailCommand = new RelayCommand<string>(AddNewDetailAction);
@@ -40,6 +43,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             IsProce = true;
         }
         #region Command
+        public RelayCommand CopyDataCommand { get; set; }
+        public RelayCommand StrikeCommand { get; set; }
         public RelayCommand<string> FilterCommand { get; set; }
         public RelayCommand<string> DeleteDetailCommand { get; set; }
         public RelayCommand<string> AddNewDetailCommand { get; set; }
@@ -48,6 +53,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         public RelayCommand AddCommand { get; set; }
         public RelayCommand SaveCommand { get; set; }
         public RelayCommand InvalidCommand { get; set; }
+        public RelayCommand ClickSourceCommand { get; set; }
         #endregion
         #region
         private ICollectionView voucherCollectionView;
@@ -68,7 +74,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
         }
         private string btnName = "新增";
-        public DateTime BeginDate 
+        public DateTime BeginDate
         {
             get => beginDate;
             set
@@ -135,6 +141,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         public IEnumerable<JournalAccount> Accounts { get; set; }
         public JournalAccount Account { get; set; }
 
+        public IEnumerable<JournalType> Types { get; set; }
+        public JournalType Type { get; set; }
+
         private JournalMaster currentVoucher;
         public JournalMaster CurrentVoucher
         {
@@ -147,19 +156,69 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 Set(() => CurrentVoucher, ref currentVoucher, value);
                 if (CurrentVoucher != null)
                 {
-                    if(CurrentVoucher.JouMas_ID != null)
+                    if(CurrentVoucher.JouMas_ID != null && CurrentVoucher.JouMas_Status.Equals("T"))
                     {
                         if(CurrentVoucher.DebitDetails != null && CurrentVoucher.CreditDetails != null && CurrentVoucher.JouMas_IsEnable == 1)
                         {
                             AccountsDb.UpdateJournalData("保存", CurrentVoucher);
                         }
-                        GetDetailData(CurrentVoucher.JouMas_ID);
                     }
+                    GetDetailData(CurrentVoucher.JouMas_ID);
                 }
             }
         }
         #endregion
         #region Function
+        private void CopyDataAction()
+        {
+            if (currentVoucher.JouMas_Status.Equals("F"))
+            {
+                JournalMaster journalMaster = currentVoucher;//紀錄目前傳票
+                AddAction();
+                foreach (JournalDetail item in journalMaster.DebitDetails)
+                {
+                    CopyDetailData(item, true);
+                }
+                foreach (JournalDetail item in journalMaster.CreditDetails)
+                {
+                    CopyDetailData(item, false);
+                }
+                AccountsDb.UpdateJournalData("保存", CurrentVoucher);
+            }
+        }
+        private void CopyDetailData(JournalDetail detail, bool isDebit)
+        {
+            JournalDetail item = new JournalDetail();
+            item.JouDet_ID = detail.JouDet_ID;
+            item.JouDet_Type = detail.JouDet_Type;
+            item.JouDet_Number = detail.JouDet_Number;
+            item.JouDet_AcctLvl1 = detail.JouDet_AcctLvl1;
+            item.JouDet_AcctLvl1Name = detail.JouDet_AcctLvl1Name;
+            item.JouDet_AcctLvl2 = detail.JouDet_AcctLvl2;
+            item.JouDet_AcctLvl2Name = detail.JouDet_AcctLvl2Name;
+            item.JouDet_AcctLvl3 = detail.JouDet_AcctLvl3;
+            item.JouDet_AcctLvl3Name = detail.JouDet_AcctLvl3Name;
+            item.Accounts = detail.Accounts;
+            item.Account = detail.Account;
+            item.JouDet_Memo = detail.JouDet_Memo;
+            if (isDebit)
+            {
+                CurrentVoucher.DebitDetails.Add(item);
+            }
+            else
+            {
+                CurrentVoucher.CreditDetails.Add(item);
+            }
+        }
+        private void StrikeAction()
+        {
+            if (currentVoucher.JouMas_Status.Equals("F"))
+            {
+                //JournalMaster journalMaster = currentVoucher;//紀錄目前傳票
+                //AddAction();
+
+            }
+        }
         private void SubmitAction()
         {
             VoucherCollectionView = CollectionViewSource.GetDefaultView(AccountsDb.GetJournalData(beginDate, endDate, string.IsNullOrEmpty(searchID)? string.Empty : searchID, Account.acctLevel1, Account.acctLevel2, Account.acctLevel3, string.IsNullOrEmpty(keyWord) ? string.Empty : keyWord));
@@ -215,13 +274,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 if(CurrentVoucher.JouMas_IsEnable == 1)
                 {
                     JournalDetail detail = new JournalDetail();
-                    detail.Accounts = AccountsDb.GetJournalAccount();
+                    detail.Accounts = AccountsDb.GetJournalAccount("立帳作業");
                     switch (gridCondition)
                     {
                         case "0":
+                            if (CurrentVoucher.DebitDetails is null)
+                                CurrentVoucher.DebitDetails = new JournalDetails();
                             CurrentVoucher.DebitDetails.Add(detail);
                             break;
                         case "1":
+                            if (CurrentVoucher.CreditDetails is null)
+                                CurrentVoucher.CreditDetails = new JournalDetails();
                             CurrentVoucher.CreditDetails.Add(detail);
                             break;
                     }
@@ -256,6 +319,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 }
             }
             return false;
+        }
+        private void ClickSourceAction()
+        {
+
         }
         private void SaveAction()
         {
@@ -325,10 +392,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void GetData()
         {
-            Accounts = AccountsDb.GetJournalAccount();
+            Accounts = AccountsDb.GetJournalAccount("立帳作業");
             JournalAccount empty = new JournalAccount();
             Accounts.ToList().Add(empty);
             Account = new JournalAccount();
+
+
+            JournalType journalType1 = new JournalType(1, "傳票作業", "1:傳票作業");
+            JournalType journalType2 = new JournalType(2, "關班轉入", "2:關班轉入");
+            JournalType journalType3 = new JournalType(3, "進退貨轉入", "3:進退貨轉入");
+
+            List<JournalType> types = new List<JournalType>() { journalType1, journalType2, journalType3 };
+            Types = types;
+            Type = journalType1;
         }
         private void GetDetailData(string id)
         {

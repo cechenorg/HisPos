@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 {
@@ -61,6 +63,42 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             if (((JournalDetail)textBox.DataContext).JouDet_Amount == 0)
             {
                 ((JournalDetail)textBox.DataContext).JouDet_Amount = (int)CreditTotalAmount.Content - (int)DebitTotalAmount.Content;
+            }
+        }
+
+
+        private void TextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            var currentRow = textBox.BindingGroup;
+            JournalDetail currentDetail = (JournalDetail)currentRow.Items[0];
+            AccountVoucherViewModel currentViewModel = (AccountVoucherViewModel)DataContext;
+
+            if (currentViewModel.CurrentVoucher != null && currentViewModel.CurrentVoucher.JouMas_Status.Equals("T"))
+            {
+                return;
+            }
+            if (currentDetail is null || currentDetail.Account is null)
+            {
+                return;
+            }
+
+            var fromSourceWindow = new His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow.FromSourceWindow();
+            fromSourceWindow.ShowDialog();
+            if((bool)fromSourceWindow.DialogResult)
+            {
+                DataTable table = ((FromSourceViewModel)fromSourceWindow.DataContext).SoureTable;
+                if (table != null && table.Columns.Contains("IsCheck"))
+                {
+                    DataRow[] selectRow = table.Select("IsCheck = true");
+                    foreach (DataRow dr in selectRow)
+                    {
+                        JournalDetail detail = new JournalDetail();
+                        detail.Accounts = ((JournalDetail)currentRow.Items[0]).Accounts;
+                        detail.Account = ((JournalDetail)currentRow.Items[0]).Account;
+                        currentRow.Items.Add(detail);
+                    }
+                }
             }
         }
     }

@@ -120,7 +120,7 @@ namespace His_Pos.NewClass.Report.Accounts
             return ds;
         }
 
-        public static IEnumerable<JournalAccount> GetJournalAccount()
+        public static IEnumerable<JournalAccount> GetJournalAccount(string tabName)
         {
             IEnumerable<JournalAccount> result = default;
             SQLServerConnection.DapperQuery((conn) =>
@@ -128,7 +128,7 @@ namespace His_Pos.NewClass.Report.Accounts
                 result = conn.Query<JournalAccount>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[AccountsCommonItems]",
                     param: new
                     {
-                        Item = "立帳作業"
+                        Item = tabName//"立帳作業"
                     },
                     commandType: CommandType.StoredProcedure);
 
@@ -188,8 +188,7 @@ namespace His_Pos.NewClass.Report.Accounts
             string newID = DateTime.Today.ToString("yyyyMMdd") + "-" + cnt.PadLeft(3, '0');
             #endregion
             #region 新增暫存
-            string sql = string.Format(@"Insert Into [{0}].[dbo].[JournalMaster] Values('{1}', '{2}', 'T', 1, null, null, GetDate(), {3}, null, null)",
-                                        Properties.Settings.Default.SystemSerialNumber, newID, date, emp);
+            string sql = string.Format(@"Insert Into [{0}].[dbo].[JournalMaster] (JouMas_ID, JouMas_Date, JouMas_Status, JouMas_IsEnable, JouMas_Memo, JouMas_VoidReason, JouMas_InsertTime, JouMas_InsertEmpID, JouMas_Source) Values('{1}', '{2}', 'T', 1, null, null, GetDate(), {3}, 1)", Properties.Settings.Default.SystemSerialNumber, newID, date, emp);
             SQLServerConnection.DapperQuery((conn) =>
             {
                 _ = conn.Query<int>(sql, commandType: CommandType.Text);
@@ -266,7 +265,15 @@ namespace His_Pos.NewClass.Report.Accounts
                 _ = conn.Query<int>(sql, commandType: CommandType.Text);
             });
         }
-
+        public static DataTable GetSourceData(string accountID)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ID", accountID));
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
         public static DataTable GetBalanceSheet(DateTime edate)
         {
             MainWindow.ServerConnection.OpenConnection();

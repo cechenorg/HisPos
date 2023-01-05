@@ -354,6 +354,7 @@
     <Compile Include="NewClass\Accounts\JournalDetail.cs" />
     <Compile Include="NewClass\Accounts\JournalDetails.cs" />
     <Compile Include="NewClass\Accounts\JournalMaster.cs" />
+    <Compile Include="NewClass\Accounts\JournalType.cs" />
     <Compile Include="NewClass\Enum.cs" />
     <Compile Include="NewClass\Feature.cs" />
     <Compile Include="NewClass\Location\Location.cs" />
@@ -845,6 +846,10 @@
       <DependentUpon>AccountVoucher.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\AccountVoucherViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\FromSourceWindow\FromSourceViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\FromSourceWindow\FromSourceWindow.xaml.cs">
+      <DependentUpon>FromSourceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManage.xaml.cs">
       <DependentUpon>AdditionalCashFlowManage.xaml</DependentUpon>
     </Compile>
@@ -1759,6 +1764,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\AccountVoucher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\FromSourceWindow\FromSourceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
