@@ -399,12 +399,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             Accounts.ToList().Add(empty);
             Account = new JournalAccount();
 
+            JournalType journalType0 = new JournalType(0, "ALL", "1:全部");
+            JournalType journalType1 = new JournalType(1, "傳票作業", "2:傳票作業");
+            JournalType journalType2 = new JournalType(2, "關班轉入", "3:關班轉入");
+            JournalType journalType3 = new JournalType(3, "進退貨轉入", "4:進退貨轉入");
 
-            JournalType journalType1 = new JournalType(1, "傳票作業", "1:傳票作業");
-            JournalType journalType2 = new JournalType(2, "關班轉入", "2:關班轉入");
-            JournalType journalType3 = new JournalType(3, "進退貨轉入", "3:進退貨轉入");
-
-            List<JournalType> types = new List<JournalType>() { journalType1, journalType2, journalType3 };
+            List<JournalType> types = new List<JournalType>() { journalType0, journalType1, journalType2, journalType3 };
             Types = types;
             Type = journalType1;
         }

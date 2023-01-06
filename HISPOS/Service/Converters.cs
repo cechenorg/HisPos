@@ -38,19 +38,6 @@ namespace His_Pos.Service
             return (value == null || value.GetType().Name == "NamedObject") ? null : value;
         }
     }
-    public class RowToIndexConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            DataGridRow row = value as DataGridRow;
-            return row.GetIndex() + 1;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
 
     public class SentinelConverter : IValueConverter
     {

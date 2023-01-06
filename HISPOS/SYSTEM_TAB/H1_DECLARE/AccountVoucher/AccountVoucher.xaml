@@ -14,7 +14,6 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
-        <service:RowToIndexConverter x:Key="RowToIndexConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -279,7 +278,7 @@
                                 <DataGridTemplateColumn Header="項次" Width="45">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <HierarchicalDataTemplate>
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowToIndexConverter}}"/>
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding JouDet_Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                         </HierarchicalDataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -336,8 +335,8 @@
                                 </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Label Grid.Row="2" Width="120" FontSize="20" Margin="0,0,50,0" Content="借方金額:" HorizontalAlignment="Right"/>
-                        <Label Name="DebitTotalAmount" Grid.Row="2" Width="60" FontSize="20" Content="{Binding CurrentVoucher.DebitTotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right"/>
+                        <Label Grid.Row="2" Width="Auto" FontSize="20" Margin="0,0,120,0" Content="借方金額:" HorizontalAlignment="Right"/>
+                        <Label Name="DebitTotalAmount" Grid.Row="2" Width="120" FontSize="20" Content="{Binding CurrentVoucher.DebitTotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Row="3">
@@ -421,7 +420,7 @@
                                 <DataGridTemplateColumn Header="項次" Width="45">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <HierarchicalDataTemplate>
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowToIndexConverter}}"/>
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding JouDet_Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                         </HierarchicalDataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -477,8 +476,8 @@
                                 </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Label Grid.Row="1" Width="120" FontSize="20" Margin="0,0,50,0" Content="貸方金額:" HorizontalAlignment="Right"/>
-                        <Label Name="CreditTotalAmount" Grid.Row="1" Width="60" FontSize="20" Content="{Binding CurrentVoucher.CreditTotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right"/>
+                        <Label Grid.Row="1" Width="Auto" FontSize="20" Margin="0,0,120,0" Content="貸方金額:" HorizontalAlignment="Right"/>
+                        <Label Name="CreditTotalAmount" Grid.Row="1" Width="120" FontSize="20" Content="{Binding CurrentVoucher.CreditTotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Left">
