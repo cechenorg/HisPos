@@ -101,5 +101,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 }
             }
         }
+
+        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            ComboBox cob = (ComboBox)sender;
+            cob.Background = Brushes.White;
+        }
+
+        private void ComboBox_DropDownClosed(object sender, EventArgs e)
+        {
+            ComboBox cob = (ComboBox)sender;
+            cob.Background = Brushes.Transparent;
+        }
     }
 }

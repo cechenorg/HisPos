@@ -259,9 +259,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     {
                         case "0":
                             CurrentVoucher.DebitDetails.Remove(CurrentVoucher.SelectedDebitDetail);
+                            CurrentVoucher.DebitTotalAmount = (int)CurrentVoucher.DebitDetails.Sum(s => s.JouDet_Amount);
                             break;
                         case "1":
                             CurrentVoucher.CreditDetails.Remove(CurrentVoucher.SelectedCreditDetail);
+                            CurrentVoucher.CreditTotalAmount = (int)CurrentVoucher.CreditDetails.Sum(s => s.JouDet_Amount);
                             break;
                     }
                 }
