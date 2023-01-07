@@ -16,6 +16,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow;
 using System.Data;
+using His_Pos.NewClass.Report.Accounts;
+using System.Threading;
+using His_Pos.FunctionWindow;
+using His_Pos.Class;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 {
@@ -82,23 +86,78 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 return;
             }
-
-            var fromSourceWindow = new His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow.FromSourceWindow();
-            fromSourceWindow.ShowDialog();
-            if((bool)fromSourceWindow.DialogResult)
+            DataTable sourceTable = AccountsDb.GetSourceData(currentDetail);
+            if(sourceTable != null && sourceTable.Rows.Count > 0)
             {
-                DataTable table = ((FromSourceViewModel)fromSourceWindow.DataContext).SoureTable;
-                if (table != null && table.Columns.Contains("IsCheck"))
+                DataColumn dc = new DataColumn("IsChecked", typeof(bool));
+                sourceTable.Columns.Add(dc);
+                sourceTable.Columns["IsChecked"].DefaultValue = false;
+                for (int i = 0; i < sourceTable.Rows.Count; i++)
                 {
-                    DataRow[] selectRow = table.Select("IsCheck = true");
-                    foreach (DataRow dr in selectRow)
-                    {
-                        JournalDetail detail = new JournalDetail();
-                        detail.Accounts = ((JournalDetail)currentRow.Items[0]).Accounts;
-                        detail.Account = ((JournalDetail)currentRow.Items[0]).Account;
-                        currentRow.Items.Add(detail);
-                    }
+                    sourceTable.Rows[i]["IsChecked"] = false;
                 }
+                var fromSourceWindow = new His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow.FromSourceWindow(sourceTable);
+                fromSourceWindow.ShowDialog();
+                
+                if ((bool)fromSourceWindow.DialogResult)
+                {
+                    DataTable table = ((FromSourceViewModel)fromSourceWindow.DataContext).SoureTable;
+                    if (table != null && table.Columns.Contains("IsChecked"))
+                    {
+                        DataRow[] selectRow = table.Select("IsChecked = true");
+                        int i = (((JournalDetail)textBox.DataContext).JouDet_Type == "D") ?
+                            currentViewModel.CurrentVoucher.DebitDetails.Count + 1 : currentViewModel.CurrentVoucher.CreditDetails.Count + 1;
+                        bool updCurrentRow = true;
+                        foreach (DataRow dr in selectRow)
+                        {
+                            if(updCurrentRow)
+                            {
+                                int index = 0;
+                                if (((JournalDetail)textBox.DataContext).JouDet_Type == "D")
+                                {
+                                    index = currentViewModel.CurrentVoucher.DebitDetails.IndexOf(currentDetail);
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Amount = Convert.ToInt32(dr["JouDet_Amount"]);
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_SourceID = Convert.ToString(dr["JouDet_SourceID"]);
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Source = "StoOrd_ID";
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_WriteOffID = Convert.ToString(dr["JouDet_ID"]);
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_WriteOffNumber = Convert.ToInt32(dr["JouDet_Number"]);
+                                }
+                                else
+                                {
+                                    index = currentViewModel.CurrentVoucher.CreditDetails.IndexOf(currentDetail);
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Amount = Convert.ToInt32(dr["JouDet_Amount"]);
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_SourceID = Convert.ToString(dr["JouDet_SourceID"]);
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Source = "StoOrd_ID";
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_WriteOffID = Convert.ToString(dr["JouDet_ID"]);
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_WriteOffNumber = Convert.ToInt32(dr["JouDet_Number"]);
+                                }
+                                updCurrentRow = false;
+                            }
+                            else
+                            {
+                                JournalDetail detail = new JournalDetail();
+                                detail.Accounts = ((JournalDetail)currentRow.Items[0]).Accounts;
+                                detail.Account = ((JournalDetail)currentRow.Items[0]).Account;
+                                detail.JouDet_ID = currentViewModel.CurrentVoucher.JouMas_ID;
+                                detail.JouDet_Number = i;
+                                detail.JouDet_Type = ((JournalDetail)textBox.DataContext).JouDet_Type;
+                                detail.JouDet_Amount = Convert.ToInt32(dr["JouDet_Amount"]);
+                                detail.JouDet_Source = "StoOrd_ID";
+                                detail.JouDet_SourceID = Convert.ToString(dr["JouDet_SourceID"]);
+                                detail.JouDet_WriteOffID = Convert.ToString(dr["JouDet_ID"]);
+                                detail.JouDet_WriteOffNumber = Convert.ToInt32(dr["JouDet_Number"]);
+                                currentViewModel.CurrentVoucher.DebitDetails.Add(detail);
+                                i++;
+                            }
+                        }
+                    }
+                    currentViewModel.CurrentVoucher.DebitTotalAmount = (int)currentViewModel.CurrentVoucher.DebitDetails.Sum(s => s.JouDet_Amount);
+                    currentViewModel.CurrentVoucher.CreditTotalAmount = (int)currentViewModel.CurrentVoucher.CreditDetails.Sum(s => s.JouDet_Amount);
+                }
+            }
+            else
+            {
+                MessageWindow.ShowMessage("此科目沒有沖帳來源!", MessageType.WARNING);
             }
         }
 

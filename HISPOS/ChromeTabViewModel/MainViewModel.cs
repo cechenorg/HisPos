@@ -188,7 +188,7 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.匯出申報檔):
                 case nameof(FeatureItem.額外收支):
                 case nameof(FeatureItem.立帳作業):
-                case nameof(FeatureItem.新立帳作業):
+                case nameof(FeatureItem.傳票作業):
                 case nameof(FeatureItem.商品查詢):
                 case nameof(FeatureItem.庫存盤點紀錄):
                 case nameof(FeatureItem.商品類別管理):
@@ -381,7 +381,7 @@ namespace His_Pos.ChromeTabViewModel
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.會計作業)).Icon };
                     break;
 
-                case nameof(FeatureItem.新立帳作業):
+                case nameof(FeatureItem.傳票作業):
                     newTab = new AccountVoucherViewModel()
                     {
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.會計作業)).Icon

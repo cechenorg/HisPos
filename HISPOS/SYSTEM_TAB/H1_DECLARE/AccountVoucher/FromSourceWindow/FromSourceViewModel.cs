@@ -16,18 +16,48 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
     {
         public FromSourceViewModel()
         {
+            CheckAllCommand = new RelayCommand(OnCheckAll);
+            CheckCommand = new RelayCommand(OnCheck);
             SubmitCommand = new RelayCommand(SubmitAction);
             GetData();
         }
         public List<JournalType> Types { get; set; }
         public JournalType Type { get; set; }
-        public DataTable SoureTable { get; set; }
+        private DataTable soureTable;
+        public DataTable SoureTable
+        {
+            get { return soureTable; }
+            set { Set(() => SoureTable, ref soureTable, value); }
+        }
         public RelayCommand SubmitCommand { get; set; }
-
+        public RelayCommand CheckAllCommand { get; set; }
+        public RelayCommand CheckCommand { get; set; }
         private void SubmitAction()
         {
             Messenger.Default.Send(new NotificationMessage("YesAction"));
         }
+        /// <summary>
+        /// 全選
+        /// </summary>
+        private void OnCheckAll()
+        {
+            DataTable table = SoureTable;
+            if (SoureTable != null)
+            {
+                foreach (DataRow item in table.Rows)
+                {
+                    item["IsCheck"] = true;
+                }
+            }
+        }
+        /// <summary>
+        /// 明細判斷全選
+        /// </summary>
+        private void OnCheck()
+        {
+
+        }
+
         private void GetData()
         {
             JournalType journalType0 = new JournalType(0, "ALL", "1:全部");
@@ -37,7 +67,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
             List<JournalType> types = new List<JournalType>() { journalType0, journalType1, journalType2, journalType3 };
             Types = types;
             Type = Types[0];
-            SoureTable = AccountsDb.GetSourceData("");
         }
     }
 }

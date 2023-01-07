@@ -136,7 +136,7 @@ namespace His_Pos.NewClass.Report.Accounts
             return result;
         }
 
-        public static IEnumerable<JournalMaster> GetJournalData(DateTime sdate, DateTime edate, string jouMas_ID, string acct1ID, string acct2ID, string acct3ID, string keyword)
+        public static IEnumerable<JournalMaster> GetJournalData(DateTime sdate, DateTime edate, string jouMas_ID, string acct1ID, string acct2ID, string acct3ID, string keyword, int source)
         {
             IEnumerable<JournalMaster> result = default;
             SQLServerConnection.DapperQuery((conn) =>
@@ -150,7 +150,8 @@ namespace His_Pos.NewClass.Report.Accounts
                         acct1ID,
                         acct2ID,
                         acct3ID,
-                        keyword
+                        keyword,
+                        source
                     },
                     commandType: CommandType.StoredProcedure);
             });
@@ -158,119 +159,149 @@ namespace His_Pos.NewClass.Report.Accounts
         }
         public static IEnumerable<JournalDetail> GetJournalData(string jouMas_ID)
         {
-            string sql = string.Format("Select JouDet_ID, JouDet_Type,JouDet_Number,JouDet_AcctLvl1,JouDet_AcctLvl2,JouDet_AcctLvl3,Cast(JouDet_Amount As int) As JouDet_Amount,JouDet_Memo From {0}.dbo.JournalDetail Where JouDet_ID = '{1}'", Properties.Settings.Default.SystemSerialNumber, jouMas_ID);
             IEnumerable<JournalDetail> result = default;
             SQLServerConnection.DapperQuery((conn) =>
             {
-                result = conn.Query<JournalDetail>(sql,
-                    commandType: CommandType.Text);
+                result = conn.Query<JournalDetail>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[JournalDetailData]",
+                    param: new
+                    {
+                        ID = jouMas_ID
+                    },
+                    commandType: CommandType.StoredProcedure);
+
             });
             return result;
         }
 
         public static string InsertTempJournal()
         {
-            string date = DateTime.Today.ToString("yyyy-MM-dd");
             int emp = ViewModelMainWindow.CurrentUser.ID;
-            #region 新單號
-            string cntSQL = string.Format("Select Count(JouMas_ID)+1 From [{0}].[dbo].[JournalMaster] Where Cast(JouMas_InsertTime As Date) = Cast(GetDate() As Date)", Properties.Settings.Default.SystemSerialNumber);
-            string cnt = "1";
-            IEnumerable<string> cntQuery = null;
-            SQLServerConnection.DapperQuery((conn) =>
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>
             {
-                cntQuery = conn.Query<string>(cntSQL,
-                    commandType: CommandType.Text);
-            });
-            foreach (var item in cntQuery)
-            {
-                cnt = item;
-            }
-            string newID = DateTime.Today.ToString("yyyyMMdd") + "-" + cnt.PadLeft(3, '0');
-            #endregion
-            #region 新增暫存
-            string sql = string.Format(@"Insert Into [{0}].[dbo].[JournalMaster] (JouMas_ID, JouMas_Date, JouMas_Status, JouMas_IsEnable, JouMas_Memo, JouMas_VoidReason, JouMas_InsertTime, JouMas_InsertEmpID, JouMas_Source) Values('{1}', '{2}', 'T', 1, null, null, GetDate(), {3}, 1)", Properties.Settings.Default.SystemSerialNumber, newID, date, emp);
-            SQLServerConnection.DapperQuery((conn) =>
-            {
-                _ = conn.Query<int>(sql, commandType: CommandType.Text);
-            });
-            #endregion
+                new SqlParameter("Emp", emp)
+            };
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertNewJournal]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            string newID = (table != null && table.Rows.Count > 0) ? Convert.ToString(table.Rows[0]["NewJournalID"]) : string.Empty;
             return newID;
         }
         public static void UpdateJournalData(string undo, JournalMaster master)
         {
-            using (TransactionScope scope = new TransactionScope())
-            {
-                int emp = ViewModelMainWindow.CurrentUser.ID;
-                string sql = string.Empty;
-                string sqlDetail = string.Empty;
-                int i = 1, j = 1;
-                if (undo.Equals("修改"))
-                {
-                    sql = string.Format(@"Update [{0}].[dbo].[JournalMaster] Set JouMas_Memo = '{1}', JouMas_ModifyTime = GETDATE(), JouMas_ModifyEmpID = {2}, JouMas_Date = '{3}' Where JouMas_ID = '{4}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_Memo, emp, master.JouMas_Date.Value.ToString("yyyy-MM-dd"), master.JouMas_ID);
-                    sqlDetail = string.Format("Delete [{0}].[dbo].[JournalDetail] Where JouDet_ID = '{1}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_ID);
-                    sql = sql + "\r\n" + sqlDetail;
-                }
-                else if(undo.Equals("新增"))
-                {
-                    sql = string.Format(@"Update [{0}].[dbo].[JournalMaster] Set JouMas_Status = 'F', JouMas_Memo = '{1}', JouMas_ModifyTime = GETDATE(), JouMas_ModifyEmpID = {2}, JouMas_Date = '{3}' Where JouMas_ID = '{4}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_Memo, emp, master.JouMas_Date.Value.ToString("yyyy-MM-dd"), master.JouMas_ID);
-                }
-                else//保存
-                {
-                    sql = string.Format(@"Update [{0}].[dbo].[JournalMaster] Set JouMas_Memo = '{1}', JouMas_Date = '{2}' Where JouMas_ID = '{3}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_Memo, master.JouMas_Date.Value.ToString("yyyy-MM-dd"), master.JouMas_ID);
-                    sqlDetail = string.Format("Delete [{0}].[dbo].[JournalDetail] Where JouDet_ID = '{1}'", Properties.Settings.Default.SystemSerialNumber, master.JouMas_ID);
-                    sql = sql + "\r\n" + sqlDetail;
-                }
-
-                foreach (JournalDetail item in master.DebitDetails)
-                {
-                    sqlDetail = string.Format(@"Insert Into [{0}].[dbo].[JournalDetail] (JouDet_ID, JouDet_Type, JouDet_Number, JouDet_AcctLvl1, JouDet_AcctLvl2, JouDet_AcctLvl3, JouDet_Amount, JouDet_Memo) Values('{1}', 'D', {2}, '{3}', '{4}','{5}', {6}, '{7}')", Properties.Settings.Default.SystemSerialNumber,
-                        master.JouMas_ID,
-                        i,
-                        item.Account.acctLevel1,
-                        item.Account.acctLevel2,
-                        item.Account.acctLevel3,
-                        item.JouDet_Amount,
-                        item.JouDet_Memo);
-                    sql = sql + "\r\n" + sqlDetail;
-                    i++;
-                }
-
-                foreach (JournalDetail item in master.CreditDetails)
-                {
-                    sqlDetail = string.Format(@"Insert Into [{0}].[dbo].[JournalDetail] (JouDet_ID, JouDet_Type, JouDet_Number, JouDet_AcctLvl1, JouDet_AcctLvl2, JouDet_AcctLvl3, JouDet_Amount, JouDet_Memo) Values('{1}', 'C', {2}, '{3}', '{4}', '{5}', {6}, '{7}')", Properties.Settings.Default.SystemSerialNumber,
-                        master.JouMas_ID,
-                        j,
-                        item.Account.acctLevel1,
-                        item.Account.acctLevel2,
-                        item.Account.acctLevel3,
-                        item.JouDet_Amount,
-                        item.JouDet_Memo);
-                    sql = sql + "\r\n" + sqlDetail;
-                    j++;
-                }
-
-                SQLServerConnection.DapperQuery((conn) =>
-                {
-                    _ = conn.Query<int>(sql, commandType: CommandType.Text);
-                });
-                scope.Complete();
-            }
-        }
-        public static void InvalidJournalData(string jouMas_ID)
-        {
             int emp = ViewModelMainWindow.CurrentUser.ID;
-            string sql = string.Format(@"Update [{0}].[dbo].[JournalMaster] Set JouMas_IsEnable = 0, JouMas_ModifyTime = GETDATE(), JouMas_ModifyEmpID = {1} Where JouMas_ID = '{2}'", Properties.Settings.Default.SystemSerialNumber, emp, jouMas_ID);
+            DataTable tbMaster = CreateJournalMaster(master);
+            DataTable tbDetail = CreateJournalDetail(master);
             SQLServerConnection.DapperQuery((conn) =>
             {
-                _ = conn.Query<int>(sql, commandType: CommandType.Text);
+                _ = conn.Query<int>($"{Properties.Settings.Default.SystemSerialNumber}.[Set].[UpdateJournalData]",
+                    param: new
+                    {
+                        undo = undo,
+                        Emp = emp,
+                        master = tbMaster,
+                        detail = tbDetail
+                    }, commandType: CommandType.StoredProcedure);
             });
         }
-        public static DataTable GetSourceData(string accountID)
+        private static DataTable CreateJournalMaster(JournalMaster master)
+        {
+            DataTable table = new DataTable();
+            DataColumn dc1 = new DataColumn("JouMas_ID", typeof(string));
+            DataColumn dc2 = new DataColumn("JouMas_Date", typeof(string));
+            DataColumn dc3 = new DataColumn("JouMas_Status", typeof(string));
+            DataColumn dc4 = new DataColumn("JouMas_IsEnable", typeof(int));
+            DataColumn dc5 = new DataColumn("JouMas_Memo", typeof(string));
+            DataColumn dc6 = new DataColumn("JouMas_VoidReason", typeof(string));
+            DataColumn dc7 = new DataColumn("JouMas_Source", typeof(int));
+            table.Columns.Add(dc1);
+            table.Columns.Add(dc2);
+            table.Columns.Add(dc3);
+            table.Columns.Add(dc4);
+            table.Columns.Add(dc5);
+            table.Columns.Add(dc6);
+            table.Columns.Add(dc7);
+            DataRow newRow = table.NewRow();
+            newRow["JouMas_ID"] = master.JouMas_ID;
+            newRow["JouMas_Date"] = Convert.ToDateTime(master.JouMas_Date).ToString("yyyy-MM-dd");
+            newRow["JouMas_Status"] = master.JouMas_Status;
+            newRow["JouMas_IsEnable"] = master.JouMas_IsEnable;
+            newRow["JouMas_Memo"] = master.JouMas_Memo;
+            newRow["JouMas_VoidReason"] = master.JouMas_VoidReason;
+            newRow["JouMas_Source"] = master.JouMas_Source;
+            table.Rows.Add(newRow);
+            return table;
+        }
+        private static DataTable CreateJournalDetail(JournalMaster master)
+        {
+            DataTable table = new DataTable();
+            DataColumn dc1 = new DataColumn("JouDet_ID", typeof(string));
+            DataColumn dc2 = new DataColumn("JouDet_Type", typeof(string));
+            DataColumn dc3 = new DataColumn("JouDet_Number", typeof(int));
+            DataColumn dc4 = new DataColumn("JouDet_AcctLvl1", typeof(string));
+            DataColumn dc5 = new DataColumn("JouDet_AcctLvl2", typeof(string));
+            DataColumn dc6 = new DataColumn("JouDet_AcctLvl3", typeof(string));
+            DataColumn dc7 = new DataColumn("JouDet_Amount", typeof(float));
+            DataColumn dc8 = new DataColumn("JouDet_Memo", typeof(string));
+            DataColumn dc9 = new DataColumn("JouDet_Source", typeof(string));
+            DataColumn dc10 = new DataColumn("JouDet_SourceID", typeof(string));
+            DataColumn dc11 = new DataColumn("JouDet_WriteOffID", typeof(string));
+            DataColumn dc12 = new DataColumn("JouDet_WriteOffNumber", typeof(int));
+            table.Columns.Add(dc1);
+            table.Columns.Add(dc2);
+            table.Columns.Add(dc3);
+            table.Columns.Add(dc4);
+            table.Columns.Add(dc5);
+            table.Columns.Add(dc6);
+            table.Columns.Add(dc7);
+            table.Columns.Add(dc8);
+            table.Columns.Add(dc9);
+            table.Columns.Add(dc10);
+            table.Columns.Add(dc11);
+            table.Columns.Add(dc12);
+            JournalDetails[] details = new JournalDetails[] { master.DebitDetails, master.CreditDetails };
+            foreach (JournalDetails items in details)
+            {
+                foreach (JournalDetail item in items)
+                {
+                    DataRow newRow = table.NewRow();
+                    if (!string.IsNullOrEmpty(item.JouDet_ID))
+                    {
+                        newRow["JouDet_ID"] = string.IsNullOrEmpty(item.JouDet_ID) ? string.Empty : item.JouDet_ID;
+                        newRow["JouDet_Type"] = string.IsNullOrEmpty(item.JouDet_Type) ? string.Empty : item.JouDet_Type;
+                        newRow["JouDet_Number"] = item.JouDet_Number;
+                        if (item.Account != null)
+                        {
+                            newRow["JouDet_AcctLvl1"] = string.IsNullOrEmpty(Convert.ToString(item.Account.acctLevel1)) ? string.Empty : Convert.ToString(item.Account.acctLevel1);
+                            newRow["JouDet_AcctLvl2"] = string.IsNullOrEmpty(Convert.ToString(item.Account.acctLevel2)) ? string.Empty : Convert.ToString(item.Account.acctLevel2).PadLeft(4, '0');
+                            newRow["JouDet_AcctLvl3"] = string.IsNullOrEmpty(Convert.ToString(item.Account.acctLevel3)) ? string.Empty : Convert.ToString(item.Account.acctLevel3).PadLeft(4, '0');
+                        }
+                        else
+                        {
+                            newRow["JouDet_AcctLvl1"] = string.Empty;
+                            newRow["JouDet_AcctLvl2"] = string.Empty;
+                            newRow["JouDet_AcctLvl3"] = string.Empty;
+                        }
+                        newRow["JouDet_Amount"] = item.JouDet_Amount;
+                        newRow["JouDet_Memo"] = string.IsNullOrEmpty(item.JouDet_Memo) ? string.Empty : item.JouDet_Memo;
+                        newRow["JouDet_Source"] = string.IsNullOrEmpty(item.JouDet_Source) ? string.Empty : item.JouDet_Source;
+                        newRow["JouDet_SourceID"] = string.IsNullOrEmpty(item.JouDet_SourceID) ? string.Empty : item.JouDet_SourceID;
+                        newRow["JouDet_WriteOffID"] = string.IsNullOrEmpty(item.JouDet_WriteOffID) ? string.Empty : item.JouDet_WriteOffID;
+                        newRow["JouDet_WriteOffNumber"] = item.JouDet_WriteOffNumber;
+                        table.Rows.Add(newRow);
+                    }
+                }
+            }
+            return table;
+        }
+        public static DataTable GetSourceData(JournalDetail detail)
         {
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ID", accountID));
-            DataTable table = MainWindow.ServerConnection.ExecuteProc("", parameters);
+            parameters.Add(new SqlParameter("DetType", detail.JouDet_Type));
+            parameters.Add(new SqlParameter("DetAcctLvl1", Convert.ToString(detail.Account.acctLevel1).PadLeft(1, '0')));
+            parameters.Add(new SqlParameter("DetAcctLvl2", Convert.ToString(detail.Account.acctLevel2).PadLeft(4, '0')));
+            parameters.Add(new SqlParameter("DetAcctLvl3", Convert.ToString(detail.Account.acctLevel3).PadLeft(4, '0')));
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[JournalWriteOff]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }

@@ -74,6 +74,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
         }
         private string btnName = "新增";
+        public bool IsBtnEnable
+        {
+            get => isBtnEnable;
+            set
+            {
+                Set(() => IsBtnEnable, ref isBtnEnable, value);
+            }
+        }
+        private bool isBtnEnable = true;
         public DateTime BeginDate
         {
             get => beginDate;
@@ -163,7 +172,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                             AccountsDb.UpdateJournalData("保存", CurrentVoucher);
                         }
                     }
-                    GetDetailData(CurrentVoucher.JouMas_ID);
+                    if (!string.IsNullOrEmpty(CurrentVoucher.JouMas_ID))
+                    {
+                        GetDetailData(CurrentVoucher.JouMas_ID);
+                    }
                 }
             }
         }
@@ -174,16 +186,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             if (currentVoucher.JouMas_Status.Equals("F"))
             {
                 JournalMaster journalMaster = currentVoucher;//紀錄目前傳票
-                AddAction();
-                foreach (JournalDetail item in journalMaster.DebitDetails)
+                bool isSuccess = InsertNewJournal();
+                if (isSuccess)
                 {
-                    CopyDetailData(item, true);
+                    foreach (JournalDetail item in journalMaster.DebitDetails)
+                    {
+                        CopyDetailData(item, true);
+                    }
+                    foreach (JournalDetail item in journalMaster.CreditDetails)
+                    {
+                        CopyDetailData(item, false);
+                    }
+                    AccountsDb.UpdateJournalData("保存", CurrentVoucher);
                 }
-                foreach (JournalDetail item in journalMaster.CreditDetails)
-                {
-                    CopyDetailData(item, false);
-                }
-                AccountsDb.UpdateJournalData("保存", CurrentVoucher);
             }
         }
         private void CopyDetailData(JournalDetail detail, bool isDebit)
@@ -214,14 +229,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         {
             if (currentVoucher.JouMas_Status.Equals("F"))
             {
-                //JournalMaster journalMaster = currentVoucher;//紀錄目前傳票
-                //AddAction();
-
+                JournalMaster journalMaster = currentVoucher;//紀錄目前傳票
+                bool isSuccess = InsertNewJournal();
+                if(isSuccess)
+                {
+                    foreach (JournalDetail item in journalMaster.DebitDetails)
+                    {
+                        JournalDetail detail = item;
+                        detail.JouDet_Type = "C";
+                        detail.JouDet_WriteOffID = journalMaster.JouMas_ID;
+                        detail.JouDet_WriteOffNumber = item.JouDet_Number;
+                        detail.JouDet_Amount = item.JouDet_Amount;
+                        CurrentVoucher.CreditDetails.Add(detail);
+                    }
+                    foreach (JournalDetail item in journalMaster.CreditDetails)
+                    {
+                        JournalDetail detail = item;
+                        detail.JouDet_Type = "D";
+                        detail.JouDet_WriteOffID = journalMaster.JouMas_ID;
+                        detail.JouDet_WriteOffNumber = item.JouDet_Number;
+                        detail.JouDet_Amount = item.JouDet_Amount;
+                        CurrentVoucher.DebitDetails.Add(detail);
+                    }
+                    AccountsDb.UpdateJournalData("保存", CurrentVoucher);
+                }
             }
         }
         private void SubmitAction()
         {
-            VoucherCollectionView = CollectionViewSource.GetDefaultView(AccountsDb.GetJournalData(beginDate, endDate, string.IsNullOrEmpty(searchID)? string.Empty : searchID, Account.acctLevel1, Account.acctLevel2, Account.acctLevel3, string.IsNullOrEmpty(keyWord) ? string.Empty : keyWord));
+            VoucherCollectionView = CollectionViewSource.GetDefaultView(AccountsDb.GetJournalData(beginDate, endDate, string.IsNullOrEmpty(searchID)? string.Empty : searchID, Account.acctLevel1, Account.acctLevel2, Account.acctLevel3, string.IsNullOrEmpty(keyWord) ? string.Empty : keyWord, Type.JournalTypeID));
             CurrentVoucher = new JournalMaster();
             CurrentVoucher = VoucherCollectionView.CurrentItem as JournalMaster;
             if (CurrentVoucher != null && (CurrentVoucher.JouMas_ID != null || CurrentVoucher.JouMas_ID != ""))
@@ -276,7 +312,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 if(CurrentVoucher.JouMas_IsEnable == 1)
                 {
                     JournalDetail detail = new JournalDetail();
-                    detail.Accounts = AccountsDb.GetJournalAccount("立帳作業");
+                    detail.Accounts = AccountsDb.GetJournalAccount("傳票作業");
+                    detail.JouDet_ID = CurrentVoucher.JouMas_ID;
+                    detail.JouDet_Type = gridCondition.Equals("0") ? "D" : "C";
+                    detail.JouDet_Number = gridCondition.Equals("0") ? CurrentVoucher.DebitDetails.Count + 1 : CurrentVoucher.CreditDetails.Count + 1;
                     switch (gridCondition)
                     {
                         case "0":
@@ -301,6 +340,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 if(jm.JouMas_IsEnable == 0)
                 {
                     BtnName = "新增";
+                    IsBtnEnable = false;
                     return true;
                 }
             }
@@ -309,6 +349,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 if (jm.JouMas_Status.Equals("T") && jm.JouMas_IsEnable == 1)
                 {
                     BtnName = "新增";
+                    IsBtnEnable = true;
                     return true;
                 }
             }
@@ -317,6 +358,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 if (jm.JouMas_Status.Equals("F") && jm.JouMas_IsEnable == 1)
                 {
                     BtnName = "修改";
+                    IsBtnEnable = true;
                     return true;
                 }
             }
@@ -353,8 +395,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void AddAction()
         {
+            InsertNewJournal();
+        }
+        private bool InsertNewJournal()
+        {
             string newJouMasID = AccountsDb.InsertTempJournal();
-            if(!string.IsNullOrEmpty(newJouMasID))
+            if (!string.IsNullOrEmpty(newJouMasID))
             {
                 MessageWindow.ShowMessage(string.Format("{0}\r\n新增成功", newJouMasID), MessageType.SUCCESS);
                 BeginDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -362,11 +408,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 SearchID = string.Empty;
                 KeyWord = string.Empty;
                 IsTemp = true;
-                IEnumerable<JournalMaster> journals = AccountsDb.GetJournalData(BeginDate, EndDate, SearchID, null, null, null, KeyWord);
+                IEnumerable<JournalMaster> journals = AccountsDb.GetJournalData(BeginDate, EndDate, SearchID, null, null, null, KeyWord, Type.JournalTypeID);
                 VoucherCollectionView = CollectionViewSource.GetDefaultView(journals);
                 foreach (var item in journals)
                 {
-                    if(item.JouMas_ID.Equals(newJouMasID))
+                    if (item.JouMas_ID.Equals(newJouMasID))
                     {
                         CurrentVoucher = item;
                         GetDetailData(newJouMasID);
@@ -374,10 +420,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     }
                 }
                 VoucherCollectionView.Filter += VoucherFilter;
+                return true;
             }
             else
             {
                 MessageWindow.ShowMessage(string.Format("新增失敗"), MessageType.WARNING);
+                return false;
             }
         }
         private void InvalidAction()
@@ -386,7 +434,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 if (CurrentVoucher.JouMas_IsEnable == 1)
                 {
-                    AccountsDb.InvalidJournalData(CurrentVoucher.JouMas_ID);
+                    AccountsDb.UpdateJournalData("作廢", CurrentVoucher);
                     CurrentVoucher.JouMas_IsEnable = 0;
                     VoucherCollectionView.Filter += VoucherFilter;
                 }
@@ -394,7 +442,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void GetData()
         {
-            Accounts = AccountsDb.GetJournalAccount("立帳作業");
+            Accounts = AccountsDb.GetJournalAccount("ALL");
             JournalAccount empty = new JournalAccount();
             Accounts.ToList().Add(empty);
             Account = new JournalAccount();

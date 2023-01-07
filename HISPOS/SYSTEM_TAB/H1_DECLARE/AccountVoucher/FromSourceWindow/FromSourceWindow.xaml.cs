@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,10 +22,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
     /// </summary>
     public partial class FromSourceWindow : Window
     {
-        public FromSourceWindow()
+        public FromSourceWindow(DataTable table)
         {
             InitializeComponent();
-            //DataContext = new FromSourceViewModel();
+            ((FromSourceViewModel)DataContext).SoureTable = table;
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 switch (notificationMessage.Notification)

@@ -70,7 +70,7 @@ namespace His_Pos.Class
         每日總帳報表 = 49,
         商品訂購網站 = 50,
         新損益報表 = 51,
-        新立帳作業 = 52
+        傳票作業 = 52
     }
 
     public enum StoreOrderProductType

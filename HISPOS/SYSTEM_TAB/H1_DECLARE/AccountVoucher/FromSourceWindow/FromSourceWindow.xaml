@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow"
         mc:Ignorable="d"
+        xmlns:service="clr-namespace:His_Pos.Service"
         Title="選擇來源"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Height="500" Width="805">
+        Height="540" Width="900">
+    <Window.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
+    </Window.Resources>
     <Window.DataContext>
         <local:FromSourceViewModel />
     </Window.DataContext>
@@ -17,19 +21,14 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="450"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-            <Label VerticalAlignment="Center" Content="資料來源:" FontSize="18" />
-            <ComboBox Width="180" FontSize="18" IsEditable="True"
-                DisplayMemberPath="JournalTypeFullName"
-                ItemsSource="{Binding Types, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <Button Width="100" BorderThickness="0" FontSize="16" Content="確定" Background="RoyalBlue" Margin="400,0,0,0"
+        <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}">
+            <Button Width="100" BorderThickness="0" FontSize="16" Content="確定" Background="RoyalBlue"
                 Command="{Binding SubmitCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                FontFamily="Segoe UI Semibold"/>
+                FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,10,0"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <DataGrid
-                Width="800"
+                Width="885"
                 AutoGenerateColumns="False"
                 Background="{StaticResource GridBackGround}"
                 CanUserAddRows="False"
@@ -38,7 +37,7 @@
                 CanUserResizeColumns="False"
                 CanUserSortColumns="False"
                 CellStyle="{StaticResource DataGridCellStyle}"
-                ItemsSource="{Binding SoureTable}">
+                ItemsSource="{Binding SoureTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Resources>
                     <Style TargetType="ScrollBar">
                         <Setter Property="Background" Value="#FFA8A8A8" />
@@ -65,29 +64,65 @@
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="60">
-                        <DataGridTemplateColumn.Header>
-                            <Border
-                                Padding="6,0,6,0"
-                                HorizontalAlignment="Center"
-                                Background="Transparent">
-                                <CheckBox
-                                     HorizontalAlignment="Center"/>
-                            </Border>
-                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding DataContext.IsAllSelected, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                      Command="{Binding DataContext.CheckAllCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                      Padding="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox />
+                                <CheckBox IsChecked="{Binding Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                      Command="{Binding DataContext.CheckCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                      Padding="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn 
-                        Width="200"
-                        Binding="{Binding Path=SourceID}"
+                        Width="90"
+                        Binding="{Binding Path=JouDet_Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Header="來源項次"
+                        IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
+                        Width="140"
+                        Binding="{Binding Path=JouMas_Date, StringFormat={}{0:yyyy-MM-dd}}"
+                        Header="傳票日期"
+                        IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
+                        Width="170"
+                        Binding="{Binding Path=JouDet_ID}"
+                        Header="傳票單號"
+                        IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
+                        Width="170"
+                        Binding="{Binding Path=JouDet_SourceID}"
                         Header="來源單號"
                         IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
@@ -107,7 +142,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="150"
-                        Binding="{Binding Path=SourceAmount, StringFormat=N0}"
+                        Binding="{Binding Path=JouDet_Amount, StringFormat=N0}"
                         Header="金額"
                         IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>

@@ -155,7 +155,7 @@
                                                 Command="{Binding Data.CopyDataCommand, Source={StaticResource proxy}}"
                                                 Header="複製" />
                                             <MenuItem
-                                                Command="{Binding Data.CopyDataCommand, Source={StaticResource proxy}}"
+                                                Command="{Binding Data.StrikeCommand, Source={StaticResource proxy}}"
                                                 Header="沖帳" />
                                         </ContextMenu>
                                     </Grid.ContextMenu>
@@ -173,14 +173,14 @@
         <StackPanel Grid.Row="2" Grid.RowSpan="2" Grid.Column="2" Margin="10,0,0,0" Width="1100" Height="740" Grid.ColumnSpan="1" Orientation="Horizontal" VerticalAlignment="Top" Background="{StaticResource GridBackGround}">
             <Grid Width="1080">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="35"/>
                     <RowDefinition Height="265"/>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="35"/>
                     <RowDefinition Height="265"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
                     <Grid>
@@ -285,7 +285,7 @@
                                 <DataGridTemplateColumn Header="會計科目">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <HierarchicalDataTemplate>
-                                            <ComboBox Width="450" FontSize="18" IsEditable="True"
+                                            <ComboBox Width="400" FontSize="18" IsEditable="True"
                                                 DisplayMemberPath="AcctFullName" DropDownOpened="ComboBox_DropDownOpened" DropDownClosed="ComboBox_DropDownClosed"
                                                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                 SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -312,24 +312,24 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="240" Header="來源單號" >
+                                <DataGridTemplateColumn Width="180" Header="來源單號" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_FromSourceID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MouseDoubleClick="TextBox_MouseDoubleClick"/>
+                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_SourceID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="240" Header="沖帳來源單號" >
+                                <DataGridTemplateColumn Width="180" Header="沖帳來源單號" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_FromStrikeID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_WriteOffID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MouseDoubleClick="TextBox_MouseDoubleClick"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="240" Header="沖帳來源序號" >
+                                <DataGridTemplateColumn Width="180" Header="沖帳來源序號" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_FromStrikeNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_WriteOffNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -427,7 +427,7 @@
                                 <DataGridTemplateColumn Header="會計科目">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <HierarchicalDataTemplate>
-                                            <ComboBox Width="450" FontSize="18" IsEditable="True"
+                                            <ComboBox Width="400" FontSize="18" IsEditable="True"
                                                 DisplayMemberPath="AcctFullName" DropDownOpened="ComboBox_DropDownOpened" DropDownClosed="ComboBox_DropDownClosed"
                                                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                 SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -456,21 +456,21 @@
                                 <DataGridTemplateColumn Width="180" Header="來源單號" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_FromSourceID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MouseDoubleClick="TextBox_MouseDoubleClick"/>
+                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_SourceID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Width="180" Header="沖帳來源單號" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_FromStrikeID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_WriteOffID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MouseDoubleClick="TextBox_MouseDoubleClick"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="100" Header="沖帳來源序號" >
+                                <DataGridTemplateColumn Width="180" Header="沖帳來源序號" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_FromStrikeNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_WriteOffNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -497,12 +497,12 @@
                 </StackPanel>
                 <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Left">
                     <Button Width="80" BorderThickness="0" FontSize="17" Content="{Binding BtnName}" Height="30"
-                        Margin="10,0,0,0" Background="RoyalBlue" FontFamily="Segoe UI Semibold"
+                        Margin="10,0,0,0" Background="RoyalBlue" FontFamily="Segoe UI Semibold" IsEnabled="{Binding IsBtnEnable}"
                         Command="{Binding SaveCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Width="80" BorderThickness="0" FontSize="17" Content="作廢" Height="30"
-                        Margin="0,0,5,0" Background="IndianRed" FontFamily="Segoe UI Semibold"
+                        Margin="0,0,5,0" Background="IndianRed" FontFamily="Segoe UI Semibold" IsEnabled="{Binding IsBtnEnable}"
                         Command="{Binding InvalidCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </Grid>
