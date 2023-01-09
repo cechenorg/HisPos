@@ -23,6 +23,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
         }
         public List<JournalType> Types { get; set; }
         public JournalType Type { get; set; }
+        private bool isAllSelected;
+        public bool IsAllSelected
+        {
+            get { return isAllSelected; }
+            set { Set(() => IsAllSelected, ref isAllSelected, value); }
+        }
         private DataTable soureTable;
         public DataTable SoureTable
         {
@@ -46,7 +52,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
             {
                 foreach (DataRow item in table.Rows)
                 {
-                    item["IsCheck"] = true;
+                    item["IsChecked"] = IsAllSelected;
                 }
             }
         }
@@ -55,7 +61,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
         /// </summary>
         private void OnCheck()
         {
-
+            DataTable table = SoureTable;
+            if (SoureTable != null)
+            {
+                DataRow[] drs = table.Select("IsChecked = false");
+                IsAllSelected = (drs != null && drs.Count() > 0) ? false : true;
+            }
         }
 
         private void GetData()

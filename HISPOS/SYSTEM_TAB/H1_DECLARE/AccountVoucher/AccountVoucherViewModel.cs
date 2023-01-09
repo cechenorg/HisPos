@@ -233,6 +233,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 bool isSuccess = InsertNewJournal();
                 if(isSuccess)
                 {
+                    CurrentVoucher.JouMas_Status = "F";
                     foreach (JournalDetail item in journalMaster.DebitDetails)
                     {
                         JournalDetail detail = item;
@@ -283,6 +284,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                     {
                         VoucherCollectionView.Filter += VoucherFilter;
+                        if (VoucherCollectionView.CurrentItem != null)
+                        {
+                            if (!string.IsNullOrEmpty(((JournalMaster)VoucherCollectionView.CurrentItem).JouMas_ID))
+                            {
+                                CurrentVoucher = (JournalMaster)VoucherCollectionView.CurrentItem;
+                                GetDetailData(((JournalMaster)VoucherCollectionView.CurrentItem).JouMas_ID);
+                            }
+                        }
                     }));
                 }
             }
