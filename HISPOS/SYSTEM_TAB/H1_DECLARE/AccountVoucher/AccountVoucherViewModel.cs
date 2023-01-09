@@ -254,12 +254,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                         detail.JouDet_Amount = item.JouDet_Amount;
                         CurrentVoucher.DebitDetails.Add(detail);
                     }
-                    AccountsDb.UpdateJournalData("保存", CurrentVoucher);
+                    AccountsDb.UpdateJournalData("新增", CurrentVoucher);
+                    IsProce = true;
+                    VoucherCollectionView.Filter += VoucherFilter;
                 }
             }
         }
         private void SubmitAction()
         {
+            if (Account is null)
+                Account = new JournalAccount();
+
             VoucherCollectionView = CollectionViewSource.GetDefaultView(AccountsDb.GetJournalData(beginDate, endDate, string.IsNullOrEmpty(searchID)? string.Empty : searchID, Account.acctLevel1, Account.acctLevel2, Account.acctLevel3, string.IsNullOrEmpty(keyWord) ? string.Empty : keyWord, Type.JournalTypeID));
             CurrentVoucher = new JournalMaster();
             CurrentVoucher = VoucherCollectionView.CurrentItem as JournalMaster;

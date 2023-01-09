@@ -20,6 +20,7 @@ using His_Pos.NewClass.Report.Accounts;
 using System.Threading;
 using His_Pos.FunctionWindow;
 using His_Pos.Class;
+using System.ComponentModel;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 {
@@ -171,6 +172,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         {
             ComboBox cob = (ComboBox)sender;
             cob.Background = Brushes.Transparent;
+        }
+        private void ComboBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+            ICollectionView itemsViewOriginal = CollectionViewSource.GetDefaultView(cmb.ItemsSource);
+
+            bool isFilter = itemsViewOriginal.CanFilter;
+            if (isFilter)
+            {
+                itemsViewOriginal.Filter = (o) =>
+                {
+                    JournalAccount accounts = (JournalAccount)o;
+                    if (string.IsNullOrEmpty(cmb.Text))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        if (accounts.acctLevel3.StartsWith(cmb.Text) || accounts.AcctFullName.Contains(cmb.Text))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                };
+            }
+            cmb.IsDropDownOpen = true;
+            itemsViewOriginal.Refresh();
         }
     }
 }
