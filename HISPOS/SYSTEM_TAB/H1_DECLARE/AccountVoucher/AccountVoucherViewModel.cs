@@ -395,6 +395,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                         AccountsDb.UpdateJournalData(btnName, CurrentVoucher);
                         MessageWindow.ShowMessage(string.Format("{0}已{1}", CurrentVoucher.JouMas_ID, btnName), MessageType.SUCCESS);
                         CurrentVoucher.JouMas_Status = "F";
+                        IsProce = true;
                         VoucherCollectionView.Filter += VoucherFilter;
                     }
                 }
@@ -402,7 +403,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private bool CheckData()
         {
-            if(CurrentVoucher.DebitTotalAmount != CurrentVoucher.CreditTotalAmount)
+            if (CurrentVoucher.DebitDetails is null || CurrentVoucher.DebitDetails.Count == 0)
+            {
+                MessageWindow.ShowMessage("借方明細沒有資料", MessageType.ERROR);
+                return false;
+            }
+
+            if (CurrentVoucher.CreditDetails is null || CurrentVoucher.CreditDetails.Count == 0)
+            {
+                MessageWindow.ShowMessage("貸方明細沒有資料", MessageType.ERROR);
+                return false;
+            }
+
+            if (CurrentVoucher.DebitTotalAmount != CurrentVoucher.CreditTotalAmount)
             {
                 MessageWindow.ShowMessage("借貸金額不一致!", MessageType.ERROR);
                 return false;

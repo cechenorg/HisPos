@@ -59,6 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             if(((JournalDetail)textBox.DataContext).JouDet_Amount == 0)
             {
                 ((JournalDetail)textBox.DataContext).JouDet_Amount = (int)DebitTotalAmount.Content - (int)CreditTotalAmount.Content;
+                CreditTotalAmount.Content = ((ObservableCollection<JournalDetail>)CreditGrid.ItemsSource).Sum(S => S.JouDet_Amount);
             }
         }
 
@@ -68,6 +69,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             if (((JournalDetail)textBox.DataContext).JouDet_Amount == 0)
             {
                 ((JournalDetail)textBox.DataContext).JouDet_Amount = (int)CreditTotalAmount.Content - (int)DebitTotalAmount.Content;
+                DebitTotalAmount.Content = ((ObservableCollection<JournalDetail>)DebitGrid.ItemsSource).Sum(S => S.JouDet_Amount);
             }
         }
 
@@ -79,7 +81,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             JournalDetail currentDetail = (JournalDetail)currentRow.Items[0];
             AccountVoucherViewModel currentViewModel = (AccountVoucherViewModel)DataContext;
 
-            if (currentViewModel.CurrentVoucher != null && currentViewModel.CurrentVoucher.JouMas_Status.Equals("T"))
+            if (currentViewModel.CurrentVoucher is null)
             {
                 return;
             }
