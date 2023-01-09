@@ -236,6 +236,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     foreach (JournalDetail item in journalMaster.DebitDetails)
                     {
                         JournalDetail detail = item;
+                        detail.JouDet_ID = CurrentVoucher.JouMas_ID;
                         detail.JouDet_Type = "C";
                         detail.JouDet_WriteOffID = journalMaster.JouMas_ID;
                         detail.JouDet_WriteOffNumber = item.JouDet_Number;
@@ -245,6 +246,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     foreach (JournalDetail item in journalMaster.CreditDetails)
                     {
                         JournalDetail detail = item;
+                        detail.JouDet_ID = CurrentVoucher.JouMas_ID;
                         detail.JouDet_Type = "D";
                         detail.JouDet_WriteOffID = journalMaster.JouMas_ID;
                         detail.JouDet_WriteOffNumber = item.JouDet_Number;
