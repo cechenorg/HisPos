@@ -286,22 +286,25 @@ namespace His_Pos.ChromeTabViewModel
             CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
             if (gg.CooPreCollectionView != null)
             {
-                foreach (CusPrePreviewBase ff in cooperativePres)
+                Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    if (Properties.Settings.Default.PrePrint == "True")
+                    foreach (CusPrePreviewBase ff in cooperativePres)
                     {
-                        foreach (var c in CooperativeClinicSettings)
+                        if (Properties.Settings.Default.PrePrint == "True")
                         {
-                            if (c.AutoPrint == true)
+                            foreach (var c in CooperativeClinicSettings)
                             {
-                                if (ff.IsPrint == false)
+                                if (c.AutoPrint == true)
                                 {
-                                    gg.PrintAction(ff);
+                                    if (ff.IsPrint == false)
+                                    {
+                                        gg.PrintAction(ff);
+                                    }
                                 }
                             }
                         }
                     }
-                }
+                }));
             }
         }
         void watch_Created(object sender, FileSystemEventArgs e)
@@ -421,15 +424,15 @@ namespace His_Pos.ChromeTabViewModel
                 CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
                 if (gg.CooPreCollectionView != null)
                 {
-                    foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
+                    if (Properties.Settings.Default.PrePrint == "True")
                     {
-                        MainWindow.Instance.Dispatcher.Invoke(() =>
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
-                            if (Properties.Settings.Default.PrePrint == "True")
+                            foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
                             {
                                 foreach (var c in cooperativeClinicSettings)
                                 {
-                                    if (c.AutoPrint == true)
+                                    if (c.AutoPrint == true && c.FilePath.Equals(((FileSystemWatcher)sender).Path))
                                     {
                                         if (ff.IsPrint == false)
                                         {
@@ -438,7 +441,7 @@ namespace His_Pos.ChromeTabViewModel
                                     }
                                 }
                             }
-                        });
+                        }));
                     }
                 }
             }

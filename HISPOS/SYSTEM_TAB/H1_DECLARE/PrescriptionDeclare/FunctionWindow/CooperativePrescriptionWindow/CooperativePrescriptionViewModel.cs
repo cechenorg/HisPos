@@ -7,6 +7,7 @@ using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.Service;
 using System;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using Resources = His_Pos.Properties.Resources;
@@ -199,16 +200,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 MainWindow.ServerConnection.CloseConnection();
                 if (Properties.Settings.Default.PrePrint == "True")
                 {
-                    foreach (CusPrePreviewBase cooView in cooperativePres)
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
-                        MainWindow.Instance.Dispatcher.Invoke(() =>
+                        foreach (CusPrePreviewBase cooView in cooperativePres)
                         {
                             if (!cooView.IsPrint)
                             {
                                 PrintAction(cooView);
                             }
-                        });
-                    }
+                        }
+                    }));
                 }
             };
             getCooperativePresWorker.RunWorkerCompleted += (o, ea) =>
