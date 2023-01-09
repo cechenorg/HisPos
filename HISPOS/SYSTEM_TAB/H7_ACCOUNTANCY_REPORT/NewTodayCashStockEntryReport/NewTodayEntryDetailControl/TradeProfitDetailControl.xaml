@@ -7,7 +7,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:newTodayCashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport" 
              d:DataContext="{d:DesignInstance Type=newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}"
-             d:DesignHeight="600" d:DesignWidth="1000" mc:Ignorable="d">
+             d:DesignHeight="600" d:DesignWidth="1300" mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />

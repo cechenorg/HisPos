@@ -121,6 +121,7 @@
             BorderThickness="0"
             Click="Confirm_OnClick"
             Command="{Binding MergeProductGroupCommand}"
+            IsEnabled="{Binding IsbtnEnable}"
             Content="盤點"
             FontFamily="Segoe UI Semibold"
             FontSize="20" />

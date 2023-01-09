@@ -23,8 +23,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         private double newInventory;
         private double shelfInventory;
         private double medInventory;
+        private double currentInventory;
         private int autoHeight;
         private int autoGridHeight;
+        private bool isbtnEnable;
         private ProductTypeEnum productType;
         public string NewPrice { get; set; }
 
@@ -35,8 +37,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             {
                 newInventory = value;
                 shelfInventory = NewInventory - stockDetail.MedBagInventory;
+                IsbtnEnable = NewInventory > currentInventory ? false : true;
                 OnPropertyChanged(nameof(IsOverage));
                 OnPropertyChanged(nameof(ShelfInventory));
+                OnPropertyChanged(nameof(IsbtnEnable));
             }
         }
         public double ShelfInventory
@@ -65,6 +69,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             get { return autoGridHeight; }
             set { autoGridHeight = value; }
         }
+        public bool IsbtnEnable
+        {
+            get { return isbtnEnable; }
+            set { isbtnEnable = value; }
+        }
         public bool IsOverage
         {
             get
@@ -91,11 +100,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             stockDetail = stock;
             NewPrice = productType == ProductTypeEnum.Deposit ? "0.00" : stock.LastPrice.ToString("0.##");
             newInventory = stock.ShelfInventory + stock.MedBagInventory;
+            currentInventory = stock.ShelfInventory + stock.MedBagInventory;
             shelfInventory = stock.ShelfInventory;
             MedInventory = stock.MedBagInventory;
             AutoHeight = isOTCType ? 60 : 200;
             AutoGridHeight = isOTCType ? 0 : 50;
             ProductType = productType;
+            IsbtnEnable = true;
         }
 
         #region ----- Define Functions -----
