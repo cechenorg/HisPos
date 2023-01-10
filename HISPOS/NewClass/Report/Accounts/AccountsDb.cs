@@ -157,6 +157,21 @@ namespace His_Pos.NewClass.Report.Accounts
             });
             return result;
         }
+        public static IEnumerable<JournalMaster> GetJournalMasterData(string jouMas_ID)
+        {
+            IEnumerable<JournalMaster> result = default;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<JournalMaster>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[JournalMasterData]",
+                    param: new
+                    {
+                        ID = jouMas_ID
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+            });
+            return result;
+        }
         public static IEnumerable<JournalDetail> GetJournalData(string jouMas_ID)
         {
             IEnumerable<JournalDetail> result = default;

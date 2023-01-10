@@ -192,7 +192,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     }
                     else
                     {
-                        if (accounts.acctLevel3.StartsWith(cmb.Text) || accounts.AcctFullName.Contains(cmb.Text))
+                        if (accounts.AcctFullName.Contains(cmb.Text))
                         {
                             return true;
                         }

@@ -36,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             ClickSourceCommand = new RelayCommand(ClickSourceAction);
             CopyDataCommand = new RelayCommand(CopyDataAction);
             StrikeCommand = new RelayCommand(StrikeAction);
+            VisibilityBtnCommand = new RelayCommand(VisibilityBtnAction);
             FilterCommand = new RelayCommand<string>(FilterAction);
             DeleteDetailCommand = new RelayCommand<string>(DeleteDetailAction);
             AddNewDetailCommand = new RelayCommand<string>(AddNewDetailAction);
@@ -48,6 +49,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         public RelayCommand<string> FilterCommand { get; set; }
         public RelayCommand<string> DeleteDetailCommand { get; set; }
         public RelayCommand<string> AddNewDetailCommand { get; set; }
+        public RelayCommand VisibilityBtnCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand ClearCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
@@ -65,6 +67,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 Set(() => VoucherCollectionView, ref voucherCollectionView, value);
             }
         }
+
+        public Visibility BtnVisibilty
+        {
+            get => btnVisibilty;
+            set
+            {
+                Set(() => BtnVisibilty, ref btnVisibilty, value);
+            }
+        }
+        private Visibility btnVisibilty = Visibility.Visible;
         public string BtnName
         {
             get => btnName;
@@ -83,6 +95,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
         }
         private bool isBtnEnable = true;
+
+        public bool IsCanEdit
+        {
+            get => isCanEdit;
+            set
+            {
+                Set(() => IsCanEdit, ref isCanEdit, value);
+            }
+        }
+        private bool isCanEdit = true;
         public DateTime BeginDate
         {
             get => beginDate;
@@ -176,6 +198,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     {
                         GetDetailData(CurrentVoucher.JouMas_ID);
                     }
+                    if (CurrentVoucher.JouMas_ID != null && CurrentVoucher.JouMas_Status.Equals("F"))
+                    {
+                        IsCanEdit = false;
+                        BtnVisibilty = Visibility.Hidden;
+                    }
                 }
             }
         }
@@ -225,6 +252,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 CurrentVoucher.CreditDetails.Add(item);
             }
         }
+        private void VisibilityBtnAction()
+        {
+            if(BtnVisibilty == Visibility.Hidden)
+            {
+                BtnVisibilty = Visibility.Visible;
+                IsCanEdit = true;
+            }
+            else
+            {
+                BtnVisibilty = Visibility.Hidden;
+                IsCanEdit = false;
+            }
+        }
         private void StrikeAction()
         {
             if (currentVoucher.JouMas_Status.Equals("F"))
@@ -266,13 +306,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 Account = new JournalAccount();
 
             VoucherCollectionView = CollectionViewSource.GetDefaultView(AccountsDb.GetJournalData(beginDate, endDate, string.IsNullOrEmpty(searchID)? string.Empty : searchID, Account.acctLevel1, Account.acctLevel2, Account.acctLevel3, string.IsNullOrEmpty(keyWord) ? string.Empty : keyWord, Type.JournalTypeID));
+            
+            VoucherCollectionView.Filter += VoucherFilter;
             CurrentVoucher = new JournalMaster();
             CurrentVoucher = VoucherCollectionView.CurrentItem as JournalMaster;
             if (CurrentVoucher != null && (CurrentVoucher.JouMas_ID != null || CurrentVoucher.JouMas_ID != ""))
             {
                 GetDetailData(CurrentVoucher.JouMas_ID);
             }
-            VoucherCollectionView.Filter += VoucherFilter;
         }
         private void ClearAction()
         {
@@ -357,6 +398,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 {
                     BtnName = "新增";
                     IsBtnEnable = false;
+                    BtnVisibilty = Visibility.Hidden;
+                    IsCanEdit = true;
                     return true;
                 }
             }
@@ -366,6 +409,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 {
                     BtnName = "新增";
                     IsBtnEnable = true;
+                    BtnVisibilty = Visibility.Visible;
+                    IsCanEdit = true;
                     return true;
                 }
             }
@@ -375,6 +420,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 {
                     BtnName = "修改";
                     IsBtnEnable = true;
+                    BtnVisibilty = Visibility.Hidden;
+                    IsCanEdit = false;
                     return true;
                 }
             }
@@ -392,11 +439,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 {
                     if (CheckData())
                     {
+                        if (IsCanEdit == false)
+                        {
+                            return;
+                        }
                         AccountsDb.UpdateJournalData(btnName, CurrentVoucher);
-                        MessageWindow.ShowMessage(string.Format("{0}已{1}", CurrentVoucher.JouMas_ID, btnName), MessageType.SUCCESS);
-                        CurrentVoucher.JouMas_Status = "F";
-                        IsProce = true;
-                        VoucherCollectionView.Filter += VoucherFilter;
+                        if (btnName.Equals("修改"))
+                        {
+                            MessageWindow.ShowMessage(string.Format("{0}\r\n修改成功", CurrentVoucher.JouMas_ID), MessageType.SUCCESS);
+                            IsCanEdit = false;
+                            BtnVisibilty = Visibility.Hidden;
+                        }
+                        else if(btnName.Equals("新增"))
+                        {
+                            MessageWindow.ShowMessage(string.Format("{0}已{1}", CurrentVoucher.JouMas_ID, btnName), MessageType.SUCCESS);
+                            CurrentVoucher.JouMas_Status = "F";
+                            IsProce = true;
+                            IsCanEdit = false;
+                            BtnVisibilty = Visibility.Hidden;
+                            VoucherCollectionView.Filter += VoucherFilter;
+                        }
+                        else
+                        {
+                            IsCanEdit = true;
+                            BtnVisibilty = Visibility.Visible;
+                        }
+                        GetMasterData(CurrentVoucher.JouMas_ID);
+                        GetDetailData(CurrentVoucher.JouMas_ID);
                     }
                 }
             }
@@ -484,6 +553,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             List<JournalType> types = new List<JournalType>() { journalType0, journalType1, journalType2, journalType3 };
             Types = types;
             Type = journalType1;
+
+            SubmitAction();
+        }
+        private void GetMasterData(string id)
+        {
+            IEnumerable<JournalMaster> master = AccountsDb.GetJournalMasterData(id);
+            foreach (JournalMaster item in master)
+            {
+                CurrentVoucher = item;
+            }
         }
         private void GetDetailData(string id)
         {
@@ -492,7 +571,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             var details = AccountsDb.GetJournalData(id);
             foreach (var item in details)
             {
-                var journal = Accounts.Where(s => s.acctLevel1 == item.JouDet_AcctLvl1 && s.acctLevel2 == item.JouDet_AcctLvl2 && s.acctLevel3 == (string.IsNullOrEmpty(item.JouDet_AcctLvl3) ? item.JouDet_AcctLvl3 : item.JouDet_AcctLvl3.PadLeft(4, '0')));
+                string level1 = item.JouDet_AcctLvl1;
+                string level2 = item.JouDet_AcctLvl2;
+                string level3 = item.JouDet_AcctLvl3.PadLeft(4, '0');
+
+                IEnumerable<JournalAccount> journal = Accounts.Where(s => s.acctLevel1 == level1 && s.acctLevel2 == level2 && s.acctLevel3 == level3);
 
                 item.Accounts = Accounts;
 
@@ -515,7 +598,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             CurrentVoucher.DebitTotalAmount = (int)CurrentVoucher.DebitDetails.Sum(s => s.JouDet_Amount);
             CurrentVoucher.CreditTotalAmount = (int)CurrentVoucher.CreditDetails.Sum(s => s.JouDet_Amount);
         }
-        
         #endregion
     }
 }
