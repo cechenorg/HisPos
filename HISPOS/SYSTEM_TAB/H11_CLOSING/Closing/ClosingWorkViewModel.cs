@@ -419,7 +419,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 MessageWindow.ShowMessage("請輸入點算現金", MessageType.ERROR);
                 return;
             }
-            if (StartDate != DateTime.Today)
+            if (StartDate != DateTime.Today && ViewModelMainWindow.CurrentUser.Authority != DomainModel.Enum.Authority.Admin && ViewModelMainWindow.CurrentUser.Authority != DomainModel.Enum.Authority.AccountingStaff)
             {
                 MessageWindow.ShowMessage("僅能關今天的班", MessageType.ERROR);
                 return;
@@ -430,14 +430,15 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
               
             ConfirmWindow cw = new ConfirmWindow("關班人員：" + emp.Name
                 + "\r\n" + "關班金額：" + CheckTotal + "\r\n\r\n資料送出後無法修改，\r\n是否進行關班作業？", "關班確認");
-            if (!(bool)cw.DialogResult)  
-                return; 
+            if (!(bool)cw.DialogResult)
+                return;
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP", ViewModelMainWindow.CurrentUser.ID));
             parameters.Add(new SqlParameter("Value", Total - CheckTotal));
             parameters.Add(new SqlParameter("Total", CheckTotal));
+            parameters.Add(new SqlParameter("Close_Date", StartDate));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCloseCash]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             if (result.Rows[0]["RESULT"].ToString() == "FAIL")

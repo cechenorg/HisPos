@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using His_Pos;
 using His_Pos.NewClass.BalanceSheet;
+using System;
 
 namespace ClosingHistoryViewModelHis_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 {
@@ -37,11 +38,33 @@ namespace ClosingHistoryViewModelHis_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             }
         }
 
+        private DateTime beginDate = DateTime.Today.AddMonths(-3);
+
+        public DateTime BeginDate
+        {
+            get => beginDate;
+            set
+            {
+                Set(() => BeginDate, ref beginDate, value);
+            }
+        }
+
+        private DateTime endDate = DateTime.Today;
+        public DateTime EndDate
+        {
+            get => endDate;
+            set
+            {
+                Set(() => EndDate, ref endDate, value);
+            }
+        }
         public RelayCommand DeleteStrikeHistory { get; set; }
+        public RelayCommand SearchCommand { get; set; }
 
         public ClosingHistoryViewModel()
         {
             DeleteStrikeHistory = new RelayCommand(DeleteStrikeHistoryAction);
+            SearchCommand = new RelayCommand(Init);
             ClosingHistories = new ClosingHistories();
             Init();
         }
@@ -49,7 +72,7 @@ namespace ClosingHistoryViewModelHis_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         private void Init()
         {
             MainWindow.ServerConnection.OpenConnection();
-            ClosingHistories.GetData();
+            ClosingHistories.GetData(BeginDate, EndDate);
             MainWindow.ServerConnection.CloseConnection();
         }
 
