@@ -19,6 +19,19 @@ namespace His_Pos.NewClass.BalanceSheet
             OGValue = r.Field<int>("OGValue");
             KeyInValue = r.Field<int>("KeyInValue");
             Value = r.Field<int>("Value");
+            DateTime insertDate = new DateTime(StrikeDateTime.Year, StrikeDateTime.Month, StrikeDateTime.Day);
+            DateTime date = new DateTime(StrikeTime.Year, StrikeTime.Month, StrikeTime.Day);
+            IsMakeUp = insertDate.CompareTo(date) != 0 ? true : false;
+        }
+        private bool isMakeUp;
+
+        public bool IsMakeUp
+        {
+            get => isMakeUp;
+            set
+            {
+                Set(() => IsMakeUp, ref isMakeUp, value);
+            }
         }
 
         private int valuee;

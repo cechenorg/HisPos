@@ -18,9 +18,11 @@ namespace His_Pos.NewClass.Report.CashReport
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CashReportByDate]", parameterList);
         }
 
-        internal static DataTable GetClosingHistories()
+        internal static DataTable GetClosingHistories(DateTime beginDate, DateTime endDate)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "sDate", beginDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "eDate", endDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ClosingWorkHistory]", parameterList);
         }
 
