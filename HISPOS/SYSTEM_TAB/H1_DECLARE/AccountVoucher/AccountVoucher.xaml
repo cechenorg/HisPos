@@ -182,6 +182,9 @@
                     <RowDefinition Height="35"/>
                     <RowDefinition Height="35"/>
                 </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Grid.RowSpan="2">
+                    <Button Grid.Column="0" Margin="150,5,0,0" Width="122" BorderThickness="0" FontSize="15" Height="30" Content="修改傳票內容" Background="RoyalBlue" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding VisibilityBtnCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
                 <StackPanel Grid.Row="0">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -189,11 +192,9 @@
                             <ColumnDefinition Width="300"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="{Binding CurrentVoucher.JouMas_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" FontSize="20"/>
-                        <Button Grid.Column="0" Margin="150,3,0,0" Width="122" BorderThickness="0" FontSize="15" Height="25" Content="修改傳票內容" Background="RoyalBlue" 
-                                HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding VisibilityBtnCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold"/>
                         <Label Grid.Column="1" Content="傳票時間:" HorizontalAlignment="Right" FontSize="20" Margin="0,0,130,0"/>
-                        <DatePicker Grid.Column="1" Width="130" Language="zh-cn" FontSize="20" Margin="0,0,0,10"
-                            HorizontalAlignment="Right" VerticalAlignment="Center" IsEnabled="{Binding IsCanEdit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        <DatePicker Grid.Column="1" Width="130" Language="zh-cn" FontSize="20" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                    IsEnabled="{Binding IsCanEdit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Text="{Binding CurrentVoucher.JouMas_Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat= yyyy/MM/dd}">
                         </DatePicker>
                     </Grid>

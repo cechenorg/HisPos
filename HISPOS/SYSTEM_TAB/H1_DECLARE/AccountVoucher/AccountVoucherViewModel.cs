@@ -254,15 +254,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void VisibilityBtnAction()
         {
-            if(BtnVisibilty == Visibility.Hidden)
+            if (IsProce)
             {
-                BtnVisibilty = Visibility.Visible;
-                IsCanEdit = true;
-            }
-            else
-            {
-                BtnVisibilty = Visibility.Hidden;
-                IsCanEdit = false;
+                if (BtnVisibilty == Visibility.Hidden)
+                {
+                    BtnVisibilty = Visibility.Visible;
+                    IsCanEdit = true;
+                }
+                else
+                {
+                    BtnVisibilty = Visibility.Hidden;
+                    IsCanEdit = false;
+                }
             }
         }
         private void StrikeAction()
