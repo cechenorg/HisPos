@@ -183,7 +183,7 @@
                     <RowDefinition Height="35"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Grid.RowSpan="2">
-                    <Button Grid.Column="0" Margin="150,5,0,0" Width="122" BorderThickness="0" FontSize="15" Height="30" Content="修改傳票內容" Background="RoyalBlue" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding VisibilityBtnCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="0" Margin="150,5,0,0" Width="122" BorderThickness="0" FontSize="15" Height="30" Content="{Binding EditContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="RoyalBlue" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding VisibilityBtnCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding BtnEditVisibilty}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0">
                     <Grid>
@@ -500,7 +500,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Left">
                     <Button Width="80" BorderThickness="0" FontSize="17" Content="{Binding BtnName}" Height="30"
-                        Margin="10,0,0,0" Background="RoyalBlue" FontFamily="Segoe UI Semibold" IsEnabled="{Binding IsBtnEnable}"
+                        Margin="10,0,0,0" Background="RoyalBlue" FontFamily="Segoe UI Semibold" IsEnabled="{Binding IsCanEdit}"
                         Command="{Binding SaveCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right">

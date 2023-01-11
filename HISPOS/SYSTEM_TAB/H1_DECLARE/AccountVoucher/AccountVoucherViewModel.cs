@@ -86,6 +86,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
         }
         private string btnName = "新增";
+
+        public string EditContent
+        {
+            get => editContent;
+            set
+            {
+                Set(() => EditContent, ref editContent, value);
+            }
+        }
+        private string editContent = "修改傳票內容";
+        public Visibility BtnEditVisibilty
+        {
+            get => btnEditVisibilty;
+            set
+            {
+                Set(() => BtnEditVisibilty, ref btnEditVisibilty, value);
+            }
+        }
+        private Visibility btnEditVisibilty = Visibility.Visible;//中間修改按鈕
         public bool IsBtnEnable
         {
             get => isBtnEnable;
@@ -94,8 +113,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 Set(() => IsBtnEnable, ref isBtnEnable, value);
             }
         }
-        private bool isBtnEnable = true;
-
+        private bool isBtnEnable = true;//下方按鈕
         public bool IsCanEdit
         {
             get => isCanEdit;
@@ -171,10 +189,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         public IEnumerable<JournalAccount> Accounts { get; set; }
         public JournalAccount Account { get; set; }
-
         public IEnumerable<JournalType> Types { get; set; }
         public JournalType Type { get; set; }
-
         private JournalMaster currentVoucher;
         public JournalMaster CurrentVoucher
         {
@@ -258,13 +274,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 if (BtnVisibilty == Visibility.Hidden)
                 {
+                    EditContent = "取消修改";
                     BtnVisibilty = Visibility.Visible;
                     IsCanEdit = true;
+                    IsBtnEnable = true;
                 }
                 else
                 {
+                    EditContent = "修改傳票內容";
                     BtnVisibilty = Visibility.Hidden;
                     IsCanEdit = false;
+                    IsBtnEnable = false;
+                    GetDetailData(CurrentVoucher.JouMas_ID);
                 }
             }
         }
@@ -402,6 +423,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     BtnName = "新增";
                     IsBtnEnable = false;
                     BtnVisibilty = Visibility.Hidden;
+                    BtnEditVisibilty = Visibility.Hidden;
                     IsCanEdit = true;
                     return true;
                 }
@@ -413,6 +435,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     BtnName = "新增";
                     IsBtnEnable = true;
                     BtnVisibilty = Visibility.Visible;
+                    BtnEditVisibilty = Visibility.Hidden;
                     IsCanEdit = true;
                     return true;
                 }
@@ -424,6 +447,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     BtnName = "修改";
                     IsBtnEnable = true;
                     BtnVisibilty = Visibility.Hidden;
+                    BtnEditVisibilty = Visibility.Visible;
                     IsCanEdit = false;
                     return true;
                 }
@@ -576,7 +600,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 string level1 = item.JouDet_AcctLvl1;
                 string level2 = item.JouDet_AcctLvl2;
-                string level3 = item.JouDet_AcctLvl3.PadLeft(4, '0');
+                string level3 = string.IsNullOrEmpty(item.JouDet_AcctLvl3) ? item.JouDet_AcctLvl3 : item.JouDet_AcctLvl3.PadLeft(4, '0');
 
                 IEnumerable<JournalAccount> journal = Accounts.Where(s => s.acctLevel1 == level1 && s.acctLevel2 == level2 && s.acctLevel3 == level3);
 
