@@ -320,6 +320,15 @@ namespace His_Pos.NewClass.Report.Accounts
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
+
+        public static DataTable GetSourceData()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[JournalSourceWriteOff]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
         public static DataTable GetBalanceSheet(DateTime edate)
         {
             MainWindow.ServerConnection.OpenConnection();

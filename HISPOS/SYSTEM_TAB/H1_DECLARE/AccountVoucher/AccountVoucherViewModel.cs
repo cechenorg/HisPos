@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Collections.ObjectModel;
 using System.Windows;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.InvalidWindow;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 {
@@ -33,7 +34,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             AddCommand = new RelayCommand(AddAction);
             InvalidCommand = new RelayCommand(InvalidAction);
             SaveCommand = new RelayCommand(SaveAction);
-            ClickSourceCommand = new RelayCommand(ClickSourceAction);
             CopyDataCommand = new RelayCommand(CopyDataAction);
             StrikeCommand = new RelayCommand(StrikeAction);
             VisibilityBtnCommand = new RelayCommand(VisibilityBtnAction);
@@ -68,6 +68,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
         }
 
+        public Visibility DisplayVoidReason
+        {
+            get => displayVoidReason;
+            set
+            {
+                Set(() => DisplayVoidReason, ref displayVoidReason, value);
+            }
+        }
+        private Visibility displayVoidReason = Visibility.Visible;
         public Visibility BtnVisibilty
         {
             get => btnVisibilty;
@@ -425,6 +434,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     BtnVisibilty = Visibility.Hidden;
                     BtnEditVisibilty = Visibility.Hidden;
                     IsCanEdit = true;
+                    DisplayVoidReason = Visibility.Visible;
                     return true;
                 }
             }
@@ -437,6 +447,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     BtnVisibilty = Visibility.Visible;
                     BtnEditVisibilty = Visibility.Hidden;
                     IsCanEdit = true;
+                    DisplayVoidReason = Visibility.Hidden;
                     return true;
                 }
             }
@@ -449,14 +460,34 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     BtnVisibilty = Visibility.Hidden;
                     BtnEditVisibilty = Visibility.Visible;
                     IsCanEdit = false;
+                    DisplayVoidReason = Visibility.Hidden;
                     return true;
                 }
             }
             return false;
         }
-        private void ClickSourceAction()
+        private bool SourceCheck()
         {
-
+            DataTable table = AccountsDb.GetSourceData();
+            foreach (var item in CurrentVoucher.DebitDetails)
+            {
+                int count = table.Select(string.Format("JouDet_SourceID = '{0}' And JouDet_Amount >= {1}", item.JouDet_SourceID, item.JouDet_Amount)).Count();
+                if (count == 0)
+                {
+                    MessageWindow.ShowMessage(string.Format("借方項次{0}沖帳來源不存在\r\n請確認來源", item.jouDet_Number), MessageType.ERROR);
+                    return false;
+                }
+            }
+            foreach (var item in CurrentVoucher.CreditDetails)
+            {
+                int count = table.Select(string.Format("JouDet_SourceID = '{0}' And JouDet_Amount >= {1}", item.JouDet_SourceID, item.JouDet_Amount)).Count();
+                if (count == 0)
+                {
+                    MessageWindow.ShowMessage(string.Format("借方項次{0}沖帳來源不存在\r\n請確認來源", item.jouDet_Number), MessageType.ERROR);
+                    return false;
+                }
+            }
+            return true;
         }
         private void SaveAction()
         {
@@ -466,9 +497,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 {
                     if (CheckData())
                     {
-                        if (IsCanEdit == false)
+                        if (btnName.Equals("新增"))
                         {
-                            return;
+                            if (!SourceCheck())
+                            {
+                                return;
+                            }
                         }
                         AccountsDb.UpdateJournalData(btnName, CurrentVoucher);
                         if (btnName.Equals("修改"))
@@ -476,13 +510,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                             MessageWindow.ShowMessage(string.Format("{0}\r\n修改成功", CurrentVoucher.JouMas_ID), MessageType.SUCCESS);
                             IsCanEdit = false;
                             BtnVisibilty = Visibility.Hidden;
+                            EditContent = "修改傳票內容";
+                            VoucherCollectionView.Filter += VoucherFilter;
                         }
-                        else if(btnName.Equals("新增"))
+                        else if (btnName.Equals("新增"))//暫存to成立
                         {
                             MessageWindow.ShowMessage(string.Format("{0}已{1}", CurrentVoucher.JouMas_ID, btnName), MessageType.SUCCESS);
                             CurrentVoucher.JouMas_Status = "F";
                             IsProce = true;
                             IsCanEdit = false;
+                            BtnEditVisibilty = Visibility.Visible;
                             BtnVisibilty = Visibility.Hidden;
                             VoucherCollectionView.Filter += VoucherFilter;
                         }
@@ -490,6 +527,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                         {
                             IsCanEdit = true;
                             BtnVisibilty = Visibility.Visible;
+                            VoucherCollectionView.Filter += VoucherFilter;
                         }
                         GetMasterData(CurrentVoucher.JouMas_ID);
                         GetDetailData(CurrentVoucher.JouMas_ID);
@@ -516,6 +554,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 MessageWindow.ShowMessage("借貸金額不一致!", MessageType.ERROR);
                 return false;
             }
+
+            foreach (var item in CurrentVoucher.DebitDetails)
+            {
+                if (item.JouDet_Amount <= 0)
+                {
+                    MessageWindow.ShowMessage("明細借貸金額必須大於零!", MessageType.ERROR);
+                    return false;
+                }
+                if (item.account is null)
+                {
+                    MessageWindow.ShowMessage("明細借貸科目必須填寫!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            foreach (var item in CurrentVoucher.CreditDetails)
+            {
+                if (item.JouDet_Amount <= 0)
+                {
+                    MessageWindow.ShowMessage("明細借貸金額必須大於零!", MessageType.ERROR);
+                    return false;
+                }
+                if (item.account is null)
+                {
+                    MessageWindow.ShowMessage("明細借貸科目必須填寫!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
             return true;
         }
         private void AddAction()
@@ -559,9 +626,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 if (CurrentVoucher.JouMas_IsEnable == 1)
                 {
-                    AccountsDb.UpdateJournalData("作廢", CurrentVoucher);
-                    CurrentVoucher.JouMas_IsEnable = 0;
-                    VoucherCollectionView.Filter += VoucherFilter;
+                    var invalidWindow = new InvalidWindow.InvalidWindow();
+                    invalidWindow.ShowDialog();
+                    if ((bool)invalidWindow.DialogResult)
+                    {
+                        CurrentVoucher.JouMas_VoidReason = ((InvalidViewModel)invalidWindow.DataContext).VoidReason;
+                        AccountsDb.UpdateJournalData("作廢", CurrentVoucher);
+                        CurrentVoucher.JouMas_IsEnable = 0;
+                        VoucherCollectionView.Filter += VoucherFilter;
+                    }
                 }
             }
         }

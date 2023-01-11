@@ -850,6 +850,10 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\FromSourceWindow\FromSourceWindow.xaml.cs">
       <DependentUpon>FromSourceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\InvalidWindow\InvalidViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\InvalidWindow\InvalidWindow.xaml.cs">
+      <DependentUpon>InvalidWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManage.xaml.cs">
       <DependentUpon>AdditionalCashFlowManage.xaml</DependentUpon>
     </Compile>
@@ -1768,6 +1772,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\FromSourceWindow\FromSourceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\InvalidWindow\InvalidWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

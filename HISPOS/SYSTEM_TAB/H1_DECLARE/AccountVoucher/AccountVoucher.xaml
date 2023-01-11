@@ -34,11 +34,7 @@
                     HorizontalAlignment="Center" VerticalAlignment="Center"
                     Text="{Binding BeginDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             </DatePicker>
-            <Label
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                Content="~"
-                FontSize="18" />
+            <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="~" FontSize="18" />
             <DatePicker Width="120" Language="zh-cn" FontSize="16"
                     HorizontalAlignment="Stretch" VerticalAlignment="Center"
                     Text="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -479,6 +475,9 @@
                                 </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
+                        <Label Grid.Row="1" Width="Auto" FontSize="20" Margin="0,0,0,0" Content="作廢原因:" HorizontalAlignment="Left" Visibility="{Binding DisplayVoidReason}"/>
+                        <TextBox Grid.Row="1" Width="330" FontSize="20" Margin="100,0,0,0" TextAlignment="Left" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Text="{Binding CurrentVoucher.JouMas_VoidReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" Visibility="{Binding DisplayVoidReason}"/>
                         <Label Grid.Row="1" Width="Auto" FontSize="20" Margin="0,0,120,0" Content="貸方金額:" HorizontalAlignment="Right"/>
                         <Label Name="CreditTotalAmount" Grid.Row="1" Width="120" FontSize="20" Content="{Binding CurrentVoucher.CreditTotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="N0" HorizontalAlignment="Right"/>
                     </Grid>
