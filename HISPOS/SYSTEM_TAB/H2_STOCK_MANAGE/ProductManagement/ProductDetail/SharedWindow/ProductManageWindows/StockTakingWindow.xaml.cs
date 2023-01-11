@@ -37,7 +37,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             {
                 newInventory = value;
                 shelfInventory = NewInventory - stockDetail.MedBagInventory;
-                IsbtnEnable = productType == ProductTypeEnum.Deposit && NewInventory > currentInventory ? false : true;
+                IsbtnEnable = (wareHouse.ID == "9" && productType == ProductTypeEnum.Deposit && NewInventory > currentInventory) || (productType != ProductTypeEnum.Deposit && wareHouse.ID == "9") ? false : true;
                 OnPropertyChanged(nameof(IsOverage));
                 OnPropertyChanged(nameof(ShelfInventory));
                 OnPropertyChanged(nameof(IsbtnEnable));
