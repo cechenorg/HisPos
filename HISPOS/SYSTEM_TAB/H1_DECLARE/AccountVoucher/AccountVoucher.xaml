@@ -60,7 +60,7 @@
             <TextBox Width="120" FontSize="16" TextAlignment="Left" HorizontalAlignment="Left" VerticalAlignment="Center"
                 Text="{Binding SearchID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
             <Label Margin="20,0,0,0" VerticalAlignment="Center" Content="會計科目:" FontSize="18" />
-            <ComboBox Width="450" FontSize="18" IsEditable="True" 
+            <ComboBox Width="450" FontSize="18" IsEditable="True" SelectedIndex="-1" IsTextSearchEnabled="False"
                 DisplayMemberPath="AcctFullName" KeyUp="ComboBox_KeyUp"
                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -284,7 +284,7 @@
                                 <DataGridTemplateColumn Header="會計科目" Width="Auto" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <HierarchicalDataTemplate>
-                                            <ComboBox Width="Auto" FontSize="16" IsEditable="True" KeyUp="ComboBox_KeyUp" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                            <ComboBox Width="Auto" FontSize="16" IsEditable="True" KeyUp="ComboBox_KeyUp" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" SelectedIndex="-1" IsTextSearchEnabled="False"
                                                 DisplayMemberPath="AcctFullName" DropDownOpened="ComboBox_DropDownOpened" DropDownClosed="ComboBox_DropDownClosed"
                                                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                 SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -426,7 +426,7 @@
                                 <DataGridTemplateColumn Header="會計科目" Width="Auto" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <HierarchicalDataTemplate>
-                                            <ComboBox Width="Auto" FontSize="16" IsEditable="True" KeyUp="ComboBox_KeyUp" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                            <ComboBox Width="Auto" FontSize="16" IsEditable="True" KeyUp="ComboBox_KeyUp" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" SelectedIndex="-1" IsTextSearchEnabled="False"
                                                 DisplayMemberPath="AcctFullName" DropDownOpened="ComboBox_DropDownOpened" DropDownClosed="ComboBox_DropDownClosed"
                                                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                 SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
