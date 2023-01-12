@@ -487,22 +487,47 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         private bool SourceCheck()
         {
             DataTable table = AccountsDb.GetSourceData();
-            foreach (var item in CurrentVoucher.DebitDetails)
+
+            foreach (JournalDetail item in CurrentVoucher.DebitDetails)
             {
-                int count = table.Select(string.Format("JouDet_SourceID = '{0}' And JouDet_Amount >= {1}", item.JouDet_SourceID, item.JouDet_Amount)).Count();
-                if (count == 0)
+                if (!string.IsNullOrEmpty(item.JouDet_WriteOffID))
                 {
-                    MessageWindow.ShowMessage(string.Format("借方項次{0}沖帳來源不存在\r\n請確認來源", item.jouDet_Number), MessageType.ERROR);
-                    return false;
+                    int count = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID)).Count();
+                    if (count == 0)
+                    {
+                        MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳來源不存在\r\n請確認來源", item.jouDet_Number), MessageType.ERROR);
+                        return false;
+                    }
+                    else
+                    {
+                        int amount = Convert.ToInt32(table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID))[0]);
+                        if (item.JouDet_Amount > amount)
+                        {
+                            MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳金額超過來源金額\r\n請確認金額", item.jouDet_Number), MessageType.ERROR);
+                            return false;
+                        }
+                    }
                 }
             }
-            foreach (var item in CurrentVoucher.CreditDetails)
+            foreach (JournalDetail item in CurrentVoucher.CreditDetails)
             {
-                int count = table.Select(string.Format("JouDet_SourceID = '{0}' And JouDet_Amount >= {1}", item.JouDet_SourceID, item.JouDet_Amount)).Count();
-                if (count == 0)
+                if (!string.IsNullOrEmpty(item.JouDet_WriteOffID))
                 {
-                    MessageWindow.ShowMessage(string.Format("借方項次{0}沖帳來源不存在\r\n請確認來源", item.jouDet_Number), MessageType.ERROR);
-                    return false;
+                    int count = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID)).Count();
+                    if (count == 0)
+                    {
+                        MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳來源不存在\r\n請確認來源", item.jouDet_Number), MessageType.ERROR);
+                        return false;
+                    }
+                    else
+                    {
+                        int amount = Convert.ToInt32(table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID))[0]);
+                        if (item.JouDet_Amount > amount)
+                        {
+                            MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳金額超過來源金額\r\n請確認金額", item.jouDet_Number), MessageType.ERROR);
+                            return false;
+                        }
+                    }
                 }
             }
             return true;
@@ -651,10 +676,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     invalidWindow.ShowDialog();
                     if ((bool)invalidWindow.DialogResult)
                     {
-                        CurrentVoucher.JouMas_VoidReason = ((InvalidViewModel)invalidWindow.DataContext).VoidReason;
-                        AccountsDb.UpdateJournalData("作廢", CurrentVoucher);
-                        CurrentVoucher.JouMas_IsEnable = 0;
-                        VoucherCollectionView.Filter += VoucherFilter;
+                        Application.Current.Dispatcher.Invoke(new Action(delegate
+                        {
+                            CurrentVoucher.JouMas_VoidReason = ((InvalidViewModel)invalidWindow.DataContext).VoidReason;
+                            AccountsDb.UpdateJournalData("作廢", CurrentVoucher);
+                            CurrentVoucher.JouMas_IsEnable = 0;
+                            CurrentVoucher.JouMas_ModifyTime = DateTime.Now;
+                            CurrentVoucher.JouMas_ModifyEmpID = ViewModelMainWindow.CurrentUser.ID;
+                            CurrentVoucher.JouMas_ModifyEmpName = ViewModelMainWindow.CurrentUser.Name;
+                            VoucherCollectionView.Filter += VoucherFilter;
+                        }));
                     }
                 }
             }
@@ -691,8 +722,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         {
             CurrentVoucher.DebitDetails = new JournalDetails();
             CurrentVoucher.CreditDetails = new JournalDetails();
-            var details = AccountsDb.GetJournalData(id);
-            foreach (var item in details)
+            IEnumerable<JournalDetail> details = AccountsDb.GetJournalData(id);
+            foreach (JournalDetail item in details)
             {
                 string level1 = item.JouDet_AcctLvl1;
                 string level2 = item.JouDet_AcctLvl2;

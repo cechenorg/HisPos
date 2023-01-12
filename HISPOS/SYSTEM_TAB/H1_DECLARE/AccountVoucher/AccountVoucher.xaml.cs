@@ -21,6 +21,7 @@ using System.Threading;
 using His_Pos.FunctionWindow;
 using His_Pos.Class;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 {
@@ -90,7 +91,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 return;
             }
             DataTable sourceTable = AccountsDb.GetSourceData(currentDetail);
-            if(sourceTable != null && sourceTable.Rows.Count > 0)
+            //DataTable sourceTable = tb.Clone();
+
+            foreach (JournalDetail item in currentViewModel.CurrentVoucher.DebitDetails)
+            {
+                if (item != currentDetail)
+                {
+                    if (!string.IsNullOrEmpty(item.JouDet_WriteOffID))
+                    {
+                        DataRow[] drs = sourceTable.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = '{1}' And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID));
+                        if (drs != null && drs.Count() > 0)
+                        {
+                            foreach (DataRow dr in drs)
+                            {
+                                sourceTable.Rows.Remove(dr);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            if (sourceTable != null && sourceTable.Rows.Count > 0)
             {
                 DataColumn dc = new DataColumn("IsChecked", typeof(bool));
                 sourceTable.Columns.Add(dc);
@@ -99,7 +121,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 {
                     sourceTable.Rows[i]["IsChecked"] = false;
                 }
-                var fromSourceWindow = new His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow.FromSourceWindow(sourceTable);
+
+                FromSourceWindow.FromSourceWindow fromSourceWindow = new His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow.FromSourceWindow(sourceTable);
                 fromSourceWindow.ShowDialog();
                 
                 if ((bool)fromSourceWindow.DialogResult)
@@ -202,6 +225,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
             cmb.IsDropDownOpen = true;
             itemsViewOriginal.Refresh();
+        }
+
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void TextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                TextBox box = (TextBox)sender;
+                JournalDetail item = (JournalDetail)box.DataContext;
+                item.JouDet_WriteOffID = string.Empty;
+                item.JouDet_WriteOffNumber = 0;
+                item.JouDet_SourceID = string.Empty;
+                item.JouDet_Source = string.Empty;
+            }
         }
     }
 }
