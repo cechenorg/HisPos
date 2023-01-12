@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -57,6 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
         #endregion ///// DataChanged Variables /////
 
         private ProductManageMedicine medicine;
+        private string wareID;
         private ProductTypeEnum productType;
         private bool isNHIProduct;
         private int locBind;
@@ -66,7 +68,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
             get { return medicine; }
             set { Set(() => Medicine, ref medicine, value); }
         }
-
+        public string WareID
+        {
+            get { return wareID; }
+            set { Set(() => WareID, ref wareID, value); }
+        }
         public ProductTypeEnum ProductType
         {
             get { return productType; }
@@ -96,7 +102,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
             RegisterCommand();
             ProductType = type;
             InitMedicineData(proID, wareHouseID);
-
+            WareID = wareHouseID;
             IsNHIProduct = true;
             if ((int)ProductType == 2) IsNHIProduct = true;
 
@@ -119,7 +125,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
             MainWindow.ServerConnection.CloseConnection();
 
             if (isSuccess)
+            {
+                InitMedicineData(Medicine.ID, WareID);
                 IsDataChanged = false;
+            }
+                
         }
 
         private void CancelChangeAction()
