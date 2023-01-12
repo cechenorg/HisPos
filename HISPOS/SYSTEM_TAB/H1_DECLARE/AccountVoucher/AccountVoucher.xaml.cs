@@ -178,30 +178,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         private void ComboBox_KeyUp(object sender, KeyEventArgs e)
         {
             ComboBox cmb = (ComboBox)sender;
+            IEnumerable<JournalAccount> Accounts = AccountsDb.GetJournalAccount("傳票作業");
             ICollectionView itemsViewOriginal = CollectionViewSource.GetDefaultView(cmb.ItemsSource);
-
             bool isFilter = itemsViewOriginal.CanFilter;
             if (isFilter)
             {
-                itemsViewOriginal.Filter = (o) =>
+                List<JournalAccount> accounts = new List<JournalAccount>();
+                if (string.IsNullOrEmpty(cmb.Text))
                 {
-                    JournalAccount accounts = (JournalAccount)o;
-                    if (string.IsNullOrEmpty(cmb.Text))
+                    cmb.ItemsSource = Accounts;
+                }
+                else
+                {
+                    foreach (JournalAccount account in Accounts)
                     {
-                        return true;
-                    }
-                    else
-                    {
-                        if (accounts.AcctFullName.Contains(cmb.Text))
+                        if (account.AcctFullName.Contains(cmb.Text))
                         {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
+                            accounts.Add(account);
                         }
                     }
-                };
+                    cmb.ItemsSource = accounts;
+                }
             }
             cmb.IsDropDownOpen = true;
             itemsViewOriginal.Refresh();

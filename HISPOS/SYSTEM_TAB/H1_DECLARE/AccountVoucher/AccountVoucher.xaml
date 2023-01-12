@@ -60,10 +60,16 @@
             <TextBox Width="120" FontSize="16" TextAlignment="Left" HorizontalAlignment="Left" VerticalAlignment="Center"
                 Text="{Binding SearchID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
             <Label Margin="20,0,0,0" VerticalAlignment="Center" Content="會計科目:" FontSize="18" />
-            <ComboBox Width="450" FontSize="18" IsEditable="True" SelectedIndex="-1" IsTextSearchEnabled="False"
-                DisplayMemberPath="AcctFullName" KeyUp="ComboBox_KeyUp"
+            <ComboBox Width="450" FontSize="18" IsEditable="True" IsTextSearchEnabled="False"
+                DisplayMemberPath="AcctFullName" KeyUp="ComboBox_KeyUp" StaysOpenOnEdit="True"
                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
             <Label Margin="20,0,0,0" VerticalAlignment="Center" Content="關鍵字:" FontSize="18" />
             <TextBox Width="150" FontSize="16" TextAlignment="Left" HorizontalAlignment="Left" VerticalAlignment="Center"
                 Text="{Binding KeyWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -287,7 +293,13 @@
                                             <ComboBox Width="Auto" FontSize="16" IsEditable="True" KeyUp="ComboBox_KeyUp" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" SelectedIndex="-1" IsTextSearchEnabled="False"
                                                 DisplayMemberPath="AcctFullName" DropDownOpened="ComboBox_DropDownOpened" DropDownClosed="ComboBox_DropDownClosed"
                                                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                <ComboBox.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <VirtualizingStackPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ComboBox.ItemsPanel>
+                                            </ComboBox>
                                         </HierarchicalDataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -429,7 +441,13 @@
                                             <ComboBox Width="Auto" FontSize="16" IsEditable="True" KeyUp="ComboBox_KeyUp" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" SelectedIndex="-1" IsTextSearchEnabled="False"
                                                 DisplayMemberPath="AcctFullName" DropDownOpened="ComboBox_DropDownOpened" DropDownClosed="ComboBox_DropDownClosed"
                                                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                <ComboBox.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <VirtualizingStackPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ComboBox.ItemsPanel>
+                                            </ComboBox>
                                         </HierarchicalDataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

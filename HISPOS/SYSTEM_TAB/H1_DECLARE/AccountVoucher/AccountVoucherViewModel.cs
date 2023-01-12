@@ -41,7 +41,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             DeleteDetailCommand = new RelayCommand<string>(DeleteDetailAction);
             AddNewDetailCommand = new RelayCommand<string>(AddNewDetailAction);
             GetData();
-            IsProce = true;
+            
         }
         #region Command
         public RelayCommand CopyDataCommand { get; set; }
@@ -197,7 +197,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
         }
         public IEnumerable<JournalAccount> Accounts { get; set; }
-        public JournalAccount Account { get; set; }
+        public JournalAccount Account
+        {
+            get => account;
+            set
+            {
+                Set(() => Account, ref account, value);
+            }
+        }
+        private JournalAccount account;
         public IEnumerable<JournalType> Types { get; set; }
         public JournalType Type { get; set; }
         private JournalMaster currentVoucher;
@@ -228,6 +236,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                         IsCanEdit = false;
                         BtnVisibilty = Visibility.Hidden;
                     }
+                    if (IsProce)
+                    {
+                        BtnEditVisibilty = Visibility.Visible;
+                        EditContent = "修改傳票內容";
+                    }
+                }
+                else
+                {
+                    BtnEditVisibilty = Visibility.Hidden;
                 }
             }
         }
@@ -352,7 +369,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         {
             SearchID = string.Empty;
             KeyWord = string.Empty;
-            Account = new JournalAccount();
+            Account = null;
         }
         private void FilterAction(string filterCondition)
         {
@@ -427,40 +444,41 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             JournalMaster jm = (JournalMaster)journal;
             if(IsInvalid)
             {
-                if(jm.JouMas_IsEnable == 0)
+                BtnVisibilty = Visibility.Hidden;
+                BtnEditVisibilty = Visibility.Hidden;
+                DisplayVoidReason = Visibility.Visible;
+                if (jm.JouMas_IsEnable == 0)
                 {
                     BtnName = "新增";
                     IsBtnEnable = false;
-                    BtnVisibilty = Visibility.Hidden;
-                    BtnEditVisibilty = Visibility.Hidden;
                     IsCanEdit = true;
-                    DisplayVoidReason = Visibility.Visible;
                     return true;
                 }
             }
-            else if(IsTemp)
+            if (IsTemp)
             {
+                BtnVisibilty = Visibility.Visible;
+                BtnEditVisibilty = Visibility.Hidden;
+                DisplayVoidReason = Visibility.Hidden;
                 if (jm.JouMas_Status.Equals("T") && jm.JouMas_IsEnable == 1)
                 {
                     BtnName = "新增";
                     IsBtnEnable = true;
-                    BtnVisibilty = Visibility.Visible;
-                    BtnEditVisibilty = Visibility.Hidden;
                     IsCanEdit = true;
-                    DisplayVoidReason = Visibility.Hidden;
                     return true;
                 }
             }
-            else
+            if (IsProce)
             {
+                BtnVisibilty = Visibility.Hidden;
+                BtnEditVisibilty = Visibility.Hidden;
+                DisplayVoidReason = Visibility.Hidden;
                 if (jm.JouMas_Status.Equals("F") && jm.JouMas_IsEnable == 1)
                 {
                     BtnName = "修改";
                     IsBtnEnable = true;
-                    BtnVisibilty = Visibility.Hidden;
-                    BtnEditVisibilty = Visibility.Visible;
                     IsCanEdit = false;
-                    DisplayVoidReason = Visibility.Hidden;
+                    BtnEditVisibilty = Visibility.Visible;
                     return true;
                 }
             }
@@ -491,49 +509,52 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void SaveAction()
         {
-            if (CurrentVoucher != null)
+            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
             {
-                if (CurrentVoucher.JouMas_IsEnable == 1)
+                if (CurrentVoucher != null)
                 {
-                    if (CheckData())
+                    if (CurrentVoucher.JouMas_IsEnable == 1)
                     {
-                        if (btnName.Equals("新增"))
+                        if (CheckData())
                         {
-                            if (!SourceCheck())
+                            if (btnName.Equals("新增"))
                             {
-                                return;
+                                if (!SourceCheck())
+                                {
+                                    return;
+                                }
                             }
+                            AccountsDb.UpdateJournalData(btnName, CurrentVoucher);
+                            if (btnName.Equals("修改"))
+                            {
+                                MessageWindow.ShowMessage(string.Format("{0}\r\n修改成功", CurrentVoucher.JouMas_ID), MessageType.SUCCESS);
+                                IsCanEdit = false;
+                                BtnVisibilty = Visibility.Hidden;
+                                EditContent = "修改傳票內容";
+                                VoucherCollectionView.Filter += VoucherFilter;
+                            }
+                            else if (btnName.Equals("新增"))//暫存to成立
+                            {
+                                MessageWindow.ShowMessage(string.Format("{0}已{1}", CurrentVoucher.JouMas_ID, btnName), MessageType.SUCCESS);
+                                CurrentVoucher.JouMas_Status = "F";
+                                IsProce = true;
+                                IsCanEdit = false;
+                                BtnEditVisibilty = Visibility.Visible;
+                                BtnVisibilty = Visibility.Hidden;
+                                VoucherCollectionView.Filter += VoucherFilter;
+                            }
+                            else
+                            {
+                                IsCanEdit = true;
+                                BtnVisibilty = Visibility.Visible;
+                                VoucherCollectionView.Filter += VoucherFilter;
+                            }
+                            GetMasterData(CurrentVoucher.JouMas_ID);
+                            GetDetailData(CurrentVoucher.JouMas_ID);
                         }
-                        AccountsDb.UpdateJournalData(btnName, CurrentVoucher);
-                        if (btnName.Equals("修改"))
-                        {
-                            MessageWindow.ShowMessage(string.Format("{0}\r\n修改成功", CurrentVoucher.JouMas_ID), MessageType.SUCCESS);
-                            IsCanEdit = false;
-                            BtnVisibilty = Visibility.Hidden;
-                            EditContent = "修改傳票內容";
-                            VoucherCollectionView.Filter += VoucherFilter;
-                        }
-                        else if (btnName.Equals("新增"))//暫存to成立
-                        {
-                            MessageWindow.ShowMessage(string.Format("{0}已{1}", CurrentVoucher.JouMas_ID, btnName), MessageType.SUCCESS);
-                            CurrentVoucher.JouMas_Status = "F";
-                            IsProce = true;
-                            IsCanEdit = false;
-                            BtnEditVisibilty = Visibility.Visible;
-                            BtnVisibilty = Visibility.Hidden;
-                            VoucherCollectionView.Filter += VoucherFilter;
-                        }
-                        else
-                        {
-                            IsCanEdit = true;
-                            BtnVisibilty = Visibility.Visible;
-                            VoucherCollectionView.Filter += VoucherFilter;
-                        }
-                        GetMasterData(CurrentVoucher.JouMas_ID);
-                        GetDetailData(CurrentVoucher.JouMas_ID);
                     }
                 }
-            }
+            }));
         }
         private bool CheckData()
         {
@@ -640,6 +661,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void GetData()
         {
+            IsProce = true;
+
             Accounts = AccountsDb.GetJournalAccount("ALL");
             JournalAccount empty = new JournalAccount();
             Accounts.ToList().Add(empty);
