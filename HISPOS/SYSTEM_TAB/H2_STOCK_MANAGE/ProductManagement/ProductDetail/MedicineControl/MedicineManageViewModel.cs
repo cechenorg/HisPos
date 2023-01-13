@@ -233,7 +233,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 MainWindow.ServerConnection.CloseConnection();
             }
             ReloadData();
-            CanEdit = ViewModelMainWindow.CurrentUser.Authority == Authority.Admin && OTCStockViewModel.OTCStockDetail.TotalInventory == 0 && OTCStockViewModel.OTCStockDetail.OnTheWayAmount == 0;
+            CanEdit = (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.PharmacyManager) && OTCStockViewModel.OTCStockDetail.TotalInventory == 0 && OTCStockViewModel.OTCStockDetail.OnTheWayAmount == 0;
         }
 
         #endregion ----- Define Functions -----
