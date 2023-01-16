@@ -124,7 +124,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 
                 FromSourceWindow.FromSourceWindow fromSourceWindow = new His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow.FromSourceWindow(sourceTable);
                 fromSourceWindow.ShowDialog();
-                
                 if ((bool)fromSourceWindow.DialogResult)
                 {
                     DataTable table = ((FromSourceViewModel)fromSourceWindow.DataContext).SoureTable;
@@ -151,11 +150,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                                 else
                                 {
                                     index = currentViewModel.CurrentVoucher.CreditDetails.IndexOf(currentDetail);
-                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Amount = Convert.ToInt32(dr["JouDet_Amount"]);
-                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_SourceID = Convert.ToString(dr["JouDet_SourceID"]);
-                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Source = "StoOrd_ID";
-                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_WriteOffID = Convert.ToString(dr["JouDet_ID"]);
-                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_WriteOffNumber = Convert.ToInt32(dr["JouDet_Number"]);
+                                    currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_Amount = Convert.ToInt32(dr["JouDet_Amount"]);
+                                    currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_SourceID = Convert.ToString(dr["JouDet_SourceID"]);
+                                    currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_Source = "StoOrd_ID";
+                                    currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_WriteOffID = Convert.ToString(dr["JouDet_ID"]);
+                                    currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_WriteOffNumber = Convert.ToInt32(dr["JouDet_Number"]);
                                 }
                                 updCurrentRow = false;
                             }

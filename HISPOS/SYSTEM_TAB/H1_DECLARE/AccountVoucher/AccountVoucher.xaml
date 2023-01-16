@@ -480,7 +480,7 @@
                                 <DataGridTemplateColumn Width="120" Header="沖帳來源單號" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_WriteOffID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MouseDoubleClick="TextBox_MouseDoubleClick" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                                            <TextBox HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_WriteOffID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MouseDoubleClick="TextBox_MouseDoubleClick" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" KeyUp="TextBox_KeyUp"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
