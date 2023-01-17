@@ -276,7 +276,7 @@ namespace His_Pos.ChromeTabViewModel
                 {
                     BusyContent = "回傳合作診所處方中...";
                 }
-                
+
                 PrintCooPre();//列印還未列印藥袋
                 //骨科上傳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
@@ -301,9 +301,9 @@ namespace His_Pos.ChromeTabViewModel
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    foreach (CusPrePreviewBase prescription in cooperativePres)
+                    if (Properties.Settings.Default.PrePrint == "True")
                     {
-                        if (Properties.Settings.Default.PrePrint == "True")
+                        foreach (CusPrePreviewBase prescription in cooperativePres)
                         {
                             foreach (var setting in CooperativeClinicSettings)
                             {
@@ -326,7 +326,7 @@ namespace His_Pos.ChromeTabViewModel
             string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
             bool isRe = false;
             string isRePost = "0";
-            
+
             string DirectPath = e.FullPath;
             //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
             if (DirectPath != null)
@@ -339,7 +339,7 @@ namespace His_Pos.ChromeTabViewModel
                 #region 先把全部的.txt轉成.xml
                 foreach (var setting in cooperativeClinicSettings)
                 {
-                    if((string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔")
+                    if ((string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔")
                     {
                         if (!string.IsNullOrEmpty(setting.FilePath))
                         {
@@ -398,7 +398,7 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     var xDocument = XDocument.Load(filePath);
                                     var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null) 
+                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null)
                                     {
                                         isRePost = "0";
                                     }
@@ -457,7 +457,7 @@ namespace His_Pos.ChromeTabViewModel
             }
             CooperativeClinicSettings.FilePurge();//打包檔案
         }
-        
+
         public static void GetTxtFiles(string path)
         {
             int counter = 0;
@@ -531,7 +531,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 XmlElement insurance = doc.CreateElement("insurance");
                 insurance.SetAttribute("insurance_type", "A");
-                insurance.SetAttribute("serial_code", ss[7].PadLeft(4,'0'));
+                insurance.SetAttribute("serial_code", ss[7].PadLeft(4, '0'));
                 insurance.SetAttribute("except_code", "");
                 insurance.SetAttribute("copayment_code", ss[10]);
                 insurance.SetAttribute("case_type", ss[25]);
@@ -791,7 +791,7 @@ namespace His_Pos.ChromeTabViewModel
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
-        
+
         public static Employee GetEmployeeByID(int ID)
         {
             var result = EmployeeCollection.SingleOrDefault(i => i.ID.Equals(ID));
@@ -892,12 +892,12 @@ namespace His_Pos.ChromeTabViewModel
 
         private void ReportPrint(string printer)
         {
-     
-                    PrintDocument printDoc = new PrintDocument();
-                    printDoc.PrinterSettings.PrinterName = printer;
-                    printDoc.PrintController = new System.Drawing.Printing.StandardPrintController();
-                    printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
-                    mCurrentPageIndex = 0;
+
+            PrintDocument printDoc = new PrintDocument();
+            printDoc.PrinterSettings.PrinterName = printer;
+            printDoc.PrintController = new System.Drawing.Printing.StandardPrintController();
+            printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
+            mCurrentPageIndex = 0;
             try
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -911,7 +911,7 @@ namespace His_Pos.ChromeTabViewModel
             {
                 FunctionWindow.MessageWindow.ShowMessage(ex.Message, Class.MessageType.ERROR);
             }
-    
+
         }
 
         private Stream CreateStream(string name, string fileNameExtension, Encoding encoding,
