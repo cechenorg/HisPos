@@ -296,7 +296,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         private void PrintCooPre()
         {
-            CooperativePrescriptionViewModel cooperativePrescriptionViewModel = new CooperativePrescriptionViewModel(11);
+            CooperativePrescriptionViewModel cooperativePrescriptionViewModel = new CooperativePrescriptionViewModel();
             if (cooperativePrescriptionViewModel.CooPreCollectionView != null)
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -431,28 +431,24 @@ namespace His_Pos.ChromeTabViewModel
                     }
                 }
 
-                CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
-                if (gg.CooPreCollectionView != null)
+                CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel();
+                if (gg.CooPreCollectionView != null && Properties.Settings.Default.PrePrint == "True")
                 {
-                    if (Properties.Settings.Default.PrePrint == "True")
+                    Application.Current.Dispatcher.Invoke((() =>
                     {
-                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
                         {
-                            foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
+                            foreach (var c in cooperativeClinicSettings)
                             {
-                                foreach (var c in cooperativeClinicSettings)
+                                if (c.AutoPrint &&
+                                    c.FilePath.Equals(((FileSystemWatcher)sender).Path) && 
+                                    ff.IsPrint == false)
                                 {
-                                    if (c.AutoPrint == true && c.FilePath.Equals(((FileSystemWatcher)sender).Path))
-                                    {
-                                        if (ff.IsPrint == false)
-                                        {
-                                            gg.PrintAction(ff);
-                                        }
-                                    }
+                                    gg.PrintAction(ff);
                                 }
                             }
-                        }));
-                    }
+                        }
+                    }));
                 }
             }
             CooperativeClinicSettings.FilePurge();//打包檔案

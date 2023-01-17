@@ -160,12 +160,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             InitCommands();
         }
 
-        public CooperativePrescriptionViewModel(int v)
-        {
-            InitVariables();
-            InitPrescriptions1();
-        }
-
+       
         private void InitVariables()
         {
             IsRead = false;
