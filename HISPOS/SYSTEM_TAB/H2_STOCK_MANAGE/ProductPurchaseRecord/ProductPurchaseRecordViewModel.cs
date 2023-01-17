@@ -178,7 +178,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             if (!IsSearchConditionValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, Manufacturer is null ? string.Empty : Manufacturer.Name, SearchProductID, WareHouse is null ? string.Empty : WareHouse.Name);
+            StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID.Trim(), Manufacturer is null ? string.Empty : Manufacturer.Name, SearchProductID, WareHouse is null ? string.Empty : WareHouse.Name);
             MainWindow.ServerConnection.CloseConnection();
 
             if (StoreOrderCollection.Count > 0)
