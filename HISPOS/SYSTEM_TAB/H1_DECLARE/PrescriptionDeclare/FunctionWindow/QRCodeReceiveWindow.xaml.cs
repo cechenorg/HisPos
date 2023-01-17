@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using static His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.PrescriptionDeclareViewModel;
 using Medicine = His_Pos.NewClass.Medicine.Base.Medicine;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
@@ -25,14 +26,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
     /// </summary>
     public partial class QRCodeReceiveWindow : Window
     {
-        private Prescription p;
+        private Prescription p = new Prescription();
         private Timer timer = new Timer(200);
         private int ScanCountNum { get; set; }
-        public QRCodeReceiveWindow()
+
+        private readonly GetCustomerPrescriptionDelegate _getCustomerPrescriptionDelegate;
+        public QRCodeReceiveWindow(GetCustomerPrescriptionDelegate getCustomerPrescriptionDelegate)
         {
             InitializeComponent();
+            _getCustomerPrescriptionDelegate = getCustomerPrescriptionDelegate;
             timer.Elapsed += new ElapsedEventHandler(InputIdle);
-            p = new Prescription();
             QRCodeReceiver.Focus();
             ShowDialog();
         }
@@ -334,8 +337,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
             if(button.IsMouseOver)
             {
                 FillData();
+                _getCustomerPrescriptionDelegate?.Invoke(p);
                 Close();
-                Messenger.Default.Send(new NotificationMessage<Prescription>(this, p, "CustomerPrescriptionSelected"));
             }
             else
             {

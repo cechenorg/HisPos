@@ -18,6 +18,7 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
+using static His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.PrescriptionDeclareViewModel;
 using Application = System.Windows.Application;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
@@ -248,8 +249,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
 
         public RelayCommand SetReservePrepareCommand { get; set; }
 
-        public CustomerPrescriptionViewModel(Customer customer, IcCard card)
+        private readonly GetCustomerPrescriptionDelegate _getCustomerPrescriptionDelegate;
+
+        public CustomerPrescriptionViewModel(Customer customer, IcCard card, GetCustomerPrescriptionDelegate getCustomerPrescriptionDelegate )
         {
+            _getCustomerPrescriptionDelegate = getCustomerPrescriptionDelegate;
+
             Patient = customer;
             Card = card.DeepCloneViaJson();
             InitCommands();
@@ -407,7 +412,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             try
             {
                 if (SelectedPrescription is null) return;
-                Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
+                _getCustomerPrescriptionDelegate?.Invoke(SelectedPrescription.CreatePrescription());
                 Messenger.Default.Send(new NotificationMessage("CloseCustomerPrescriptionWindow"));
             }
             catch (Exception e)
