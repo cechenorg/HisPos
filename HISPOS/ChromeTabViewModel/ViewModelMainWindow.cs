@@ -296,23 +296,20 @@ namespace His_Pos.ChromeTabViewModel
         }
         private void PrintCooPre()
         {
-            CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
-            if (gg.CooPreCollectionView != null)
+            CooperativePrescriptionViewModel cooperativePrescriptionViewModel = new CooperativePrescriptionViewModel(11);
+            if (cooperativePrescriptionViewModel.CooPreCollectionView != null)
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    foreach (CusPrePreviewBase ff in cooperativePres)
+                    foreach (CusPrePreviewBase prescription in cooperativePres)
                     {
                         if (Properties.Settings.Default.PrePrint == "True")
                         {
-                            foreach (var c in CooperativeClinicSettings)
+                            foreach (var setting in CooperativeClinicSettings)
                             {
-                                if (c.AutoPrint == true)
+                                if (setting.AutoPrint && prescription.IsPrint == false)
                                 {
-                                    if (ff.IsPrint == false)
-                                    {
-                                        gg.PrintAction(ff);
-                                    }
+                                    cooperativePrescriptionViewModel.PrintAction(prescription);
                                 }
                             }
                         }
