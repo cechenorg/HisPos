@@ -311,7 +311,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
             ProductTransactionDetail.ProductTransactionDetail ptd = new ProductTransactionDetail.ProductTransactionDetail(masterRow, result);
             ptd.Closed += DetailWindowClosed;
-            ptd.Show();
+            ptd.ShowDialog();
             ptd.Activate();
         }
 

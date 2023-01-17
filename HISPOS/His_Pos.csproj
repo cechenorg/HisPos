@@ -365,6 +365,7 @@
     <Compile Include="NewClass\Report\DepositReport\DepositDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositReportData.cs" />
     <Compile Include="NewClass\Report\ReportService.cs" />
+    <Compile Include="NewClass\Trade\TradeRecord\TradeDetail.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountReport\ClosingAccountReportRepository.cs" />
@@ -1581,6 +1582,7 @@
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionDetail\ProductTransactionDetail.xaml.cs">
       <DependentUpon>ProductTransactionDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionDetail\ProductTransactionDetailViewModel.cs" />
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordView.xaml.cs">
       <DependentUpon>ProductTransactionRecordView.xaml</DependentUpon>
     </Compile>
