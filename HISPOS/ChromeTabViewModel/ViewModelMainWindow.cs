@@ -227,9 +227,11 @@ namespace His_Pos.ChromeTabViewModel
                             //開啟監聽
                             watch.EnableRaisingEvents = true;
                             //是否連子資料夾都要偵測
-                            watch.IncludeSubdirectories = true;
+                            watch.IncludeSubdirectories = false;
+
+                            watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
                             //新增時觸發事件
-                            watch.Created += watch_Created;
+                            watch.Created += new FileSystemEventHandler(watch_Created);
                         }
                     }
                     else
@@ -240,9 +242,11 @@ namespace His_Pos.ChromeTabViewModel
                             //開啟監聽
                             watch.EnableRaisingEvents = true;
                             //是否連子資料夾都要偵測
-                            watch.IncludeSubdirectories = true;
+                            watch.IncludeSubdirectories = false;
+
+                            watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
                             //新增時觸發事件
-                            watch.Created += watch_Created;
+                            watch.Created += new FileSystemEventHandler(watch_Created);
                         }
                     }
                 }
@@ -317,7 +321,7 @@ namespace His_Pos.ChromeTabViewModel
                 }));
             }
         }
-        void watch_Created(object sender, FileSystemEventArgs e)
+        private static void watch_Created(object sender, FileSystemEventArgs e)
         {
             //NewFunction.GetXmlFiles();
             var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
@@ -434,7 +438,7 @@ namespace His_Pos.ChromeTabViewModel
                 CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel();
                 if (gg.CooPreCollectionView != null && Properties.Settings.Default.PrePrint == "True")
                 {
-                    Application.Current.Dispatcher.Invoke((() =>
+                    Application.Current.Dispatcher.Invoke(() =>
                     {
                         foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
                         {
@@ -448,7 +452,7 @@ namespace His_Pos.ChromeTabViewModel
                                 }
                             }
                         }
-                    }));
+                    });
                 }
             }
             CooperativeClinicSettings.FilePurge();//打包檔案

@@ -162,7 +162,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         {
             _getCustomerPrescriptionDelegate = getCustomerPrescriptionDelegate;
             InitVariables();
-            InitPrescriptions();
+            InitPrescriptions1();
             InitCommands();
         }
 
