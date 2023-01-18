@@ -234,20 +234,18 @@ namespace His_Pos.ChromeTabViewModel
                             watch.Created += new FileSystemEventHandler(watch_Created);
                         }
                     }
-                    else
-                    {
-                        if (c.TypeName.Equals("展望") && Directory.Exists(c.FilePath))
-                        {
-                            FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.xml");
-                            //開啟監聽
-                            watch.EnableRaisingEvents = true;
-                            //是否連子資料夾都要偵測
-                            watch.IncludeSubdirectories = false;
 
-                            watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-                            //新增時觸發事件
-                            watch.Created += new FileSystemEventHandler(watch_Created);
-                        }
+                    if (c.TypeName.Equals("展望") && Directory.Exists(c.FilePath))
+                    {
+                        FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.xml");
+                        //開啟監聽
+                        watch.EnableRaisingEvents = true;
+                        //是否連子資料夾都要偵測
+                        watch.IncludeSubdirectories = false;
+
+                        watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+                        //新增時觸發事件
+                        watch.Created += new FileSystemEventHandler(watch_Created);
                     }
                 }
 
