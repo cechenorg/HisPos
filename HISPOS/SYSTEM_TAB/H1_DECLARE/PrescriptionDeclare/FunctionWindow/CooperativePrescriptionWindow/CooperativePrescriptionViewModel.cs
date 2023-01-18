@@ -3,10 +3,12 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.Service;
 using System;
 using System.ComponentModel;
+using System.Data;
 using System.Windows;
 using System.Windows.Data;
 using static His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.PrescriptionDeclareViewModel;
@@ -196,6 +198,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 BusyContent = Resources.取得合作處方;
                 MainWindow.ServerConnection.OpenConnection();
                 cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
+                var table = CooperativeClinicSettingDb.Init();
                 MainWindow.ServerConnection.CloseConnection();
                 if (Properties.Settings.Default.PrePrint == "True")
                 {
@@ -203,9 +206,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                     {
                         foreach (CusPrePreviewBase cooView in cooperativePres)
                         {
-                            if (!cooView.IsPrint)
+                            DataRow[] coolInstitution = table.Select(string.Format("CooCli_ID = '{0}'", Convert.ToString(cooView.Institution.ID)));
+                            if (coolInstitution != null && coolInstitution.Length > 0)
                             {
-                                PrintAction(cooView);
+                                var isAutoPrint = Convert.ToBoolean(coolInstitution[0]["CooCli_AutoPrint"]);
+                                if (!cooView.IsPrint && isAutoPrint)
+                                {
+                                    PrintAction(cooView);
+                                }
                             }
                         }
                     }));

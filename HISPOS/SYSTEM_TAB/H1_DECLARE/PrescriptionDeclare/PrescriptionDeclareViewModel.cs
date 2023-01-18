@@ -563,11 +563,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetCooperativePresAction()
         {
             //查詢合作診所處方
+
+            var cooPresWindow = new CooperativePrescriptionWindow();
             CooperativePrescriptionViewModel cooperativePrescriptionViewModel = new CooperativePrescriptionViewModel(GetCustomerPrescription);
-            var cooPresWindow = new CooperativePrescriptionWindow()
-            {
-                DataContext = cooperativePrescriptionViewModel
-            };
+            cooPresWindow.DataContext = cooperativePrescriptionViewModel;
+            cooPresWindow.ShowDialog();
         }
 
         private void GetCustomerPrescription(Prescription prescription)
