@@ -9,6 +9,7 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
+using static His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.PrescriptionDeclareViewModel;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using Resources = His_Pos.Properties.Resources;
 
@@ -153,19 +154,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
 
         #endregion Commands
 
-        public CooperativePrescriptionViewModel()
+        private readonly GetCustomerPrescriptionDelegate _getCustomerPrescriptionDelegate;
+
+        public CooperativePrescriptionViewModel(GetCustomerPrescriptionDelegate getCustomerPrescriptionDelegate = null)
         {
+            _getCustomerPrescriptionDelegate = getCustomerPrescriptionDelegate;
             InitVariables();
             InitPrescriptions();
             InitCommands();
         }
 
-        public CooperativePrescriptionViewModel(int v)
-        {
-            InitVariables();
-            InitPrescriptions1();
-        }
-
+       
         private void InitVariables()
         {
             IsRead = false;
@@ -244,7 +243,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             try
             {
                 if (SelectedPrescription is null) return;
-                Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
+                _getCustomerPrescriptionDelegate?.Invoke(SelectedPrescription.CreatePrescription());
                 Messenger.Default.Send(new NotificationMessage("CloseCooperativePrescriptionWindow"));
             }
             catch (Exception e)
