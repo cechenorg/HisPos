@@ -33,6 +33,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Xml;
@@ -232,6 +233,10 @@ namespace His_Pos.ChromeTabViewModel
                             watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
                             //新增時觸發事件
                             watch.Created += new FileSystemEventHandler(watch_Created);
+                            //錯誤時觸發事件
+                            watch.Error += watch_Error;
+                            Thread threadPrint = new Thread(TimePrint);
+                            threadPrint.Start();
                         }
                     }
 
@@ -321,13 +326,9 @@ namespace His_Pos.ChromeTabViewModel
         }
         private static void watch_Created(object sender, FileSystemEventArgs e)
         {
-            //NewFunction.GetXmlFiles();
             var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
-            TaiwanCalendar tc = new TaiwanCalendar();
-            DateTime now = DateTime.Now;
-            string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
-            bool isRe = false;
-            string isRePost = "0";
+           
+           
 
             string DirectPath = e.FullPath;
             //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
@@ -335,13 +336,11 @@ namespace His_Pos.ChromeTabViewModel
             {
                 var cooperativeClinicSettings = new CooperativeClinicSettings();
                 cooperativeClinicSettings.Init();
-                var xDocs = new List<XDocument>();
-                var cusIdNumbers = new List<string>();
-                var paths = new List<string>();
+               
                 #region 先把全部的.txt轉成.xml
                 foreach (var setting in cooperativeClinicSettings)
                 {
-                    if ((string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔")
+                    if ((string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔" && setting.FilePath == ((FileSystemWatcher)sender).Path)
                     {
                         if (!string.IsNullOrEmpty(setting.FilePath))
                         {
@@ -379,6 +378,14 @@ namespace His_Pos.ChromeTabViewModel
                     }
                 }
                 #endregion
+                TaiwanCalendar tc = new TaiwanCalendar();
+                DateTime now = DateTime.Now;
+                string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
+                bool isRe = false;
+                string isRePost = "0";
+                var xDocs = new List<XDocument>();
+                var cusIdNumbers = new List<string>();
+                var paths = new List<string>();
                 foreach (var setting in cooperativeClinicSettings)
                 {
                     try
@@ -432,30 +439,44 @@ namespace His_Pos.ChromeTabViewModel
                     {
                     }
                 }
-
-                CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel();
-                if (gg.CooPreCollectionView != null && Properties.Settings.Default.PrePrint == "True")
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
-                        {
-                            foreach (var c in cooperativeClinicSettings)
-                            {
-                                if (c.AutoPrint &&
-                                    c.FilePath.Equals(((FileSystemWatcher)sender).Path) && 
-                                    ff.IsPrint == false)
-                                {
-                                    gg.PrintAction(ff);
-                                }
-                            }
-                        }
-                    });
-                }
             }
             CooperativeClinicSettings.FilePurge();//打包檔案
         }
-
+        private static void watch_Error(object sender, ErrorEventArgs e)
+        {
+            Exception error = e.GetException();
+        }
+        private void TimePrint()
+        {
+            bool isClick = false;
+            while (true)
+            {
+                if (DateTime.Now.Second % 10 == 5 && !isClick)
+                {
+                    var cooperativeClinicSettings = new CooperativeClinicSettings();
+                    cooperativeClinicSettings.Init();
+                    cooperativePres.GetCooperative(DateTime.Today, DateTime.Today);
+                    if (Properties.Settings.Default.PrePrint == "True")
+                    {
+                        foreach (CusPrePreviewBase previewBase in cooperativePres)
+                        {
+                            foreach (CooperativeClinicSetting setting in cooperativeClinicSettings)
+                            {
+                                if (setting.AutoPrint && previewBase.IsPrint == false)
+                                {
+                                    previewBase.PrintDir();
+                                }
+                            }
+                        }
+                    }
+                    isClick = true;
+                }
+                else
+                {
+                    isClick = false;
+                }
+            }
+        }
         public static void GetTxtFiles(string path)
         {
             int counter = 0;
