@@ -455,10 +455,20 @@ namespace His_Pos.ChromeTabViewModel
                 {
                     var cooperativeClinicSettings = new CooperativeClinicSettings();
                     cooperativeClinicSettings.Init();
-                    cooperativePres.GetCooperative(DateTime.Today, DateTime.Today);
+                    var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
+                    CusPrePreviewBases cusPres = new CusPrePreviewBases();
+                    foreach (DataRow r in table.Rows)
+                    {
+                        var xDocument = new XmlDocument();
+                        xDocument.LoadXml(r["CooCli_XML"].ToString());
+                        cusPres.Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml),
+                            r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(),
+                            r.Field<bool>("CooCli_IsRead"), r.Field<bool>("CooCli_IsPrint")));
+                    }
+
                     if (Properties.Settings.Default.PrePrint == "True")
                     {
-                        foreach (CusPrePreviewBase previewBase in cooperativePres)
+                        foreach (CusPrePreviewBase previewBase in cusPres)
                         {
                             foreach (CooperativeClinicSetting setting in cooperativeClinicSettings)
                             {
