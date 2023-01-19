@@ -371,7 +371,8 @@
     <Compile Include="NewClass\Report\Accounts\AccountsCommonItem.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositReportData.cs" />
-    <Compile Include="NewClass\Report\ReportService.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\IncomeStatementRawData.cs" />
+    <Compile Include="InfraStructure\ReportService.cs" />
     <Compile Include="NewClass\Trade\TradeRecord\TradeDetail.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
