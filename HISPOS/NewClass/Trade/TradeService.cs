@@ -94,7 +94,7 @@ namespace His_Pos.NewClass.Trade
             return result;
             
         }
-        public static DataTable TradeRecordInsert(string masID, string cusID, string payMethod, int preTotal, int discountAmt, string cardNum, string invoiceNum, string taxNum, string cashier, string note, double cash, double card, double voucher, double cashCoupon, List<TradeDetail> detail)
+        public static DataTable TradeRecordInsert(string masID, string cusID, string payMethod, int preTotal,int realTotal, int discountAmt, string cardNum, string invoiceNum, string taxNum, string cashier, string note, double cash, double card, double voucher, double cashCoupon, List<TradeDetail> detail)
         {
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -102,8 +102,8 @@ namespace His_Pos.NewClass.Trade
             parameters.Add(new SqlParameter("CustomerID", cusID));
             parameters.Add(new SqlParameter("PayMethod", payMethod));
             parameters.Add(new SqlParameter("PreTotal", preTotal));
-            parameters.Add(new SqlParameter("DiscountAmt", preTotal));
-            parameters.Add(new SqlParameter("RealTotal", discountAmt));
+            parameters.Add(new SqlParameter("DiscountAmt", discountAmt));
+            parameters.Add(new SqlParameter("RealTotal", realTotal));
             parameters.Add(new SqlParameter("CardNumber", cardNum));
             parameters.Add(new SqlParameter("InvoiceNumber", invoiceNum));
             parameters.Add(new SqlParameter("TaxNumber", taxNum));
