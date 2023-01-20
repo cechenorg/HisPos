@@ -214,7 +214,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
         }
         private void SubmitAction()
         {
-            DataTable result = TradeService.TradeRecordInsert(masterID, cusID, payMethod, preTotal, discountAmt, cardNum, invoiceNum, taxNum, cashier, note, cash, card, voucher, cashCoupon, Details);
+            DataTable result = TradeService.TradeRecordInsert(masterID, cusID, payMethod, preTotal, realTotal, discountAmt, cardNum, invoiceNum, taxNum, cashier, note, cash, card, voucher, cashCoupon, Details);
 
             if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
