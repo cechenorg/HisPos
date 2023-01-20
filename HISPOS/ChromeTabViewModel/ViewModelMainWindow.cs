@@ -240,7 +240,7 @@ namespace His_Pos.ChromeTabViewModel
                         }
                     }
 
-                    if (c.TypeName.Equals("展望") && Directory.Exists(c.FilePath))
+                    if (c.TypeName != null && c.TypeName.Equals("展望") && Directory.Exists(c.FilePath))
                     {
                         FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.xml");
                         //開啟監聽

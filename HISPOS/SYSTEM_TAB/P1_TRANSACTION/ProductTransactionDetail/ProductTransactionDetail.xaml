@@ -390,7 +390,7 @@
                     Width="95"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content="0"
+                    Content="{Binding PreTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
                     Foreground="Black" />
@@ -408,7 +408,7 @@
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
-                    Content="0"
+                    Content="{Binding DiscountAmt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
@@ -432,7 +432,7 @@
                     Width="95"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content=""
+                    Content="{Binding PriceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
