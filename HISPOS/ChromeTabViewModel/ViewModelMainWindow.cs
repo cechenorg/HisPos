@@ -34,6 +34,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Xml;
@@ -235,8 +236,9 @@ namespace His_Pos.ChromeTabViewModel
                             watch.Created += new FileSystemEventHandler(watch_Created);
                             //錯誤時觸發事件
                             watch.Error += watch_Error;
-                            Thread threadPrint = new Thread(TimePrint);
-                            threadPrint.Start();
+                            //Thread threadPrint = new Thread(TimePrint);
+                            //threadPrint.Start();
+                            Task.Run(() => TimePrint());
                         }
                     }
 
@@ -446,7 +448,7 @@ namespace His_Pos.ChromeTabViewModel
         {
             Exception error = e.GetException();
         }
-        private void TimePrint()
+        private async Task TimePrint()
         {
             bool isClick = false;
             while (true)
