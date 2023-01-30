@@ -406,8 +406,6 @@
     <Compile Include="NewClass\Medicine\NotEnoughMedicine\NotEnoughMedicines.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicine.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicines.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerGroupTag.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerGroupTags.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerRecord\CustomerRecords.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerRecord\CustomerRecord.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerRecord\CustomerRecordDb.cs" />

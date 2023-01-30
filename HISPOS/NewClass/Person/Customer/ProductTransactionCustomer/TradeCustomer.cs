@@ -17,7 +17,6 @@ namespace His_Pos.NewClass.Person.Customer.ProductTransactionCustomer
         public int Point { get; set; }
         public int OwnMoney { get; set; }
         public string Note { get; set; }
-        public CustomerGroupTags GroupTags { get; set; }
 
         public int Old => (Birth is null) ? 0 : DateTime.Now.Subtract((DateTime)Birth).Days / 365;
         public bool HasOwnMoney => OwnMoney > 0;
