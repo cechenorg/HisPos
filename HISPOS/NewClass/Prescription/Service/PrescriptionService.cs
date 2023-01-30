@@ -669,27 +669,36 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
-            var reportFormat = Properties.Settings.Default.ReportFormat;
-            if (TempPre.Institution != null)// && TempPre.Institution.ID == "3532082753"
-            {
-                TempPrint.Division.Name = "";
-                var singleMode = (bool)PrintResult[1];
-                if (singleMode)
-                    TempPrint.PrintMedBagSingleMode();
-                else
-                    TempPrint.PrintMedBagMultiMode();
-            }
-            else if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+            string reportFormat = Settings.Default.ReportFormat;
+            //if (TempPre.Institution != null)// && TempPre.Institution.ID == "3532082753"
+            //{
+            //    TempPrint.Division.Name = "";
+            //    bool singleMode = (bool)PrintResult[1];
+
+            //    if (singleMode)
+            //    {
+            //        TempPrint.PrintMedBagSingleMode();
+            //    }
+            //    else
+            //    {
+            //        TempPrint.PrintMedBagMultiMode();
+            //    }
+            //}
+            if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
             {
                 TempPre.PrintMedBagSingleModeByCE();
             }
             else
             {
-                var singleMode = (bool)PrintResult[1];
+                bool singleMode = (bool)PrintResult[1];
                 if (singleMode)
+                {
                     TempPre.PrintMedBagSingleMode();
+                }
                 else
+                {
                     TempPre.PrintMedBagMultiMode();
+                }
             }
         }
 
@@ -867,10 +876,10 @@ namespace His_Pos.NewClass.Prescription.Service
         public void CloneTempPre()
         {
             TempPre = (Prescription)Current.Clone();
-            if (TempPre.Institution != null)//&& TempPre.Institution.ID == "3532082753"
-            {
-                TempPrint = (Prescription)Current.PrintClone();
-            }
+            //if (TempPre.Institution != null&& TempPre.Institution.ID == "3532082753")
+            //{
+            //    TempPrint = (Prescription)Current.PrintClone();
+            //}
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]
