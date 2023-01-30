@@ -54,22 +54,24 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
             }
         }
 
-        public bool CheckIDNotEmpty()
-        {
-            return !string.IsNullOrEmpty(ID);
-        }
+        //public bool CheckIDNotEmpty()
+        //{
+        //    return !string.IsNullOrEmpty(ID);
+        //}
 
-        public bool IsDentistry()
-        {
-            return ID.Equals("40");
-        }
+        //public bool IsDentistry()
+        //{
+        //    return ID.Equals("40");
+        //}
 
         public object Clone()
         {
-            var copy = new Division();
-            copy.ID = this.ID;
-            copy.Name = (string)this.Name.Clone();
-            copy.FullName = this.ID;
+            var copy = new Division
+            {
+                ID = ID,
+                Name = Name,
+                FullName = ID
+            };
             return copy;
         }
     }

@@ -33,6 +33,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Xml;
@@ -172,7 +173,7 @@ namespace His_Pos.ChromeTabViewModel
             CanMoveTabs = true;
             ShowAddButton = false;
 
-            SingdeWebURI = $@"http://kaokaodepon.singde.com.tw:5566/id/{CurrentPharmacy.ID}/pass/{CurrentPharmacy.ID}";
+            SingdeWebURI = $@"https://kaokaodepon.singde.com.tw:5566/id/{CurrentPharmacy.ID}/pass/{CurrentPharmacy.ID}";
 
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -227,10 +228,29 @@ namespace His_Pos.ChromeTabViewModel
                             //開啟監聽
                             watch.EnableRaisingEvents = true;
                             //是否連子資料夾都要偵測
-                            watch.IncludeSubdirectories = true;
+                            watch.IncludeSubdirectories = false;
+
+                            watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
                             //新增時觸發事件
-                            watch.Created += watch_Created;
+                            watch.Created += new FileSystemEventHandler(watch_Created);
+                            //錯誤時觸發事件
+                            watch.Error += watch_Error;
+                            Thread threadPrint = new Thread(TimePrint);
+                            threadPrint.Start();
                         }
+                    }
+
+                    if (c.TypeName != null && c.TypeName.Equals("展望") && Directory.Exists(c.FilePath))
+                    {
+                        FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.xml");
+                        //開啟監聽
+                        watch.EnableRaisingEvents = true;
+                        //是否連子資料夾都要偵測
+                        watch.IncludeSubdirectories = false;
+
+                        watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+                        //新增時觸發事件
+                        watch.Created += new FileSystemEventHandler(watch_Created);
                     }
                 }
 
@@ -263,7 +283,7 @@ namespace His_Pos.ChromeTabViewModel
                 {
                     BusyContent = "回傳合作診所處方中...";
                 }
-                
+
                 PrintCooPre();//列印還未列印藥袋
                 //骨科上傳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
@@ -283,23 +303,20 @@ namespace His_Pos.ChromeTabViewModel
         }
         private void PrintCooPre()
         {
-            CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
-            if (gg.CooPreCollectionView != null)
+            CooperativePrescriptionViewModel cooperativePrescriptionViewModel = new CooperativePrescriptionViewModel();
+            if (cooperativePrescriptionViewModel.CooPreCollectionView != null)
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    foreach (CusPrePreviewBase ff in cooperativePres)
+                    if (Properties.Settings.Default.PrePrint == "True")
                     {
-                        if (Properties.Settings.Default.PrePrint == "True")
+                        foreach (CusPrePreviewBase prescription in cooperativePres)
                         {
-                            foreach (var c in CooperativeClinicSettings)
+                            foreach (var setting in CooperativeClinicSettings)
                             {
-                                if (c.AutoPrint == true)
+                                if (setting.AutoPrint && prescription.IsPrint == false)
                                 {
-                                    if (ff.IsPrint == false)
-                                    {
-                                        gg.PrintAction(ff);
-                                    }
+                                    cooperativePrescriptionViewModel.PrintAction(prescription);
                                 }
                             }
                         }
@@ -307,29 +324,23 @@ namespace His_Pos.ChromeTabViewModel
                 }));
             }
         }
-        void watch_Created(object sender, FileSystemEventArgs e)
+        private static void watch_Created(object sender, FileSystemEventArgs e)
         {
-            //NewFunction.GetXmlFiles();
             var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
-            TaiwanCalendar tc = new TaiwanCalendar();
-            DateTime now = DateTime.Now;
-            string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
-            bool isRe = false;
-            string isRePost = "0";
-            
+           
+           
+
             string DirectPath = e.FullPath;
             //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
             if (DirectPath != null)
             {
                 var cooperativeClinicSettings = new CooperativeClinicSettings();
                 cooperativeClinicSettings.Init();
-                var xDocs = new List<XDocument>();
-                var cusIdNumbers = new List<string>();
-                var paths = new List<string>();
+               
                 #region 先把全部的.txt轉成.xml
                 foreach (var setting in cooperativeClinicSettings)
                 {
-                    if((string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔")
+                    if ((string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔" && setting.FilePath == ((FileSystemWatcher)sender).Path)
                     {
                         if (!string.IsNullOrEmpty(setting.FilePath))
                         {
@@ -367,6 +378,14 @@ namespace His_Pos.ChromeTabViewModel
                     }
                 }
                 #endregion
+                TaiwanCalendar tc = new TaiwanCalendar();
+                DateTime now = DateTime.Now;
+                string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
+                bool isRe = false;
+                string isRePost = "0";
+                var xDocs = new List<XDocument>();
+                var cusIdNumbers = new List<string>();
+                var paths = new List<string>();
                 foreach (var setting in cooperativeClinicSettings)
                 {
                     try
@@ -388,7 +407,7 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     var xDocument = XDocument.Load(filePath);
                                     var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null) 
+                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null)
                                     {
                                         isRePost = "0";
                                     }
@@ -420,34 +439,54 @@ namespace His_Pos.ChromeTabViewModel
                     {
                     }
                 }
-
-                CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
-                if (gg.CooPreCollectionView != null)
-                {
-                    if (Properties.Settings.Default.PrePrint == "True")
-                    {
-                        Application.Current.Dispatcher.Invoke(new Action(() =>
-                        {
-                            foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
-                            {
-                                foreach (var c in cooperativeClinicSettings)
-                                {
-                                    if (c.AutoPrint == true && c.FilePath.Equals(((FileSystemWatcher)sender).Path))
-                                    {
-                                        if (ff.IsPrint == false)
-                                        {
-                                            gg.PrintAction(ff);
-                                        }
-                                    }
-                                }
-                            }
-                        }));
-                    }
-                }
             }
             CooperativeClinicSettings.FilePurge();//打包檔案
         }
-        
+        private static void watch_Error(object sender, ErrorEventArgs e)
+        {
+            Exception error = e.GetException();
+        }
+        private void TimePrint()
+        {
+            bool isClick = false;
+            while (true)
+            {
+                if (DateTime.Now.Second % 10 == 5 && !isClick)
+                {
+                    var cooperativeClinicSettings = new CooperativeClinicSettings();
+                    cooperativeClinicSettings.Init();
+                    var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
+                    CusPrePreviewBases cusPres = new CusPrePreviewBases();
+                    foreach (DataRow r in table.Rows)
+                    {
+                        var xDocument = new XmlDocument();
+                        xDocument.LoadXml(r["CooCli_XML"].ToString());
+                        cusPres.Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml),
+                            r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(),
+                            r.Field<bool>("CooCli_IsRead"), r.Field<bool>("CooCli_IsPrint")));
+                    }
+
+                    if (Properties.Settings.Default.PrePrint == "True")
+                    {
+                        foreach (CusPrePreviewBase previewBase in cusPres)
+                        {
+                            foreach (CooperativeClinicSetting setting in cooperativeClinicSettings)
+                            {
+                                if (setting.AutoPrint && previewBase.IsPrint == false)
+                                {
+                                    previewBase.PrintDir();
+                                }
+                            }
+                        }
+                    }
+                    isClick = true;
+                }
+                else
+                {
+                    isClick = false;
+                }
+            }
+        }
         public static void GetTxtFiles(string path)
         {
             int counter = 0;
@@ -521,7 +560,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 XmlElement insurance = doc.CreateElement("insurance");
                 insurance.SetAttribute("insurance_type", "A");
-                insurance.SetAttribute("serial_code", ss[7].PadLeft(4,'0'));
+                insurance.SetAttribute("serial_code", ss[7].PadLeft(4, '0'));
                 insurance.SetAttribute("except_code", "");
                 insurance.SetAttribute("copayment_code", ss[10]);
                 insurance.SetAttribute("case_type", ss[25]);
@@ -781,7 +820,7 @@ namespace His_Pos.ChromeTabViewModel
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
-        
+
         public static Employee GetEmployeeByID(int ID)
         {
             var result = EmployeeCollection.SingleOrDefault(i => i.ID.Equals(ID));
@@ -882,12 +921,12 @@ namespace His_Pos.ChromeTabViewModel
 
         private void ReportPrint(string printer)
         {
-     
-                    PrintDocument printDoc = new PrintDocument();
-                    printDoc.PrinterSettings.PrinterName = printer;
-                    printDoc.PrintController = new System.Drawing.Printing.StandardPrintController();
-                    printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
-                    mCurrentPageIndex = 0;
+
+            PrintDocument printDoc = new PrintDocument();
+            printDoc.PrinterSettings.PrinterName = printer;
+            printDoc.PrintController = new System.Drawing.Printing.StandardPrintController();
+            printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
+            mCurrentPageIndex = 0;
             try
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -901,7 +940,7 @@ namespace His_Pos.ChromeTabViewModel
             {
                 FunctionWindow.MessageWindow.ShowMessage(ex.Message, Class.MessageType.ERROR);
             }
-    
+
         }
 
         private Stream CreateStream(string name, string fileNameExtension, Encoding encoding,

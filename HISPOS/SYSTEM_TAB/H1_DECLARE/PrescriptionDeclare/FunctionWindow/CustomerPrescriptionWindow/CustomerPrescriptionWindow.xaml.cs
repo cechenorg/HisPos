@@ -10,10 +10,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     /// </summary>
     public partial class CustomerPrescriptionWindow : Window
     {
-        public CustomerPrescriptionWindow(Customer customer, IcCard card)
+        public CustomerPrescriptionWindow()
         {
             InitializeComponent();
-            DataContext = new CustomerPrescriptionViewModel(customer, card);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("CloseCustomerPrescriptionWindow"))
@@ -23,12 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 }
             });
             this.Closing += (sender, e) => Messenger.Default.Unregister(this);
-            if (((CustomerPrescriptionViewModel)DataContext).ShowDialog)
-                ShowDialog();
-            else
-            {
-                Messenger.Default.Unregister(this);
-            }
+           
         }
     }
 }

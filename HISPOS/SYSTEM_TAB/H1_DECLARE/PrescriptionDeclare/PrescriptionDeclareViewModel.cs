@@ -40,6 +40,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineS
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -68,6 +69,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 {
     public class PrescriptionDeclareViewModel : TabBase
     {
+
+        public delegate void GetCustomerPrescriptionDelegate(Prescription receiveMsg);
         public static TabBase TabThis;
 
         public static TabBase getThis()
@@ -554,27 +557,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void ScanPrescriptionQRCodeAction()
         {
-            Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
-            var receive = new QRCodeReceiveWindow();
-            Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
+            var receive = new QRCodeReceiveWindow(GetCustomerPrescription);
         }
 
         private void GetCooperativePresAction()
         {
             //查詢合作診所處方
-            Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
+
             var cooPresWindow = new CooperativePrescriptionWindow();
-            Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
+            CooperativePrescriptionViewModel cooperativePrescriptionViewModel = new CooperativePrescriptionViewModel(GetCustomerPrescription);
+            cooPresWindow.DataContext = cooperativePrescriptionViewModel;
+            cooPresWindow.ShowDialog();
         }
 
-        private void GetCustomerPrescription(NotificationMessage<Prescription> receiveMsg)
+        private void GetCustomerPrescription(Prescription prescription)
         {
             isNotInit = false;
             setBuckleAmount = false;
-            Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
-            Messenger.Default.Unregister<NotificationMessage<Prescription>>("QRCodePrescriptionScanned", GetCustomerPrescription);
-            if (!CheckPatientEqual(receiveMsg.Content)) return;
-            CurrentPrescription = receiveMsg.Content;
+            if (!CheckPatientEqual(prescription)) return;
+            CurrentPrescription = prescription;
             CurrentPrescription.IsBuckle = CurrentPrescription.WareHouse != null;
             CheckNewCustomer();
             CountMedicinePointAction();
@@ -1478,9 +1479,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void CheckCustomPrescriptions()
         {
-            Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
-            var cusPreWindow = new CustomerPrescriptionWindow(CurrentPrescription.Patient, currentCard);
-            Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
+            CustomerPrescriptionViewModel customerPrescriptionViewModel= new CustomerPrescriptionViewModel(CurrentPrescription.Patient, currentCard,GetCustomerPrescription);
+
+            if (customerPrescriptionViewModel.ShowDialog)
+            {
+                var cusPreWindow = new CustomerPrescriptionWindow()
+                {
+                    DataContext = customerPrescriptionViewModel
+                };
+                cusPreWindow.ShowDialog();
+            }
         }
 
         private bool CheckPatientEqual(Prescription receive)

@@ -66,6 +66,9 @@ namespace His_Pos.NewClass.Prescription
             PaymentCategory = new PaymentCategory();
             SpecialTreat = new SpecialTreat();
             Patient = new Customer();
+            PrescriptionPoint = new PrescriptionPoint();
+            PrescriptionStatus = new PrescriptionStatus();
+            Type = new PrescriptionType();
         }
 
         public Prescription(DataRow r, PrescriptionType type)
@@ -1304,60 +1307,61 @@ namespace His_Pos.NewClass.Prescription
             return ChronicSeq != null && ChronicSeq > 0;
         }
 
-        public object PrintClone()
-        {
-            var clone = new Prescription
-            {
-                Patient = (Customer)Patient.Clone(),
-                Institution = VM.GetInstitution(Institution?.ID),
-                Division = (Division)Division.Clone(),
-                Pharmacist = Pharmacist.DeepCloneViaJson(),
-                TempMedicalNumber = TempMedicalNumber,
-                TreatDate = TreatDate,
-                AdjustDate = AdjustDate,
-                MainDisease = MainDisease.DeepCloneViaJson(),
-                SubDisease = SubDisease?.DeepCloneViaJson(),
-                ChronicSeq = ChronicSeq,
-                ChronicTotal = ChronicTotal,
-                AdjustCase = VM.GetAdjustCase(AdjustCase?.ID),
-                PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.ID),
-                Copayment = VM.GetCopayment(Copayment?.Id),
-                PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.ID),
-                SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.ID),
-                PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson(),
-                PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson(),
-                InsertTime = InsertTime,
-                Type = Type,
-                OrderContent = OrderContent,
-                OrderID = OrderID,
-                AdjustDay = AdjustDay,
-                AdjustYear = AdjustYear,
-                AdjustMonth = AdjustMonth,
-                Medicines = new Medicines()
-            };
-            foreach (var m in Medicines)
-            {
-                switch (m)
-                {
-                    case MedicineNHI _:
-                        clone.Medicines.Add((MedicineNHI)m.Clone());
-                        break;
+        //public object PrintClone()
+        //{
+        //    var clone = new Prescription
+        //    {
+        //        Patient = (Customer)Patient.Clone(),
+        //        Institution = VM.GetInstitution(Institution?.ID),
+        //        Division = (Division)Division.Clone(),
+        //        Pharmacist = Pharmacist.DeepCloneViaJson(),
+        //        TempMedicalNumber = TempMedicalNumber,
+        //        TreatDate = TreatDate,
+        //        AdjustDate = AdjustDate,
+        //        MainDisease = MainDisease.DeepCloneViaJson(),
+        //        SubDisease = SubDisease?.DeepCloneViaJson(),
+        //        ChronicSeq = ChronicSeq,
+        //        ChronicTotal = ChronicTotal,
+        //        AdjustCase = VM.GetAdjustCase(AdjustCase?.ID),
+        //        PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.ID),
+        //        Copayment = VM.GetCopayment(Copayment?.Id),
+        //        PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.ID),
+        //        SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.ID),
+        //        PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson(),
+        //        PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson(),
+        //        InsertTime = InsertTime,
+        //        Type = Type,
+        //        OrderContent = OrderContent,
+        //        OrderID = OrderID,
+        //        AdjustDay = AdjustDay,
+        //        AdjustYear = AdjustYear,
+        //        AdjustMonth = AdjustMonth,
+        //        Medicines = new Medicines()
+        //    };
+        //    //var clone = new Prescription();
+        //    foreach (var m in Medicines)
+        //    {
+        //        switch (m)
+        //        {
+        //            case MedicineNHI _:
+        //                clone.Medicines.Add((MedicineNHI)m.Clone());
+        //                break;
 
-                    case MedicineSpecialMaterial _:
-                        clone.Medicines.Add((MedicineSpecialMaterial)m.Clone());
-                        break;
+        //            case MedicineSpecialMaterial _:
+        //                clone.Medicines.Add((MedicineSpecialMaterial)m.Clone());
+        //                break;
 
-                    case MedicineOTC _:
-                        clone.Medicines.Add((MedicineOTC)m.Clone());
-                        break;
+        //            case MedicineOTC _:
+        //                clone.Medicines.Add((MedicineOTC)m.Clone());
+        //                break;
 
-                    default:
-                        clone.Medicines.Add((MedicineVirtual)m.Clone());
-                        break;
-                }
-            }
-            return clone;
-        }
+        //            default:
+        //                clone.Medicines.Add((MedicineVirtual)m.Clone());
+        //                break;
+        //        }
+        //    }
+        //    return clone;
+        //}
 
         public object Clone()
         {
@@ -1389,8 +1393,6 @@ namespace His_Pos.NewClass.Prescription
                 AdjustYear = AdjustYear,
                 AdjustMonth = AdjustMonth,
                 Medicines = new Medicines()
-       
-                
             };
             foreach (var m in Medicines)
             {
@@ -1634,7 +1636,10 @@ namespace His_Pos.NewClass.Prescription
                 return string.Empty;
             }
             if (string.IsNullOrEmpty(Institution?.ID))
+            {
                 return Resources.InstitutionError;
+            }
+
             return VM.GetInstitution(Institution.ID) is null ? Resources.InstitutionError : string.Empty;
         }
 
@@ -1670,34 +1675,54 @@ namespace His_Pos.NewClass.Prescription
 
         private string CheckCopayment()
         {
-            if (Copayment is null) return Resources.CopaymentError;
+            if (Copayment is null)
+            {
+                return Resources.CopaymentError;
+            }
+
             if (!CheckIsHomeCare())
+            {
                 return string.IsNullOrEmpty(Copayment?.Id) ? Resources.CopaymentError : string.Empty;
+            }
+
             Copayment = VM.GetCopayment("009");
             return string.Empty;
         }
 
         private string CheckDivision()
         {
-            if (Division != null && Division.CheckIDNotEmpty()) return string.Empty;
-            if (CheckIsHomeCare() || CheckIsQuitSmoking())
+            if (Division != null && !string.IsNullOrEmpty(Division.ID))
+            {
                 return string.Empty;
+            }
+            if (CheckIsHomeCare() || CheckIsQuitSmoking())
+            {
+                return string.Empty;
+            }
             return Resources.DivisionError;
         }
 
         private string CheckPaymentCategory()
         {
-            if (!(PaymentCategory is null)) return string.Empty;
-            var isChronic = ChronicSeq != null || AdjustCase.IsChronic();
-            if (CheckIsHomeCare() || isChronic)
+            if (!(PaymentCategory is null))
+            {
                 return string.Empty;
+            }
+            bool isChronic = ChronicSeq != null || AdjustCase.IsChronic();
+            if (CheckIsHomeCare() || isChronic)
+            {
+                return string.Empty;
+            }
             return Resources.PaymentCategoryError;
         }
 
         private string CheckDiseaseCode()
         {
             if (string.IsNullOrEmpty(MainDisease?.ID))
+            {
                 return CheckIsHomeCare() ? string.Empty : Resources.DiseaseCodeError;
+            }
+
             return string.Empty;
         }
 
@@ -1705,10 +1730,16 @@ namespace His_Pos.NewClass.Prescription
         private string CheckMedicalNumber(bool noCard)
         {
             if (noCard)
+            {
                 return SetMedicalNumberWithoutICCard();
+            }
+
             var medicalNumberEmpty = CheckMedicalNumberEmpty();
             if (!string.IsNullOrEmpty(medicalNumberEmpty))
+            {
                 return medicalNumberEmpty;
+            }
+
             SetMedicalNumber();
             return string.Empty;
         }
@@ -1738,7 +1769,11 @@ namespace His_Pos.NewClass.Prescription
         {
             if (string.IsNullOrEmpty(TempMedicalNumber))
             {
-                if (!CheckIsHomeCare()) return Resources.MedicalNumberError;
+                if (!CheckIsHomeCare())
+                {
+                    return Resources.MedicalNumberError;
+                }
+
                 TempMedicalNumber = "N";
                 return string.Empty;
             }
@@ -1766,12 +1801,26 @@ namespace His_Pos.NewClass.Prescription
 
         private string CheckChronicTimes()
         {
-            if (string.IsNullOrEmpty(AdjustCase.ID)) return string.Empty;
-            if (!AdjustCase.ID.Equals("2")) return string.Empty;
+            if (string.IsNullOrEmpty(AdjustCase.ID))
+            {
+                return string.Empty;
+            }
+
+            if (!AdjustCase.ID.Equals("2"))
+            {
+                return string.Empty;
+            }
+
             if (ChronicSeq is null && ChronicTotal is null)
+            {
                 return Resources.ChronicTimesError;
+            }
+
             if (ChronicSeq is null)
+            {
                 return Resources.ChronicSeqError;
+            }
+
             return ChronicTotal is null ? Resources.ChronicTotalError : string.Empty;
         }
 
@@ -1779,7 +1828,10 @@ namespace His_Pos.NewClass.Prescription
         {
             CheckPrescribeInstitution();
             if (AdjustCase is null || !AdjustCase.ID.Equals("0"))
+            {
                 AdjustCase = VM.GetAdjustCase("0").DeepCloneViaJson();
+            }
+
             return CheckPharmacist();
         }
 

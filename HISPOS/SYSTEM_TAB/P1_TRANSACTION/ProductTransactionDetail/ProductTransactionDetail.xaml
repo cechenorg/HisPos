@@ -15,6 +15,9 @@
     WindowStartupLocation="CenterScreen"
     ResizeMode="NoResize"
     mc:Ignorable="d">
+    <Window.DataContext>
+        <local:ProductTransactionDetailViewModel />
+    </Window.DataContext>
     <Window.Resources>
         <Style x:Key="ActionLabelStyle" TargetType="{x:Type Label}">
             <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
@@ -78,7 +81,7 @@
                     Width="100"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content="0"
+                    Content="{Binding RealTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="24"
                     Foreground="Black" />
@@ -95,7 +98,7 @@
                     Width="100"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content=""
+                    Content="{Binding Cashier, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
                     Foreground="Black" />
@@ -116,7 +119,7 @@
                     Margin="0,0,0,0"
                     Background="IndianRed"
                     BorderThickness="0"
-                    Click="btnSubmit_Click"
+                    Command="{Binding SubmitCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Content="送出修改"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
@@ -128,7 +131,7 @@
                     Margin="10,0,0,0"
                     Background="DimGray"
                     BorderThickness="0"
-                    Click="btnDelete_Click"
+                    Command="{Binding DeleteCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Content="刪除"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16" />
@@ -139,7 +142,7 @@
                     Margin="10,0,0,0"
                     Background="DimGray"
                     BorderThickness="0"
-                    Click="btnReturn_Click"
+                    Command="{Binding ReturnCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Content="退貨"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16" />
@@ -168,7 +171,7 @@
                     Width="65"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content="0"
+                    Content="{Binding Cash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
@@ -185,7 +188,7 @@
                     Width="65"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content="0"
+                    Content="{Binding Card, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
@@ -202,7 +205,7 @@
                     Width="65"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content="0"
+                    Content="{Binding Voucher, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
@@ -219,7 +222,7 @@
                     Width="65"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content="0"
+                    Content="{Binding CashCoupon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
@@ -236,7 +239,7 @@
                     Width="65"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content="0"
+                    Content="{Binding Prepay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
@@ -261,6 +264,7 @@
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
                     Foreground="Black"
+                    Text="{Binding CardNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     TextChanged="tb_TextChanged">
                     <TextBox.InputScope>
                         <InputScope>
@@ -286,6 +290,7 @@
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
                     Foreground="Black"
+                    Text="{Binding TaxNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     TextChanged="tb_TextChanged">
                     <TextBox.InputScope>
                         <InputScope>
@@ -309,6 +314,7 @@
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     FontFamily="Segoe UI Semi"
+                    Content="{Binding InvoiceNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontSize="16"
                     Foreground="Black" />
                 <Label
@@ -337,6 +343,7 @@
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
                     Foreground="Black"
+                    Text="{Binding CusName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     TextChanged="tb_TextChanged"
                     KeyDown="tbCusName_KeyDown">
                     <TextBox.InputScope>
@@ -362,6 +369,7 @@
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
                     FontFamily="Segoe UI Semibold"
+                    Content="{Binding CusPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontSize="16"
                     Foreground="Black" />
             </StackPanel>
@@ -382,7 +390,7 @@
                     Width="95"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content="0"
+                    Content="{Binding PreTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
                     Foreground="Black" />
@@ -400,7 +408,7 @@
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
-                    Content="0"
+                    Content="{Binding DiscountAmt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
@@ -424,7 +432,7 @@
                     Width="95"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content=""
+                    Content="{Binding PriceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
@@ -442,6 +450,8 @@
             EnableRowVirtualization="False"
             GridLinesVisibility="Horizontal"
             MouseDoubleClick="ProductDataGrid_MouseDoubleClick"
+            ItemsSource="{Binding Details, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding Detail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectionUnit="Cell" Grid.ColumnSpan="2" Margin="0,0,-0.4,44.6" Grid.RowSpan="2">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -468,7 +478,7 @@
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource Shadow}" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding Path=TraDet_IsGift}" Value="1">
+                        <DataTrigger Binding="{Binding TraDet_IsGift}" Value="1">
                             <Setter Property="Background">
                                 <Setter.Value>
                                     <SolidColorBrush Opacity="0.5" Color="ForestGreen" />
@@ -507,7 +517,7 @@
                                 Width="140"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding Path=TraDet_ProductID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding TraDet_ProductID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="16"
                                 InputMethod.IsInputMethodEnabled="False" />
@@ -527,7 +537,7 @@
                                     Width="320"
                                     Margin="0,0,20,0"
                                     VerticalAlignment="Center"
-                                    Content="{Binding Path=TraDet_ProductName}"
+                                    Content="{Binding TraDet_ProductName}"
                                     FontFamily="Segoe UI Semibold"
                                     FontSize="16" />
                             </StackPanel>
@@ -544,7 +554,7 @@
                 <DataGridTextColumn
                     x:Name="Price"
                     Width="100"
-                    Binding="{Binding Path=TraDet_Price, UpdateSourceTrigger=PropertyChanged}"
+                    Binding="{Binding TraDet_Price, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Header="售價"
@@ -554,7 +564,7 @@
                             <Setter Property="HorizontalAlignment" Value="Center" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Irr}" Value="Yes">
+                                <DataTrigger Binding="{Binding Irr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="Yes">
                                     <Setter Property="Foreground" Value="Red" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -569,7 +579,7 @@
                                 Width="40"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding Path=TraDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding TraDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="16" />
                         </DataTemplate>
@@ -577,7 +587,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Width="80"
-                    Binding="{Binding Path=TraDet_PriceSum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Binding="{Binding TraDet_PriceSum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Header="小計"
@@ -597,7 +607,7 @@
                                 Width="40"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding Path=TraDet_DepositAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding TraDet_DepositAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="16" />
                         </DataTemplate>
@@ -615,13 +625,29 @@
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="18"
                                 Foreground="Black"
-                                IsEnabled="{Binding Path=IsReward_Format, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectedIndex="0"
+                                IsEnabled="{Binding IsReward_Format, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                IsReadOnly="{Binding IsReward_Format, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectedValuePath="Emp_CashierID"
-                                Text="{Binding Path=TraDet_RewardPersonnel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                SelectedItem="{Binding Emp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Emps, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTextColumn
+                    Width="80"
+                    Binding="{Binding TraDet_RewardPercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    Header="績效"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel
@@ -640,7 +666,7 @@
                 x:Name="lblTradeTime"
                 Width="180"
                 HorizontalAlignment="Left"
-                Content=""
+                Content="{Binding TradeTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18" />
             <Label
@@ -654,7 +680,7 @@
                 x:Name="lblUpdateTime"
                 Width="250"
                 HorizontalAlignment="Left"
-                Content=""
+                Content="{Binding UpdateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18" />
             <Label
