@@ -463,7 +463,7 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("TreatmentDateReturn", treatReturn),
                         new ReportParameter("RecId", " "), //病歷號
                         new ReportParameter("Division",p.Division is null ?string.Empty:p.Division.Name),
-                        new ReportParameter("Hospital", p.Institution.Name),
+                        new ReportParameter("Hospital", p.Institution is null ? VM.CurrentPharmacy.Name : p.Institution.Name),
                         new ReportParameter("PaySelf", (p.PrescriptionPoint.AmountSelfPay ?? 0).ToString()),
                         new ReportParameter("ServicePoint", p.PrescriptionPoint.MedicalServicePoint.ToString()),
                         new ReportParameter("TotalPoint", p.PrescriptionPoint.TotalPoint.ToString()),
@@ -514,7 +514,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("PatientName", p.Patient.Name),
                 new ReportParameter("PatientGender_Birthday",$"{cusGender}/{DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true)}"),
                 new ReportParameter("TreatmentDate", treatmentDateChi),
-                new ReportParameter("Hospital", p.Institution.Name),
+                new ReportParameter("Hospital", p.Institution is null ? VM.CurrentPharmacy.Name : p.Institution.Name),
                 new ReportParameter("PaySelf", (p.PrescriptionPoint.AmountSelfPay ?? 0).ToString()),
                 new ReportParameter("ServicePoint", p.PrescriptionPoint.MedicalServicePoint.ToString()),
                 new ReportParameter("TotalPoint", p.PrescriptionPoint.TotalPoint.ToString()),
