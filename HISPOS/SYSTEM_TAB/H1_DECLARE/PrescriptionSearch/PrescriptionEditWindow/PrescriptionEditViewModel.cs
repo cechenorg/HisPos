@@ -377,10 +377,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             OriginalPrescription = p;
             ChronicTimesCanEdit = !OriginalPrescription.AdjustCase.IsChronic();
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
-            if (EditedPrescription.Institution != null && EditedPrescription.Institution.ID == "3532082753")
-            {
-                PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
-            }
+            //if (EditedPrescription.Institution != null)// && EditedPrescription.Institution.ID == "3532082753"
+            //{
+            //    PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
+            //}
 
             EditedPrescription.ID = p.ID;
             EditedPrescription.SourceId = p.SourceId;
@@ -404,17 +404,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void InitPrescription()
         {
             if (EditedPrescription.Division != null)
+            {
                 EditedPrescription.Division = VM.GetDivision(OriginalPrescription.Division?.ID);
-            if (MedicalPersonnels.Count(m => m.IDNumber.Equals(EditedPrescription.Pharmacist.IDNumber)) == 0)
-                MedicalPersonnels.Add(EditedPrescription.Pharmacist);
+            }
+                
+            //if (MedicalPersonnels.Count(m => m.IDNumber.Equals(EditedPrescription.Pharmacist.IDNumber)) == 0)
+            //{
+            //    MedicalPersonnels.Add(EditedPrescription.Pharmacist);
+            //}
+                
             EditedPrescription.Pharmacist =
                 MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(OriginalPrescription.Pharmacist.IDNumber));
             EditedPrescription.AdjustCase = VM.GetAdjustCase(OriginalPrescription.AdjustCase.ID);
             EditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
-            if (EditedPrescription.Institution != null &&  EditedPrescription.Institution.ID == "3532082753")
-            {
-                PrintEditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
-            }
+            //if (EditedPrescription.Institution != null &&  EditedPrescription.Institution.ID == "3532082753")
+            //{
+            //    PrintEditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
+            //}
             if (OriginalPrescription.PrescriptionCase != null)
                 EditedPrescription.PrescriptionCase = VM.GetPrescriptionCases(OriginalPrescription.PrescriptionCase?.ID);
             if (OriginalPrescription.PaymentCategory != null)
@@ -537,10 +543,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void PrintMedBagAction()
         {
-            if (EditedPrescription.Institution.ID == "3532082753")
-            {
-                PrintEditedPrescription.Division.Name = "";
-            }
+            //if (EditedPrescription.Institution.ID == "3532082753")
+            //{
+            //    PrintEditedPrescription.Division.Name = "";
+            //}
             var printConfirmResult = NewFunction.CheckPrint(EditedPrescription);
             var printMedBag = printConfirmResult[0];
             var printSingle = printConfirmResult[1];
@@ -676,18 +682,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 case "I21" when EditedPrescription.PrescriptionPoint.MedicinePoint > 100:
                     EditedPrescription.Copayment = VM.GetCopayment("I20");
-                    if (EditedPrescription.Institution.ID == "3532082753")
-                    {
-                        PrintEditedPrescription.Copayment = VM.GetCopayment("I20");
-                    }
+                    //if (EditedPrescription.Institution.ID == "3532082753")
+                    //{
+                    //    PrintEditedPrescription.Copayment = VM.GetCopayment("I20");
+                    //}
                     break;
 
                 case "I20" when EditedPrescription.PrescriptionPoint.MedicinePoint <= 100:
                     EditedPrescription.Copayment = VM.GetCopayment("I21");
-                    if (EditedPrescription.Institution.ID == "3532082753")
-                    {
-                        PrintEditedPrescription.Copayment = VM.GetCopayment("I21");
-                    }
+                    //if (EditedPrescription.Institution.ID == "3532082753")
+                    //{
+                    //    PrintEditedPrescription.Copayment = VM.GetCopayment("I21");
+                    //}
                     break;
             }
             DataChangedAction();
@@ -835,10 +841,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void RedoEditAction()
         {
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
-            if (EditedPrescription.Institution.ID == "3532082753")
-            {
-                PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
-            }
+            //if (EditedPrescription.Institution.ID == "3532082753")
+            //{
+            //    PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
+            //}
             EditedPrescription.ID = OriginalPrescription.ID;
             EditedPrescription.SourceId = OriginalPrescription.SourceId;
             PrintEditedPrescription.ID = OriginalPrescription.ID;

@@ -135,8 +135,8 @@ namespace His_Pos.NewClass.Trade
             foreach (var item in detail)
             {
                 DataRow[] drs = empList.Select(string.Format("Emp_Name = '{0}'", Convert.ToString(item.Emp.Emp_Name)));
-                string Id = Convert.ToString(drs[0]["Emp_ID"]);
-
+                string Id = Convert.ToString(drs[0]["Emp_ID"]) == "0" ? null : Convert.ToString(drs[0]["Emp_ID"]);
+                string rewardPercent = item.TraDet_RewardPercent == 0 ? null : Convert.ToString(item.TraDet_RewardPercent);
                 dt.Rows.Add(
                     item.TraDet_DetailID,
                     item.TraDet_ProductID,
@@ -147,7 +147,7 @@ namespace His_Pos.NewClass.Trade
                     item.TraDet_IsGift,
                     item.TraDet_DepositAmount,
                     Id,
-                    item.TraDet_RewardPercent);
+                    rewardPercent);
             }
             return dt;
         }
