@@ -28,6 +28,10 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                 DisplayFilePath = tempsplit[tempsplit.Length - 1];
             }
             IsInstitutionEdit = true;
+            if (r.Table.Columns.Contains("CooCli_Number"))
+            {
+                Number = r.Field<int>("CooCli_Number");
+            }
         }
 
         public CooperativeClinicSetting()
@@ -42,6 +46,14 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
         {
             get { return cooperavieClinic; }
             set { Set(() => CooperavieClinic, ref cooperavieClinic, value); }
+        }
+
+        private int number;
+
+        public int Number
+        {
+            get { return number; }
+            set { Set(() => Number, ref number, value); }
         }
 
         private bool autoPrint = false;
