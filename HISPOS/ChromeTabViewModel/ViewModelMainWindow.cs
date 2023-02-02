@@ -37,6 +37,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using StringRes = His_Pos.Properties.Resources;
@@ -139,7 +140,6 @@ namespace His_Pos.ChromeTabViewModel
         public static Institutions Institutions { get; set; }
         public static WareHouses WareHouses { get; set; }
         public static CooperativeClinicSettings CooperativeClinicSettings { get; set; }
-        public CusPrePreviewBases cooperativePres { get; set; }
         public static Divisions Divisions { get; set; }
         public static AdjustCases AdjustCases { get; set; }
         public static PaymentCategories PaymentCategories { get; set; }
@@ -208,7 +208,7 @@ namespace His_Pos.ChromeTabViewModel
                 Divisions = new Divisions();
                 BusyContent = "取得合作院所設定";
                 CooperativeClinicSettings = new CooperativeClinicSettings();
-                cooperativePres = new CusPrePreviewBases();
+                CusPrePreviewBases cooperativePres = new CusPrePreviewBases();
 
                 CooperativeClinicSettings.Init();
                 var xDocs = new List<XDocument>();
@@ -238,7 +238,8 @@ namespace His_Pos.ChromeTabViewModel
                             watch.Error += watch_Error;
                             //Thread threadPrint = new Thread(TimePrint);
                             //threadPrint.Start();
-                            Task.Run(() => TimePrint());
+                            //Task task = new Task(() => TimePrint());
+                            //await Task.Run(() => TimePrint());
                         }
                     }
 
@@ -286,7 +287,7 @@ namespace His_Pos.ChromeTabViewModel
                     BusyContent = "回傳合作診所處方中...";
                 }
 
-                PrintCooPre();//列印還未列印藥袋
+                PrintCooPre(cooperativePres);//列印還未列印藥袋
                 //骨科上傳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
@@ -299,27 +300,39 @@ namespace His_Pos.ChromeTabViewModel
                 MainWindow.ServerConnection.OpenConnection();
                 HisApiFunction.CheckDailyUpload();
                 MainWindow.ServerConnection.CloseConnection();
+                RunBackgroundPrintTimer();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
-        private void PrintCooPre()
+
+        private void RunBackgroundPrintTimer()
+        {
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Interval = TimeSpan.FromSeconds(10);
+            dispatcherTimer.Tick += DispatcherTimerOnTick;
+            dispatcherTimer.Start();
+        }
+
+        private void DispatcherTimerOnTick(object sender, EventArgs e)
+        {
+            TimePrint();
+        }
+
+        private void PrintCooPre(CusPrePreviewBases cooperativePres)
         {
             CooperativePrescriptionViewModel cooperativePrescriptionViewModel = new CooperativePrescriptionViewModel();
-            if (cooperativePrescriptionViewModel.CooPreCollectionView != null)
+            if (cooperativePrescriptionViewModel.CooPreCollectionView != null || Properties.Settings.Default.PrePrint == "True")
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    if (Properties.Settings.Default.PrePrint == "True")
+                    foreach (CusPrePreviewBase prescription in cooperativePres)
                     {
-                        foreach (CusPrePreviewBase prescription in cooperativePres)
+                        foreach (var setting in CooperativeClinicSettings)
                         {
-                            foreach (var setting in CooperativeClinicSettings)
+                            if (setting.AutoPrint && prescription.IsPrint == false && prescription.Institution.ID == setting.CooperavieClinic.ID)
                             {
-                                if (setting.AutoPrint && prescription.IsPrint == false)
-                                {
-                                    cooperativePrescriptionViewModel.PrintAction(prescription);
-                                }
+                                cooperativePrescriptionViewModel.PrintAction(prescription);
                             }
                         }
                     }
@@ -328,10 +341,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         private static void watch_Created(object sender, FileSystemEventArgs e)
         {
-            var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
-           
-           
-
+            DataTable table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
             string DirectPath = e.FullPath;
             //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
             if (DirectPath != null)
@@ -448,44 +458,39 @@ namespace His_Pos.ChromeTabViewModel
         {
             Exception error = e.GetException();
         }
-        private async Task TimePrint()
+        private void TimePrint()
         {
             bool isClick = false;
-            while (true)
+            if (Properties.Settings.Default.PrePrint == "True" )
             {
-                if (DateTime.Now.Second % 10 == 5 && !isClick)
-                {
-                    var cooperativeClinicSettings = new CooperativeClinicSettings();
-                    cooperativeClinicSettings.Init();
-                    var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
-                    CusPrePreviewBases cusPres = new CusPrePreviewBases();
-                    foreach (DataRow r in table.Rows)
-                    {
-                        var xDocument = new XmlDocument();
-                        xDocument.LoadXml(r["CooCli_XML"].ToString());
-                        cusPres.Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml),
-                            r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(),
-                            r.Field<bool>("CooCli_IsRead"), r.Field<bool>("CooCli_IsPrint")));
-                    }
+                MainWindow.ServerConnection.OpenConnection();
+                var cooperativeClinicSettings = new CooperativeClinicSettings();
+                cooperativeClinicSettings.Init();
+                var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
+                MainWindow.ServerConnection.CloseConnection();
 
-                    if (Properties.Settings.Default.PrePrint == "True")
+                CusPrePreviewBases cusPres = new CusPrePreviewBases();
+                foreach (DataRow r in table.Rows)
+                {
+                    var xDocument = new XmlDocument();
+                    xDocument.LoadXml(r["CooCli_XML"].ToString());
+                    cusPres.Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml),
+                        r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(),
+                        r.Field<bool>("CooCli_IsRead"), r.Field<bool>("CooCli_IsPrint")));
+                }
+
+                if (Properties.Settings.Default.PrePrint == "True")
+                {
+                    foreach (CusPrePreviewBase previewBase in cusPres)
                     {
-                        foreach (CusPrePreviewBase previewBase in cusPres)
+                        foreach (CooperativeClinicSetting setting in cooperativeClinicSettings)
                         {
-                            foreach (CooperativeClinicSetting setting in cooperativeClinicSettings)
+                            if (setting.AutoPrint && previewBase.IsPrint == false && setting.CooperavieClinic.ID == previewBase.Institution.ID)
                             {
-                                if (setting.AutoPrint && previewBase.IsPrint == false)
-                                {
-                                    previewBase.PrintDir();
-                                }
+                                previewBase.PrintDir();
                             }
                         }
                     }
-                    isClick = true;
-                }
-                else
-                {
-                    isClick = false;
                 }
             }
         }
