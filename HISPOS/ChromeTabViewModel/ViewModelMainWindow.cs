@@ -330,7 +330,7 @@ namespace His_Pos.ChromeTabViewModel
                     {
                         foreach (var setting in CooperativeClinicSettings)
                         {
-                            if (setting.AutoPrint && prescription.IsPrint == false)
+                            if (setting.AutoPrint && prescription.IsPrint == false && prescription.Institution.ID == setting.CooperavieClinic.ID)
                             {
                                 cooperativePrescriptionViewModel.PrintAction(prescription);
                             }
