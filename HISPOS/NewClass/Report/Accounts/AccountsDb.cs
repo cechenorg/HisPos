@@ -334,7 +334,7 @@ namespace His_Pos.NewClass.Report.Accounts
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("eDate", edate));
-            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[BalanceSheet]", parameters);
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[BalanceSheetNew]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }

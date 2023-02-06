@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 
 namespace His_Pos.NewClass.BalanceSheet
 {
@@ -23,7 +24,7 @@ namespace His_Pos.NewClass.BalanceSheet
             ID = row.Field<string>("acctLevel2");
             Name = row.Field<string>("acctName2");
             //Type = row.Field<string>("acctLevel1") == "1" ? "借" : "貸";
-            Value = row.Field<int>("acctValue");
+            Value = Convert.ToInt32(row["acctValue"]);//row.Field<int>("acctValue");
         }
     }
 }
