@@ -376,6 +376,7 @@
     <Compile Include="NewClass\Report\IncomeStatement\IncomeStatementRawData.cs" />
     <Compile Include="InfraStructure\ReportService.cs" />
     <Compile Include="NewClass\Trade\TradeRecord\TradeDetail.cs" />
+    <Compile Include="Service\HISPOSWebApiService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountReport\ClosingAccountReportRepository.cs" />
