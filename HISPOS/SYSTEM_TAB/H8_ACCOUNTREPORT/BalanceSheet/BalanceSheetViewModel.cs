@@ -746,53 +746,22 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     newRow["acctLevel1"] = acctLevel1;
                     newRow["acctLevel2"] = acctLevel2;
                     newRow["acctName2"] = dr["acctName2"];
-                    if(acctLevel2 == 1130)
-                    {
-                        DataTable tbStockDB = StockValueDb.GetStockVale(new DateTime(_endDate.Year, _endDate.Month,1), _endDate);//直接取庫存現值報表
-                        if(tbStockDB != null && tbStockDB.Rows.Count > 0)
-                        {
-                            newRow["acctValue"] = Convert.ToInt32(tbStockDB.Compute("Sum(Value)", string.Empty));
-                        }
-                        else
-                        {
-                            newRow["acctValue"] = 0;
-                        }
-                    }
-                    else
-                    {
-                        newRow["acctValue"] = Convert.ToInt32(balanceData.Compute("Sum(acctValue)", string.Format("acctLevel1 = {0} And acctLevel2 = {1}", acctLevel1, acctLevel2)));
-                    }
+                    newRow["acctValue"] = Convert.ToInt32(balanceData.Compute("Sum(acctValue)", string.Format("acctLevel1 = {0} And acctLevel2 = {1}", acctLevel1, acctLevel2)));
                     
                     tbLeftGrid.Rows.Add(newRow);
                 }
                 else
                 {
                     DataRow newRow = tbRightGrid.NewRow();
-                    newRow["acctLevel1"] = acctLevel1;
-                    newRow["acctLevel2"] = acctLevel2;
-                    newRow["acctName2"] = dr["acctName2"];
-
                     if (tbRightGrid.Select(string.Format("acctLevel2 = {0}", acctLevel2)).Length > 0)
                     {
                         continue;
                     }
-                    else if(acctLevel2 == 3430)
-                    {
-                        var expenseDatas = ReportService.GetIncomeStatementDetail(_endDate.AddYears(-1).Year).ToList();
-                        int total = Convert.ToInt32(expenseDatas.Sum(s=>s.AcctValue));
-                        total += Convert.ToInt32(balanceData.Compute("Sum(acctValue)", string.Format("acctLevel1 = {0} And acctLevel2 = {1}", acctLevel1, acctLevel2)));
-                        newRow["acctValue"] = total;
-                    }
-                    else if (acctLevel2 == 3440)
-                    {                        
-                        var expenseDatas = ReportService.GetIncomeStatementDetail(_endDate.Year).ToList();
-                        int total = Convert.ToInt32(expenseDatas.Sum(s => s.AcctValue));
-                        newRow["acctValue"] = total;
-                    }
-                    else
-                    {
-                        newRow["acctValue"] = Convert.ToInt32(balanceData.Compute("Sum(acctValue)", string.Format("acctLevel1 = {0} And acctLevel2 = {1}", acctLevel1, acctLevel2)));
-                    }
+                    newRow["acctLevel1"] = acctLevel1;
+                    newRow["acctLevel2"] = acctLevel2;
+                    newRow["acctName2"] = dr["acctName2"];
+                    newRow["acctValue"] = Convert.ToInt32(balanceData.Compute("Sum(acctValue)", string.Format("acctLevel1 = {0} And acctLevel2 = {1}", acctLevel1, acctLevel2)));
+
                     tbRightGrid.Rows.Add(newRow);
                 }
             }
