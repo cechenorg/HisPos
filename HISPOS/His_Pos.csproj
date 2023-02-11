@@ -3349,6 +3349,10 @@
       <Project>{2719a667-ad03-4056-8d56-116c802564c2}</Project>
       <Name>DomainModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DTO\DTO.csproj">
+      <Project>{01d8e52f-02a9-4c9a-8a1f-a37257b45527}</Project>
+      <Name>DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InfraStructure\InfraStructure.csproj">
       <Project>{80c7a5be-46f5-46ee-9e10-c14dd8a6e281}</Project>
       <Name>InfraStructure</Name>
