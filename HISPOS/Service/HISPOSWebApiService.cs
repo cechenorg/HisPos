@@ -15,37 +15,67 @@ namespace His_Pos.Service
     internal class HISPOSWebApiService
     {
 
-        private const string webapiPath = @"https://kaokaodepon.singde.com.tw:60005/ServerAPI/";
+        //private const string webapiPath = @"https://kaokaodepon.singde.com.tw:60005/ServerWebAPI/";
+
+        private const string webapiPath = @"https://localhost:7129/ServerWebAPI/";
         public async Task SyncData()
         {
 
-            await GetAPIData<AdjustCaseDTO>("GetAdjustCase");
+            var data = await GetAPIData<AdjustCaseDTO>("GetAdjustCase");
         }
 
-        private async Task<T> GetAPIData<T>(string route)
+
+
+
+        private async Task<IEnumerable<T>> GetAPIData<T>(string route)
         {
             string targetUrl = webapiPath + "GetAdjustCase";
 
             HttpWebRequest request = WebRequest.Create(targetUrl) as HttpWebRequest;
             request.Method = "GET";
-            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentType = "application/json";
             request.Timeout = 30000;
 
             string result = "";
-            // 取得回應資料
-            using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+
+            try
             {
+                var response = await request.GetResponseAsync();
+
                 using (StreamReader sr = new StreamReader(response.GetResponseStream()))
                 {
                     result = sr.ReadToEnd();
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
-            
-            var DTO = JsonConvert.DeserializeObject<T>(result);
 
-            return DTO;
+
+            ResponseData<T> responseData = new ResponseData<T>();
+            try
+            {
+                if (string.IsNullOrEmpty(result) == false)
+                    responseData = JsonConvert.DeserializeObject<ResponseData<T>>(result);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+
+            return responseData.Data;
         }
 
+    }
+
+    public class ResponseData<T>
+    {
+        public DateTime DateTime => DateTime.Now;
+
+        public IEnumerable<T> Data { get; set; } = new List<T>();
     }
 }

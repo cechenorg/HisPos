@@ -216,11 +216,16 @@ namespace His_Pos.ChromeTabViewModel
             set => initialData = value;
         }
 
-        private void ExecuteInitData()
+        private async void ExecuteInitData()
         {
+            BusyContent = "同步中心資料";
+            HISPOSWebApiService webApiService = new HISPOSWebApiService();
+            await webApiService.SyncData();
+
             var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
+            worker.DoWork +=  (o, ea) =>
             {
+
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "取得庫別名";
                 WareHouses = new WareHouses(WareHouseDb.Init());
@@ -257,12 +262,7 @@ namespace His_Pos.ChromeTabViewModel
                             //新增時觸發事件
                             watch.Created += new FileSystemEventHandler(watch_Created);
                             //錯誤時觸發事件
-                            watch.Error += watch_Error;
-                            //Thread threadPrint = new Thread(TimePrint);
-                            //threadPrint.Start();
-                            //Task task = new Task(() => TimePrint());
-                            //await Task.Run(() => TimePrint());
-                        }
+                            watch.Error += watch_Error;                        }
                     }
 
                     if (c.TypeName != null && c.TypeName.Equals("展望") && Directory.Exists(c.FilePath))

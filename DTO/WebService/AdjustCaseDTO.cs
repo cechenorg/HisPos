@@ -8,6 +8,8 @@ namespace WebServiceDTO
 {
     public class AdjustCaseDTO
     {
+        public AdjustCaseDTO(){}
+
         public string Adj_ID { get; set; }
         public string Adj_Name { get; set; }
     }
