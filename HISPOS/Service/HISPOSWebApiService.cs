@@ -21,15 +21,60 @@ namespace His_Pos.Service
         public async Task SyncData()
         {
 
+            List<Task> taskList = new List<Task>()
+            {
+                SyncSpecialMedicines(),
+                SyncSmokeMedicines(),
+                SyncMedicines(),
+                SyncInstitutions(),
+                SyncDivisions(),
+                SyncDiseasesCode(),
+                SyncAdjustCase(),
+            };
+
+            await Task.WhenAll(taskList);
+        }
+
+        private async Task SyncSpecialMedicines()
+        {
+            var data = await GetAPIData<NHISpecialMedicineDTO>("GetNHISpecialMedicines");
+        }
+
+        private async Task SyncSmokeMedicines()
+        {
+            var data = await GetAPIData<NHISmokeMedicineDTO>("GetNHISmokeMedicines");
+        }
+
+        private async Task SyncMedicines()
+        {
+            var data = await GetAPIData<NHIMedicineDTO>("GetNHIMedicines");
+        }
+
+        private async Task SyncInstitutions()
+        {
+            var data = await GetAPIData<InstitutionDTO>("GetInstitutions");
+        }
+
+        private async Task SyncDivisions()
+        {
+            var data = await GetAPIData<DivisionDTO>("GetDivisions");
+        }
+
+        private async Task SyncDiseasesCode()
+        {
+            var data = await GetAPIData<DiseaseCodeDTO>("GetDiseaseCode");
+        }
+
+        private async Task SyncAdjustCase()
+        {
             var data = await GetAPIData<AdjustCaseDTO>("GetAdjustCase");
         }
 
 
 
-
         private async Task<IEnumerable<T>> GetAPIData<T>(string route)
         {
-            string targetUrl = webapiPath + "GetAdjustCase";
+            string targetUrl = webapiPath + route;
 
             HttpWebRequest request = WebRequest.Create(targetUrl) as HttpWebRequest;
             request.Method = "GET";
