@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Newtonsoft.Json;
+using WebServiceDTO;
 
 namespace His_Pos.Service
 {
@@ -18,7 +19,7 @@ namespace His_Pos.Service
         public async Task SyncData()
         {
 
-            //await GetAPIData<AdjustCaseDTO>("GetAdjustCase");
+            await GetAPIData<AdjustCaseDTO>("GetAdjustCase");
         }
 
         private async Task<T> GetAPIData<T>(string route)
