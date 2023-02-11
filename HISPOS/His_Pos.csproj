@@ -298,7 +298,7 @@
     </Reference>
     <Reference Include="WebServiceDTO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\WebServiceDTO.dll</HintPath>
+      <HintPath>..\..\WebAPICore\WebServiceDTO\bin\Debug\net6.0\WebServiceDTO.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -2762,7 +2762,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Content Include="WebServiceDTO.dll" />
     <Resource Include="Images\RedDot.png" />
     <Resource Include="Images\line_enable.png" />
     <Content Include="RDLC\MedBagReportSingleByCE.rdlc">
