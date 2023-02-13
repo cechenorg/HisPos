@@ -26,29 +26,34 @@ namespace His_Pos.InfraStructure
             ExecProc(data, $"{schemeName}.[DataSource].[SyncSpecialMedicine]");
         }
 
-        private async Task SyncSmokeMedicines()
+        public void SyncSmokeMedicines(List<NHISmokeMedicineDTO> data)
         {
-
+            ExecProc(data, $"{schemeName}.[DataSource].[SyncSmokeMedicines]");
         }
 
-        private async Task SyncMedicines()
+        public void SyncMedicines(List<NHIMedicineDTO> data)
         {
+            ExecProc(data, $"{schemeName}.[DataSource].[SyncMedicines]");
         }
 
-        private async Task SyncInstitutions()
+        public void SyncInstitutions(List<InstitutionDTO> data)
         {
+            ExecProc(data, $"{schemeName}.[DataSource].[SyncInstitutions]");
         }
 
-        private async Task SyncDivisions()
+        public void SyncDivisions(List<DivisionDTO> data)
         {
+            ExecProc(data, $"{schemeName}.[DataSource].[SyncDivisions]");
         }
 
-        private async Task SyncDiseasesCode()
+        public void SyncDiseasesCode(List<DiseaseCodeDTO> data)
         {
+            ExecProc(data, $"{schemeName}.[DataSource].[SyncDiseasesCode]");
         }
 
-        private async Task SyncAdjustCase()
+        public void SyncAdjustCase(List<AdjustCaseDTO> data)
         {
+            ExecProc(data, $"{schemeName}.[DataSource].[SyncAdjustCase]");
         }
 
         private void ExecProc<T>(List<T> data, string spName)

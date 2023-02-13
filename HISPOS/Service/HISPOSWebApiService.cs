@@ -48,31 +48,37 @@ namespace His_Pos.Service
         private async Task SyncSmokeMedicines()
         {
             var data = await GetAPIData<NHISmokeMedicineDTO>("GetNHISmokeMedicines");
+            _commonDataRepository.SyncSmokeMedicines(data.ToList());
         }
 
         private async Task SyncMedicines()
         {
             var data = await GetAPIData<NHIMedicineDTO>("GetNHIMedicines");
+            _commonDataRepository.SyncMedicines(data.ToList());
         }
 
         private async Task SyncInstitutions()
         {
             var data = await GetAPIData<InstitutionDTO>("GetInstitutions");
+            _commonDataRepository.SyncInstitutions(data.ToList());
         }
 
         private async Task SyncDivisions()
         {
             var data = await GetAPIData<DivisionDTO>("GetDivisions");
+            _commonDataRepository.SyncDivisions(data.ToList());
         }
 
         private async Task SyncDiseasesCode()
         {
             var data = await GetAPIData<DiseaseCodeDTO>("GetDiseaseCode");
+            _commonDataRepository.SyncDiseasesCode(data.ToList());
         }
 
         private async Task SyncAdjustCase()
         {
             var data = await GetAPIData<AdjustCaseDTO>("GetAdjustCase");
+            _commonDataRepository.SyncAdjustCase(data.ToList());
         }
 
 
