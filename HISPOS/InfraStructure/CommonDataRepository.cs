@@ -8,7 +8,9 @@ using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DomainModel;
 using WebServiceDTO;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 namespace His_Pos.InfraStructure
 {
@@ -21,20 +23,7 @@ namespace His_Pos.InfraStructure
         }
         public void SyncNHISpecialMedicine(List<NHISpecialMedicineDTO> data)
         {
-            SQLServerConnection.DapperQuery( (conn) =>
-            {
-                try
-                {
-                    conn.Execute($"{schemeName}.[DataSource].[SyncSpecialMedicine]",
-                        param: new { SpecialMedicine = ConvertToDataTable(data) },
-                        commandType: CommandType.StoredProcedure);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-              
-            });
+            ExecProc(data, $"{schemeName}.[DataSource].[SyncSpecialMedicine]");
         }
 
         private async Task SyncSmokeMedicines()
@@ -62,35 +51,24 @@ namespace His_Pos.InfraStructure
         {
         }
 
-        public System.Data.DataTable ConvertToDataTable<T>(IList<T> data)
-
+        private void ExecProc<T>(List<T> data, string spName)
         {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
-
-            System.Data.DataTable table = new System.Data.DataTable();
-
-            foreach (PropertyDescriptor prop in properties)
+            SQLServerConnection.DapperQuery((conn) =>
             {
-                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-            }
-
-            foreach (T item in data)
-
-            {
-
-                DataRow row = table.NewRow();
-
-                foreach (PropertyDescriptor prop in properties)
+                try
                 {
-                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
-
+                    conn.Execute(spName,
+                        param: new { SpecialMedicine = data.ConvertToDataTable() },
+                        commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
 
-                table.Rows.Add(row);
-            }
-
-            return table;
-
+            });
         }
+
+       
     }
 }
