@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Google.Protobuf;
+using His_Pos.InfraStructure;
 using Newtonsoft.Json;
 using WebServiceDTO;
 
@@ -18,6 +19,9 @@ namespace His_Pos.Service
         //private const string webapiPath = @"https://kaokaodepon.singde.com.tw:60005/ServerWebAPI/";
 
         private const string webapiPath = @"https://localhost:7129/ServerWebAPI/";
+
+        private CommonDataRepository _commonDataRepository = new CommonDataRepository();
+
         public async Task SyncData()
         {
 
@@ -38,6 +42,7 @@ namespace His_Pos.Service
         private async Task SyncSpecialMedicines()
         {
             var data = await GetAPIData<NHISpecialMedicineDTO>("GetNHISpecialMedicines");
+            _commonDataRepository.SyncNHISpecialMedicine(data.ToList());
         }
 
         private async Task SyncSmokeMedicines()

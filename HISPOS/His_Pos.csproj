@@ -348,6 +348,7 @@
       <DependentUpon>TradeAddProductWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="InfraStructure\AccountService.cs" />
+    <Compile Include="InfraStructure\CommonDataRepository.cs" />
     <Compile Include="InfraStructure\ProductService.cs" />
     <Compile Include="NewClass\Accounts\Accounts.cs" />
     <Compile Include="NewClass\Accounts\JournalAccount.cs" />
