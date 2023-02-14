@@ -23,47 +23,54 @@ namespace His_Pos.InfraStructure
         }
         public void SyncNHISpecialMedicine(List<NHISpecialMedicineDTO> data)
         {
-            ExecProc(data, $"{schemeName}.[DataSource].[SyncSpecialMedicine]");
+            ExecProc( $"{schemeName}.[DataSource].[SyncSpecialMedicine]", 
+                new[]{new { SpecialMedicine = data.ConvertToDataTable() } });
         }
 
         public void SyncSmokeMedicines(List<NHISmokeMedicineDTO> data)
         {
-            ExecProc(data, $"{schemeName}.[DataSource].[SyncSmokeMedicines]");
+            ExecProc($"{schemeName}.[DataSource].[SyncSmokeMedicines]",
+                new[] { new { SmokeMedicine = data.ConvertToDataTable() } });
         }
 
         public void SyncMedicines(List<NHIMedicineDTO> data)
         {
-            ExecProc(data, $"{schemeName}.[DataSource].[SyncMedicines]");
+            ExecProc($"{schemeName}.[DataSource].[SyncMedicines]",
+                new[] { new { Medicine = data.ConvertToDataTable() } });
         }
 
         public void SyncInstitutions(List<InstitutionDTO> data)
         {
-            ExecProc(data, $"{schemeName}.[DataSource].[SyncInstitutions]");
+            ExecProc($"{schemeName}.[DataSource].[SyncInstitutions]",
+                new[] { new { Institutions = data.ConvertToDataTable() } });
         }
 
         public void SyncDivisions(List<DivisionDTO> data)
         {
-            ExecProc(data, $"{schemeName}.[DataSource].[SyncDivisions]");
+            ExecProc($"{schemeName}.[DataSource].[SyncDivisions]", 
+                new[] { new { Divisions = data.ConvertToDataTable() } });
         }
 
         public void SyncDiseasesCode(List<DiseaseCodeDTO> data)
         {
-            ExecProc(data, $"{schemeName}.[DataSource].[SyncDiseasesCode]");
+            ExecProc($"{schemeName}.[DataSource].[SyncDiseasesCode]",
+                new[] { new { DiseasesCodes = data.ConvertToDataTable() } });
         }
 
         public void SyncAdjustCase(List<AdjustCaseDTO> data)
         {
-            ExecProc(data, $"{schemeName}.[DataSource].[SyncAdjustCase]");
+            ExecProc($"{schemeName}.[DataSource].[SyncAdjustCase]",
+                new[] { new { AdjustCases = data.ConvertToDataTable() } });
         }
 
-        private void ExecProc<T>(List<T> data, string spName)
+        private void ExecProc( string spName,dynamic[] paramemter)
         {
             SQLServerConnection.DapperQuery((conn) =>
             {
                 try
                 {
                     conn.Execute(spName,
-                        param: new { SpecialMedicine = data.ConvertToDataTable() },
+                         param: paramemter ,
                         commandType: CommandType.StoredProcedure);
                 }
                 catch (Exception e)
