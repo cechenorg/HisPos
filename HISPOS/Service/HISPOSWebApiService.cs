@@ -22,7 +22,7 @@ namespace His_Pos.Service
 
         private CommonDataRepository _commonDataRepository = new CommonDataRepository();
 
-        public async Task SyncData()
+        public void SyncData()
         {
 
             List<Task> taskList = new List<Task>()
@@ -36,7 +36,7 @@ namespace His_Pos.Service
                 SyncAdjustCase(),
             };
 
-            await Task.WhenAll(taskList);
+            Task.WhenAll(taskList).Wait();
         }
 
         private async Task SyncSpecialMedicines()

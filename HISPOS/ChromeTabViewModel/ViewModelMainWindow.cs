@@ -218,13 +218,12 @@ namespace His_Pos.ChromeTabViewModel
 
         private async void ExecuteInitData()
         {
-            BusyContent = "同步中心資料";
-            HISPOSWebApiService webApiService = new HISPOSWebApiService();
-            await webApiService.SyncData();
-
             var worker = new BackgroundWorker();
             worker.DoWork +=  (o, ea) =>
             {
+                BusyContent = "同步中心資料";
+                HISPOSWebApiService webApiService = new HISPOSWebApiService();
+                webApiService.SyncData();
 
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "取得庫別名";
