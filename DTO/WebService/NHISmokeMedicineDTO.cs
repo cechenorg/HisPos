@@ -12,7 +12,7 @@ namespace WebServiceDTO
         public string SmoMed_Name { get; set; }
         public string SmoMed_EngName { get; set; }
         public string SmoMed_Ingredient { get; set; }
-        public double SmoMed_Price { get; set; }
+        public double? SmoMed_Price { get; set; }
         public string SmoMed_Manufactory { get; set; }
         public string SmoMed_ForeignMedicine { get; set; }
     }

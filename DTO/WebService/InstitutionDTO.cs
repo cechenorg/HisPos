@@ -12,7 +12,7 @@ namespace WebServiceDTO
         public string Ins_Name { get; set; }
         public string Ins_Address { get; set; }
         public string Ins_Telephone { get; set; }
-        public DateTime Ins_EndContractDate { get; set; }
+        public DateTime? Ins_EndContractDate { get; set; }
         public string Ins_InsertPharmacy { get; set; }
         public string Ins_Type { get; set; }
     }

@@ -19,7 +19,7 @@ namespace WebServiceDTO
         public string Med_SingleCompound { get; set; }
         public string Med_Ingredient { get; set; }
         public string Med_ATC { get; set; }
-        public int Med_Control { get; set; }
+        public int? Med_Control { get; set; }
         public bool Med_IsFrozen { get; set; }
         public string Med_NhiNote { get; set; }
         public DateTime Med_StartDate { get; set; }
