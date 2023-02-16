@@ -14,7 +14,7 @@ namespace WebServiceDTO
         public float Med_Amount { get; set; }
         public string Med_Unit { get; set; }
         public double Med_Price { get; set; }
-        public string Med_Manufactor { get; set; }
+        public string Med_Manufactory { get; set; }
         public string Med_Form { get; set; }
         public string Med_SingleCompound { get; set; }
         public string Med_Ingredient { get; set; }
