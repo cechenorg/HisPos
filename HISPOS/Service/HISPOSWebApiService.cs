@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DTO.WebService;
 using Google.Protobuf;
 using His_Pos.InfraStructure;
 using Newtonsoft.Json;
@@ -128,10 +129,5 @@ namespace His_Pos.Service
 
     }
 
-    public class ResponseData<T>
-    {
-        public DateTime DateTime => DateTime.Now;
-
-        public IEnumerable<T> Data { get; set; } = new List<T>();
-    }
+   
 }
