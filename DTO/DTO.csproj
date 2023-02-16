@@ -54,6 +54,7 @@
     <Compile Include="WebService\ProductInfo.cs" />
     <Compile Include="WebService\SingdeFrequencyDTO.cs" />
     <Compile Include="WebService\SingdeOTCDTO.cs" />
+    <Compile Include="WebService\UpdateTimeDTO.cs" />
     <Compile Include="WebService\WebResponse.cs" />
   </ItemGroup>
   <ItemGroup />

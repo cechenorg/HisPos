@@ -40,6 +40,15 @@ namespace His_Pos.Service
             Task.WhenAll(taskList).Wait();
         }
 
+        public async Task<List<UpdateTimeDTO>> GetNeededUpdateTimeList()
+        {
+            List<UpdateTimeDTO> result = new List<UpdateTimeDTO>();
+            var data = await GetAPIData<UpdateTimeDTO>("GetDataSourceUpdateTime");
+
+            var currentUpdateTimeList = _commonDataRepository.GetCurrentUpdateTime();
+            return result;
+        }
+
         private async Task SyncSpecialMedicines()
         {
             var data = await GetAPIData<NHISpecialMedicineDTO>("GetNHISpecialMedicines");

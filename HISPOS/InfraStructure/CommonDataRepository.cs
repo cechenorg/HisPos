@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using DomainModel;
 using WebServiceDTO;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using DTO.WebService;
 
 namespace His_Pos.InfraStructure
 {
@@ -21,6 +22,31 @@ namespace His_Pos.InfraStructure
         {
 
         }
+
+        public List<UpdateTimeDTO> GetCurrentUpdateTime()
+        {
+            List<UpdateTimeDTO> result = new List<UpdateTimeDTO>();
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                try
+                {
+                    result = conn.Query<UpdateTimeDTO>("[DataSource].[GetUpdateTime]",
+                        commandType: CommandType.StoredProcedure).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+            });
+            return result;
+        }
+        public void SyncUpdateTime(List<UpdateTimeDTO> data)
+        {
+            ExecProc($"{schemeName}.[DataSource].[SyncUpdateTime]",
+                new[] { new { UpdateTimes = data.ConvertToDataTable() } });
+        }
+
         public void SyncNHISpecialMedicine(List<NHISpecialMedicineDTO> data)
         {
             ExecProc( $"{schemeName}.[DataSource].[SyncSpecialMedicine]", 
