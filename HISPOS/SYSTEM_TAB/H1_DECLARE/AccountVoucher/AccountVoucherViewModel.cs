@@ -500,12 +500,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     }
                     else
                     {
-                        int amount = Convert.ToInt32(table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID))[0]);
-                        if (item.JouDet_Amount > amount)
+                        DataRow[] drs = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID));
+                        if (drs != null && drs.Length > 0)
                         {
-                            MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳金額超過來源金額\r\n請確認金額", item.jouDet_Number), MessageType.ERROR);
-                            return false;
+                            int amount = Convert.ToInt32(drs[0]["JouDet_Amount"]);
+                            if (item.JouDet_Amount > amount)
+                            {
+                                MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳金額超過來源金額\r\n請確認金額", item.jouDet_Number), MessageType.ERROR);
+                                return false;
+                            }
                         }
+                        
                     }
                 }
             }
