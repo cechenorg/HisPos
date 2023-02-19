@@ -26,27 +26,67 @@ namespace His_Pos.Service
         public void SyncData()
         {
 
-            List<Task> taskList = new List<Task>()
-            {
-                SyncSpecialMedicines(),
-                SyncSmokeMedicines(),
-                SyncMedicines(),
-                SyncInstitutions(),
-                SyncDivisions(),
-                SyncDiseasesCode(),
-                SyncAdjustCase(),
-            };
+            var updateList = GetNeededUpdateTimeList();
+            updateList.Wait();
 
+            List<Task> taskList = GetNeededSyncTask(updateList.Result);
             Task.WhenAll(taskList).Wait();
+        }
+
+        private List<Task> GetNeededSyncTask(List<UpdateTimeDTO> updateTimeList)
+        {
+            List<Task> taskList = new List<Task>();
+
+            var updateTableNameList = updateTimeList.Select(_ => _.UpdTime_TableName);
+
+            if (updateTableNameList.Contains("AdjustCase"))
+                taskList.Add(SyncAdjustCase());
+
+            if (updateTableNameList.Contains("DiseaseCode"))
+                taskList.Add(SyncDiseasesCode());
+            if (updateTableNameList.Contains("Division"))
+                taskList.Add(SyncDivisions());
+            if (updateTableNameList.Contains("Institution"))
+                taskList.Add(SyncInstitutions());
+            if (updateTableNameList.Contains("Medicine"))
+                taskList.Add(SyncMedicines());
+            if (updateTableNameList.Contains("SmokeMedicine"))
+                taskList.Add(SyncSmokeMedicines());
+            if (updateTableNameList.Contains("SpecialMedicine"))
+                taskList.Add(SyncSpecialMedicines());
+            if (updateTableNameList.Contains("DiseaseCodeMapping"))
+                taskList.Add(SyncDiseaseCodeMapping());
+            if (updateTableNameList.Contains("MedicineForm"))
+                taskList.Add(SyncMedicineForm());
+
+            return taskList;
         }
 
         public async Task<List<UpdateTimeDTO>> GetNeededUpdateTimeList()
         {
-            List<UpdateTimeDTO> result = new List<UpdateTimeDTO>();
-            var data = await GetAPIData<UpdateTimeDTO>("GetDataSourceUpdateTime");
+            List<UpdateTimeDTO> needUpdateList = new List<UpdateTimeDTO>();
+            var apiUpdateTimeList = await GetAPIData<UpdateTimeDTO>("GetDataSourceUpdateTime");
 
             var currentUpdateTimeList = _commonDataRepository.GetCurrentUpdateTime();
-            return result;
+            var currentTableList = currentUpdateTimeList.Select(_ => _.UpdTime_TableName).ToList();
+
+            foreach (var apiUpdateTime in apiUpdateTimeList)
+            {
+                if (currentTableList.Contains(apiUpdateTime.UpdTime_TableName))
+                {
+                    var currentUpdateTimeData = currentUpdateTimeList.Single(_ => _.UpdTime_TableName == apiUpdateTime.UpdTime_TableName);
+
+                    if (currentUpdateTimeData.UpdTime_LastUpdateTime < apiUpdateTime.UpdTime_LastUpdateTime)
+                    {
+                        needUpdateList.Add(apiUpdateTime);
+                    }
+                }
+                else
+                {
+                    needUpdateList.Add(apiUpdateTime);
+                }
+            }
+            return needUpdateList;
         }
 
         private async Task SyncSpecialMedicines()
@@ -89,6 +129,14 @@ namespace His_Pos.Service
         {
             var data = await GetAPIData<AdjustCaseDTO>("GetAdjustCase");
             _commonDataRepository.SyncAdjustCase(data.ToList());
+        }
+
+        private async Task SyncDiseaseCodeMapping()
+        {
+        }
+
+        private async Task SyncMedicineForm()
+        {
         }
 
 
@@ -138,5 +186,5 @@ namespace His_Pos.Service
 
     }
 
-   
+
 }
