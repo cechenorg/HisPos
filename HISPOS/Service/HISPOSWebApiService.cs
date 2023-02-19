@@ -31,6 +31,8 @@ namespace His_Pos.Service
 
             List<Task> taskList = GetNeededSyncTask(updateList.Result);
             Task.WhenAll(taskList).Wait();
+
+            _commonDataRepository.SyncUpdateTime(updateList.Result);
         }
 
         private List<Task> GetNeededSyncTask(List<UpdateTimeDTO> updateTimeList)
@@ -41,7 +43,6 @@ namespace His_Pos.Service
 
             if (updateTableNameList.Contains("AdjustCase"))
                 taskList.Add(SyncAdjustCase());
-
             if (updateTableNameList.Contains("DiseaseCode"))
                 taskList.Add(SyncDiseasesCode());
             if (updateTableNameList.Contains("Division"))
@@ -133,10 +134,14 @@ namespace His_Pos.Service
 
         private async Task SyncDiseaseCodeMapping()
         {
+            var data = await GetAPIData<DiseaseCodeMappingDTO>("GetDiseaseCodeMapping");
+            _commonDataRepository.SyncDiseaseCodeMapping(data.ToList());
         }
 
         private async Task SyncMedicineForm()
         {
+            var data = await GetAPIData<MedicineFormDTO>("GetNHIMedicineForm");
+            _commonDataRepository.SyncMedicineForm(data.ToList());
         }
 
 

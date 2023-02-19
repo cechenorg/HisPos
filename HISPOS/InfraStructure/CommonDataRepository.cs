@@ -30,7 +30,7 @@ namespace His_Pos.InfraStructure
             {
                 try
                 {
-                    result = conn.Query<UpdateTimeDTO>("[DataSource].[GetUpdateTime]",
+                    result = conn.Query<UpdateTimeDTO>($"{schemeName}.[DataSource].[GetUpdateTime]",
                         commandType: CommandType.StoredProcedure).ToList();
                 }
                 catch (Exception e)
@@ -87,6 +87,18 @@ namespace His_Pos.InfraStructure
         {
             ExecProc($"{schemeName}.[DataSource].[SyncAdjustCase]",
                 new[] { new { AdjustCases = data.ConvertToDataTable() } });
+        }
+
+        public void SyncDiseaseCodeMapping(List<DiseaseCodeMappingDTO> data)
+        {
+            ExecProc($"{schemeName}.[DataSource].[SyncDiseaseCodeMapping]",
+                new[] { new { DiseaseCodeMappings = data.ConvertToDataTable() } });
+        }
+
+        public void SyncMedicineForm(List<MedicineFormDTO> data)
+        {
+            ExecProc($"{schemeName}.[DataSource].[SyncMedicineForm]",
+                new[] { new { MedicineForms = data.ConvertToDataTable() } });
         }
 
         private void ExecProc( string spName,dynamic[] paramemter)

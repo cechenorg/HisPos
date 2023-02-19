@@ -45,9 +45,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebService\AdjustCaseDTO.cs" />
     <Compile Include="WebService\DiseaseCodeDTO.cs" />
+    <Compile Include="WebService\DiseaseCodeMappingDTO.cs" />
     <Compile Include="WebService\DivisionDTO.cs" />
     <Compile Include="WebService\Enum.cs" />
     <Compile Include="WebService\InstitutionDTO.cs" />
+    <Compile Include="WebService\MedicineFormDTO.cs" />
     <Compile Include="WebService\NHIMedicineDTO.cs" />
     <Compile Include="WebService\NHISmokeMedicineDTO.cs" />
     <Compile Include="WebService\NHISpecialMedicineDTO.cs" />
