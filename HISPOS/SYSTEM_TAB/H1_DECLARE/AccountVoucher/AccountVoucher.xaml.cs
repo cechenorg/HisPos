@@ -172,7 +172,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                                 detail.JouDet_SourceID = Convert.ToString(dr["JouDet_SourceID"]);
                                 detail.JouDet_WriteOffID = Convert.ToString(dr["JouDet_ID"]);
                                 detail.JouDet_WriteOffNumber = Convert.ToInt32(dr["JouDet_Number"]);
-                                currentViewModel.CurrentVoucher.DebitDetails.Add(detail);
+                                if (((JournalDetail)textBox.DataContext).JouDet_Type == "D")
+                                {
+                                    currentViewModel.CurrentVoucher.DebitDetails.Add(detail);
+                                }
+                                else
+                                {
+                                    currentViewModel.CurrentVoucher.CreditDetails.Add(detail);
+                                }
+                                    
                                 i++;
                             }
                         }
