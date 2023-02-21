@@ -59,7 +59,9 @@ namespace His_Pos.Service
                 taskList.Add(SyncDiseaseCodeMapping());
             if (updateTableNameList.Contains("MedicineForm"))
                 taskList.Add(SyncMedicineForm());
-
+            if (updateTableNameList.Contains("MedicineNHISingde"))
+                taskList.Add(SyncMedicineNHISingde());
+            
             return taskList;
         }
 
@@ -145,6 +147,11 @@ namespace His_Pos.Service
         }
 
 
+        private async Task SyncMedicineNHISingde()
+        {
+            var data = await GetAPIData<MedicineNHISingdeDTO>("GetMedicineNHISingde");
+            _commonDataRepository.SyncMedicineNHISingde(data.ToList());
+        }
 
         private async Task<IEnumerable<T>> GetAPIData<T>(string route)
         {

@@ -101,6 +101,12 @@ namespace His_Pos.InfraStructure
                 new[] { new { MedicineForms = data.ConvertToDataTable() } });
         }
 
+        public void SyncMedicineNHISingde(List<MedicineNHISingdeDTO> data)
+        {
+            ExecProc($"{schemeName}.[DataSource].[SyncMedicineNHISingde]",
+                new[] { new { Medicines = data.ConvertToDataTable() } });
+        }
+
         private void ExecProc( string spName,dynamic[] paramemter)
         {
             SQLServerConnection.DapperQuery((conn) =>

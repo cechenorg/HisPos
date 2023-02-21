@@ -50,6 +50,7 @@
     <Compile Include="WebService\Enum.cs" />
     <Compile Include="WebService\InstitutionDTO.cs" />
     <Compile Include="WebService\MedicineFormDTO.cs" />
+    <Compile Include="WebService\MedicineNHISingdeDTO.cs" />
     <Compile Include="WebService\NHIMedicineDTO.cs" />
     <Compile Include="WebService\NHISmokeMedicineDTO.cs" />
     <Compile Include="WebService\NHISpecialMedicineDTO.cs" />
