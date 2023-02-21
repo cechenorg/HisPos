@@ -19,6 +19,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
             CheckAllCommand = new RelayCommand(OnCheckAll);
             CheckCommand = new RelayCommand(OnCheck);
             SubmitCommand = new RelayCommand(SubmitAction);
+            IsSubmit = false;
+        }
+        private bool isSubmit;
+        public bool IsSubmit
+        {
+            get { return isSubmit; }
+            set { Set(() => IsSubmit, ref isSubmit, value); }
         }
         private bool isAllSelected;
         public bool IsAllSelected
@@ -37,6 +44,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
         public RelayCommand CheckCommand { get; set; }
         private void SubmitAction()
         {
+            IsSubmit = true;
             Messenger.Default.Send(new NotificationMessage("YesAction"));
         }
         /// <summary>

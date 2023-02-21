@@ -122,9 +122,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     sourceTable.Rows[i]["IsChecked"] = false;
                 }
 
-                FromSourceWindow.FromSourceWindow fromSourceWindow = new His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow.FromSourceWindow(sourceTable);
+                FromSourceWindow.FromSourceWindow fromSourceWindow = new FromSourceWindow.FromSourceWindow(sourceTable);
                 fromSourceWindow.ShowDialog();
-                if ((bool)fromSourceWindow.DialogResult)
+                bool isSubmit = ((FromSourceViewModel)fromSourceWindow.DataContext).IsSubmit;
+                if (isSubmit)
                 {
                     DataTable table = ((FromSourceViewModel)fromSourceWindow.DataContext).SoureTable;
                     if (table != null && table.Columns.Contains("IsChecked"))

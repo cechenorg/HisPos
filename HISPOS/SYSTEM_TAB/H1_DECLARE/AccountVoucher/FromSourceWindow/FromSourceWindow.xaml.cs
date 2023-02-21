@@ -31,12 +31,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
                 switch (notificationMessage.Notification)
                 {
                     case "YesAction":
-                        DialogResult = true;
+                        ((FromSourceViewModel)DataContext).IsSubmit = true;
                         Close();
                         break;
 
                     case "NoAction":
-                        DialogResult = false;
+                        ((FromSourceViewModel)DataContext).IsSubmit = false;
                         Close();
                         break;
                 }
