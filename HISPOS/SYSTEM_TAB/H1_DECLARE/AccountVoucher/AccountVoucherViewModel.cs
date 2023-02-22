@@ -55,10 +55,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         public RelayCommand AddCommand { get; set; }
         public RelayCommand SaveCommand { get; set; }
         public RelayCommand InvalidCommand { get; set; }
-        public RelayCommand ClickSourceCommand { get; set; }
+        //public RelayCommand ClickSourceCommand { get; set; }
         #endregion
         #region
-        private ICollectionView voucherCollectionView;
         public ICollectionView VoucherCollectionView
         {
             get => voucherCollectionView;
@@ -67,7 +66,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 Set(() => VoucherCollectionView, ref voucherCollectionView, value);
             }
         }
-
+        private ICollectionView voucherCollectionView;
         public Visibility DisplayVoidReason
         {
             get => displayVoidReason;
@@ -149,7 +148,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 Set(() => EndDate, ref endDate, value);
             }
         }
-
         private DateTime endDate = DateTime.Today;
         public string SearchID
         {
@@ -169,7 +167,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
         }
         private string keyWord;
-        private bool isProce;
         public bool IsProce
         {
             get => isProce;
@@ -178,7 +175,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 Set(() => IsProce, ref isProce, value);
             }
         }
-        private bool isTemp;
+        private bool isProce;
         public bool IsTemp
         {
             get => isTemp;
@@ -187,7 +184,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 Set(() => IsTemp, ref isTemp, value);
             }
         }
-        private bool isInvalid;
+        private bool isTemp;
         public bool IsInvalid
         {
             get => isInvalid;
@@ -196,7 +193,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 Set(() => IsInvalid, ref isInvalid, value);
             }
         }
-        public IEnumerable<JournalAccount> Accounts { get; set; }
+        private bool isInvalid;
+        public IEnumerable<JournalAccount> Accounts
+        {
+            get => accounts;
+            set
+            {
+                Set(() => Accounts, ref accounts, value);
+            }
+        }
+        private IEnumerable<JournalAccount> accounts;
         public JournalAccount Account
         {
             get => account;
@@ -206,9 +212,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
         }
         private JournalAccount account;
-        public IEnumerable<JournalType> Types { get; set; }
-        public JournalType Type { get; set; }
-        private JournalMaster currentVoucher;
+        public IEnumerable<JournalType> Types
+        {
+            get => types;
+            set
+            {
+                Set(() => Types, ref types, value);
+            }
+        }
+        private IEnumerable<JournalType> types;
+        public JournalType Type
+        {
+            get => type;
+            set
+            {
+                Set(() => Type, ref type, value);
+            }
+        }
+        private JournalType type;
         public JournalMaster CurrentVoucher
         {
             get
@@ -248,6 +269,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 }
             }
         }
+        private JournalMaster currentVoucher;
         #endregion
         #region Function
         private void CopyDataAction()
@@ -732,15 +754,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             CurrentVoucher.DebitDetails = new JournalDetails();
             CurrentVoucher.CreditDetails = new JournalDetails();
             IEnumerable<JournalDetail> details = AccountsDb.GetJournalData(id);
+
+            IEnumerable<JournalAccount> orgAccounts = AccountsDb.GetJournalAccount("ALL");
+
             foreach (JournalDetail item in details)
             {
                 string level1 = item.JouDet_AcctLvl1;
                 string level2 = item.JouDet_AcctLvl2;
                 string level3 = string.IsNullOrEmpty(item.JouDet_AcctLvl3) ? item.JouDet_AcctLvl3 : item.JouDet_AcctLvl3.PadLeft(4, '0');
 
-                IEnumerable<JournalAccount> journal = Accounts.Where(s => s.acctLevel1 == level1 && s.acctLevel2 == level2 && s.acctLevel3 == level3);
+                IEnumerable<JournalAccount> journal = orgAccounts.Where(s => s.acctLevel1 == level1 && s.acctLevel2 == level2 && s.acctLevel3 == level3);
 
-                item.Accounts = Accounts;
+                item.Accounts = orgAccounts;
 
                 if (journal != null && journal.Count() > 0)
                 {
