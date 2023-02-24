@@ -77,7 +77,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
             ConfirmAddCommand = new RelayCommand(ConfirmAddAction);
             TypeCollection = new List<string>();
             TypeCollection.Add("藥品");
-            TypeCollection.Add("OTC");
+            TypeCollection.Add("門市商品");
             SelectedType = "藥品";
 
             InitVariables();
@@ -117,7 +117,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
             WareHouseCollection = new WareHouses(WareHouseDb.Init());
             //DonePurchaseOrders = new StoreOrders(StoreOrderDB.GetDonePurchaseOrdersInOneWeek());
             MainWindow.ServerConnection.CloseConnection();
-
+            int i = 0;
+            foreach(WareHouse wareHouse in WareHouseCollection)
+            {
+                if(wareHouse.ID == "9")
+                {
+                    break;
+                }
+                i++;
+            }
+            WareHouseCollection.RemoveAt(i);
             PurchaseOrderManufactory = ManufactoryCollection[0];
             ReturnOrderManufactory = ManufactoryCollection[0];
 

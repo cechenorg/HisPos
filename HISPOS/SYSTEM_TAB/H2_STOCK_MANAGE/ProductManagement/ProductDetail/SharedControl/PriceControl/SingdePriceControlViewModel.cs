@@ -128,6 +128,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 case ProductTypeEnum.SpecialMedicine:
                     manageMedicineDetailDataTable = ProductDetailDB.GetProductManageSpecialMedicineDetailByID(proID);
                     break;
+
+                case ProductTypeEnum.Deposit:
+                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageOTCMedicineDetailByID(proID);
+                    break;
             }
 
             if (manageMedicineDetailDataTable is null || manageMedicineDetailDataTable.Rows.Count == 0)
@@ -148,6 +152,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
                 case ProductTypeEnum.SpecialMedicine:
                     MedicineDetail = new ProductNHISpecialDetail(manageMedicineDetailDataTable.Rows[0]);
+                    break;
+
+                case ProductTypeEnum.Deposit:
+                    MedicineDetail = new ProductManageDetail(manageMedicineDetailDataTable.Rows[0]);
                     break;
             }
         }

@@ -116,7 +116,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
                 {
-                    List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || s.OrderStatus == OrderStatusEnum.SCRAP).OrderBy(_ => _.IsWaitOrder).ThenBy(_ => _.ID.Substring(1, 11)).ToList();
+                    DateTime Vaildate = DateTime.Today.AddDays(-180);
+                    List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || s.OrderStatus == OrderStatusEnum.SCRAP).Where(s=>s.CreateDateTime.CompareTo(Vaildate) > 0).OrderBy(_ => _.IsWaitOrder).ThenBy(_ => _.ID.Substring(1, 11)).ToList();
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
                     if (storeOrders.Count > 0)
                         dateTime = storeOrders.Min(w=>w.CreateDateTime).ToString("yyyyMMdd");
@@ -150,7 +151,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                             {
                                 int flag = Convert.ToInt32(drs[0]["FLAG"]);
                                 string ReceiveID = Convert.ToString(drs[0]["PRESCRIPTION_RECEIVEID"]);
-                                if (flag == 2)
+                                if (flag == 2 && storeOrders[i].OrderType != OrderTypeEnum.RETURN)
                                 {
                                     string VoidReason = "5.其他:杏德訂單已作廢";
                                     StoreOrderDB.RemoveStoreOrderByID(storeOrders[i].ID, VoidReason);
@@ -162,7 +163,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                                     if(!string.IsNullOrEmpty(ReceiveID) && ReceiveID != null)
                                     {
                                         currentStoreOrder = storeOrders[i];
-                                        bool isUptSuccess = currentStoreOrder.UpdateOrderDataFromSingde(drs[0]);
+                                        bool isUptSuccess = true;
+                                        if ((string.IsNullOrEmpty(currentStoreOrder.ReceiveID) ? string.Empty : currentStoreOrder.ReceiveID) != ReceiveID)//如果ReceiveID已更新成杏德單，不更新
+                                        {
+                                            isUptSuccess = currentStoreOrder.UpdateOrderDataFromSingde(drs[0]);
+                                        }
+                                        
                                         if (!isUptSuccess && storeOrders[i].ID != storeOrders[i].ReceiveID)//尚未更新為杏德單號
                                         {
                                             if (storeOrders[i].OrderType != OrderTypeEnum.RETURN)

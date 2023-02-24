@@ -30,6 +30,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             IsCooperative = r.Field<int>("IsCooperative") == 1;
             AdjustDate = r.Field<DateTime>("AdjustDate").ToTaiwanDateTime();
             IsEnable = r.Field<string>("IsEnable") == "1";
+            VirtualMeduse = r.Field<int>("VirtualMeduse");
         }
 
         private string insName;
@@ -38,6 +39,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         private double paySelfPoint;
         private decimal meduse;
         private int profit;
+        private int virtualMeduse;
 
         private int count;
         private int disableCount;
@@ -55,14 +57,23 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         private int paySelfProfit;
         private int slowProfit;
         private int normalProfit;
+
         private int coopMeduse;
         private int paySelfMeduse;
         private int slowMeduse;
         private int normalMeduse;
+
+        private int coopVirtualMeduse;
+        private int paySelfVirtualMeduse;
+        private int slowVirtualMeduse;
+        private int normalVirtualMeduse;
+
+
         private double coopIncome;
         private double paySelfIncome;
         private double slowIncome;
         private double normalIncome;
+        
 
         private decimal coopChange;
         private decimal paySelfChange;
@@ -74,6 +85,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         private int medTotalMeduse;
         private double medTotalIncome;
         private decimal medTotalChange;
+        private int medTotalVirtualMedUse;
 
         public int Id { get; set; }
         public string AdjustCaseID { get; set; }
@@ -157,6 +169,16 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
+        public int VirtualMeduse
+        {
+            get => virtualMeduse;
+            set
+            {
+                Set(() => VirtualMeduse, ref virtualMeduse, value);
+            }
+        }
+
+        
         public int Count
         {
             get => count;
@@ -257,6 +279,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => NormalProfit, ref normalProfit, value);
             }
         }
+
         public int CoopMeduse
         {
             get => coopMeduse;
@@ -289,6 +312,42 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => NormalMeduse, ref normalMeduse, value);
             }
         }
+
+        public int CoopVirtualMeduse
+        {
+            get => coopVirtualMeduse;
+            set
+            {
+                Set(() => CoopVirtualMeduse, ref coopVirtualMeduse, value);
+            }
+        }
+        public int PaySelfVirtuaMeduse
+        {
+            get => paySelfVirtualMeduse;
+            set
+            {
+                Set(() => PaySelfVirtuaMeduse, ref paySelfVirtualMeduse, value);
+            }
+        }
+        public int SlowVirtuaMeduse
+        {
+            get => slowVirtualMeduse;
+            set
+            {
+                Set(() => SlowVirtuaMeduse, ref slowVirtualMeduse, value);
+            }
+        }
+        public int NormalVirtuaMeduse
+        {
+            get => normalVirtualMeduse;
+            set
+            {
+                Set(() => NormalVirtuaMeduse, ref normalVirtualMeduse, value);
+            }
+        }
+
+
+
         public double CoopIncome
         {
             get => coopIncome;
@@ -400,17 +459,27 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
+        public int MedTotalVirtualMedUse
+        {
+            get => medTotalVirtualMedUse;
+            set
+            {
+                Set(() => MedTotalVirtualMedUse, ref medTotalVirtualMedUse, value);
+            }
+        }
+
+        
+
         public void SumMedProfit(StockTakingDetailReport.StockTakingDetailReport StockTakingDetailReportSum)
         {
             MedTotalCount = NormalCount + PaySelfCount + SlowCount + CoopCount;
             MedTotalIncome = NormalIncome + PaySelfIncome + SlowIncome + CoopIncome;
             MedTotalMeduse = NormalMeduse + PaySelfMeduse + SlowMeduse + CoopMeduse;
             MedTotalChange = NormalChange + PaySelfChange + SlowChange + CoopChange;
-            
+            MedTotalVirtualMedUse = NormalVirtuaMeduse + PaySelfVirtuaMeduse + SlowVirtuaMeduse + CoopVirtualMeduse;
 
             MedTotalProfit = (decimal)(MedTotalIncome + 
                                        MedTotalMeduse + (double)MedTotalChange + StockTakingDetailReportSum.Price );
-
         }
 
         public void SumPrescriptionDetail(PrescriptionDetailReports prescriptionDetailReports )
@@ -422,27 +491,26 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             var tempCollectionSlow = filterCooperative.Where(p => p.AdjustCaseID == "2");
             var tempCollectionPaySelf = filterCooperative.Where(p => p.AdjustCaseID == "0");
 
-
+            //profit normal
             NormalCount = tempCollectionNormal.Count();
             NormalMeduse = (int)tempCollectionNormal.Sum(s => s.Meduse);
-
-            //profit normal
-
             NormalIncome = (int)tempCollectionNormal.Sum(s => s.MedicalPoint) + (int)tempCollectionNormal.Sum(s => s.MedicalServicePoint) + (int)tempCollectionNormal.Sum(s => s.PaySelfPoint);
+            NormalVirtuaMeduse = tempCollectionNormal.Sum(s => s.VirtualMeduse);
+            NormalProfit = (int)(NormalIncome + NormalMeduse + (double)NormalChange);
 
-            SlowCount = tempCollectionSlow.Count();
-            SlowMeduse = (int)tempCollectionSlow.Sum(s => s.Meduse);
-            NormalProfit = (int)(NormalIncome + NormalMeduse + (double)NormalChange );
 
             //profit slow 
+            SlowCount = tempCollectionSlow.Count();
+            SlowMeduse = (int)tempCollectionSlow.Sum(s => s.Meduse);
             SlowIncome = (int)tempCollectionSlow.Sum(s => s.MedicalPoint) + (int)tempCollectionSlow.Sum(s => s.MedicalServicePoint) + (int)tempCollectionSlow.Sum(s => s.PaySelfPoint);
+            SlowVirtuaMeduse = tempCollectionSlow.Sum(s => s.VirtualMeduse);
+            SlowProfit = (int)(SlowIncome + SlowMeduse + (double)SlowChange);
 
+            //profit payself
             PaySelfCount = tempCollectionPaySelf.Count();
             PaySelfMeduse = (int)tempCollectionPaySelf.Sum(s => s.Meduse);
-            SlowProfit = (int)(SlowIncome + SlowMeduse + (double)SlowChange );
-            //profit payself
-
             PaySelfIncome = (int)tempCollectionPaySelf.Sum(s => s.MedicalPoint) + (int)tempCollectionPaySelf.Sum(s => s.MedicalServicePoint) + (int)tempCollectionPaySelf.Sum(s => s.PaySelfPoint);
+            PaySelfVirtuaMeduse = tempCollectionPaySelf.Sum(s => s.VirtualMeduse);
             PaySelfProfit = (int)(PaySelfIncome + PaySelfMeduse + (double)PaySelfChange );
 
         }

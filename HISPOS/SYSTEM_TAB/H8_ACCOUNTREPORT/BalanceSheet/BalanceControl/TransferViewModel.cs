@@ -96,14 +96,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         {
             SelectBank = new AccountsReports();
             StrikeCommand = new RelayCommand<RelayCommand>(StrikeAction);
-
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
-            MainWindow.ServerConnection.CloseConnection();
+            DataTable table = AccountsDb.GetBankByAccountsID();
             Bank = new List<AccountsReports>();
-            foreach (DataRow c in result.Rows)
+            foreach (DataRow dr in table.Rows)
             {
-                Bank.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+                Bank.Add(new AccountsReports(dr["Name"].ToString(), 0, dr["ID"].ToString()));
             }
             BankCollectionViewSource = new CollectionViewSource { Source = Bank };
             BankCollectionView = BankCollectionViewSource.View;

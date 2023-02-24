@@ -59,6 +59,8 @@ namespace His_Pos.NewClass.Prescription.Service
         }
 
         protected MedicinesSendSingdeViewModel vm { get; set; } = null;
+
+        protected IEnumerable<Prescription> PrescriptionList { get; set; }
         protected Prescription Current { get; set; }
         protected Prescription TempPre { get; set; }
         protected Prescription TempPrint { get; set; }
@@ -114,8 +116,8 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public bool StartRegister()
         {
-            MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
+            MainWindow.ServerConnection.OpenConnection();
             var result = Register();
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
@@ -315,7 +317,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 return false;
             }
 
-            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.Authority == DomainModel.Enum.Authority.MasterPharmacist) return true;
+            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.Authority == DomainModel.Enum.Authority.MasterPharmacist || VM.CurrentUser.Authority == DomainModel.Enum.Authority.PharmacyManager) return true;
             MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
             return false;
         }
@@ -414,7 +416,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
-        private static string BuildPatientTel(Prescription p)
+        public static string BuildPatientTel(Prescription p)
         {
             string patientTel = string.Empty;
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
@@ -461,7 +463,7 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("TreatmentDateReturn", treatReturn),
                         new ReportParameter("RecId", " "), //病歷號
                         new ReportParameter("Division",p.Division is null ?string.Empty:p.Division.Name),
-                        new ReportParameter("Hospital", p.Institution.Name),
+                        new ReportParameter("Hospital", p.Institution is null ? VM.CurrentPharmacy.Name : p.Institution.Name),
                         new ReportParameter("PaySelf", (p.PrescriptionPoint.AmountSelfPay ?? 0).ToString()),
                         new ReportParameter("ServicePoint", p.PrescriptionPoint.MedicalServicePoint.ToString()),
                         new ReportParameter("TotalPoint", p.PrescriptionPoint.TotalPoint.ToString()),
@@ -512,7 +514,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("PatientName", p.Patient.Name),
                 new ReportParameter("PatientGender_Birthday",$"{cusGender}/{DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true)}"),
                 new ReportParameter("TreatmentDate", treatmentDateChi),
-                new ReportParameter("Hospital", p.Institution.Name),
+                new ReportParameter("Hospital", p.Institution is null ? VM.CurrentPharmacy.Name : p.Institution.Name),
                 new ReportParameter("PaySelf", (p.PrescriptionPoint.AmountSelfPay ?? 0).ToString()),
                 new ReportParameter("ServicePoint", p.PrescriptionPoint.MedicalServicePoint.ToString()),
                 new ReportParameter("TotalPoint", p.PrescriptionPoint.TotalPoint.ToString()),
@@ -629,6 +631,10 @@ namespace His_Pos.NewClass.Prescription.Service
             else
                 Current.PrescriptionStatus.IsCreateSign = true;
         }
+        public static List<string> GetPrescriptionSign(Prescription p)
+        {
+            return HisAPI.WritePrescriptionData(p);
+        }
 
         public void Print(bool noCard)
         {
@@ -663,27 +669,36 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
-            var reportFormat = Properties.Settings.Default.ReportFormat;
-            if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
-            {
-                TempPrint.Division.Name = "";
-                var singleMode = (bool)PrintResult[1];
-                if (singleMode)
-                    TempPrint.PrintMedBagSingleMode();
-                else
-                    TempPrint.PrintMedBagMultiMode();
-            }
-            else if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+            string reportFormat = Settings.Default.ReportFormat;
+            //if (TempPre.Institution != null)// && TempPre.Institution.ID == "3532082753"
+            //{
+            //    TempPrint.Division.Name = "";
+            //    bool singleMode = (bool)PrintResult[1];
+
+            //    if (singleMode)
+            //    {
+            //        TempPrint.PrintMedBagSingleMode();
+            //    }
+            //    else
+            //    {
+            //        TempPrint.PrintMedBagMultiMode();
+            //    }
+            //}
+            if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
             {
                 TempPre.PrintMedBagSingleModeByCE();
             }
             else
             {
-                var singleMode = (bool)PrintResult[1];
+                bool singleMode = (bool)PrintResult[1];
                 if (singleMode)
+                {
                     TempPre.PrintMedBagSingleMode();
+                }
                 else
+                {
                     TempPre.PrintMedBagMultiMode();
+                }
             }
         }
 
@@ -732,10 +747,15 @@ namespace His_Pos.NewClass.Prescription.Service
                     }
                 }
             }
-            var selfcoSendCount = printSendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
-            var selfallSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
-            //部分傳送的品項 > 0 或是 全傳送的品項 > 0 且 < 處方總量
-            if (selfcoSendCount > 0 || (selfallSendCount < printSendData.Count && selfallSendCount > 0))
+            //var selfcoSendCount = printSendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
+            //var selfallSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
+
+            var selfPrepareAmount = tempPrintSendData.Sum(_ => _.TreatAmount - _.SendAmount);
+            var sendAmount = tempPrintSendData.Sum(_ => _.SendAmount);
+
+
+            //有自備也有傳送則列印登錄明細
+            if (selfPrepareAmount > 0 && sendAmount > 0)
             {
                 var rptViewer = new ReportViewer();
                 SetReserveMedicinesSheetReportViewer(rptViewer, tempPrintSendData);
@@ -856,7 +876,7 @@ namespace His_Pos.NewClass.Prescription.Service
         public void CloneTempPre()
         {
             TempPre = (Prescription)Current.Clone();
-            //if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
+            //if (TempPre.Institution != null&& TempPre.Institution.ID == "3532082753")
             //{
             //    TempPrint = (Prescription)Current.PrintClone();
             //}

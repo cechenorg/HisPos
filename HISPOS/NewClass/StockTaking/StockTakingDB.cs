@@ -93,7 +93,7 @@ namespace His_Pos.NewClass.StockTaking
         internal static void InsertStockTaking(StockTaking.StockTaking stockTaking, string typeName)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "EmpID", ChromeTabViewModel.ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "EmpID", ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "warID", stockTaking.WareHouse.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "TypeName", typeName);
             DataBaseFunction.AddSqlParameter(parameterList, "ProductIDs", SetStockTakingPlanProducts(stockTaking.StockTakingProductCollection));
@@ -166,6 +166,7 @@ namespace His_Pos.NewClass.StockTaking
             masterTable.Columns.Add("StoTakDet_NewValue", typeof(double));
             masterTable.Columns.Add("StoTakDet_Note", typeof(string));
             masterTable.Columns.Add("StoTakDet_ValueDiff", typeof(double));
+            masterTable.Columns.Add("StoTakDet_BatchNumber", typeof(string));
             masterTable.Columns.Add("TakingPrice", typeof(double));
             return masterTable;
         }
@@ -188,11 +189,12 @@ namespace His_Pos.NewClass.StockTaking
             {
                 DataRow newRow = productListTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_ProductID", m.ID);
-                DataBaseFunction.AddColumnValue(newRow, "StoTakDet_EmployeeID", ChromeTabViewModel.ViewModelMainWindow.CurrentUser.ID);
+                DataBaseFunction.AddColumnValue(newRow, "StoTakDet_EmployeeID", ViewModelMainWindow.CurrentUser.ID);
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_OldValue", m.Inventory);
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_NewValue", m.NewInventory);
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_Note", m.Note);
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_ValueDiff", m.NewInventoryTotalPrice - m.TotalPrice);
+                DataBaseFunction.AddColumnValue(newRow, "StoTakDet_BatchNumber", m.BatchNum);
                 DataBaseFunction.AddColumnValue(newRow, "TakingPrice", m.TakingPrice);
                 productListTable.Rows.Add(newRow);
             }

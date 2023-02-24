@@ -14,63 +14,47 @@ namespace His_Pos.NewClass.Person.Customer
 
         public void SearchCustomers(string idNumber, string name, string cellPhone, string tel, DateTime? birth)
         {
-            var table = CustomerDb.SearchCustomers(idNumber, name, cellPhone, tel, birth);
-            foreach (DataRow r in table.Rows)
+            var cusList = CustomerDb.SearchCustomers(idNumber, name, cellPhone, tel, birth);
+            foreach (Customer r in cusList)
             {
-                Add(new Customer(r));
-            }
-        }
-
-        public void Init()
-        {
-            var table = CustomerDb.GetData();
-            foreach (DataRow r in table.Rows)
-            {
-                Add(new Customer(r));
+                Add(r);
             }
         }
 
         public void GetDataByNameOrBirth(string name, DateTime? date, string idNumber, string phoneNumber)
         {
             Clear();
-            var table = CustomerDb.GetDataByNameOrBirth(name, date, idNumber, phoneNumber);
-            foreach (DataRow r in table.Rows)
+            var cusList = CustomerDb.GetDataByNameOrBirth(name, date, idNumber, phoneNumber);
+            foreach (Customer r in cusList)
             {
-                Customer customer = new Customer(r);
-                customer.IsEnable = r.Field<bool>("Cus_IsEnable");
-                Add(customer);
+                Add(r);
             }
         }
 
-        public void GetDataByNameOrBirth(string ID)
+        public void GetCustomerByCusId(int ID)
         {
             Clear();
-            var table = CustomerDb.GetDataByNameOrBirth(ID);
-            foreach (DataRow r in table.Rows)
-            {
-                Customer customer = new Customer(r);
-                customer.IsEnable = r.Field<bool>("Cus_IsEnable");
-                Add(customer);
-            }
+            var customer = CustomerDb.GetCustomerByCusId(ID);
+            Add(customer);
         }
 
         public Customers SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> ddatas)
         {
-            DataTable table = CustomerDb.SetCustomersByPrescriptions(ddatas);
+            var cusList = CustomerDb.SetCustomersByPrescriptions(ddatas);
             Customers customers = new Customers();
-            foreach (DataRow r in table.Rows)
+            foreach (Customer cus in cusList)
             {
-                customers.Add(new Customer(r));
+                customers.Add(cus);
             }
             return customers;
         }
 
         public void GetTodayEdited()
         {
-            var table = CustomerDb.GetTodayEdited();
-            foreach (DataRow r in table.Rows)
+            var cusList = CustomerDb.GetTodayEdited();
+            foreach (Customer r in cusList)
             {
-                Add(new Customer(r));
+                Add(r);
             }
         }
     }

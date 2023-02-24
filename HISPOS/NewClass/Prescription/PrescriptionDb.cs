@@ -1,9 +1,13 @@
-﻿using His_Pos.ChromeTabViewModel;
+﻿using Dapper;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
+using His_Pos.HisApi;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
+using His_Pos.NewClass.Prescription.ICCard.Upload;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
@@ -17,10 +21,12 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Transactions;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
+using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 
 // ReSharper disable TooManyArguments
 
@@ -38,6 +44,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescriptionDetails));
+            DataBaseFunction.AddSqlParameter(parameterList, "Emp", ViewModelMainWindow.CurrentUser.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
         }
 
@@ -392,22 +399,13 @@ namespace His_Pos.NewClass.Prescription
             p.Patient.CheckGender();
             var gender = p.Patient.Gender.Equals("男") ? "1" : "2";
             dtlData.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
-            AppendPatientTel(dtlData, p.Patient);
+            AppendPatientTel(dtlData, p.Patient, p);
             dtlData.AppendLine();
         }
 
-        private static void AppendPatientTel(StringBuilder dtlData, Customer patient)
+        private static void AppendPatientTel(StringBuilder dtlData, Customer patient, Prescription p)
         {
-            string patientTel = string.Empty;
-            if (!string.IsNullOrEmpty(patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.CellPhone : patient.CellPhone + "(註)";
-            else
-            {
-                if (!string.IsNullOrEmpty(patient.Tel))
-                    patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.Tel : patient.Tel + "(註)";
-                else if (!string.IsNullOrEmpty(patient.ContactNote))
-                    patientTel = patient.ContactNote.Replace("\r\n", "/");
-            }
+            string patientTel = PrescriptionService.BuildPatientTel(p);
             dtlData.Append(string.IsNullOrEmpty(patientTel) ? string.Empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
         }
 
@@ -672,6 +670,10 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", p.PrescriptionStatus.IsDeposit);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsAdjust", p.PrescriptionStatus.IsAdjust);
 
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_OrigTreatmentDT", null);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode1", p.OrigTreatmentCode);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedIDCode2", null);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_CardNo", null);
             prescriptionMasterTable.Rows.Add(newRow);
             return prescriptionMasterTable;
         }
@@ -758,6 +760,10 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_IsDeclare", typeof(bool));
             masterTable.Columns.Add("PreMas_IsDeposit", typeof(bool));
             masterTable.Columns.Add("PreMas_IsAdjust", typeof(bool));
+            masterTable.Columns.Add("PreMas_OrigTreatmentDT", typeof(string));
+            masterTable.Columns.Add("PreMas_MedIDCode1", typeof(string));
+            masterTable.Columns.Add("PreMas_MedIDCode2", typeof(string));
+            masterTable.Columns.Add("PreMas_CardNo", typeof(string));
             return masterTable;
         }
 
@@ -1175,6 +1181,47 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "StoOrd_PrescriptionID", iD);
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderByPrescriptionID]", parameterList);
+        }
+
+        public static void UploadData2(Prescription p, IcDataUploadService.Rec rec1)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                string sql = string.Empty;
+                sql = string.Format("Update [{0}].[HIS].[PrescriptionMaster] Set [PreMas_OrigTreatmentDT] = '{1}', [PreMas_MedIDCode1] = '{2}', [PreMas_MedIDCode2] = '{3}', [PreMas_CardNo] = '{4}', [PreMas_ModifyEmpID] = '{5}', [PreMas_ModifyTime] = GETDATE(), PreMas_SecuritySign = '{6}' Where [PreMas_ID] = {7} \n", Properties.Settings.Default.SystemSerialNumber, p.OrigTreatmentDT, p.OrigTreatmentCode, p.TreatmentCode, p.Card.CardNumber, ViewModelMainWindow.CurrentUser.ID, p.Card.MedicalNumberData.SecuritySignature, p.ID);
+                
+                if (p.PrescriptionSign != null)
+                {
+                    for (int i = 0; i < p.Medicines.Count; i++)
+                    {
+                        sql += string.Format("Update [{0}].[HIS].[PrescriptionDetail] Set PreDet_SecuritySign = '{1}' Where PreDet_PrescriptionID = {2} And PreDet_Number = {3} \n", Properties.Settings.Default.SystemSerialNumber,
+                                   p.PrescriptionSign[i],
+                                   p.ID,
+                                   i + 1
+                                   );
+                    }
+                }
+                
+                
+                
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    _ = conn.Query<int>(sql, commandType: CommandType.Text);
+                });
+                scope.Complete();
+            }
+                
+        }
+        public static string GetSignXml(int id)
+        {
+            string result = string.Empty;
+            string sql = string.Format("Select UplData_Content From {0}.His.UploadData Where UplData_PrescriptionID = {1}", 
+                Properties.Settings.Default.SystemSerialNumber, id);
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.QueryFirst<string>(sql, commandType: CommandType.Text);
+            });
+            return result;
         }
     }
 }

@@ -37,9 +37,12 @@ namespace His_Pos.FunctionWindow
 
         #endregion ----- Define Variables -----
 
+        private readonly IEmployeeService _employeeService;
+
         public LoginWindowViewModel()
         {
-            
+            _employeeService = new EmployeeService(new EmployeeDb());
+
             LoginCommand = new RelayCommand<object>(LoginAction);
             LeaveCommand = new RelayCommand(LeaveAction);
             CheckCsHis();
@@ -58,7 +61,7 @@ namespace His_Pos.FunctionWindow
         private void LoginAction(object sender)
         {
             bool isEnable = false;
-            Employee loginEmployee = EmployeeService.Login(Account, (sender as PasswordBox)?.Password);
+            Employee loginEmployee = _employeeService.Login(Account, (sender as PasswordBox)?.Password);
             if (loginEmployee != null) 
             {
                 ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
@@ -149,7 +152,13 @@ namespace His_Pos.FunctionWindow
                 Properties.Settings.Default.InvoiceNumberStart = string.IsNullOrEmpty(inumS) ? "" : inumS.Substring(6, inumS.Length - 6);
                 Properties.Settings.Default.InvoiceNumberCount = string.IsNullOrEmpty(inumC) ? "" : inumC.Substring(6, inumC.Length - 6);
                 Properties.Settings.Default.InvoiceNumberEng = string.IsNullOrEmpty(inumE) ? "" : inumE.Substring(6, inumE.Length - 6);
-                Properties.Settings.Default.PrePrint = string.IsNullOrEmpty(pP) ? "" : pP.Substring(3, pP.Length - 3);
+
+                if (pP != null)
+                {
+                    bool flag = Boolean.TryParse(pP.Substring(3, pP.Length - 3), out flag);
+                    Properties.Settings.Default.PrePrint = flag.ToString();//string.IsNullOrEmpty(pP) ? "" : pP.Substring(3, pP.Length - 3);
+                }
+                
                 Properties.Settings.Default.ReportFormat = string.IsNullOrEmpty(rpf) ? "" : rpf.Substring(4);
                 Properties.Settings.Default.Save();
             }

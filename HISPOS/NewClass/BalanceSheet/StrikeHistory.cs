@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using System;
 using System.Data;
@@ -164,7 +165,7 @@ namespace His_Pos.NewClass.BalanceSheet
 
         public bool CanEdit
         {
-            get => (StrikeTime >= DateTime.Today || ViewModelMainWindow.CurrentUser.ID == 1) && CanDelete;
+            get => ((InsertTime >= DateTime.Today && ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff) || ViewModelMainWindow.CurrentUser.Authority == Authority.Admin) && CanDelete;
         }
 
         private bool CanDelete { get; set; }

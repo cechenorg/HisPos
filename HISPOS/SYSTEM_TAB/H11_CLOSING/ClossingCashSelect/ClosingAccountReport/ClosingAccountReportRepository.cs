@@ -90,10 +90,14 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
             parameterList.Add(new SqlParameter("verifykey", data.VerifyKey));
             parameterList.Add(new SqlParameter("TargetMonth", data.Month));
             parameterList.Add(new SqlParameter("TargetValue", data.MonthlyTarget));
+            parameterList.Add(new SqlParameter("PrescriptionCountTarget", data.PrescriptionCountTarget));
+            parameterList.Add(new SqlParameter("PrescriptionProfitTarget", data.DrugProfitTarget));
+            parameterList.Add(new SqlParameter("OtcProfitTarget", data.OtcProfitTarget));
+            parameterList.Add(new SqlParameter("OtcTurnoverTarget", data.OtcTurnoverTarget));
             parameterList.Add(new SqlParameter("EmpAccount", ViewModelMainWindow.CurrentUser.Account));
             
             MainWindow.ServerConnection.ExecuteProcBySchema(
-               ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertUpdateAccountTarget]", parameterList);
+               ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertUpdateAccountTarget_Dev]", parameterList);
      
         }
 

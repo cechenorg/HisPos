@@ -444,9 +444,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             var idnum = string.IsNullOrEmpty(IdNumber) ? null : IdNumber;
             var phone = string.IsNullOrEmpty(PhoneNumber) ? null : PhoneNumber;
 
-            MainWindow.ServerConnection.OpenConnection();
-            CustomerCollection.GetDataByNameOrBirth(name, bday, idnum, phone);
-            MainWindow.ServerConnection.CloseConnection();
+            CustomerCollection.GetDataByNameOrBirth(name, bday, idnum, phone);        
             if (CustomerCollection.Count > 0)
                 Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
             InitDataChanged();
@@ -454,9 +452,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         private void SearchIDAction()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            CustomerCollection.GetDataByNameOrBirth(SearchOrderID);
-            MainWindow.ServerConnection.CloseConnection();
+            CustomerCollection.GetCustomerByCusId(Convert.ToInt32(SearchOrderID));
             if (CustomerCollection.Count > 0)
                 Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
             InitDataChanged();

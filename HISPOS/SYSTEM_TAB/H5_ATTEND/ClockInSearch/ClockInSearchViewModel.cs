@@ -28,11 +28,14 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             return this;
 
         }
-        public ClockInSearchViewModel()
+
+        private IEmployeeService _employeeService;
+        public ClockInSearchViewModel(IEmployeeService employeeService)
         {
             RegisterCommands();
             GetComYear();
             GetDate();
+            _employeeService = employeeService;
         }
 
         public string account = "";
@@ -247,7 +250,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         }
         private bool CheckPassWord()
         {
-            SingInEmployee = EmployeeService.Login(SingInEmployee.Account, SingInEmployee.Password);
+            SingInEmployee = _employeeService.Login(SingInEmployee.Account, SingInEmployee.Password);
             
             //檢查帳密 密碼錯誤
             if (SingInEmployee == null)

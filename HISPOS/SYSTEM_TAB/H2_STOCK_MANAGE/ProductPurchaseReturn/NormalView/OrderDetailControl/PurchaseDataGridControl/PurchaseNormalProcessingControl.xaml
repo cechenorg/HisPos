@@ -157,6 +157,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Width="Auto"
+                    MinWidth="150"
                     Binding="{Binding ID}"
                     FontFamily="Segoe UI Semi"
                     Header="商品代碼"
@@ -182,7 +183,8 @@
                                     CommonSafeAmount="{Binding SafeAmount}"
                                     ControlLevel="{Binding IsControl}"
                                     IsCommon="{Binding IsCommon}"
-                                    IsFrozen="{Binding IsFrozen}" />
+                                    IsFrozen="{Binding IsFrozen}" 
+                                    IsDeposit="{Binding IsDeposit}"/>
                                 <Label
                                     Margin="-5,0,0,0"
                                     VerticalAlignment="Center"
@@ -226,7 +228,7 @@
                                 Width="60"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.##}}"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18" />
                             <!--<TextBox
@@ -388,6 +390,19 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTextColumn
+                    Width="100"
+                    Binding="{Binding OrderDetailWarehouse.Name}"
+                    FontFamily="Segoe UI Semi"
+                    Header="庫別"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTemplateColumn
                     MinWidth="120"
                     Header="效期"
@@ -404,21 +419,17 @@
                                 InsertKeyMode="Overwrite"
                                 PreviewKeyDown="Amount_PreviewKeyDown"
                                 KeyDown="MaskedTextBox_OnKeyDown"
-                                Mask="000/00/00"
+                                Mask="0000/00/00"
                                 PromptChar="-"
-                                Style="{StaticResource MaterialDesignTextBox}"
-                                ValueDataType="xctk:DateTimeFormat">
+                                Style="{StaticResource MaterialDesignTextBox}">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding
-                                        Converter="{StaticResource NullableDateConverter}"
+                                        StringFormat= "yyyy/MM/dd"
                                         Mode="TwoWay"
                                         NotifyOnValidationError="True"
                                         Path="SearchStartDate"
                                         UpdateSourceTrigger="PropertyChanged"
                                         ValidatesOnDataErrors="True">
-                                        <Binding.ValidationRules>
-                                            <service:DateValidationRule />
-                                        </Binding.ValidationRules>
                                     </Binding>
                                 </xctk:MaskedTextBox.Text>
                             </xctk:MaskedTextBox>
@@ -582,106 +593,138 @@
                 FontWeight="Bold"
                 Foreground="Black" />
         </StackPanel>
-        <StackPanel
-            Grid.Row="3"
-            Background="{StaticResource GridDarkerBackGround}"
-            Orientation="Horizontal">
-            <Button
-                Visibility="{Binding CurrentStoreOrder.Visibility}"
-                Margin="10,0,0,0"
-                Width="150"
-                Background="RoyalBlue"
-                BorderThickness="0"
-                Command="{Binding ToNextStatusCommand}"
-                Content="確認收貨"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16" Cursor="Hand" />
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="總計 $"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                Foreground="Black" />
-            <TextBlock
-                Width="65"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                FontWeight="Bold"
-                Foreground="Black"
-                Text="{Binding CurrentStoreOrder.TotalPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
-            <Label
-                Margin="20,0,0,0"
-                VerticalAlignment="Center"
-                Content="共"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                FontWeight="Bold"
-                Foreground="Black" />
-            <Label
-                Width="50"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Center"
-                Content="{Binding CurrentStoreOrder.OrderProducts.Count}"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                FontWeight="Bold"
-                Foreground="Black" />
-            <Label
-                VerticalAlignment="Center"
-                Content="品項"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                FontWeight="Bold"
-                Foreground="Black" />
-            <Label
-                Width="95"
-                VerticalAlignment="Center"
-                Content="建立時間:"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                FontWeight="Bold"
-                Foreground="Black" />
-            <Label
-                Width="195"
-                VerticalAlignment="Center"
-                Content="{Binding CurrentStoreOrder.CreateDateTime, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                FontWeight="Bold"
-                Foreground="Black" />
-            <Label
-                Visibility="{Binding CurrentStoreOrder.Visibility}"
-                x:Name="lbNormalPay"
-                VerticalAlignment="Center"
-                Content="一般收貨"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16"
-                Foreground="Black" />
-            <ToggleButton
-                Visibility="{Binding CurrentStoreOrder.Visibility}"
-                x:Name="tgPay"
-                Click="tgPay_Click"
-                Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                IsChecked="{Binding CurrentStoreOrder.IsPayCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <Label
-                Visibility="{Binding CurrentStoreOrder.Visibility}"
-                x:Name="lbCashPay"
-                VerticalAlignment="Center"
-                Content="下貨付現"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16"
-                Foreground="DimGray" />
-            <Button 
-                Width="120"
-                Margin="25,0,0,0"
-                Background="DimGray"
-                BorderThickness="0"
-                Command="{Binding DeleteOrderCommand}"
-                Content="{Binding BtnScrapContent}"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16" />
-        </StackPanel>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="275"/>
+                <ColumnDefinition Width="700"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel
+                Grid.Column="0"
+                Background="{StaticResource GridDarkerBackGround}"
+                Orientation="Horizontal">
+                <Button
+                    Visibility="{Binding CurrentStoreOrder.Visibility}"
+                    Margin="5,0,0,0"
+                    Width="120"
+                    Background="RoyalBlue"
+                    BorderThickness="0"
+                    Command="{Binding ToNextStatusCommand}"
+                    Content="確認收貨"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16" Cursor="Hand" />
+            </StackPanel>
+            <StackPanel 
+                Grid.Column="1"
+                Background="{StaticResource GridDarkerBackGround}"
+                Orientation="Horizontal">
+                <Label
+                    Margin="5,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="總計$"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    Foreground="Black" />
+                <TextBlock
+                    Width="Auto"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                    Text="{Binding CurrentStoreOrder.TotalPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
+                <Label
+                    Margin="5,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="寄售$"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    Foreground="Black" />
+                <TextBlock
+                    Width="Auto"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                    Text="{Binding CurrentStoreOrder.DepositPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Column="2"
+                Background="{StaticResource GridDarkerBackGround}"
+                Orientation="Horizontal">
+                <Label
+                    VerticalAlignment="Center"
+                    Content="共"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="Black" />
+                <Label
+                    Width="30"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Content="{Binding CurrentStoreOrder.OrderProducts.Count}"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="Black" />
+                <Label
+                    VerticalAlignment="Center"
+                    Content="品項"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="Black" />
+                <Label
+                    Width="90"
+                    VerticalAlignment="Center"
+                    Content="建立時間:"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="Black" />
+                <Label
+                    Width="150"
+                    VerticalAlignment="Center"
+                    Content="{Binding CurrentStoreOrder.CreateDateTime, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="Black" />
+                <Label
+                    Visibility="{Binding CurrentStoreOrder.Visibility}"
+                    x:Name="lbNormalPay"
+                    VerticalAlignment="Center"
+                    Content="一般收貨"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="Black" />
+                <ToggleButton
+                    Visibility="{Binding CurrentStoreOrder.Visibility}"
+                    x:Name="tgPay"
+                    Click="tgPay_Click"
+                    Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                    IsChecked="{Binding CurrentStoreOrder.IsPayCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Label
+                    Visibility="{Binding CurrentStoreOrder.Visibility}"
+                    x:Name="lbCashPay"
+                    VerticalAlignment="Center"
+                    Content="下貨付現"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="DimGray" />
+                <Button 
+                    Width="120"
+                    Margin="5,0,0,0"
+                    Background="DimGray"
+                    BorderThickness="0"
+                    Command="{Binding DeleteOrderCommand}"
+                    Content="{Binding BtnScrapContent}"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16" />
+            </StackPanel>
+        </Grid>
+        
     </Grid>
 </UserControl>

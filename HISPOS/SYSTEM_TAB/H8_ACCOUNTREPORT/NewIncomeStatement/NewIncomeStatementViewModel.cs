@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Report.Accounts;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
 {
@@ -156,22 +157,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
 
         private void GetData(int year)
         {
-            MainWindow.ServerConnection.OpenConnection();
-
-            List<SqlParameter> paraCount = new List<SqlParameter>();
-            paraCount.Add(new SqlParameter("YEAR", year));
-            List<SqlParameter> paraIncome = new List<SqlParameter>();
-            paraIncome.Add(new SqlParameter("YEAR", year));
-            List<SqlParameter> paraExpanse = new List<SqlParameter>();
-            paraExpanse.Add(new SqlParameter("YEAR", year));
-            List<SqlParameter> paraClosed = new List<SqlParameter>();
-            paraClosed.Add(new SqlParameter("YEAR", year));
-
-            DataTable count = MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionCountByYear]", paraCount);
-            DataTable income = MainWindow.ServerConnection.ExecuteProc("[Get].[IncomeByYear]", paraIncome);
-            DataTable expanse = MainWindow.ServerConnection.ExecuteProc("[Get].[ExpanseByYear]", paraExpanse);
-            DataTable closed = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsClosedByYear]", paraClosed);
-
+            DataSet ds = AccountsDb.GetIncomeData(year);
+            DataTable count = ds.Tables[0];
+            DataTable income = ds.Tables[1];
+            DataTable expanse = ds.Tables[2];
+            DataTable closed = ds.Tables[3];
             foreach (DataRow dr in closed.Rows)
             {
                 bool isZero = true;
@@ -191,14 +181,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
             closed.AcceptChanges();
 
             Dispatcher.CurrentDispatcher.Invoke( () =>
-            {  
+            {
                 CountDataView = count.DefaultView;
                 IncomeDataView = income.DefaultView;
                 ExpanseDataView = expanse.DefaultView;
                 ClosedDataView = closed.DefaultView;
             });
 
-            MainWindow.ServerConnection.CloseConnection();
 
             DataTable total = income.Clone();
 
@@ -230,15 +219,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
             }
 
             Dispatcher.CurrentDispatcher.Invoke(() =>
-            { 
-                TotalDataView = total.DefaultView; 
+            {
+                TotalDataView = total.DefaultView;
             });
         }
 
         private void SearchData()
         {
-             
-
             if (InputYear > 2000 && InputYear < 2100)
             {
                  IsBusy = true;

@@ -151,7 +151,7 @@
                         Background="Transparent"
                         BorderThickness="0"
                         Command="{Binding TradeProfitReportSelectionChangedCommand}"
-                        Content="OTC交易"
+                        Content="門市交易"
                         FontFamily="Segoe UI Semibold"
                         FontSize="13"
                         Foreground="DimGray"
@@ -212,7 +212,7 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         HorizontalAlignment="Center"
-                        Content="OTC交易"
+                        Content="門市交易"
                         FontFamily="Segoe UI Semibold"
                         FontSize="20" />
                     <StackPanel

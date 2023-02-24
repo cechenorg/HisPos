@@ -1935,7 +1935,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 return;
             }
 
-            var data = ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id);
+            var data = ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id,StartDate,EndDate);
             PrescriptionDetailMedicineRepotCollection = new ObservableCollection<PrescriptionDetailMedicineRepot>(data);
         }
 
@@ -2527,7 +2527,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 TradeProfitReportCollection = new TradeProfitReports(StartDate, EndDate);
                 StockTakingReportCollection = new StockTakingReports(StartDate, EndDate);
                 StockTakingOTCReportCollection = new StockTakingOTCReports(StartDate, EndDate);
-                RewardReportCollection = new RewardReports(StartDate, EndDate);
+                RewardReportCollection = new RewardReports(Properties.Settings.Default.SystemSerialNumber, StartDate, EndDate);
 
                 DataTable Extra = PrescriptionProfitReportDb.GetExtraMoneyByDates(StartDate, EndDate);
                 ExtraMoney = Extra.Rows[0].Field<decimal?>("CashFlow_Value");
@@ -2789,7 +2789,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             TradeDetailReportSum.RealTotal = tempCollection.Sum(s => s.RealTotal);
             TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
             TradeDetailReportSum.CardFee = tempCollection.Sum(s => s.CardFee);
-            TradeDetailReportSum.Count = tempCollection.Count();
+            TradeDetailReportSum.Count = tempCollection.Count(_ => _.IsEnable);
+
+            TradeDetailReportSum.DisableCount = tempCollection.Count(_ => _.IsEnable == false);
+
+            TradeDetailReportSum.TotalCount = TradeDetailReportSum.DisableCount + TradeDetailReportSum.Count;
+
         }
 
         private void SumStockTakingOTCDetailReport()

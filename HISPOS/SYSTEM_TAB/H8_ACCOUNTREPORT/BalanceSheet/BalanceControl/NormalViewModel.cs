@@ -186,17 +186,15 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         {
             AccDataDetail = new AccountsDetailReport();
             SelectedType = new List<AccountsReports>();
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
-            MainWindow.ServerConnection.CloseConnection();
+            DataTable table = AccountsDb.GetBankByAccountsID();
             SelectedType = new List<AccountsReports>();
             if (ID != "001001")
             {
                 SelectedType.Add(new AccountsReports("現金", 0, "001001"));
             }
-            foreach (DataRow c in result.Rows)
+            foreach (DataRow dr in table.Rows)
             {
-                SelectedType.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+                SelectedType.Add(new AccountsReports(dr["Name"].ToString(), 0, dr["ID"].ToString()));
             }
             AccData = new AccountsReport();
             IDClone = ID;
@@ -256,14 +254,15 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             if (Selected == null) { return; }
 
             AccDataDetail = new AccountsDetailReport();
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ID", Selected.ID));
-            DataTable Data = new DataTable();
-            Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetailDetailReport]", parameters);
+            DataTable table = AccountsDb.GetAccountsDetailDetailReport(Selected.ID);
+            if(Selected.ID == "203999")
+            {
+                table = GetProfit(table);
+            }
+            
             int index = 0;
             int nowindex = 0;
-            foreach (DataRow r in Data.Rows)
+            foreach (DataRow r in table.Rows)
             {
                 if (r["ID"].ToString() == SelectDetailClone)
                 {
@@ -273,35 +272,36 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 index++;
             }
             //SelectedDetailCopy = SelectDetailClone;
-            MainWindow.ServerConnection.CloseConnection();
             SelectedDetailindex = nowindex;
         }
 
         public NormalViewModel()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
-            MainWindow.ServerConnection.CloseConnection();
+            DataTable table = AccountsDb.GetBankByAccountsID();
             SelectedType = new List<AccountsReports>();
             SelectedType.Add(new AccountsReports("現金", 0, "001001"));
-            foreach (DataRow c in result.Rows)
+            foreach (DataRow dr in table.Rows)
             {
-                SelectedType.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+                SelectedType.Add(new AccountsReports(dr["Name"].ToString(), 0, dr["ID"].ToString()));
             }
             AccData = new AccountsReport();
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
+        }
+        public NormalViewModel(bool undo)
+        {
+
         }
 
         public void Init()
         {
             AccData = new AccountsReport();
             Selectedindex = -1;
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ID", IDClone));
-            parameters.Add(new SqlParameter("edate", EndDate));
-            DataTable Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
+            DataTable Data = AccountsDb.GetAccountsDetail(IDClone, EndDate);
+            if(IDClone.Equals("203"))
+            {
+                Data = GetProfit(Data, false);
+            }
             int index = 0;
             int nowindex = 0;
             if (Data.Rows.Count > 0)
@@ -324,7 +324,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                     DetailChangeAction();
                 }
             }
-            MainWindow.ServerConnection.CloseConnection();
         }
 
         public void DeleteAction()
@@ -474,5 +473,148 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             Init();
 
         }
+
+        public DataTable tableClone()
+        {
+            DataTable table = new DataTable();
+            DataColumn dcID = new DataColumn("ID", typeof(string));
+            table.Columns.Add(dcID);
+            DataColumn dcName = new DataColumn("Header", typeof(string));
+            table.Columns.Add(dcName);
+            DataColumn dcType = new DataColumn("Type", typeof(string));
+            table.Columns.Add(dcType);
+            DataColumn dcValue = new DataColumn("Value", typeof(decimal));
+            table.Columns.Add(dcValue);
+            return table;
+        }
+        /// <summary>
+        /// </summary>
+        /// <param name="table">沖帳紀錄</param>
+        /// <param name="isPeriod">是否本期損益</param>
+        /// <returns></returns>
+        public DataTable GetProfit(DataTable table, bool isPeriod)
+        {
+            decimal total = 0;
+            int count = 13;
+            DateTime dt = new DateTime();
+            if(EndDate == dt)
+            {
+                EndDate = DateTime.Today;
+            }
+            if (isPeriod)
+            {
+                DataSet dataSet = AccountsDb.GetIncomeData(EndDate.Year);
+                DataRow[] totalIncome = dataSet.Tables[1].Select("MONTH = '總計'");
+                DataRow[] totalExpanse = dataSet.Tables[2].Select("MONTH = '總計'");
+                DataRow[] totalClosed = dataSet.Tables[3].Select("MONTH = '總計'");
+                total = (totalIncome != null && totalIncome.Length > 0 ? Convert.ToDecimal(totalIncome[0][EndDate.Month]) : 0) +
+                    (totalExpanse != null && totalExpanse.Length > 0 ? Convert.ToDecimal(totalExpanse[0][EndDate.Month]) : 0) +
+                    (totalClosed != null && totalClosed.Length > 0 ? Convert.ToDecimal(totalClosed[0][EndDate.Month]) : 0);
+            }
+            else
+            {
+                for (int year = 2021; year <= EndDate.Year; year++)
+                {
+                    DataSet dataSet = AccountsDb.GetIncomeData(year);
+                    DataRow[] totalIncome = dataSet.Tables[1].Select("MONTH = '總計'");
+                    DataRow[] totalExpanse = dataSet.Tables[2].Select("MONTH = '總計'");
+                    DataRow[] totalClosed = dataSet.Tables[3].Select("MONTH = '總計'");
+                    if (year == EndDate.Year)
+                        count = EndDate.Month;
+
+                    for (int j = 1; j < count; j++)
+                    {
+                        total += (totalIncome != null && totalIncome.Length > 0 ? Convert.ToDecimal(totalIncome[0][j]) : 0) +
+                            (totalExpanse != null && totalExpanse.Length > 0 ? Convert.ToDecimal(totalExpanse[0][j]) : 0) +
+                            (totalClosed != null && totalClosed.Length > 0 ? Convert.ToDecimal(totalClosed[0][j]) : 0);
+                    }
+                }
+            }
+            if (isPeriod)
+            {
+                DataRow row = table.NewRow();
+                row["Value"] = total;
+                table.Rows.Add(row);
+            }
+            else if (!isPeriod && table != null && table.Select("ID = '203999'").Length > 0)
+            {
+                DataRow dr = table.Select("ID = '203999'")[0];
+                dr["Value"] = Convert.ToDecimal(dr["Value"]) + total;
+            }
+            else
+            {
+                DataRow row = table.NewRow();
+                row["ID"] = "203999";
+                row["Name"] = "股東權益";
+                row["Value"] = total;
+                table.Rows.Add(row);
+            }
+            return table;
+        }
+        /// <summary>
+        /// 203999沖帳明細
+        /// </summary>
+        /// <param name="tbStrike">沖帳紀錄</param>
+        /// <returns></returns>
+        public DataTable GetProfit(DataTable tbStrike)
+        {
+            DataTable table = SetTableStruct();
+            int count = 13;
+            //List<string> colMonth = new List<string>() {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "AUG", "SEP", "OCT", "NOV", "DEC" };
+            for(int year = 2021; year <= DateTime.Today.Year; year++)
+            {
+                DataSet dataSet = AccountsDb.GetIncomeData(year);//同月份總計相加
+                DataRow[] totalIncome = dataSet.Tables[1].Select("MONTH = '總計'");
+                DataRow[] totalExpanse = dataSet.Tables[2].Select("MONTH = '總計'");
+                DataRow[] totalClosed = dataSet.Tables[3].Select("MONTH = '總計'");
+                if(year == DateTime.Today.Year)
+                {
+                    count = DateTime.Today.Month + 1;
+                }
+                for(int month = 1; month < count; month++)
+                {
+                    decimal monTotal = (totalIncome != null && totalIncome.Length > 0 ? Convert.ToDecimal(totalIncome[0][month]) : 0) +
+                                       (totalExpanse != null && totalExpanse.Length > 0 ? Convert.ToDecimal(totalExpanse[0][month]) : 0) +
+                                       (totalClosed != null && totalClosed.Length > 0 ? Convert.ToDecimal(totalClosed[0][month]) : 0);
+                    string sdate = string.Format("{0}-{1}-01", year - 1911, month.ToString().PadLeft(2, '0'));
+                    DataRow[] drs = tbStrike.Select(string.Format("Date = '{0}'", sdate));
+                    if(drs != null && drs.Length > 0)
+                    {
+                        foreach(DataRow dr in drs)
+                        {
+                            decimal strikeValue = Convert.ToDecimal(dr["Value"]);
+                            monTotal = monTotal + strikeValue;
+                        }
+                    }
+                    if(monTotal != 0)
+                    {
+                        DataRow newRow = table.NewRow();
+                        newRow["Record_ID"] = sdate;
+                        newRow["Date"] = sdate;
+                        newRow["Value"] = monTotal;
+                        newRow["ID"] = sdate;
+                        newRow["StrikeValue"] = 0.00;
+                        table.Rows.Add(newRow);
+                    }
+                }
+            }
+            return table;
+        }
+        public DataTable SetTableStruct()
+        {
+            DataTable table = new DataTable();
+            DataColumn dcRecID = new DataColumn("Record_ID", typeof(string));
+            DataColumn dcDate = new DataColumn("Date", typeof(string));
+            DataColumn dcValue = new DataColumn("Value", typeof(decimal));
+            DataColumn dcID = new DataColumn("ID", typeof(string));
+            DataColumn dcStrikeValue = new DataColumn("StrikeValue", typeof(decimal));
+            table.Columns.Add(dcRecID);
+            table.Columns.Add(dcDate);
+            table.Columns.Add(dcValue);
+            table.Columns.Add(dcID);
+            table.Columns.Add(dcStrikeValue);
+            return table;
+        }
+
     }
 }

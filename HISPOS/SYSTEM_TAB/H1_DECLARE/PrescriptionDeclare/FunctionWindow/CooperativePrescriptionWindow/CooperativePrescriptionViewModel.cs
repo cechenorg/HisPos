@@ -3,11 +3,15 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.Service;
 using System;
 using System.ComponentModel;
+using System.Data;
+using System.Windows;
 using System.Windows.Data;
+using static His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.PrescriptionDeclareViewModel;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using Resources = His_Pos.Properties.Resources;
 
@@ -152,19 +156,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
 
         #endregion Commands
 
-        public CooperativePrescriptionViewModel()
+        private readonly GetCustomerPrescriptionDelegate _getCustomerPrescriptionDelegate;
+
+        public CooperativePrescriptionViewModel(GetCustomerPrescriptionDelegate getCustomerPrescriptionDelegate = null)
         {
+            _getCustomerPrescriptionDelegate = getCustomerPrescriptionDelegate;
             InitVariables();
-            InitPrescriptions();
+            InitPrescriptions1();
             InitCommands();
         }
 
-        public CooperativePrescriptionViewModel(int v)
-        {
-            InitVariables();
-            InitPrescriptions1();
-        }
-
+       
         private void InitVariables()
         {
             IsRead = false;
@@ -196,19 +198,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 BusyContent = Resources.取得合作處方;
                 MainWindow.ServerConnection.OpenConnection();
                 cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
+                var table = CooperativeClinicSettingDb.Init();
                 MainWindow.ServerConnection.CloseConnection();
                 if (Properties.Settings.Default.PrePrint == "True")
                 {
-                    foreach (CusPrePreviewBase cooView in cooperativePres)
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
-                        MainWindow.Instance.Dispatcher.Invoke(() =>
+                        foreach (CusPrePreviewBase cooView in cooperativePres)
                         {
-                            if (!cooView.IsPrint)
+                            DataRow[] coolInstitution = table.Select(string.Format("CooCli_ID = '{0}'", Convert.ToString(cooView.Institution.ID)));
+                            if (coolInstitution != null && coolInstitution.Length > 0)
                             {
-                                PrintAction(cooView);
+                                var isAutoPrint = Convert.ToBoolean(coolInstitution[0]["CooCli_AutoPrint"]);
+                                if (!cooView.IsPrint && isAutoPrint)
+                                {
+                                    PrintAction(cooView);
+                                }
                             }
-                        });
-                    }
+                        }
+                    }));
                 }
             };
             getCooperativePresWorker.RunWorkerCompleted += (o, ea) =>
@@ -243,7 +251,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             try
             {
                 if (SelectedPrescription is null) return;
-                Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
+                _getCustomerPrescriptionDelegate?.Invoke(SelectedPrescription.CreatePrescription());
                 Messenger.Default.Send(new NotificationMessage("CloseCooperativePrescriptionWindow"));
             }
             catch (Exception e)

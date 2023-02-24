@@ -18,6 +18,14 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport.RewardDetailRecordRepo
             CultureInfo culture = new CultureInfo("zh-TW");
             culture.DateTimeFormat.Calendar = new TaiwanCalendar();
             ChkoutTime = dt.ToString("yyy/MM/dd", culture);
+            if (r.Table.Columns.Contains("Pro_RewardPercent"))
+            {
+                RewardPercent = Convert.ToDouble(r["Pro_RewardPercent"]);
+            }
+            if (r.Table.Columns.Contains("TraDet_Amount"))
+            {
+                TraDetAmount = Convert.ToInt32(r["TraDet_Amount"]);
+            }
         }
 
         public string ProductID { get; set; }
@@ -25,5 +33,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport.RewardDetailRecordRepo
         public double RewardAmount { get; set; }
         public string ChkoutTime { get; set; }
         public int MasterID { get; set; }
+        public double RewardPercent { get; set; }
+        public int TraDetAmount { get; set; }
     }
 }

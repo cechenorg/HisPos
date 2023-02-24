@@ -11,28 +11,50 @@ using His_Pos.Service;
 
 namespace His_Pos.NewClass.Person.Employee
 {
-    public class EmployeeService
+
+    public interface IEmployeeService
     {
+        void Insert(Employee emp);
+        Employee GetDataByID(int id);
+        IEnumerable<Employee> GetData();
+        void Update(Employee emp);
+        void Delete(Employee emp);
+        Employee Login(string Account, string Password);
 
-        public static Employee GetDataByID(int id)
+    }
+    public class EmployeeService : IEmployeeService
+    {
+        private readonly IEmployeeDB _employeeDb;
+
+        public EmployeeService(IEmployeeDB employeeDb)
         {
-            return EmployeeDb.GetData().SingleOrDefault(_ => _.ID == id);
+            _employeeDb = employeeDb;
         }
 
-        public static void Insert(Employee emp)
+        public Employee GetDataByID(int id)
         {
-            EmployeeDb.Insert(emp);
+            return _employeeDb.GetData().SingleOrDefault(_ => _.ID == id);
         }
 
-        public static void Update(Employee emp)
+        public IEnumerable<Employee> GetData()
+        {
+            return _employeeDb.GetData();
+        }
+
+        public void Insert(Employee emp)
+        {
+            _employeeDb.Insert(emp);
+        }
+
+        public void Update(Employee emp)
         {
 
-            EmployeeDb.Update(emp);
+            _employeeDb.Update(emp);
         }
    
-        public static void Delete(Employee emp)
+        public void Delete(Employee emp)
         {
-            EmployeeDb.Delete(emp.ID);
+            _employeeDb.Delete(emp.ID);
         }
 
         public static string GetEmployeeNewAccount()
@@ -84,9 +106,9 @@ namespace His_Pos.NewClass.Person.Employee
             return ErrorMessage.OK;
         }
 
-        public static Employee Login(string Account, string Password)
+        public Employee Login(string Account, string Password)
         {
-            return EmployeeDb.EmployeeLogin(Account, Password);
+            return _employeeDb.EmployeeLogin(Account, Password);
         }
 
         public static IEnumerable<GroupAuthority> GetGroupPharmacy(Employee emp, List<PharmacyInfo> groupServerList)

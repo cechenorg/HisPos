@@ -165,6 +165,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
                     Width="Auto"
+                    MinWidth="150"
                     Header="商品代碼"
                     IsReadOnly="True"
                     CanUserResize="False">
@@ -173,6 +174,7 @@
                             <TextBox
                                 x:Name="ProductIDTextbox"
                                 Width="Auto"
+                                MinWidth="150"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
                                 CharacterCasing="Upper"
@@ -194,6 +196,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <generalCustomControl:ProductStatusIcon
+                                    IsDeposit="{Binding IsDeposit}"
                                     CommonSafeAmount="{Binding SafeAmount}"
                                     ControlLevel="{Binding IsControl}"
                                     IsCommon="{Binding IsCommon}"
@@ -236,7 +239,7 @@
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                 PreviewKeyDown="ProductPriceTextbox_PreviewKeyDown"
                                 Style="{DynamicResource CantEditPrice}"
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}">
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.##}}">
                             </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -378,6 +381,19 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTextColumn
+                    Width="100"
+                    Binding="{Binding OrderDetailWarehouse.Name}"
+                    FontFamily="Segoe UI Semi"
+                    Header="庫別"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTemplateColumn
                     MinWidth="120"
                     Header="備註"
@@ -526,8 +542,8 @@
             Orientation="Horizontal">
             <Button
                 Visibility="{Binding CurrentStoreOrder.Visibility}"
-                Width="120"
-                Margin="15,0,0,0"
+                Width="100"
+                Margin="10,0,0,0"
                 Background="{StaticResource Shadow}"
                 BorderBrush="Transparent"
                 Command="{Binding AddProductCommand}"
@@ -535,14 +551,15 @@
                 FontFamily="Segoe UI Semibold"
                 Foreground="Black" />
             <Label
-                Margin="10,0,0,0"
+                Width="Auto"
+                Margin="5,0,0,0"
                 VerticalAlignment="Center"
                 Content="總計 $"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 Foreground="Black" />
             <TextBlock
-                Width="100"
+                Width="90"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -550,7 +567,23 @@
                 Foreground="Black"
                 Text="{Binding CurrentStoreOrder.TotalPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" />
             <Label
-                Margin="20,0,0,0"
+                Margin="5,0,0,0"
+                VerticalAlignment="Center"
+                Content="寄售$"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <TextBlock
+                Width="85"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="Black"
+                Text="{Binding CurrentStoreOrder.DepositPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                Width="Auto"
+                Margin="5,0,0,0"
                 VerticalAlignment="Center"
                 Content="共"
                 FontFamily="Segoe UI Semibold"
@@ -558,7 +591,7 @@
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
-                Width="80"
+                Width="50"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
                 Content="{Binding CurrentStoreOrder.ProductCount, UpdateSourceTrigger=PropertyChanged, FallbackValue=0}"
@@ -574,7 +607,7 @@
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
-                Margin="10,0,0,0"
+                Margin="5,0,0,0"
                 Width="95"
                 VerticalAlignment="Center"
                 Content="建立時間:"
@@ -583,8 +616,8 @@
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
-                Margin="5,0,0,0"
-                Width="230"
+                Margin="0"
+                Width="170"
                 VerticalAlignment="Center"
                 Content="{Binding CurrentStoreOrder.CreateDateTime, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
                 FontFamily="Segoe UI Semibold"

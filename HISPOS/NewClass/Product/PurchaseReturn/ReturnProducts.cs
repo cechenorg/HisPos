@@ -22,6 +22,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     switch (row.Field<string>("TYPE"))
                     {
                         case "O":
+                        case "D":
                             tempProduct = new ReturnOTC(row);
                             break;
 

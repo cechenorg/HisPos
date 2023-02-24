@@ -1,9 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
 
 namespace His_Pos.NewClass.ProductType
 {
-    public class ProductType : ObservableObject
+    public class ProductType : ObservableObject, ICloneable
     {
         #region ----- Define Variables -----
 
@@ -19,12 +20,23 @@ namespace His_Pos.NewClass.ProductType
         }
 
         #endregion ----- Define Variables -----
-
+        public ProductType()
+        {
+        }
         public ProductType(DataRow row)
         {
             ID = row.Field<int>("Type_ID");
             ParentID = row.Field<int>("Type_Parent");
             Name = row.Field<string>("Type_Name");
+        }
+        public object Clone()
+        {
+            ProductType productType = new ProductType();
+
+            productType.ID = ID;
+            productType.Name = Name;
+
+            return productType;
         }
     }
 }

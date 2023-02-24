@@ -373,80 +373,50 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Label
-                        Height="35"
-                        Margin="10,0,0,0"
-                        Content="藥品點數"
+                    <Label Height="35" Margin="10,0,0,0" Content="藥品點數"
                         Style="{StaticResource BoldLabelContent17}" />
-                    <Label
-                        Width="75"
-                        Height="35"
-                        HorizontalContentAlignment="Right"
+                    <Label Width="75" Height="35"
+                        HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}"
                         Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.MedicinePoint, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         Style="{StaticResource BoldLabelContent16}" />
-                    <Label
-                        Height="35"
-                        Margin="10,0,0,0"
-                        Content="特材點數"
+                    <Label Height="35" Margin="10,0,0,0" Content="特材點數"
                         Style="{StaticResource BoldLabelContent17}" />
-                    <Label
-                        Width="75"
-                        Height="35"
-                        Margin="5,0,0,0"
-                        HorizontalContentAlignment="Right"
+                    <Label Width="75" Height="35" Margin="5,0,0,0"
+                        HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}"
                         Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.SpecialMaterialPoint, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         Style="{StaticResource BoldLabelContent16}" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <Label
-                        Height="35"
-                        Margin="10,0,0,0"
-                        Content="部分負擔"
+                    <Label Height="35" Margin="10,0,0,0" Content="部分負擔"
                         Style="{StaticResource BoldLabelContent17}" />
-                    <Label
-                        Width="75"
-                        Height="35"
-                        Margin="5,0,0,0"
-                        HorizontalContentAlignment="Right"
+                    <Label Width="75" Height="35" Margin="5,0,0,0"
+                        HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}"
                         Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.CopaymentPoint, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         Style="{StaticResource BoldLabelContent16}" />
-                    <Label
-                        Height="35"
-                        Margin="10,0,0,0"
-                        Content="藥事服務"
+                    <Label Height="35" Margin="10,0,0,0" Content="藥事服務"
                         Style="{StaticResource BoldLabelContent17}" />
-                    <Label
-                        Width="75"
-                        Height="35"
-                        Margin="5,0,0,0"
+                    <Label Width="75" Height="35" Margin="5,0,0,0"
                         HorizontalContentAlignment="Right"
                         Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.MedicalServicePoint, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         Style="{StaticResource BoldLabelContent16}" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <Label Height="35" Margin="10,0,0,0" Content="申請點數" Style="{StaticResource BoldLabelContent17}" />
-                    <Label Width="75"  Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Right"
+                    <Label Width="75"  Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}"
                         Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.ApplyPoint, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         Style="{StaticResource BoldLabelContent16}" />
                     <Label Height="35" Margin="10,0,0,0"  Content="總計點數" Style="{StaticResource BoldLabelContent17}" />
-                    <Label
-                        Width="75"
-                        Height="35"
-                        Margin="5,0,0,0"
-                        HorizontalContentAlignment="Right"
+                    <Label Width="75" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}"
                         Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.TotalPoint, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         Style="{StaticResource BoldLabelContent16}" />
                 </StackPanel>
                 <StackPanel Grid.Row="3" Orientation="Horizontal">
                     <Label Height="30" Margin="10,0,0,0" Content="自費" Style="{StaticResource BoldLabelContent17}" />
-                    <TextBox
-                        Width="70"
-                        Height="35"
+                    <TextBox Width="60" Height="35"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Right"
                         CaretBrush="Black"
-                        FontSize="16"
-                        Foreground="{StaticResource ForeGround}"
+                        FontSize="16" Foreground="{StaticResource ForeGround}"
                         Text="{Binding DataContext.EditedPrescription.PrescriptionPoint.AmountSelfPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
@@ -454,12 +424,12 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
-                    <Label Height="35" Margin="10,0,0,0" Content="押金" Style="{StaticResource BoldLabelContent17}" />
-                    <Label Width="40" Height="35" Margin="10,0,0,0" HorizontalContentAlignment="Right"
+                    <Label Height="35" Margin="5,0,0,0" Content="押金" Style="{StaticResource BoldLabelContent17}" />
+                    <Label Width="55" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}"
                         Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.Deposit, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         Style="{StaticResource BoldLabelContent16}" />
-                    <Label Height="35" Margin="10,0,0,0" Content="實收" Style="{StaticResource BoldLabelContent17}" />
-                    <Label Width="42" Height="35" Margin="10,0,0,0" HorizontalContentAlignment="Right"
+                    <Label Height="32" Margin="5,0,0,0" Content="實收" Style="{StaticResource BoldLabelContent17}" />
+                    <Label Width="65" Height="35" Margin="0,0,0,0" HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}"
                         Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.ActualReceive, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         Style="{StaticResource BoldLabelContent16}" />
                 </StackPanel>
@@ -480,7 +450,7 @@
                         </ContentControl.Style>
                     </ContentControl>
                     <Button Margin="10,5,0,0" Background="Red" BorderBrush="Red"
-                        Command="{Binding DataContext.Delete, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"  Content="刪除" />
+                        Command="{Binding DataContext.Delete, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"  Content="刪除" IsEnabled="{Binding IsCanDelete}"/>
                     <Button Margin="10,5,0,0" Background="DimGray" BorderBrush="DimGray"
                         Command="{Binding DataContext.RedoEdit, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Content="復原編輯"
                         IsEnabled="{Binding IsEdit, UpdateSourceTrigger=PropertyChanged}" />
@@ -583,7 +553,7 @@
             <Grid Width="1340" Height="800">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="45" />
-                    <RowDefinition Height="165" />
+                    <RowDefinition Height="220" />
                     <RowDefinition />
                     <RowDefinition Height="250" />
                 </Grid.RowDefinitions>
@@ -634,6 +604,7 @@
                 </StackPanel>
                 <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                     <Grid.RowDefinitions>
+                        <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
@@ -1015,6 +986,17 @@
                             </i:Interaction.Triggers>
                         </ComboBox>
                     </StackPanel>
+                    <StackPanel Grid.Row="3" Margin="10" Orientation="Horizontal">
+                        <Label Content="原就醫識別碼" Style="{StaticResource BoldLabelContent18}" />
+                        <TextBox x:Name="MedIDCode1" Width="240" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" CharacterCasing="Upper" 
+                                 Text="{Binding EditedPrescription.OrigTreatmentCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="17" Foreground="{StaticResource ForeGround}" MaxLength="20">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <command:EventToCommand Command="{Binding DataChanged}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </StackPanel>
                 </Grid>
                 <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="1320"
                     Margin="10,0,10,0" HorizontalAlignment="Left" AllowDrop="True" AutoGenerateColumns="False"
@@ -1057,18 +1039,25 @@
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
                                 </Trigger>
+                                <DataTrigger Binding="{Binding Path=Price0}" Value="true">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Opacity="0.5" Color="Pink" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="50" IsReadOnly="True">
+                        <DataGridTemplateColumn Width="30" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="Hidden"></Image>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn MinWidth="20" Binding="{Binding Order, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontWeight="Bold" IsReadOnly="True">
+                        <DataGridTextColumn MinWidth="10" Binding="{Binding Order, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontWeight="Bold" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -1076,12 +1065,13 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTemplateColumn x:Name="MedicineId" Width="150" Header="健保代碼" IsReadOnly="True">
+                        <DataGridTemplateColumn x:Name="MedicineId" MinWidth="150" Width="auto" Header="健保代碼" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox
                                         Name="MedicineID"
-                                        Width="150"
+                                        MinWidth="150"
+                                        Width="auto"
                                         Height="35"
                                         HorizontalAlignment="Center"
                                         HorizontalContentAlignment="Center"

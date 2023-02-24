@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
 using System;
 using His_Pos.Database;
+using His_Pos.NewClass.StockValue;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
@@ -21,41 +22,35 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         public DateTime EndDate;
         public ProductViewModel(string ID, DateTime endDate)
         {
+            DetailChangeCommand = new RelayCommand(DetailChangeAction);
             AccData = new AccountsReport();
             IDClone = ID;
             EndDate = endDate;
-            Init();
-            DetailChangeCommand = new RelayCommand(DetailChangeAction);
-
+            //Init();
+            if (ID.Equals("006"))
+            {
+                DataTable table = StockValueDb.GetStockVale(endDate.AddDays(-7), endDate);
+                foreach (DataRow dr in table.Rows)
+                {
+                    AccData.Add(new AccountsReports(dr));
+                }
+            }
+            else
+            {
+                DataTable table = AccountsDb.GetAccountsDetail(IDClone, EndDate);
+                foreach (DataRow dr in table.Rows)
+                {
+                    AccData.Add(new AccountsReports(dr));
+                }
+            }
+            
+            
             SelectedIndex = 0;
             if (Selected != null)
             {
                 Selected = AccData[0];
             }
-            DetailChangeAction();
-        }
-        public void Init()
-        {
-            AccData = new AccountsReport();
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ID", IDClone));
-            parameters.Add(new SqlParameter("edate", EndDate));
-            DataTable Data = new DataTable();
-            Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
-            foreach (DataRow r in Data.Rows)
-            {
-                AccData.Add(new AccountsReports(r));
-            }
-            SelectedIndex = -1;
-            SelectedIndex = 0;
-            if (AccData.Count > 1)
-            {
-                Selected = AccData[0];
-            }
-            SelectedIndex = 0;
-            DetailChangeAction();
-            MainWindow.ServerConnection.CloseConnection();
+            //DetailChangeAction();
         }
         public ProductViewModel()
         {
@@ -97,18 +92,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
         private void DetailChangeAction()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            var parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "ID", IDClone);
-            DataBaseFunction.AddSqlParameter(parameterList, "edate", EndDate);
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameterList);
-            MainWindow.ServerConnection.CloseConnection();
+            DataTable table = AccountsDb.GetAccountsDetail(IDClone, EndDate);
             Product = new ObservableCollection<AccountsReports>();
-            foreach (DataRow c in result.Rows)
+            foreach (DataRow dr in table.Rows)
             {
-                if (Selected != null && Selected.ID != c["ID"].ToString())
+                if (Selected != null && Selected.ID != dr["ID"].ToString())
                 {
-                    Product.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+                    Product.Add(new AccountsReports(dr["Name"].ToString(), 0, dr["ID"].ToString()));
                 }
             }
         }

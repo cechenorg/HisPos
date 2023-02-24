@@ -32,6 +32,15 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
                 IsTakingPriceEditable = ValueDiff > 0;
             }
         }
+        private string batchNum;
+        public string BatchNum
+        {
+            get { return batchNum; }
+            set
+            {
+                Set(() => BatchNum, ref batchNum, value);
+            }
+        }
 
         private double valueDiff;
 
@@ -135,9 +144,9 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             }
             else
             {
-                AveragePrice = TotalPrice / Inventory;
+                AveragePrice = Math.Round(TotalPrice / Inventory, 4, MidpointRounding.AwayFromZero);
             }
-            TakingPrice = Math.Round(AveragePrice, 2, MidpointRounding.AwayFromZero);
+            TakingPrice = Math.Round(AveragePrice, 4, MidpointRounding.AwayFromZero);
             IsUpdate = false;
             NewInventoryTotalPrice = (OnTheFrame + MedBagAmount - Inventory) * AveragePrice;
         }
@@ -146,9 +155,11 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
 
         public void GetStockTakingTotalPrice(string warID)
         {
-            NewInventoryTotalPrice = StockTakingDB.GetStockTakingTotalPrice(this, warID).Rows[0].Field<double>("TotalPrice");
-            if ((NewInventory + MedBagAmount - Inventory) > 0)
-                NewInventoryTotalPrice += (NewInventory + MedBagAmount - Inventory) * AveragePrice;
+            //NewInventoryTotalPrice = StockTakingDB.GetStockTakingTotalPrice(this, warID).Rows[0].Field<double>("TotalPrice");
+            //if ((NewInventory + MedBagAmount - Inventory) > 0)
+            //    NewInventoryTotalPrice += (NewInventory + MedBagAmount - Inventory) * AveragePrice;
+
+            NewInventoryTotalPrice = Math.Round((NewInventory + MedBagAmount) * AveragePrice, 0);
         }
 
         #endregion ----- Define Functions -----

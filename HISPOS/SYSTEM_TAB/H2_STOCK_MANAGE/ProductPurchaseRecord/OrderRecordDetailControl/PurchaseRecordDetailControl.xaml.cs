@@ -24,7 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord.OrderRecordDe
 
             ProductDetailWindow.ShowProductDetailWindow();
 
-            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)row.Item).ID, ((PurchaseProduct)row.Item).WareHouseID.ToString() }, "ShowProductDetail"));
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)row.Item).ID, ((PurchaseProduct)row.Item).OrderDetailWarehouse.ID.ToString() }, "ShowProductDetail"));
         }
     }
 }

@@ -199,7 +199,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="80"
-                    Binding="{Binding IsType}"
+                    Binding="{Binding DisplayType}"
                     FontFamily="Segoe UI Semibold"
                     Header="類別"
                     IsReadOnly="True">
@@ -298,7 +298,7 @@
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
-                Content="OTC小計: $"
+                Content="門市小計: $"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBlock

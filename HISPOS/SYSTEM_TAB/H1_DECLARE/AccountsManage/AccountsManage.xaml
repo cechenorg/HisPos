@@ -89,7 +89,7 @@
                 VerticalAlignment="Center"
                 Content="立帳日期"
                 FontSize="18" />
-            <xctk:MaskedTextBox
+            <!--<xctk:MaskedTextBox
                 x:Name="RecordDate"
                 Width="100"
                 Height="35"
@@ -121,7 +121,23 @@
                         <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=StartDate}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </xctk:MaskedTextBox>
+            </xctk:MaskedTextBox>-->
+            <DatePicker
+                x:Name="RecordDate"
+                Language="zh-cn"
+                Width="120"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Text="{Binding RecordDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Focusable="False"
+                FontSize="16">
+                <!--<DatePicker.Resources>
+                    <Style TargetType="DatePickerTextBox">
+                        <Setter Property="IsReadOnly" Value="True"/>
+                    </Style>
+                </DatePicker.Resources>-->
+            </DatePicker>
             <Button
                 x:Name="btnAdd"
                 Width="80"

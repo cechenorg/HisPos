@@ -10,26 +10,19 @@ namespace His_Pos.NewClass.Report.RewardReport
         {
         }
 
-        public RewardReports(DateTime sDate, DateTime eDate)
+        public RewardReports(string schema, DateTime sDate, DateTime eDate)
         {
-            GetDataByDate(sDate, eDate);
+            GetDataByDate(schema, sDate, eDate);
         }
 
-        public void GetDataByDate(DateTime sDate, DateTime eDate)
+        public void GetDataByDate(string schema, DateTime sDate, DateTime eDate)
         {
             Clear();
-            DataTable table = RewardReportDb.GetDataByDate(sDate, eDate);
+            DataTable table = RewardReportDb.GetDataByDate(schema ,sDate, eDate);
             foreach (DataRow r in table.Rows)
             {
                 Add(new RewardReport(r));
             }
-            //DataTable pointEditTable = PrescriptionProfitReportDb.GetPrescriptionPointEditRecordByDates(sDate, eDate);
-            //if (pointEditTable.Rows.Count > 0)
-            //{
-            //    var editDataRow = pointEditTable.Rows[0];
-            //    var editProfit = this.SingleOrDefault(p => p.TypeId.Equals("5"));
-            //    editProfit?.CountEditPoint(editDataRow);
-            //}
         }
     }
 }

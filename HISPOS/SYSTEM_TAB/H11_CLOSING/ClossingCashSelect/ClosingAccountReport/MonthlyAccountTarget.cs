@@ -11,11 +11,15 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
     public class MonthlyAccountTarget:ObservableObject
     {
         public MonthlyAccountTarget() { }
-        public MonthlyAccountTarget(DataRow r )
+        public MonthlyAccountTarget(DataRow r)
         {
             VerifyKey = r.Field<string>("Pharmacy_VerifyKey");
             Month = r.Field<DateTime>("TargetMonth");
             MonthlyTarget = r.Field<int>("TargetValue"); 
+            PrescriptionCountTarget = r.Field<int>("PrescriptionCountTarget"); 
+            DrugProfitTarget = r.Field<int>("PrescriptionProfitTarget"); 
+            OtcProfitTarget = r.Field<int>("OtcProfitTarget"); 
+            OtcTurnoverTarget = r.Field<int>("OtcTurnoverTarget"); 
         }
 
         public string VerifyKey { get; set; }
@@ -24,6 +28,10 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
         public int MonthlyProfit { get; set; } //月業績
 
         public int MonthlyTarget { get; set; } //月目標
+        public int PrescriptionCountTarget { get; set; } //慢箋張數
+        public int DrugProfitTarget { get; set; } //配藥+慢箋毛利
+        public int OtcProfitTarget { get; set; } //OTC毛利
+        public int OtcTurnoverTarget { get; set; } //OTC營業額
 
         public DateTime Month { get; set; } //加總
 

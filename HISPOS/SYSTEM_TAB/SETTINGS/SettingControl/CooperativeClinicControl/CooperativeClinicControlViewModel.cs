@@ -1,4 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
@@ -39,6 +41,14 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         {
             get { return cooperativeClinicSettingCollection; }
             set { Set(() => CooperativeClinicSettingCollection, ref cooperativeClinicSettingCollection, value); }
+        }
+
+        private bool isEnableEdit= VM.CurrentUser.Authority == Authority.Admin;
+
+        public bool IsEnableEdit
+        {
+            get { return isEnableEdit; }
+            set { Set(() => IsEnableEdit, ref isEnableEdit, value); }
         }
 
         #endregion Var
@@ -84,10 +94,53 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             var dailyUploadConfirm = new ConfirmWindow("更新後會影響處方資料串接與扣庫 是否更新合作診所? ", "合作診所更新確認", false);
             if (dailyUploadConfirm.DialogResult == true)
             {
+                if(DataCheck() == false)
+                    return;
+                
+
                 CooperativeClinicSettingCollection.Update();
                 MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
                 VM.CooperativeClinicSettings.Init();
             }
+        }
+
+        private bool DataCheck()
+        {
+            bool result = true;
+
+            foreach (var data in CooperativeClinicSettingCollection)
+            {
+                //檢查EndDate
+                if (data.EndDate < data.StartDate)
+                {
+                    MessageWindow.ShowMessage($@"{data.CooperavieClinic.Name} 結束日期不可小於開始日期!", Class.MessageType.ERROR);
+                    result = false;
+                    break;
+                }
+            }
+
+            //檢查同診所區間
+            var dataList = CooperativeClinicSettingCollection.ToList();
+
+            var repeatIDList = dataList.ToList().Where(_ => 
+                            dataList.Count(x => x.CooperavieClinic.ID == _.CooperavieClinic.ID) > 1).Select(_ => _.CooperavieClinic.ID).Distinct();
+
+            foreach (var repeatID in repeatIDList)
+            {
+                var repeatCoop = dataList.Where(_ => _.CooperavieClinic.ID == repeatID).OrderBy(_ => _.StartDate).ToList();
+
+                for (int i = 0; i < repeatCoop.Count - 1; i++)
+                {
+                    if (repeatCoop[i + 1].StartDate <= repeatCoop[i].EndDate)
+                    {
+                        MessageWindow.ShowMessage($@"{repeatCoop[i].CooperavieClinic.Name} 偵測到同藥局期間設定重複!", Class.MessageType.ERROR);
+                        result = false;
+                        break;
+                    }
+                }
+            }
+
+            return result;
         }
 
         private void OpenFileAction()

@@ -344,6 +344,7 @@ namespace His_Pos.NewClass.Medicine.Base
                         break;
 
                     case 2:
+                    case 4:
                         medicine = new MedicineOTC(r);
                         medicine.PaySelf = true;
 
@@ -683,13 +684,18 @@ namespace His_Pos.NewClass.Medicine.Base
                 foreach (var m in this)
                 {
                     if (!m.InventoryID.Equals(inv.ID) || m is MedicineVirtual) continue;
-                    if (m.IsCommon) continue; //常備藥不可於登錄採購
+                    if (m.IsCommon) {
+                        m.BuckleAmount = m.UsableAmount;
+                        continue; //常備藥不可於登錄採購
+                    }
                     var controlLevel = m is MedicineNHI nhiMed ? nhiMed.ControlLevel : null;
                     //notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID, m.FullName, m.Amount - m.UsableAmount, m.IsCommon, m.Frozen, controlLevel, m.AveragePrice, m.Amount - m.UsableAmount));
-                    notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID, m.FullName, m.Amount - m.UsableAmount, m.IsCommon, m.Frozen, controlLevel, m.AveragePrice, m.Amount - m.UsableAmount, m.UsableAmount, m.Amount,m.SingdeInv));
+                    if (m.Amount > m.UsableAmount)  { 
+                        notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID, m.FullName, m.Amount - m.UsableAmount, m.IsCommon, m.Frozen, controlLevel, m.AveragePrice, m.Amount - m.UsableAmount, m.UsableAmount, m.Amount,m.SingdeInv));
+                    }                    
                 }
                 negativeStock = this.Where(med => !(med is MedicineVirtual))
-                    .Where(med => med.InventoryID.Equals(inv.ID))
+                    .Where(med => (med.InventoryID.Equals(inv.ID) && med.BuckleAmount>med.UsableAmount))
                     .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
             }
             if (notEnoughMedicines.Count > 0 && warID.Equals("0"))

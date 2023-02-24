@@ -23,8 +23,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         private double newInventory;
         private double shelfInventory;
         private double medInventory;
+        private double currentInventory;
         private int autoHeight;
         private int autoGridHeight;
+        private bool isbtnEnable;
+        private ProductTypeEnum productType;
         public string NewPrice { get; set; }
 
         public double NewInventory
@@ -34,8 +37,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             {
                 newInventory = value;
                 shelfInventory = NewInventory - stockDetail.MedBagInventory;
+                IsbtnEnable = (wareHouse.ID == "9" && productType == ProductTypeEnum.Deposit && NewInventory > currentInventory) || (productType != ProductTypeEnum.Deposit && wareHouse.ID == "9") ? false : true;
                 OnPropertyChanged(nameof(IsOverage));
                 OnPropertyChanged(nameof(ShelfInventory));
+                OnPropertyChanged(nameof(IsbtnEnable));
             }
         }
         public double ShelfInventory
@@ -64,30 +69,44 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             get { return autoGridHeight; }
             set { autoGridHeight = value; }
         }
+        public bool IsbtnEnable
+        {
+            get { return isbtnEnable; }
+            set { isbtnEnable = value; }
+        }
         public bool IsOverage
         {
             get
             {
-                if (NewInventory > stockDetail.ShelfInventory) return true;
+                if (NewInventory > stockDetail.ShelfInventory && productType != ProductTypeEnum.Deposit) return true;
                 else return false;
             }
         }
 
+        public ProductTypeEnum ProductType
+        {
+            get { return productType; }
+            set { productType = value; }
+        }
+
         #endregion ----- Define Variables -----
 
-        public StockTakingWindow(string proID, WareHouse ware, MedicineStockDetail stock, bool isOTCType)
+        public StockTakingWindow(string proID, WareHouse ware, MedicineStockDetail stock, bool isOTCType, ProductTypeEnum productType)
         {
             InitializeComponent();
             DataContext = this;
             productID = proID;
             wareHouse = ware;
             stockDetail = stock;
-            NewPrice = stock.LastPrice.ToString("0.##");
+            NewPrice = productType == ProductTypeEnum.Deposit ? "0.00" : stock.LastPrice.ToString("0.##");
             newInventory = stock.ShelfInventory + stock.MedBagInventory;
+            currentInventory = stock.ShelfInventory + stock.MedBagInventory;
             shelfInventory = stock.ShelfInventory;
             MedInventory = stock.MedBagInventory;
             AutoHeight = isOTCType ? 60 : 200;
             AutoGridHeight = isOTCType ? 0 : 50;
+            ProductType = productType;
+            IsbtnEnable = true;
         }
 
         #region ----- Define Functions -----
@@ -138,6 +157,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             MainWindow.ServerConnection.OpenConnection();
             StockTaking stockTaking = new StockTaking();
+            if (ProductType == ProductTypeEnum.Deposit)
+                NewPrice = "0";
             stockTaking.SingleStockTaking(productID, stockDetail.TotalInventory, NewInventory, double.Parse(NewPrice), wareHouse);
             MainWindow.ServerConnection.CloseConnection();
 

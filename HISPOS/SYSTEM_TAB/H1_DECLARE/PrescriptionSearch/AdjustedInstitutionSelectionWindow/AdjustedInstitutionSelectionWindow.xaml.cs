@@ -16,7 +16,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
         public AdjustedInstitutionSelectionWindow(PrescriptionSearchInstitutions institutions)
         {
             InitializeComponent();
-            DataContext = new AdjustedInstitutionSelectionViewModel(institutions);
+            DataContext = new AdjustedInstitutionSelectionViewModel(institutions,this);
             ShowDialog();
         }
     }

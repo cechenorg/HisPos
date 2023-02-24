@@ -70,7 +70,7 @@ namespace His_Pos
             }
             else
             {
-                MessageWindow.ShowMessage(e.Exception.Message,MessageType.ERROR);
+                MessageWindow.ShowMessage(e.Exception.Message, MessageType.ERROR);
                 e.Handled = true;
             }
         }

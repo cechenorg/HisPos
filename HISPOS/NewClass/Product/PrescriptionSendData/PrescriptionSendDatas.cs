@@ -37,7 +37,8 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                             selfPrepareAmount = 0;
                     }
                     else
-                        selfPrepareAmount = m.SendAmount < 0 ? 0 : m.Amount - m.SendAmount;
+                        selfPrepareAmount = m.SendAmount <= 0 ? 0 : m.Amount - m.SendAmount;
+
 
                     if (tempMeds.Count(t => t.ID == m.InventoryID) == 0)
                         tempMeds.Add(new MedicineInventoryStruct(m.InventoryID, selfPrepareAmount));
@@ -61,18 +62,48 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                         tempMeds.Add(new MedicineInventoryStruct(m.InventoryID, 0));
                 }
             }
-            Inventorys inventories = Inventorys.GetAllInventoryByProIDs(meds);
-            foreach (var inv in inventories)
+            if (prescription.ID == 0)
             {
-                for (int i = 0; i < tempMeds.Count; i++)
+                Inventorys inventories = Inventorys.GetAllInventoryByProIDs(meds);
+                foreach (var inv in inventories)
                 {
-                    if (tempMeds[i].ID == inv.InvID)
+                    for (int i = 0; i < tempMeds.Count; i++)
                     {
-                        tempMeds[i].Amount += inv.InventoryAmount + inv.OnTheWayAmount - inv.MegBagAmount;
-                        tempMeds[i].Amount = tempMeds[i].Amount < 0 ? 0 : tempMeds[i].Amount;
+                        if (tempMeds[i].ID == inv.InvID)
+                        {
+                            tempMeds[i].Amount += inv.InventoryAmount + inv.OnTheWayAmount - inv.MegBagAmount;
+                            tempMeds[i].Amount = tempMeds[i].Amount < 0 ? 0 : tempMeds[i].Amount;
+                        }
                     }
                 }
             }
+            else
+            {
+                MedicineInventoryStructs usableMeds = new MedicineInventoryStructs();
+                usableMeds.GetUsableAmountByPrescriptionID(prescription.ID);
+                foreach (var m in usableMeds)
+                {
+                    for (int i = 0; i < tempMeds.Count; i++)
+                    {
+                        if (tempMeds[i].ID == m.ID)
+                        {
+                            tempMeds[i].Amount += m.Amount;
+                        }
+                    }
+                }
+                Inventorys inventories = Inventorys.GetAllInventoryByProIDs(meds);
+                foreach (var inv in inventories)
+                {
+                    for (int i = 0; i < tempMeds.Count; i++)
+                    {
+                        if (tempMeds[i].ID == inv.InvID)
+                        {
+                            tempMeds[i].Amount += inv.OnTheWayAmount ;
+                        }
+                    }
+                }
+            }
+
             for (int i = 0; i < tempMeds.Count; i++)
             {
                 for (int j = 0; j < this.Count; j++)

@@ -17,5 +17,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
                 Add(new PrescriptionSearchInstitution(r));
             }
         }
+
+        public bool IsNeedReSearch { get; set; }
     }
 }

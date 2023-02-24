@@ -1,6 +1,8 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System.Data;
+using DomainModel.Enum;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
@@ -18,12 +20,18 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             ChronicIsBuckle = r.Field<bool>("CooCli_ChiIsBuckle");
             ChronicWareHouse = VM.GetWareHouse(r.Field<int>("CooCli_ChiWareHouseID").ToString());
             AutoPrint = r.Field<bool>("CooCli_AutoPrint");
+            StartDate = r.Field<DateTime?>("CooCli_StartDate");
+            EndDate = r.Field<DateTime?>("CooCli_EndDate");
             if (!(FilePath is null))
             {
                 var tempsplit = FilePath.Split('\\');
                 DisplayFilePath = tempsplit[tempsplit.Length - 1];
             }
             IsInstitutionEdit = true;
+            if (r.Table.Columns.Contains("CooCli_Number"))
+            {
+                Number = r.Field<int>("CooCli_Number");
+            }
         }
 
         public CooperativeClinicSetting()
@@ -38,6 +46,14 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
         {
             get { return cooperavieClinic; }
             set { Set(() => CooperavieClinic, ref cooperavieClinic, value); }
+        }
+
+        private int number;
+
+        public int Number
+        {
+            get { return number; }
+            set { Set(() => Number, ref number, value); }
         }
 
         private bool autoPrint = false;
@@ -55,8 +71,21 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             get { return isInstitutionEdit; }
             set { Set(() => IsInstitutionEdit, ref isInstitutionEdit, value); }
         }
+        private DateTime? startDate;
 
+        public DateTime? StartDate
+        {
+            get { return startDate; }
+            set { Set(() => StartDate, ref startDate, value); }
+        }
 
+        private DateTime? endDate;
+
+        public DateTime? EndDate
+        {
+            get { return endDate; }
+            set { Set(() => StartDate, ref endDate, value); }
+        }
 
         private bool isPurge;
 

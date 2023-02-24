@@ -47,6 +47,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Collections.Generic;
 using System;
 using System.Diagnostics;
+using His_Pos.NewClass.Person.Employee;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -208,7 +209,7 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.藥健康網頁):
                 case nameof(FeatureItem.促銷管理):
                 case nameof(FeatureItem.銷售紀錄):
-                case nameof(FeatureItem.OTC訂購網頁):
+                case nameof(FeatureItem.商品訂購網站):
                 case nameof(FeatureItem.結帳作業):
                 case nameof(FeatureItem.損益報表):
                 case nameof(FeatureItem.資產負債表):
@@ -234,6 +235,8 @@ namespace His_Pos.ChromeTabViewModel
             if (IsTabOpened(featureItem.ToString())) return;
 
             TabBase newTab;
+
+            IEmployeeService employeeService = new EmployeeService(new EmployeeDb());
 
             switch (featureItem.ToString())
             {
@@ -273,7 +276,7 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new ProductTransactionRecordViewModel() { 
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.銷售作業)).Icon };
                     break;
-                case nameof(FeatureItem.OTC訂購網頁):
+                case nameof(FeatureItem.商品訂購網站):
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = ViewModelMainWindow.SingdeWebURI,
@@ -291,7 +294,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.員工管理):
-                    newTab = new EmployeeManageViewModel() { 
+                    newTab = new EmployeeManageViewModel(employeeService) { 
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.藥局管理)).Icon };
                     break;
 
@@ -401,12 +404,12 @@ namespace His_Pos.ChromeTabViewModel
 
                 //出勤管理
                 case nameof(FeatureItem.上下班打卡):   
-                    newTab = new AddClockInViewModel() {
+                    newTab = new AddClockInViewModel(employeeService) {
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.出勤管理)).Icon };
                     break;
 
                 case nameof(FeatureItem.打卡記錄查詢):
-                    newTab = new ClockInSearchViewModel() { 
+                    newTab = new ClockInSearchViewModel(employeeService) { 
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.出勤管理)).Icon };
                     break;
 

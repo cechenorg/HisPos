@@ -202,13 +202,23 @@ namespace His_Pos.NewClass.StoreOrder
 
         #region ///// Product Function /////
 
-        public override void CalculateTotalPrice()
+        public override void CalculateTotalPrice(int isDone)
         {
             if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
-                ReturnStockValue = ReturnProducts.Where(w => w.IsChecked).Sum(p => p.ReturnStockValue);
+            {
+                ReturnStockValue = ReturnProducts.Where(w => w.IsChecked && w.TypeOTC != 4).Sum(p => p.ReturnStockValue);
+                TotalPrice = ReturnProducts.Where(w => w.IsChecked && w.TypeOTC != 4).Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
+                TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
+            }
+            else
+            {
+                ReturnStockValue = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => p.ReceiveAmount);//Sum(p => p.InventoryDetailCollection.Sum(s => s.ReturnStockValue));
+                TotalPrice = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
+                TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
+            }
+                
 
-            TotalPrice = ReturnProducts.Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
-            TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
+            
             RaisePropertyChanged(nameof(ReturnDiff));
         }
 
@@ -230,8 +240,8 @@ namespace His_Pos.NewClass.StoreOrder
                             value = detail.ReturnStockValue;
                             avgPrice = detail.ReceiveAmount;
                         }
-                        returnProduct.Price = avgPrice;//(平均單價)
-                        returnProduct.SubTotal = Math.Round(Convert.ToDouble(avgPrice * returnProduct.RealAmount), MidpointRounding.AwayFromZero);
+                        returnProduct.Price = (OrderStatus== OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING) ? returnProduct.Price : avgPrice;//(平均單價)
+                        returnProduct.SubTotal = (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING) ? returnProduct.SubTotal : Math.Round(Convert.ToDouble(avgPrice * returnProduct.RealAmount), MidpointRounding.AwayFromZero);
                         returnProduct.ReceiveAmount = Math.Round(avgPrice * returnProduct.ReturnAmount, MidpointRounding.AwayFromZero);
                     }
                 }
@@ -248,7 +258,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             ReturnProducts.SetStartEditToPrice();
 
-            CalculateTotalPrice();
+            CalculateTotalPrice(0);
         }
 
         internal void CalculateReturnAmount()
@@ -258,7 +268,7 @@ namespace His_Pos.NewClass.StoreOrder
                 returnProduct.CalculateReturnAmount();
             }
 
-            CalculateTotalPrice();
+            CalculateTotalPrice(0);
         }
 
         internal void ReturnOrderRePurchase()
@@ -309,6 +319,7 @@ namespace His_Pos.NewClass.StoreOrder
                     switch (row.Field<string>("TYPE"))
                     {
                         case "O":
+                        case "D":
                             tempProduct = new ReturnOTC(row);
                             break;
 
@@ -363,7 +374,7 @@ namespace His_Pos.NewClass.StoreOrder
         public override void DeleteSelectedProduct()
         {
             ReturnProducts.Remove((ReturnProduct)SelectedItem);
-            CalculateTotalPrice();
+            CalculateTotalPrice(0);
 
             RaisePropertyChanged(nameof(ProductCount));
         }

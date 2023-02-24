@@ -22,6 +22,9 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
         public ClosingAccountTargetSettingWindow()
         {
             InitializeComponent();
+
+            var viewModel = new ClosingAccountTargetSettingVM(Close);
+            this.DataContext = viewModel;
         }
     }
 }

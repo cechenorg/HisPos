@@ -93,7 +93,10 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 NewCustomer.IDNumber = customer.IDNumber;
                 NewCustomer.Name = customer.Name;
                 NewCustomer.Birthday = customer.Birthday;
-                NewCustomer.CellPhone = !regex.IsMatch(customer.CellPhone) ? customer.CellPhone : string.Empty;
+
+                if(string.IsNullOrEmpty(customer.CellPhone) == false)
+                    NewCustomer.CellPhone = !regex.IsMatch(customer.CellPhone) ? customer.CellPhone : string.Empty;
+
                 NewCustomer.SecondPhone = customer.SecondPhone;
                 NewCustomer.Tel = customer.Tel;
                 if (customer.Gender == Properties.Resources.Male)

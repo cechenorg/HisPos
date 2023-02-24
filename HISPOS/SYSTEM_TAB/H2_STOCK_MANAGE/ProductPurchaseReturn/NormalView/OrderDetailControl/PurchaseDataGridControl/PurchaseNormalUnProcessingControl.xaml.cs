@@ -182,7 +182,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
             ProductDetailWindow.ShowProductDetailWindow();
 
-            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).WareHouseID.ToString() }, "ShowProductDetail"));
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).OrderDetailWarehouse.ID.ToString() }, "ShowProductDetail"));
         }
 
         private void GetProductToolTip(object sender, MouseEventArgs e)

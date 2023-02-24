@@ -33,8 +33,11 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using StringRes = His_Pos.Properties.Resources;
@@ -137,7 +140,6 @@ namespace His_Pos.ChromeTabViewModel
         public static Institutions Institutions { get; set; }
         public static WareHouses WareHouses { get; set; }
         public static CooperativeClinicSettings CooperativeClinicSettings { get; set; }
-        public CusPrePreviewBases cooperativePres { get; set; }
         public static Divisions Divisions { get; set; }
         public static AdjustCases AdjustCases { get; set; }
         public static PaymentCategories PaymentCategories { get; set; }
@@ -147,6 +149,7 @@ namespace His_Pos.ChromeTabViewModel
         public static Usages Usages { get; set; }
         public static Positions Positions { get; set; }
         public static int StoreOrderDays { get; set; }
+        public static DateTime ClosingDate { get; set; }
         public static Pharmacy CurrentPharmacy { get; set; }
         public static Employee CurrentUser { get; set; }
         public static Employees EmployeeCollection { get; set; }
@@ -164,13 +167,14 @@ namespace His_Pos.ChromeTabViewModel
             MainWindow.ServerConnection.OpenConnection();
             StoreOrderDays = StoreOrderDB.GetStoreOrderDays();
             CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
+            ClosingDate = Pharmacy.GetClosingDate();
             CurrentPharmacy.MedicalPersonnels = new Employees();
             CooperativeInstitutionID = WebApi.GetCooperativeClinicId(CurrentPharmacy.ID);
             MainWindow.ServerConnection.CloseConnection();
             CanMoveTabs = true;
             ShowAddButton = false;
 
-            SingdeWebURI = $@"http://kaokaodepon.singde.com.tw:5566/id/{CurrentPharmacy.ID}/pass/{CurrentPharmacy.ID}";
+            SingdeWebURI = $@"https://kaokaodepon.singde.com.tw:5566/id/{CurrentPharmacy.ID}/pass/{CurrentPharmacy.ID}";
 
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -204,7 +208,7 @@ namespace His_Pos.ChromeTabViewModel
                 Divisions = new Divisions();
                 BusyContent = "取得合作院所設定";
                 CooperativeClinicSettings = new CooperativeClinicSettings();
-                cooperativePres = new CusPrePreviewBases();
+                CusPrePreviewBases cooperativePres = new CusPrePreviewBases();
 
                 CooperativeClinicSettings.Init();
                 var xDocs = new List<XDocument>();
@@ -225,10 +229,31 @@ namespace His_Pos.ChromeTabViewModel
                             //開啟監聽
                             watch.EnableRaisingEvents = true;
                             //是否連子資料夾都要偵測
-                            watch.IncludeSubdirectories = true;
+                            watch.IncludeSubdirectories = false;
+
+                            watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
                             //新增時觸發事件
-                            watch.Created += watch_Created;
+                            watch.Created += new FileSystemEventHandler(watch_Created);
+                            //錯誤時觸發事件
+                            watch.Error += watch_Error;
+                            //Thread threadPrint = new Thread(TimePrint);
+                            //threadPrint.Start();
+                            //Task task = new Task(() => TimePrint());
+                            //await Task.Run(() => TimePrint());
                         }
+                    }
+
+                    if (c.TypeName != null && c.TypeName.Equals("展望") && Directory.Exists(c.FilePath))
+                    {
+                        FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.xml");
+                        //開啟監聽
+                        watch.EnableRaisingEvents = true;
+                        //是否連子資料夾都要偵測
+                        watch.IncludeSubdirectories = false;
+
+                        watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+                        //新增時觸發事件
+                        watch.Created += new FileSystemEventHandler(watch_Created);
                     }
                 }
 
@@ -261,8 +286,8 @@ namespace His_Pos.ChromeTabViewModel
                 {
                     BusyContent = "回傳合作診所處方中...";
                 }
-                
-                PrintCooPre();//列印還未列印藥袋
+
+                PrintCooPre(cooperativePres);//列印還未列印藥袋
                 //骨科上傳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
@@ -275,56 +300,59 @@ namespace His_Pos.ChromeTabViewModel
                 MainWindow.ServerConnection.OpenConnection();
                 HisApiFunction.CheckDailyUpload();
                 MainWindow.ServerConnection.CloseConnection();
+                RunBackgroundPrintTimer();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
-        private void PrintCooPre()
+
+        private void RunBackgroundPrintTimer()
         {
-            CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
-            if (gg.CooPreCollectionView != null)
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Interval = TimeSpan.FromSeconds(10);
+            dispatcherTimer.Tick += DispatcherTimerOnTick;
+            dispatcherTimer.Start();
+        }
+
+        private void DispatcherTimerOnTick(object sender, EventArgs e)
+        {
+            TimePrint();
+        }
+
+        private void PrintCooPre(CusPrePreviewBases cooperativePres)
+        {
+            CooperativePrescriptionViewModel cooperativePrescriptionViewModel = new CooperativePrescriptionViewModel();
+            if (cooperativePrescriptionViewModel.CooPreCollectionView != null || Properties.Settings.Default.PrePrint == "True")
             {
-                foreach (CusPrePreviewBase ff in cooperativePres)
+                Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    if (Properties.Settings.Default.PrePrint == "True")
+                    foreach (CusPrePreviewBase prescription in cooperativePres)
                     {
-                        foreach (var c in CooperativeClinicSettings)
+                        foreach (var setting in CooperativeClinicSettings)
                         {
-                            if (c.AutoPrint == true)
+                            if (setting.AutoPrint && prescription.IsPrint == false && prescription.Institution.ID == setting.CooperavieClinic.ID)
                             {
-                                if (ff.IsPrint == false)
-                                {
-                                    gg.PrintAction(ff);
-                                }
+                                cooperativePrescriptionViewModel.PrintAction(prescription);
                             }
                         }
                     }
-                }
+                }));
             }
         }
-        void watch_Created(object sender, FileSystemEventArgs e)
+        private static void watch_Created(object sender, FileSystemEventArgs e)
         {
-            //NewFunction.GetXmlFiles();
-            var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
-            TaiwanCalendar tc = new TaiwanCalendar();
-            DateTime now = DateTime.Now;
-            string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
-            bool isRe = false;
-            string isRePost = "0";
-            
+            DataTable table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
             string DirectPath = e.FullPath;
             //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
             if (DirectPath != null)
             {
                 var cooperativeClinicSettings = new CooperativeClinicSettings();
                 cooperativeClinicSettings.Init();
-                var xDocs = new List<XDocument>();
-                var cusIdNumbers = new List<string>();
-                var paths = new List<string>();
+               
                 #region 先把全部的.txt轉成.xml
                 foreach (var setting in cooperativeClinicSettings)
                 {
-                    if((string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔")
+                    if ((string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔" && setting.FilePath == ((FileSystemWatcher)sender).Path)
                     {
                         if (!string.IsNullOrEmpty(setting.FilePath))
                         {
@@ -343,7 +371,17 @@ namespace His_Pos.ChromeTabViewModel
                                             {
                                                 continue;
                                             }
-                                            GetTxtFiles(filePath);
+                                            if (!NewFunction.IsFileInUse(filePath))
+                                            {
+                                                try
+                                                {
+                                                    NewFunction.GetTxtFiles(filePath);
+                                                }
+                                                catch
+                                                {
+
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -352,6 +390,14 @@ namespace His_Pos.ChromeTabViewModel
                     }
                 }
                 #endregion
+                TaiwanCalendar tc = new TaiwanCalendar();
+                DateTime now = DateTime.Now;
+                string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
+                bool isRe = false;
+                string isRePost = "0";
+                var xDocs = new List<XDocument>();
+                var cusIdNumbers = new List<string>();
+                var paths = new List<string>();
                 foreach (var setting in cooperativeClinicSettings)
                 {
                     try
@@ -373,7 +419,7 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     var xDocument = XDocument.Load(filePath);
                                     var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null) 
+                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null)
                                     {
                                         isRePost = "0";
                                     }
@@ -382,7 +428,7 @@ namespace His_Pos.ChromeTabViewModel
                                         isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString().Trim();
                                         isRePost = string.IsNullOrEmpty(isRePost) ? "0" : isRePost;
                                     }
-                                    if (isRePost != "0" )
+                                    if (isRePost != "0")
                                     {
                                         isRe = true;
                                     }
@@ -405,32 +451,48 @@ namespace His_Pos.ChromeTabViewModel
                     {
                     }
                 }
+            }
+            CooperativeClinicSettings.FilePurge();//打包檔案
+        }
+        private static void watch_Error(object sender, ErrorEventArgs e)
+        {
+            Exception error = e.GetException();
+        }
+        private void TimePrint()
+        {
+            bool isClick = false;
+            if (Properties.Settings.Default.PrePrint == "True" )
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                var cooperativeClinicSettings = new CooperativeClinicSettings();
+                cooperativeClinicSettings.Init();
+                var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
+                MainWindow.ServerConnection.CloseConnection();
 
-                CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
-                if (gg.CooPreCollectionView != null)
+                CusPrePreviewBases cusPres = new CusPrePreviewBases();
+                foreach (DataRow r in table.Rows)
                 {
-                    foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
+                    var xDocument = new XmlDocument();
+                    xDocument.LoadXml(r["CooCli_XML"].ToString());
+                    cusPres.Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml),
+                        r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(),
+                        r.Field<bool>("CooCli_IsRead"), r.Field<bool>("CooCli_IsPrint")));
+                }
+
+                if (Properties.Settings.Default.PrePrint == "True")
+                {
+                    foreach (CusPrePreviewBase previewBase in cusPres)
                     {
-                        MainWindow.Instance.Dispatcher.Invoke(() =>
+                        foreach (CooperativeClinicSetting setting in cooperativeClinicSettings)
                         {
-                            if (Properties.Settings.Default.PrePrint == "True")
+                            if (setting.AutoPrint && previewBase.IsPrint == false && setting.CooperavieClinic.ID == previewBase.Institution.ID)
                             {
-                                foreach (var c in cooperativeClinicSettings)
-                                {
-                                    if (c.AutoPrint == true)
-                                    {
-                                        if (ff.IsPrint == false)
-                                        {
-                                            gg.PrintAction(ff);
-                                        }
-                                    }
-                                }
+                                previewBase.PrintDir();
                             }
-                        });
+                        }
                     }
                 }
             }
-            CooperativeClinicSettings.FilePurge();//打包檔案
         }
         public static void GetTxtFiles(string path)
         {
@@ -505,7 +567,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 XmlElement insurance = doc.CreateElement("insurance");
                 insurance.SetAttribute("insurance_type", "A");
-                insurance.SetAttribute("serial_code", ss[7].PadLeft(4,'0'));
+                insurance.SetAttribute("serial_code", ss[7].PadLeft(4, '0'));
                 insurance.SetAttribute("except_code", "");
                 insurance.SetAttribute("copayment_code", ss[10]);
                 insurance.SetAttribute("case_type", ss[25]);
@@ -765,7 +827,7 @@ namespace His_Pos.ChromeTabViewModel
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
-        
+
         public static Employee GetEmployeeByID(int ID)
         {
             var result = EmployeeCollection.SingleOrDefault(i => i.ID.Equals(ID));
@@ -866,12 +928,12 @@ namespace His_Pos.ChromeTabViewModel
 
         private void ReportPrint(string printer)
         {
-     
-                    PrintDocument printDoc = new PrintDocument();
-                    printDoc.PrinterSettings.PrinterName = printer;
-                    printDoc.PrintController = new System.Drawing.Printing.StandardPrintController();
-                    printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
-                    mCurrentPageIndex = 0;
+
+            PrintDocument printDoc = new PrintDocument();
+            printDoc.PrinterSettings.PrinterName = printer;
+            printDoc.PrintController = new System.Drawing.Printing.StandardPrintController();
+            printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
+            mCurrentPageIndex = 0;
             try
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -885,7 +947,7 @@ namespace His_Pos.ChromeTabViewModel
             {
                 FunctionWindow.MessageWindow.ShowMessage(ex.Message, Class.MessageType.ERROR);
             }
-    
+
         }
 
         private Stream CreateStream(string name, string fileNameExtension, Encoding encoding,

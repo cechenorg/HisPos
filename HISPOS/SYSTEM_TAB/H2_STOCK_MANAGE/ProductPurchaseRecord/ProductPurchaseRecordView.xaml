@@ -159,6 +159,8 @@
                     FontSize="18"
                     Foreground="{StaticResource ForeGround}"
                     InsertKeyMode="Overwrite"
+                    InputMethod.IsInputMethodEnabled="False"
+                    InputScope="Number"
                     KeyDown="StartDate_OnKeyDown"
                     Mask="000/00/00"
                     PromptChar="-"
@@ -192,6 +194,8 @@
                     FontSize="18"
                     Foreground="{StaticResource ForeGround}"
                     InsertKeyMode="Overwrite"
+                    InputMethod.IsInputMethodEnabled="False"
+                    InputScope="Number"
                     Mask="000/00/00"
                     PromptChar="-"
                     Style="{StaticResource MaterialDesignTextBox}"
@@ -245,45 +249,85 @@
                     Foreground="{StaticResource ForeGround}" />
                 <TextBox
                     Width="130"
-                    Margin="0,0,10,0"
+                    Margin="5,0,5,0"
                     FontSize="16"
                     Text="{Binding SearchOrderID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Label
                     Width="Auto"
-                    Margin="10,0,5,0"
+                    Margin="5,0,5,0"
                     Content="商品代碼/名稱"
                     FontFamily="Segoe UI Semibold"
                     FontSize="18"
                     Foreground="{StaticResource ForeGround}" />
                 <TextBox
                     Width="130"
-                    Margin="0,0,10,0"
+                    Margin="5,0,5,0"
                     FontSize="16"
                     Text="{Binding SearchProductID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Label
                     Width="Auto"
-                    Margin="10,0,5,0"
+                    Margin="5,0,5,0"
                     Content="庫別"
                     FontFamily="Segoe UI Semibold"
                     FontSize="18"
                     Foreground="{StaticResource ForeGround}" />
-                <TextBox
+                <ComboBox
+                    x:Name="CobWare"
+                    Width="100"
+                    Height="45"
+                    Margin="5,0,5,0"
+                    VerticalContentAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    IsEditable="True"
+                    SelectedIndex="-1"
+                    KeyUp="ComboBox_KeyUp"
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding WareHouseCollection}"
+                    SelectedItem="{Binding WareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                </ComboBox>
+                <!--<TextBox
                     Width="130"
                     Margin="0,0,10,0"
                     FontSize="16"
-                    Text="{Binding SearchWareName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding SearchWareName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
                 <Label
                     Width="Auto"
-                    Margin="10,0,5,0"
+                    Margin="5,0,5,0"
                     Content="供應商"
                     FontFamily="Segoe UI Semibold"
                     FontSize="18"
                     Foreground="{StaticResource ForeGround}" />
-                <TextBox
+                <ComboBox
+                    x:Name="CobMan"
+                    Margin="5,0,5,0"
+                    Width="150"
+                    Height="45"
+                    VerticalContentAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    IsEditable="True"
+                    SelectedIndex="-1"
+                    KeyUp="ComboBox_KeyUp"
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding ManufacturerCollection}"
+                    SelectedItem="{Binding Manufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                </ComboBox>
+                <!--<TextBox
                     Width="130"
                     Margin="0,0,10,0"
                     FontSize="16"
-                    Text="{Binding SearchManufactoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding SearchManufactoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
             </StackPanel>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>

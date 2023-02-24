@@ -17,7 +17,9 @@ namespace His_Pos.NewClass.StockTaking.StockTaking
         {
             ID = r.Field<string>("StoTakMas_ID");
             WareHouse = ChromeTabViewModel.ViewModelMainWindow.GetWareHouse(r.Field<int>("StoTakMas_WarehouseID").ToString());
-            Employee = EmployeeService.GetDataByID(r.Field<int>("Emp_ID"));
+
+            EmployeeService employeeService = new EmployeeService(new EmployeeDb());
+            Employee = employeeService.GetDataByID(r.Field<int>("Emp_ID"));
             Time = r.Field<DateTime>("StoTakMas_Time");
             TotalValueDiff = r.Field<double>("TotalValueDiff");
             StockTakingProductCollection = new StockTakingProducts();

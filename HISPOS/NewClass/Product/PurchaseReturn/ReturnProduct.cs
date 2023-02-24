@@ -53,8 +53,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 CalculateRealPrice();
             }
         }
-
         public int WareHouseID { get; set; }
+        public WareHouse.WareHouse OrderDetailWarehouse { get; set; }
         public int InvID { get; set; }
         public double Inventory { get; set; }
         public string UnitName { get; set; }
@@ -184,6 +184,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             subTotal = (double)row.Field<decimal>("StoOrdDet_SubTotal");
             if(row.Table.Columns.Contains("IsDone"))
                 IsDone = Convert.ToBoolean(row["IsDone"]);
+            if (row.Table.Columns.Contains("War_ID") && row.Table.Columns.Contains("War_Name"))
+                OrderDetailWarehouse = new WareHouse.WareHouse(row);
             InventoryDetailCollection.Add(new ReturnProductInventoryDetail(row));
         }
 

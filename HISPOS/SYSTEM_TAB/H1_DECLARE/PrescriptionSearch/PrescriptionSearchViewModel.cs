@@ -3,8 +3,11 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.HisApi;
 using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.ICCard;
+using His_Pos.NewClass.Prescription.ICCard.Upload;
 using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using His_Pos.NewClass.Prescription.Search;
 using His_Pos.NewClass.Prescription.Service;
@@ -407,6 +410,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand ExportMedicineCsv { get; set; }
         public RelayCommand SearchNotBuckleCommad { get; set; }
         public RelayCommand ImportDeclareFileCommand { get; set; }
+        public RelayCommand GetIcData2Commad { get; set; }
         #endregion Commands
 
         public PrescriptionSearchViewModel()
@@ -470,6 +474,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ExportPrescriptionCsv = new RelayCommand(ExportPrescriptionCsvAction);
             ExportMedicineCsv = new RelayCommand(ExportMedicineCsvAction);
             SearchNotBuckleCommad = new RelayCommand(SearchNotBuckleAction);
+            GetIcData2Commad = new RelayCommand(GetIcData2Action);
         }
 
         private void ImportDeclareFileAction()
@@ -697,7 +702,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void FilterAdjustedInstitutionAction()
         {
-            var insFilter = new AdjustedInstitutionSelectionWindow.AdjustedInstitutionSelectionWindow(Institutions);
+            
+            var insFilter = new AdjustedInstitutionSelectionWindow.AdjustedInstitutionSelectionWindow(Institutions );
             var selectCount = Institutions.Count(i => i.Selected);
             if (selectCount <= 3)
             {
@@ -711,6 +717,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
             }
+
+            if(Institutions.IsNeedReSearch)
+                SearchAction();
         }
 
         private void ShowPrescriptionEditAction()
@@ -991,6 +1000,136 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             var presID = (from object p in PrescriptionCollectionView select ((PrescriptionSearchPreview)p).ID).ToList();
             var table = PrescriptionDb.GetSearchReservesSummary(presID);
             return (from DataColumn c in table.Rows[0].Table.Columns select table.Rows[0].Field<int>(c.ColumnName)).ToList();
+        }
+
+        private void GetIcData2Action()
+        {
+            #region 2.0版本
+            try
+            {
+                DataTable tbPre = PrescriptionDb.GetPrescriptionByID(SelectedPrescription.ID);
+                Prescription p = new Prescription();
+
+                if (tbPre != null && tbPre.Rows.Count > 0)
+                {
+                    bool isAdjust = Convert.ToBoolean(tbPre.Rows[0]["IsAdjust"]);
+                    if(!isAdjust)
+                    {
+                        MessageWindow.ShowMessage("此筆處方未調劑\r\n無法匯出2.0XML檔案", MessageType.ERROR);
+                        return;
+                    }
+                }
+
+                foreach (DataRow dr in tbPre.Rows)
+                {
+                    p = new Prescription(dr, searchType);
+                }
+
+                if(string.IsNullOrEmpty(p.TreatmentCode))
+                {
+                    MessageWindow.ShowMessage("此筆處方無就醫識別碼\r\n無法匯出2.0XML檔案", MessageType.ERROR);
+                    return;
+                }
+
+                p = GetIcCardData(p);
+
+                var uploadData2 = HisApiFunction.GetIcData2(p, false);
+
+                SaveFileDialog diag = new SaveFileDialog();
+                diag.FileName = string.Format("{0}_{1}.xml", ViewModelMainWindow.CurrentPharmacy.ID, DateTime.Now.ToString("yyyyMMddHHmmss"));
+                diag.Filter = "XML files(.xml)|*.xml|all Files(*.*)|*.*";
+                if (diag.ShowDialog() == DialogResult.OK)
+                {
+                    File.WriteAllText(diag.FileName, uploadData2, Encoding.GetEncoding(950));
+                }
+            }
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage(e.Message, MessageType.ERROR);
+            }
+            #endregion
+        }
+        private Prescription GetIcCardData(Prescription p)
+        {
+            p.Card.MedicalNumberData = new SeqNumber();
+            List<string> listSign = new List<string>();
+            string xml = PrescriptionDb.GetSignXml(p.ID);
+
+            DataSet ds = CXmlToDataSet(xml);
+            SeqNumber seq = new SeqNumber();
+            foreach (DataTable tb in ds.Tables)
+            {
+                if(tb.Columns.Contains("A79"))
+                {
+                    foreach(DataRow dr in tb.Rows)
+                    {
+                        listSign.Add(Convert.ToString(dr["A79"]));
+                    }
+                }
+                
+                if (tb.Columns.Contains("A11"))//M02卡片號碼
+                {
+                    p.Card.CardNumber = Convert.ToString(tb.Rows[0]["A11"]);
+                }
+                if (tb.Columns.Contains("A12"))//M03身分證
+                {
+                    p.Card.IDNumber = Convert.ToString(tb.Rows[0]["A12"]);
+                }
+                if (tb.Columns.Contains("A13"))//M04生日
+                {
+                    p.Card.Birthday = DateTimeExtensions.TWDateStringToDateTime(Convert.ToString(tb.Rows[0]["A13"]));
+                }
+                if (tb.Columns.Contains("A14"))//M05醫療院所
+                {
+                    seq.InstitutionId = Convert.ToString(tb.Rows[0]["A14"]);
+                }
+                if (tb.Columns.Contains("A16"))//M05醫療院所
+                {
+                    seq.SamId = Convert.ToString(tb.Rows[0]["A16"]);
+                }
+                if (tb.Columns.Contains("A22"))//M14醫療院所
+                {
+                    seq.SecuritySignature = Convert.ToString(tb.Rows[0]["A22"]);
+                }
+            }
+
+            p.Card.MedicalNumberData = seq;
+            p.PrescriptionSign = listSign;
+            return p;
+        }
+        public static DataSet CXmlToDataSet(string xmlStr)
+        {
+            DataSet ds = new DataSet();
+            if (!string.IsNullOrEmpty(xmlStr))
+            {
+                StringReader StrStream = null;
+                XmlTextReader Xmlrdr = null;
+                try
+                {
+                    StrStream = new StringReader(xmlStr);
+                    Xmlrdr = new XmlTextReader(StrStream);
+                    ds.ReadXml(Xmlrdr);
+                    return ds;
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    //释放资源
+                    if (Xmlrdr != null)
+                    {
+                        Xmlrdr.Close();
+                        StrStream.Close();
+                        StrStream.Dispose();
+                    }
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

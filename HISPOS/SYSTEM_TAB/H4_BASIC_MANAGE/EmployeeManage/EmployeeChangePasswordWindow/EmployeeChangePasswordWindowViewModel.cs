@@ -58,10 +58,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeChangePasswo
 
         #endregion Var
 
-        public EmployeeChangePasswordWindowViewModel(Employee e)
+        private readonly IEmployeeService _employeeService;
+        public EmployeeChangePasswordWindowViewModel(Employee e, IEmployeeService employeeService)
         {
             EmployeeSelected = e;
             SubmitCommand = new RelayCommand(SubmitAction);
+            _employeeService = employeeService;
         }
 
         private void SubmitAction()
@@ -80,8 +82,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeChangePasswo
             ConfirmWindow confirmWindow = new ConfirmWindow("是否修改密碼?", "密碼修改確認");
             if ((bool)confirmWindow.DialogResult)
             {
-                EmployeeSelected.Password = NewPassword; 
-                EmployeeService.Update(EmployeeSelected);
+                EmployeeSelected.Password = NewPassword;
+                _employeeService.Update(EmployeeSelected);
                 MessageWindow.ShowMessage("修改成功!", Class.MessageType.SUCCESS);
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseEmployeeChangePasswordWindow"));
             }

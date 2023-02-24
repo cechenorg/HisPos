@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Dapper;
+using His_Pos.Database;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -53,6 +55,19 @@ namespace His_Pos.NewClass.ProductType
             parameters.Add(new SqlParameter("TYPE_ID", typeID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductTypeDeleteType]", parameters);
+        }
+
+        internal static DataTable GetProductType()
+        {
+            DataTable dt = new DataTable();
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                var result = conn.ExecuteReader(
+                    string.Format("Select Type_ID,0 As Type_Parent ,Type_Name From [{0}].[Product].[Type] Where Type_Parent = 1 And Type_IsEnable = 1", Properties.Settings.Default.SystemSerialNumber),
+                    commandType: CommandType.Text);
+                dt.Load(result);
+            });
+            return dt;
         }
     }
 }

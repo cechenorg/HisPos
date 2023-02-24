@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
@@ -8,11 +9,16 @@ using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.NewClass.Prescription.ICCard;
+using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.Properties;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.INDEX;
 using System;
 using System.ComponentModel;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using static His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.PrescriptionDeclareViewModel;
 using Application = System.Windows.Application;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
@@ -241,8 +247,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         public RelayCommand PrescriptionSelected { get; set; }
         public RelayCommand DeleteRegisterPrescription { get; set; }
 
-        public CustomerPrescriptionViewModel(Customer customer, IcCard card)
+        public RelayCommand SetReservePrepareCommand { get; set; }
+
+        private readonly GetCustomerPrescriptionDelegate _getCustomerPrescriptionDelegate;
+
+        public CustomerPrescriptionViewModel(Customer customer, IcCard card, GetCustomerPrescriptionDelegate getCustomerPrescriptionDelegate )
         {
+            _getCustomerPrescriptionDelegate = getCustomerPrescriptionDelegate;
+
             Patient = customer;
             Card = card.DeepCloneViaJson();
             InitCommands();
@@ -257,6 +269,34 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             PrescriptionSelected = new RelayCommand(PrescriptionSelectedAction);
             MakeUp = new RelayCommand(MakeUpAction);
             DeleteRegisterPrescription = new RelayCommand(DeleteRegisterPrescriptionAction);
+            SetReservePrepareCommand = new RelayCommand(SetReservePrepareAction);
+        }
+
+        private void SetReservePrepareAction()
+        {
+            if (SelectedPrescription is ChronicPreview)
+            {
+                var chronicPreview = SelectedPrescription as ChronicPreview;
+                chronicPreview.SwichPrepareMed();
+                MainWindow.ServerConnection.OpenConnection();
+                MainWindow.SingdeConnection.OpenConnection();
+                var mappingIndexReserve = IndexReserveDb.GetDataByID(chronicPreview.ID);
+
+                if (chronicPreview.IsSend == "未處理")
+                    mappingIndexReserve.PrepareMedStatus = IndexPrepareMedType.Unprocess;
+                else if (chronicPreview.IsSend == "不備藥")
+                    mappingIndexReserve.PrepareMedStatus = IndexPrepareMedType.UnPrepare;
+
+                IndexReserveDb.Save(mappingIndexReserve.Id, mappingIndexReserve.PhoneCallStatus, mappingIndexReserve.PrepareMedStatus, mappingIndexReserve.StoOrdID);
+
+                MainWindow.ServerConnection.CloseConnection();
+                MainWindow.SingdeConnection.CloseConnection();
+            }
+
+            //用來觸發UI更新的解法,目前沒更好的做法
+            SelectedType = CustomerPrescriptionType.Register;
+            SelectedType = CustomerPrescriptionType.Reserve;
+            //
         }
 
         private void DeleteRegisterPrescriptionAction()
@@ -372,7 +412,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             try
             {
                 if (SelectedPrescription is null) return;
-                Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
+                _getCustomerPrescriptionDelegate?.Invoke(SelectedPrescription.CreatePrescription());
                 Messenger.Default.Send(new NotificationMessage("CloseCustomerPrescriptionWindow"));
             }
             catch (Exception e)

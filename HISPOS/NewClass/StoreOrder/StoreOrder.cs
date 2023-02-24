@@ -20,6 +20,7 @@ namespace His_Pos.NewClass.StoreOrder
         private Product.Product selectedItem;
         private OrderStatusEnum orderStatus;
         private double totalPrice;
+        private double depositPrice;
         private StoreOrderHistorys storeOrderHistory;
 
         protected int initProductCount;
@@ -54,6 +55,14 @@ namespace His_Pos.NewClass.StoreOrder
         {
             get { return orderTypeIsOTC; }
             set { Set(() => OrderTypeIsOTC, ref orderTypeIsOTC, value); }
+        }
+
+        private string displayType;
+
+        public string DisplayType
+        {
+            get { return displayType; }
+            set { Set(() => DisplayType, ref displayType, value); }
         }
 
         private string orderIsPayCash;
@@ -101,6 +110,11 @@ namespace His_Pos.NewClass.StoreOrder
         {
             get { return totalPrice; }
             set { Set(() => TotalPrice, ref totalPrice, value); }
+        }
+        public double DepositPrice
+        {
+            get { return depositPrice; }
+            set { Set(() => DepositPrice, ref depositPrice, value); }
         }
         private string prescriptionID;
         public string PrescriptionID
@@ -158,11 +172,6 @@ namespace His_Pos.NewClass.StoreOrder
                 IsCanDelete = true;
             //else
             //    IsCanDelete = false;
-            List<Authority> IsScrapAuthority = new List<Authority>() {Authority.Admin, Authority.AccountingStaff};
-            if (OrderStatus != OrderStatusEnum.SCRAP && IsScrapAuthority.Contains(auth))
-                IsScrap = true;
-            else
-                IsScrap = false;
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
@@ -172,8 +181,9 @@ namespace His_Pos.NewClass.StoreOrder
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
             initProductCount = row.Field<int>("ProductCount");
             OrderTypeIsOTC = row.Field<string>("StoOrd_IsOTCType");
+            DisplayType = (OrderTypeIsOTC == "OTC") ? "門市" : "藥品";
             OrderIsPayCash = row.Field<bool>("StoOrd_IsPayCash") ? "下貨付現" : "一般收貨";
-            if(row.Table.Columns.Contains("StoOrd_ModifyUser"))
+            if (row.Table.Columns.Contains("StoOrd_ModifyUser"))
             {
                 if(!DBNull.Value.Equals(row["StoOrd_ModifyUser"]))
                     ModifyUser = row.Field<string>("StoOrd_ModifyUser");
@@ -202,7 +212,7 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     IsEnableVoid = "Hidden";
                 }
-                if (ID.Substring(0, 1) == "R" && (OrderStatus== OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
+                if (ID.Substring(0, 1) == "R" && (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
                 {
                     IsCanDelete = true;
                     Visibility = "Visibility";
@@ -212,6 +222,13 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 PrescriptionID = Convert.ToString(row["StoOrd_PrescriptionID"]);
             }
+            List<Authority> IsScrapAuthority = new List<Authority>() { Authority.Admin, Authority.AccountingStaff };
+            int tramasID = row.Table.Columns.Contains("StoOrd_TraMasID") ? Convert.ToInt32(row["StoOrd_TraMasID"]) : 0;
+            DateTime dt = ViewModelMainWindow.ClosingDate.AddDays(1);
+            if (OrderStatus != OrderStatusEnum.SCRAP && IsScrapAuthority.Contains(auth) && DateTime.Compare(dt, DoneDateTime is null ? DateTime.Today : (DateTime)DoneDateTime) < 0 && ((ViewModelMainWindow.CurrentUser.Authority == Authority.Admin) || tramasID == 0))
+                IsScrap = true;
+            else
+                IsScrap = false;
         }
 
         #region ----- Define Functions -----
@@ -228,7 +245,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public abstract void DeleteSelectedProduct();
 
-        public abstract void CalculateTotalPrice();
+        public abstract void CalculateTotalPrice(int isDone);
 
         public abstract void SetProductToProcessingStatus();
 
@@ -426,6 +443,8 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                     else
                     {
+                        if (type == 1)
+                            CheckStoreOrderLower();
                         result = StoreOrderDB.PurchaseStoreOrderToDone(ID, IsPayCash);
                     }
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
@@ -436,9 +455,6 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                     else
                     {
-                        if (type == 1)
-                            CheckStoreOrderLower();
-
                         string id = LowOrderID;
                         IsDoneOrder = true;
                         OrderStatus = OrderStatusEnum.DONE;
@@ -555,24 +571,21 @@ namespace His_Pos.NewClass.StoreOrder
                 ToScrapStatus();
             }
             else*/
-            bool isSuccess = false;
-            if (orderFlag != 2)
-            {
-                SourceID = orderID;
-                ReceiveID = prescriptionReceiveID;
-                CheckCode = checkCode;
 
-                isSuccess = UpdateOrderProductsFromSingde();
+            SourceID = orderID;
+            ReceiveID = prescriptionReceiveID;
+            CheckCode = checkCode;
 
-                if (isSuccess)
-                    OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
-            }
+            bool isSuccess = UpdateOrderProductsFromSingde();
+
+            if (isSuccess)
+                OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
             return isSuccess;
         }
 
         private bool UpdateOrderProductsFromSingde()
         {
-            bool isSuccess = PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID, CheckCode, SourceID);
+            bool isSuccess = PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID, CheckCode, SourceID, OrderType);
 
             if (isSuccess)
                 GetOrderProducts();
@@ -726,6 +739,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID, string type)
         {
+            type = (type == "門市商品") ? "OTC" : "藥品";
             DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID, wareHouseID, type);
 
             switch (orderType)

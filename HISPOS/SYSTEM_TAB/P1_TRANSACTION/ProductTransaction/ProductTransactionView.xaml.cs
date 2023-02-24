@@ -327,6 +327,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         DataColumn deposit = new DataColumn("Deposit", typeof(int));
                         deposit.DefaultValue = 0;
                         ProductList.Columns.Add(deposit);
+
                     }
 
                     DataRow newRow = ProductList.NewRow();
@@ -511,6 +512,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             dt.Columns.Add("TraDet_PriceSum", typeof(int));
             dt.Columns.Add("TraDet_IsGift", typeof(int));
             dt.Columns.Add("TraDet_DepositAmount", typeof(int));
+            //dt.Columns.Add("War_ID", typeof(int));
             foreach (DataRow dr in ProductList.Rows)
             {
                 dt.Rows.Add(
@@ -522,6 +524,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     dr["Calc"],
                     dr["IsGift"],
                     dr["Deposit"]);
+                    //,
+                    //dr["War_ID"]);
             }
             return dt;
         }
@@ -605,7 +609,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumberEng.ToString() + Properties.Settings.Default.InvoiceNumber.ToString();
                     }
                     ClearPage();
-                    MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
+                    MessageWindow.ShowMessage("結帳完成！", MessageType.SUCCESS);
                 }
                 else { MessageWindow.ShowMessage(result.Rows[0].Field<string>("RESULT"), MessageType.ERROR); }
             }
@@ -834,7 +838,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 string proID = ProductList.Rows[index]["Pro_ID"].ToString();
                 ProductDetailWindow.ShowProductDetailWindow();
-                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
+                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, ProductList.Rows[index]["War_ID"].ToString() }, "ShowProductDetail"));
                 await Task.Delay(20);
                 ProductDetailWindow.ActivateProductDetailWindow();
             }
@@ -1188,24 +1192,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 CultureInfo culture = new CultureInfo("zh-TW");
                 culture.DateTimeFormat.Calendar = new TaiwanCalendar();
                 dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
-            }
-        }
-
-        private void acw_RaiseCustomEvent(object sender, CustomEventArgs e)
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ID", int.Parse(e.Message)));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetCustomerByID]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
-
-            if (result.Rows.Count == 0)
-            {
-                MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
-            }
-            else
-            {
-                FillInCustomerData(result);
             }
         }
 

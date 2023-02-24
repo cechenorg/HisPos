@@ -18,14 +18,13 @@ namespace His_Pos.NewClass.Report
     public class ReportService
     {
 
-        public static DataSet TodayCashStockEntryReport(DateTime startDAte, DateTime endDate)
+        public static DataSet TodayCashStockEntryReport(string schema, DateTime startDAte, DateTime endDate)
         {
-
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", startDAte);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", endDate);
-            var result = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList);
+            var result = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList, schema:schema);
             MainWindow.ServerConnection.CloseConnection();
 
             return result;
@@ -80,13 +79,18 @@ namespace His_Pos.NewClass.Report
             return result;
         }
 
-        public static IEnumerable<PrescriptionDetailMedicineRepot> GetPrescriptionDetailMedicineReportById(int id )
+        public static IEnumerable<PrescriptionDetailMedicineRepot> GetPrescriptionDetailMedicineReportById(int id ,DateTime? startDate, DateTime? endDate)
         {
             IEnumerable<PrescriptionDetailMedicineRepot> result = default;
             SQLServerConnection.DapperQuery((conn) =>
             {
                 result = conn.Query<PrescriptionDetailMedicineRepot>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[PrescriptionDetailMedicineReportById]",
-                    param: new { Id = id },
+                    param: new
+                    {
+                        Id = id ,
+                        sDate = startDate,
+                        eDate = endDate
+                    },
                     commandType: CommandType.StoredProcedure);
 
             });

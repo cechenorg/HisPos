@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using DomainModel.Enum;
+using His_Pos.ChromeTabViewModel;
+using System.Data;
 
 namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
 {
@@ -14,6 +16,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
             Manufactory = row.Field<string>("Med_Manufactory");
             SC = row.Field<string>("Med_SingleCompound") + "方";
             Ingredient = row.Field<string>("Med_Ingredient");
+            IsControl = !(ControlLevel is null) || !(!IsDeposit || (IsDeposit && ViewModelMainWindow.CurrentUser.Authority == Authority.Admin));
         }
 
         public bool IsFrozen { get; }
@@ -26,6 +29,6 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
         public string SC { get; }
         public string Ingredient { get; }
 
-        public bool IsControl => !(ControlLevel is null);
+        //public bool IsControl => !(ControlLevel is null);
     }
 }

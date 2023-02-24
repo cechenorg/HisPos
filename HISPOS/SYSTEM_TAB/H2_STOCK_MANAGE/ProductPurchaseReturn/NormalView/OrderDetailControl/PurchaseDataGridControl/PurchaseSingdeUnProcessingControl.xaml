@@ -92,6 +92,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
                     Width="Auto"
+                    MinWidth="150"
                     Header="商品代碼"
                     IsReadOnly="True"
                     CanUserResize="False">
@@ -100,6 +101,7 @@
                             <TextBox
                                 x:Name="ProductIDTextbox"
                                 Width="Auto"
+                                MinWidth="150"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
                                 CharacterCasing="Upper"
@@ -143,7 +145,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding LastPrice}"
+                    Binding="{Binding LastPrice, StringFormat={}{0:0.##}}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="上次單價"
@@ -323,6 +325,19 @@
                     Header="包裝量"
                     IsReadOnly="True"
                     CanUserResize="False">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="100"
+                    Binding="{Binding OrderDetailWarehouse.Name}"
+                    FontFamily="Segoe UI Semi"
+                    Header="庫別"
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />

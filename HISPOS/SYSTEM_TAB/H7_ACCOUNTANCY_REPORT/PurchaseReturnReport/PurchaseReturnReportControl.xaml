@@ -133,7 +133,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="50"
+                    Width="80"
                     Binding="{Binding OTCType}"
                     FontFamily="Segoe UI Semibold"
                     Header="類別"
@@ -255,7 +255,7 @@
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18"
-                Text="OTC進貨 $"
+                Text="門市商品進貨 $"
                 TextAlignment="Center" />
             <TextBlock
                 Width="100"
@@ -437,7 +437,7 @@
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18"
-                Text="OTC退貨 $"
+                Text="門市商品退貨 $"
                 TextAlignment="Center" />
             <TextBlock
                 Width="100"

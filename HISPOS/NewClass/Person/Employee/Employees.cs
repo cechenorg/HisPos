@@ -9,15 +9,17 @@ namespace His_Pos.NewClass.Person.Employee
 {
     public class Employees : ObservableCollection<Employee>
     {
+
+        private EmployeeService _employeeService = new EmployeeService(new EmployeeDb());
         public Employees()
         {
+
         }
 
         public void Init()
         {
             Clear();
-
-            var employees = EmployeeDb.GetData();
+            var employees = _employeeService.GetData();
           
             foreach (var emp in employees)
             {
@@ -51,7 +53,7 @@ namespace His_Pos.NewClass.Person.Employee
         public void GetEnablePharmacist(DateTime selectedDate)
         { 
            
-            foreach (var emp in EmployeeDb.GetData())
+            foreach (var emp in _employeeService.GetData())
             {
                 if (emp.CheckLeave(selectedDate) && emp.IsLocalPharmist() && emp.IsLocal)
                     Add(emp);
@@ -66,7 +68,7 @@ namespace His_Pos.NewClass.Person.Employee
         public void InitPharmacists()
         {
             Clear();
-            var employees = EmployeeDb.GetData();
+            var employees = _employeeService.GetData();
              
             foreach (var emp in employees.Where(_ => _.IsLocalPharmist()))
             {

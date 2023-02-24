@@ -1,7 +1,9 @@
-﻿using His_Pos.Database;
+﻿using System;
+using His_Pos.Database;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
 {
@@ -37,6 +39,9 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_IsPurge", c.IsPurge);
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_FolderPath", c.FilePath);
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_AutoPrint", c.AutoPrint);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_StartDate", c.StartDate);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_EndDate", c.EndDate);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_Number", c.Number);
                 cooperativeClinicTable.Rows.Add(newRow);
             }
             return cooperativeClinicTable;
@@ -54,6 +59,9 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             masterTable.Columns.Add("CooCli_IsPurge", typeof(bool));
             masterTable.Columns.Add("CooCli_FolderPath", typeof(string));
             masterTable.Columns.Add("CooCli_AutoPrint", typeof(string));
+            masterTable.Columns.Add("CooCli_StartDate", typeof(DateTime));
+            masterTable.Columns.Add("CooCli_EndDate", typeof(DateTime));
+            masterTable.Columns.Add("CooCli_Number", typeof(int));
             return masterTable;
         }
 

@@ -183,7 +183,7 @@
             <!--<CheckBox Content="全傳送"  IsChecked="{Binding IsAllSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />-->
             <!--<Rectangle Width="610" />-->
             <StackPanel Width="650" Visibility="{Binding SingdeInvNotEnough, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Label Content="※因杏德庫存量無法滿足採購量，建議更換同成分同劑量同錠型的其他藥品"
+                <Label Content="※如杏德庫存量無法滿足採購量，建議更換同成分同劑量同錠型的其他藥品"
                        Foreground="IndianRed" Style="{StaticResource BoldLabelContent18}"></Label>
             </StackPanel>
             <Button

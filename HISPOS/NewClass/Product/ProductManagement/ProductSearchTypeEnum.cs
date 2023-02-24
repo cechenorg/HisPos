@@ -4,6 +4,7 @@
     {
         Medicine = 1,
         OTC = 2,
-        ALL = 3
+        ALL = 3,
+        Deposit = 4
     }
 }

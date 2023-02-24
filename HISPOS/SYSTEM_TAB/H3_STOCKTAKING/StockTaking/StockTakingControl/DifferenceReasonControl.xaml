@@ -25,6 +25,7 @@
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             FrozenColumnCount="2"
             GridLinesVisibility="Horizontal"
+            SelectedItem="{Binding StockTakingReason.StockTakingPlanProductSelected}"
             ItemsSource="{Binding StockTakingReason.StockTakingProductCollection}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">

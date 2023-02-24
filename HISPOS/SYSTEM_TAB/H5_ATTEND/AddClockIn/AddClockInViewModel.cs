@@ -21,10 +21,13 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
             return this;
 
         }
-        public AddClockInViewModel()
+
+        private readonly IEmployeeService _employeeService;
+        public AddClockInViewModel(IEmployeeService employeeService)
         {
             GetDate();
             RegisterCommands();
+            _employeeService = employeeService;
         }
 
         #region ----- Define Commands -----
@@ -140,13 +143,14 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 
         #region ----- Define Functions -----
 
+       
         private void RegisterCommands()
         {
             ConfirmAddClockInCommand = new RelayCommand<object>(ConfirmAddClockInAction);
         }
         private bool CheckPassWord()
         {
-            Employee = EmployeeService.Login(Employee.Account, Employee.Password);
+            Employee = _employeeService.Login(Employee.Account, Employee.Password);
            
             //檢查帳密 密碼錯誤
             if (Employee == null)

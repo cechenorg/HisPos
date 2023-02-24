@@ -89,7 +89,7 @@ namespace His_Pos
                             new[] {
                                 nameof(FeatureItem.結帳作業) ,
                                 nameof(FeatureItem.銷售紀錄) ,
-                                nameof(FeatureItem.OTC訂購網頁) ,
+                                nameof(FeatureItem.商品訂購網站) ,
                             }));
              
             HisFeatures.Add(new Feature(@"..\Images\Transaction.png", nameof(FeatureTab.藥局管理),

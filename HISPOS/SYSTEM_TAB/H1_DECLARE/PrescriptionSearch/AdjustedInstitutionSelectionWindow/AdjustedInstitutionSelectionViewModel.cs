@@ -3,7 +3,10 @@ using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
+using Castle.Core;
+using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSelectionWindow
 {
@@ -15,6 +18,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
         {
             get => institutions;
             set { Set(() => Institutions, ref institutions, value); }
+        }
+
+        private PrescriptionSearchInstitutions originInstitutions;
+
+        public PrescriptionSearchInstitutions OriginInstitutions
+        {
+            get => originInstitutions;
+            set { Set(() => OriginInstitutions, ref originInstitutions, value); }
         }
 
         private CollectionViewSource insCollectionViewSource;
@@ -52,6 +63,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
             {
                 Set(() => Search, ref search, value);
                 InsCollectionViewSource.Filter += FilterBySearchText;
+                SelectAllAction();
             }
         }
 
@@ -66,25 +78,73 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
             }
         }
 
+        private bool _isSelectedAll = true;
+
+        public bool IsSelectedAll
+        {
+            get => _isSelectedAll;
+            set
+            {
+                Set(() => IsSelectedAll, ref _isSelectedAll, value);
+
+                if (value)
+                {
+                    SelectAllAction();
+                }
+                else
+                {
+                    CancelSelectAllAction();
+                }
+            }
+        }
+
         public string SelectedCount
         {
             get => "已選 " + Institutions.Count(i => i.Selected) + " 間";
         }
+        private Window _window;
 
+        public bool IsNeedResearch { get; set; }
         public RelayCommand<string> FocusUpDownCommand { get; set; }
         public RelayCommand SelectAll { get; set; }
         public RelayCommand CancelSelectAll { get; set; }
         public RelayCommand SelectedChanged { get; set; }
 
-        public AdjustedInstitutionSelectionViewModel(PrescriptionSearchInstitutions adjustedInstitutions)
+        public RelayCommand CancelCommand { get; set; }
+        public RelayCommand SubmitCommand { get; set; }
+        public AdjustedInstitutionSelectionViewModel(PrescriptionSearchInstitutions adjustedInstitutions, Window window)
         {
-            Institutions = adjustedInstitutions;
+            _window = window;
+
+            adjustedInstitutions.IsNeedReSearch = false;
+            OriginInstitutions = adjustedInstitutions;
+            Institutions = adjustedInstitutions.DeepCloneViaJson();
             InsCollectionViewSource = new CollectionViewSource { Source = Institutions };
             InsCollectionView = InsCollectionViewSource.View;
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
             SelectAll = new RelayCommand(SelectAllAction);
             CancelSelectAll = new RelayCommand(CancelSelectAllAction);
             SelectedChanged = new RelayCommand(SelectedCountChangedAction);
+
+            CancelCommand = new RelayCommand(CancelAction);
+            SubmitCommand = new RelayCommand(SubmitAction);
+        }
+
+        private void SubmitAction()
+        {
+          
+            for (int i = 0; i < OriginInstitutions.Count; i++)
+            {
+                OriginInstitutions[i].Selected = Institutions.Single(_ => _.ID == OriginInstitutions[i].ID).Selected;
+            }
+
+            OriginInstitutions.IsNeedReSearch = true;
+            _window.Close();
+        }
+
+        private void CancelAction()
+        {
+            _window.Close();
         }
 
         private void SelectedCountChangedAction()
@@ -94,18 +154,47 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
 
         private void SelectAllAction()
         {
-            foreach (var i in Institutions)
+
+            Institutions.ForEach(_ => _.Selected = false);
+
+
+            if (string.IsNullOrEmpty(Search))
             {
-                i.Selected = true;
+                foreach (var i in Institutions)
+                {
+                    i.Selected = true;
+                }
             }
+            else
+            {
+                foreach (var i in Institutions.Where(_ => _.Name.Contains(Search)))
+                {
+                    i.Selected = true;
+                }
+            }
+           
+
+            SelectedCountChangedAction();
         }
 
         private void CancelSelectAllAction()
         {
-            foreach (var i in Institutions)
+            if (string.IsNullOrEmpty(Search))
             {
-                i.Selected = false;
+                foreach (var i in Institutions)
+                {
+                    i.Selected = false;
+                }
             }
+            else
+            {
+                foreach (var i in Institutions.Where(_ => _.Name.Contains(Search)))
+                {
+                    i.Selected = false;
+                }
+            }
+
+            SelectedCountChangedAction();
         }
 
         private void FocusUpDownAction(string direction)

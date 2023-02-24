@@ -1,6 +1,21 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport.NewTodayCashStockEntryReport" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:entryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport.TodayEntryDetailControl" xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:service="clr-namespace:His_Pos.Service" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:newTodayCashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport" xmlns:newTodayEntryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport.NewTodayEntryDetailControl" d:DesignHeight="839" d:DesignWidth="1365" d:DataContext="{d:DesignInstance Type=newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}" mc:Ignorable="d">
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport.NewTodayCashStockEntryReport" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:entryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport.TodayEntryDetailControl"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:newTodayCashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport" 
+             xmlns:newTodayEntryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport.NewTodayEntryDetailControl"
+             d:DesignHeight="839" d:DesignWidth="1365"
+             d:DataContext="{d:DesignInstance Type=newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}" 
+             mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <service:EqualInverseParameterConverter x:Key="EqualInverseParameterConverter"/>
         <DataTemplate x:Key="CashDetailControl" DataType="{x:Type newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
             <entryDetailControl:CashDetailControl />
         </DataTemplate>
@@ -112,7 +127,7 @@
                     <Border Grid.Row="6" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="10" BorderBrush="LightGray" BorderThickness="0,1,0,0" />
 
                     <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
-                        <Label Content="OTC" PreviewMouseDown="OTCTrade_PreviewMouseDown" />
+                        <Label Content="門市" PreviewMouseDown="OTCTrade_PreviewMouseDown" />
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                         <Border BorderBrush="Gray">
@@ -255,7 +270,29 @@
                             <MouseBinding Command="{Binding ViewReportDetailCommand}" CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.AllPrescription_Cost}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray">
-                            <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" />
+                            <Label Width="130" HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" >
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                                        <Setter Property="Content" Value="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.MedTotalVirtualMedUse,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
+                                                <Setter Property="Content" >
+                                                    <Setter.Value>
+                                                    <StackPanel>
+                                                            <TextBlock FontSize="14" Text="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse,StringFormat={}{0:N0}}"/>
+                                                           <TextBlock FontSize="14">
+                                                               <Run Text="(" Foreground="Red" />
+                                                               <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.MedTotalVirtualMedUse,StringFormat={}{0:N0}}" />
+                                                               <Run Foreground="Red" Text=")"></Run>
+                                                           </TextBlock>
+                                                    </StackPanel>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
                         </Border>
                     </StackPanel>
                     <StackPanel x:Name="PREChange" Grid.Row="2" Grid.Column="4" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="PREChange_PreviewMouseDown">
@@ -330,7 +367,29 @@
                             <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick" CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.CoopPrescription_Cost}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding  PrescriptionDetailReportSumMain.CoopMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" />
+                            <Label Width="130" HorizontalContentAlignment="Right"  ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0">
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                                        <Setter Property="Content" Value="{Binding PrescriptionDetailReportSumMain.CoopMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.CoopVirtualMeduse,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <StackPanel>
+                                                            <TextBlock FontSize="14" Text="{Binding PrescriptionDetailReportSumMain.CoopMeduse,StringFormat={}{0:N0}}" />
+                                                            <TextBlock FontSize="14">
+                                                                <Run Text="(" Foreground="Red" />
+                                                                <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.CoopVirtualMeduse,StringFormat={}{0:N0}}" />
+                                                                <Run Foreground="Red" Text=")"></Run>
+                                                            </TextBlock>
+                                                        </StackPanel> 
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
                         </Border>
                     </StackPanel>
                     <StackPanel x:Name="COOPChange" Grid.Row="3" Grid.Column="4" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="COOPChange_PreviewMouseDown">
@@ -401,7 +460,29 @@
                                           CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.Chironic_Cost}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.SlowMeduse  , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" />
+                            <Label Width="130" HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" >
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                                        <Setter Property="Content" Value="{Binding PrescriptionDetailReportSumMain.SlowMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.SlowVirtuaMeduse,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <StackPanel>
+                                                            <TextBlock FontSize="14" Text="{Binding PrescriptionDetailReportSumMain.SlowMeduse,StringFormat={}{0:N0}}" />
+                                                            <TextBlock FontSize="14">
+                                                                <Run Text="(" Foreground="Red" />
+                                                                <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.SlowVirtuaMeduse,StringFormat={}{0:N0}}" />
+                                                                <Run Foreground="Red" Text=")"></Run>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
                         </Border>
                     </StackPanel>
                     <StackPanel x:Name="SLOWChange" Grid.Row="4" Grid.Column="4" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="SLOWChange_PreviewMouseDown">
@@ -473,7 +554,29 @@
                                           CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.NormalPrescription_Cost}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Width="130" VerticalAlignment="Center" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.NormalMeduse , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Silver" Padding="0,0,30,0" />
+                            <Label Width="130" VerticalAlignment="Center" HorizontalContentAlignment="Right" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Silver" Padding="0,0,30,0" >
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                                        <Setter Property="Content" Value="{Binding PrescriptionDetailReportSumMain.NormalMeduse}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.NormalVirtuaMeduse,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <StackPanel>
+                                                            <TextBlock FontSize="14" Text="{Binding PrescriptionDetailReportSumMain.NormalMeduse,StringFormat={}{0:N0}}" />
+                                                            <TextBlock FontSize="14">
+                                                                <Run Text="(" Foreground="Red" />
+                                                                <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.NormalVirtuaMeduse,StringFormat={}{0:N0}}" />
+                                                                <Run Foreground="Red" Text=")"></Run>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
                         </Border>
                     </StackPanel>
                     <StackPanel x:Name="NORMALChange" Grid.Row="5" Grid.Column="4" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="NORMALChange_PreviewMouseDown">
@@ -543,7 +646,29 @@
                                           CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.Prescribtion_Cost}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding  PrescriptionDetailReportSumMain.PaySelfMeduse , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" />
+                            <Label Width="130" HorizontalContentAlignment="Right"  ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" >
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                                        <Setter Property="Content" Value="{Binding PrescriptionDetailReportSumMain.PaySelfMeduse,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PrescriptionDetailReportSumMain.PaySelfVirtuaMeduse, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource EqualInverseParameterConverter},ConverterParameter=0}" Value="True">
+                                                <Setter Property="Content" >
+                                                    <Setter.Value>
+                                                        <StackPanel>
+                                                            <TextBlock FontSize="14" Text="{Binding PrescriptionDetailReportSumMain.PaySelfMeduse,StringFormat={}{0:N0}}" />
+                                                            <TextBlock FontSize="14">
+                                                                <Run Text="(" Foreground="Red" />
+                                                                <Run Foreground="Red" Text="{Binding PrescriptionDetailReportSumMain.PaySelfVirtuaMeduse,StringFormat={}{0:N0}}" />
+                                                                <Run Foreground="Red" Text=")"></Run>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
                         </Border>
                     </StackPanel>
                     <StackPanel x:Name="SELFChange" Grid.Row="6" Grid.Column="4" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="SELFChange_PreviewMouseDown">

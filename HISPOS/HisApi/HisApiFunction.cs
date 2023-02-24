@@ -4,6 +4,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.ICCard;
 using His_Pos.NewClass.Prescription.ICCard.Upload;
 using His_Pos.Properties;
 using His_Pos.Service;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using System.Text.RegularExpressions;
 
 // ReSharper disable All
 
@@ -27,11 +29,11 @@ namespace His_Pos.HisApi
             var iWriteCount = medList.Count;
             var iBufferLength = 40 * iWriteCount;
             p.Card.Read();
-            var treatDateTime = DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
+            var treatDateTime = p.Card.MedicalNumberData.TreatDateTime;// DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
             var pDataWriteStr = p.Medicines.CreateMedicalData(treatDateTime);
-            byte[] pDateTime = ConvertData.StringToBytes(treatDateTime + "\0", 14);
-            byte[] pPatientID = ConvertData.StringToBytes(p.Card.PatientBasicData.IDNumber + "\0", 11);
-            byte[] pPatientBirthDay = ConvertData.StringToBytes(p.Card.PatientBasicData.BirthdayStr + "\0", 8);
+            byte[] pDateTime = ConvertData.StringToBytes(treatDateTime + "\0", (treatDateTime + "\0").Length);
+            byte[] pPatientID = ConvertData.StringToBytes(p.Card.PatientBasicData.IDNumber + "\0", (p.Card.PatientBasicData.IDNumber + "\0").Length);
+            byte[] pPatientBirthDay = ConvertData.StringToBytes(p.Card.PatientBasicData.BirthdayStr + "\0", (p.Card.PatientBasicData.BirthdayStr + "\0").Length);
             byte[] pDataWrite = ConvertData.StringToBytes(pDataWriteStr, 3660);
             byte[] pBuffer = new byte[iBufferLength];
             if (OpenCom())
@@ -56,10 +58,11 @@ namespace His_Pos.HisApi
         public static DataTable CreatDailyUploadData(Prescription p, bool isMakeUp)
         {
             DataTable table;
-            Rec rec = new Rec(p, isMakeUp);
-            var uploadData = rec.SerializeDailyUploadObject();
+            IcDataUploadService.Rec rec1 = new IcDataUploadService.Rec(p, isMakeUp);
+            var uploadData1 = rec1.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
-            table = InsertUploadData(p, uploadData, p.Card.MedicalNumberData.TreatDateTime);
+            table = InsertUploadData(p, uploadData1, DateTimeExtensions.TWDateStringToDateTime(p.Card.MedicalNumberData.TreatDateTime));
+            UpdPrescription2(p, rec1);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
@@ -68,10 +71,11 @@ namespace His_Pos.HisApi
         public static DataTable CreatErrorDailyUploadData(Prescription p, bool isMakeUp, ErrorUploadWindowViewModel.IcErrorCode e = null)
         {
             DataTable table;
-            Rec rec = new Rec(p, isMakeUp, e);
-            var uploadData = rec.SerializeDailyUploadObject();
+            IcDataUploadService.Rec rec1 = new IcDataUploadService.Rec(p, isMakeUp, e);
+            var uploadData1 = rec1.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
-            table = InsertUploadData(p, uploadData, DateTime.Now);
+            table = InsertUploadData(p, uploadData1, DateTime.Now);
+            UpdPrescription2(p, rec1);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
@@ -267,6 +271,67 @@ namespace His_Pos.HisApi
                 table = IcDataUploadDb.InsertDailyUploadData(p.ID, uploadData, treat);
             }
             return table;
+        }
+
+        public static string GetIcData2(Prescription p, bool isMakeUp)
+        {
+            var uploadData2 = string.Empty;
+            try
+            {
+                IcDataUploadService2.Recs recs2 = new IcDataUploadService2.Recs();
+                IcDataUploadService2.Rec rec2 = new IcDataUploadService2.Rec(p, isMakeUp);
+                recs2.Rec = new List<IcDataUploadService2.Rec> { rec2 };
+                int i = 1;
+                foreach (IcDataUploadService2.Rec rc in recs2.Rec)
+                {
+                    foreach (IcDataUploadService2.MedicalData md in rc.MainMessage.MedicalMessageList)
+                    {
+                        md.MedicalRow = i;
+                        i++;
+                    }
+                }
+                uploadData2 = recs2.SerializeDailyUploadObject();
+            }
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage(e.Message, MessageType.ERROR);
+            }
+            return uploadData2;
+        }
+
+        //public static SeqNumber GetSeqNumber256N1()
+        //{
+        //    IcCard card = new IcCard();
+        //    card.MedicalNumberData = new SeqNumber();
+        //    if (OpenCom())
+        //    {
+        //        byte[] cTreatItem = ConvertData.StringToBytes("AF\0", 3);
+        //        byte[] cBabyTreat = ConvertData.StringToBytes(" ", 2);
+        //        byte[] cTreatAfterCheck = { new byte() };
+        //        int iBufferLen = 316;
+        //        byte[] pBuffer = new byte[316];
+        //        var res = HisApiBase.hisGetSeqNumber256N1(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
+        //        card.MedicalNumberData = new SeqNumber(pBuffer);
+        //        CloseCom();
+        //    }   
+        //    return card.MedicalNumberData;
+        //}
+        private static void UpdPrescription2(Prescription p, IcDataUploadService.Rec rec1)
+        {
+            if(p.Card != null)
+            {
+                try
+                {
+                    p.TreatmentCode = p.Card.MedicalNumberData.TreatmentCode;
+                    p.OrigTreatmentDT = p.Card.MedicalNumberData.TreatDateTime;
+                    p.SecuritySignature = p.Card.MedicalNumberData.SecuritySignature;
+                    PrescriptionDb.UploadData2(p, rec1);
+                }
+                catch
+                {
+
+                }
+            }
         }
     }
 }

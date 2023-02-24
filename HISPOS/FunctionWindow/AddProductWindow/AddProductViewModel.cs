@@ -224,7 +224,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
 
         private void ProductTradeFilter(object sender, FilterEventArgs e)
         {
-            if (((ProductStruct)e.Item).Type == ProductTypeEnum.OTC)
+            if (((ProductStruct)e.Item).Type == ProductTypeEnum.OTCMedicine)
                 e.Accepted = true;
             else
                 e.Accepted = false;
@@ -340,7 +340,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     e.Accepted = true;
             }
             else if (OrderTypeIsOTC == "藥品") {
-                if (((ProductStruct)e.Item).Type == ProductTypeEnum.OTC)
+                if (((ProductStruct)e.Item).Type == ProductTypeEnum.OTCMedicine || ((ProductStruct)e.Item).Type == ProductTypeEnum.Deposit)
                     e.Accepted = false;
                 else
                     e.Accepted = true;

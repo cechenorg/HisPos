@@ -34,8 +34,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 using His_Pos.NewClass.Report.DepositReport;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
@@ -43,6 +45,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
     public class NewTodayCashStockEntryReportViewModel : TabBase
     {
         #region Variables
+        public readonly string schema;
 
         public override TabBase getTab()
         {
@@ -1542,6 +1545,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public DataSet Ds = new DataSet();
         DataTable PrescriptionAllDataTable = new DataTable();
 
+        private ReportDetailType _currentDetailType;
+
         #endregion Variables
 
         #region Command
@@ -1554,6 +1559,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand PrescriptionDetailClickCommand { get; set; }
         public RelayCommand PrescriptionDetailDoubleClickCommand { get; set; }
         public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
+        public RelayCommand TradeProfitDetailMedicineDoubleClickCommand { get; set; }
+        public RelayCommand StockTakingOTCDetailMedicineDoubleClickCommand { get; set; }
+
         public RelayCommand PrintPrescriptionProfitDetailCommand { get; set; }
         public RelayCommand AllDepositReportSelectionChangedCommand { get; set; }
         public RelayCommand DepositDetailClickCommand { get; set; }
@@ -1585,7 +1593,35 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand<ReportDetailType> ViewReportDetailCommand { get; set; }
         #endregion Command
 
+        public NewTodayCashStockEntryReportViewModel(DateTime startDate, DateTime endDate, string schema)
+        {
+            InitCommands();
+
+            StartDate = startDate;
+            EndDate = endDate;
+
+            if (schema == string.Empty)
+                this.schema = Properties.Settings.Default.SystemSerialNumber;
+            else
+                this.schema = schema;
+
+            GetData();
+
+            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
+            AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
+            SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
+        }
+
         public NewTodayCashStockEntryReportViewModel()
+        {
+            schema = Properties.Settings.Default.SystemSerialNumber;
+
+            InitCommands();
+
+            GetData();
+        }
+
+        private void InitCommands()
         {
             SearchCommand = new RelayCommand(GetData);
 
@@ -1596,13 +1632,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             SelfSelfPrescriptionSelectionChangedCommand = new RelayCommand(SelfSelfPrescriptionSelectionChangedAction);
             CooperativePrescriptionSelectionChangedCommand = new RelayCommand(CooperativePrescriptionSelectionChangedAction);
 
-
-
             CashDetailClickCommand = new RelayCommand(CashDetailClickAction);
 
             PrescriptionDetailClickCommand = new RelayCommand(PrescriptionDetailClickAction);
             PrescriptionDetailDoubleClickCommand = new RelayCommand(PrescriptionDetailDoubleClickAction);
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
+            TradeProfitDetailMedicineDoubleClickCommand = new RelayCommand(TradeProfitDetailMedicineDoubleClickAction);
+            StockTakingOTCDetailMedicineDoubleClickCommand = new RelayCommand(StockTakingDetailDoubleClickAction);
 
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
 
@@ -1617,7 +1653,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             TradeProfitReportSelectionChangedCommand = new RelayCommand(TradeProfitReportSelectionChangedAction);
             TradeProfitIcomeReportSelectionChangedCommand = new RelayCommand(TradeProfitIncomeReportSelectionChangedAction);
-            TradeProfitCostCostReportSelectionChangedCommand = new RelayCommand(TradeProfitCostCostReportSelectionChangedAction);
+            TradeProfitCostCostReportSelectionChangedCommand =
+                new RelayCommand(TradeProfitCostCostReportSelectionChangedAction);
             TradeProfitAllReportSelectionChangedCommand = new RelayCommand(TradeProfitAllReportSelectionChangedAction);
             TradeProfitTicketReportSelectionChangedCommand = new RelayCommand(TradeProfitTicketReportSelectionChangedAction);
 
@@ -1633,12 +1670,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             RewardExcelCommand = new RelayCommand(RewardExcelAction);
             PrintTradeProfitDetailCommand = new RelayCommand(PrintTradeProfitDetailAction);
             ViewReportDetailCommand = new RelayCommand<ReportDetailType>(ViewReportDetailAction);
-            GetData();
         }
 
         private void ViewReportDetailAction(ReportDetailType type)
         {
-
+            _currentDetailType = type;
             switch (type)
             {
 
@@ -1855,7 +1891,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 return;
             }
 
-            var data = ReportService.GetPrescriptionDetailMedicineReportById(SelectedDepositDetailReport.PremasID);
+            var data = ReportService.GetPrescriptionDetailMedicineReportById(SelectedDepositDetailReport.PremasID,null,null);
             PrescriptionDetailMedicineRepotCollection = new ObservableCollection<PrescriptionDetailMedicineRepot>(data);
         }
 
@@ -1866,7 +1902,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void PrintTradeProfitDetailAction()
         {
-            PrintService.PrintTradeProfitDetail(StartDate, EndDate);
+            //PrintService.PrintTradeProfitDetail(StartDate, EndDate);
+            PrintService.PrintTradeProfitDetail(TradeProfitDetailReportCollection, StartDate, EndDate);
         }
 
         private void CashDetailMouseDoubleClickAction()
@@ -1891,7 +1928,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrintService.PrintPrescriptionProfitDetailAction(StartDate, EndDate, PrescriptionDetailReportView);
         }
 
+        private void StockTakingDetailDoubleClickAction()
+        {
+            if (StockTakingOTCDetailMedicineReportSelectItem is null) return;
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { StockTakingOTCDetailMedicineReportSelectItem.ID, "0" }, "ShowProductDetail"));
+        }
 
+        private void TradeProfitDetailMedicineDoubleClickAction()
+        {
+            if (TradeProfitDetailMedicineReportSelectItem is null) return;
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { TradeProfitDetailMedicineReportSelectItem.ProductID, "0" }, "ShowProductDetail"));
+        }
 
         private void PrescriptionDetailMedicineDoubleClickAction()
         {
@@ -1949,9 +1998,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             {
                 string ogTransTime = dr["TraMas_ChkoutTime"].ToString();
                 DateTime dt = DateTime.Parse(ogTransTime);
-                CultureInfo culture = new CultureInfo("zh-TW");
-                culture.DateTimeFormat.Calendar = new TaiwanCalendar();
-                dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
+                //CultureInfo culture = new CultureInfo("zh-TW");
+                //culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                //dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
+                dr["TransTime_Format"] = dt.ToString("yyyy/MM/dd HH:mm");
             }
             ProductTransactionDetail ptd = new ProductTransactionDetail(masterRow, result);
 
@@ -1967,7 +2017,16 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 return;
             }
 
-            var data = ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id);
+
+            bool isChangedTab = _currentDetailType == ReportDetailType.AllPrescription_Change ||
+                                _currentDetailType == ReportDetailType.Chironic_Change ||
+                                _currentDetailType == ReportDetailType.CoopPrescription_Change ||
+                                _currentDetailType == ReportDetailType.Prescribtion_Change ||
+                                _currentDetailType == ReportDetailType.NormalPrescription_Change;
+
+            var data = isChangedTab
+                ? ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id, StartDate, EndDate)
+                : ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id, null, null);
             PrescriptionDetailMedicineRepotCollection = new ObservableCollection<PrescriptionDetailMedicineRepot>(data);
         }
 
@@ -2269,26 +2328,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CoopVis = Visibility.Collapsed;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = "報表查詢中";
-                PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
-                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-
-                AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
-                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-                SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
-                IsBusy = false;
-            };
+            
             IsBusy = true;
-            worker.RunWorkerAsync();
+            BusyContent = "報表查詢中";
             CooperativePrescriptionSelectedItem = null;
             StockTakingSelectedItem = null;
+            Task.Run(() =>
+            {
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
+
+                Dispatcher.CurrentDispatcher.Invoke(() =>
+                {
+                    PrescriptionDetailReportViewSource = new CollectionViewSource
+                        { Source = PrescriptionDetailReportCollection };
+                    PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+
+                    AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
+                    PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                    SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
+                    IsBusy = false;
+                });
+            });
         }
 
         private void SelfSelfPrescriptionSelectionChangedAction()
@@ -2398,7 +2458,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             BusyContent = "報表查詢中";
 
-            Ds = ReportService.TodayCashStockEntryReport(StartDate, EndDate);
+            Ds = ReportService.TodayCashStockEntryReport(schema, StartDate, EndDate);
 
             PrescriptionAllDataTable = new DataTable();
             PrescriptionAllDataTable.Merge(Ds.Tables[0]);
@@ -2428,6 +2488,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReports tempCooperativePres = new PrescriptionDetailReports(Ds.Tables[0]);
             PrescriptionDetailReportSumMain.CoopCount = tempCooperativePres.Count();
             PrescriptionDetailReportSumMain.CoopMeduse = (int)tempCooperativePres.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.CoopVirtualMeduse = tempCooperativePres.Sum(s => s.VirtualMeduse);
             PrescriptionDetailReportSumMain.CoopIncome = (int)tempCooperativePres.Sum(s => s.MedicalPoint) +
                                                          (int)tempCooperativePres.Sum(s => s.MedicalServicePoint) +
                                                          (int)tempCooperativePres.Sum(s => s.PaySelfPoint);
@@ -2550,7 +2611,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void SumAllProfit()
         {
-            TotalCashFlow.AllCount = TradeDetailReportSum.Count + PrescriptionDetailReportSumMain.MedTotalCount;
+            TotalCashFlow.AllCount = TradeDetailReportSum.TotalCount + PrescriptionDetailReportSumMain.MedTotalCount;
             TotalCashFlow.AllIncome = (int)(TradeDetailReportSum.RealTotal + PrescriptionDetailReportSumMain.MedTotalIncome);
 
             TotalCashFlow.AllCost = (int)(TradeDetailReportSum.TotalCost + PrescriptionDetailReportSumMain.MedTotalMeduse);
@@ -2601,7 +2662,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void CalculateTotalRewardProfit()
         {
-            RewardReportCollection = new RewardReports(StartDate, EndDate);
+            RewardReportCollection = new RewardReports(schema, StartDate, EndDate);
             TotalRewardReport.RewardAmountSum = -RewardReportCollection.Sum(c => c.RewardAmount);
             TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
         }

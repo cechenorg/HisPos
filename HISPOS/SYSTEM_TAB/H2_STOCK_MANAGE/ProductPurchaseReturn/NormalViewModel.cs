@@ -25,6 +25,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.Threading;
 using His_Pos.NewClass.Product.ProductGroupSetting;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -75,6 +76,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get => isCanDelete;
             set { Set(() => IsCanDelete, ref isCanDelete, value); }
         }
+        private bool isClosed;
+        public bool IsClosed
+        {
+            get => isClosed;
+            set { Set(() => IsClosed, ref isClosed, value); }
+        }
         public bool IsBusy
         {
             get => isBusy;
@@ -117,6 +124,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 {
                     IsCanDelete = currentStoreOrder.IsCanDelete;
                     BtnScrapContent = (IsCanDelete == true) ? "作廢" : "取消作廢";
+                    IsClosed = DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), currentStoreOrder.CreateDateTime) < 0 && currentStoreOrder.IsEnable;
                 }
                 return currentStoreOrder;
             }
@@ -222,7 +230,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         private void CalculateTotalPriceAction()
         {
-            CurrentStoreOrder.CalculateTotalPrice();
+            CurrentStoreOrder.CalculateTotalPrice(0);
         }
 
         public void AddOrderByMinus()
@@ -342,13 +350,72 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     MessageWindow.ShowMessage("品項入庫量且小計大於0!", MessageType.WARNING);
                     return;
                 }
+                Dictionary<string, decimal> lastAmt = new Dictionary<string, decimal>();
+                if ((CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING) && CurrentStoreOrder.OrderType != OrderTypeEnum.RETURN)
+                {
+                    DataTable table = PurchaseReturnProductDB.GetProductsByStoreOrderID(CurrentStoreOrder.ID);
+                    if (table != null && table.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in table.Rows)
+                        {
+                            if (!lastAmt.ContainsKey(Convert.ToString(dr["Pro_ID"])))
+                            {
+                                lastAmt.Add(Convert.ToString(dr["Pro_ID"]), Convert.ToDecimal(dr["Inv_LastPrice"]));
+                            }
+                        }
+                    }
+                }
+                    
+                
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
                 CurrentStoreOrder.MoveToNextStatus();
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
-                if(!CurrentStoreOrder.IsCancel)
+                if ((CurrentStoreOrder.OrderStatus == OrderStatusEnum.DONE) && CurrentStoreOrder.OrderType != OrderTypeEnum.RETURN)
+                {
+                    DataTable table = PurchaseReturnProductDB.GetProductsByStoreOrderID(CurrentStoreOrder.ID);
+                    if (table != null && table.Rows.Count > 0)
+                    {
+                        string msg = string.Empty;
+                        string msgPurchase = string.Empty;
+                        string msgSell = string.Empty;
+                        foreach (DataRow dr in table.Rows)
+                        {
+                            string proID = Convert.ToString(dr["Pro_ID"]);
+                            decimal lastPrice = Math.Round(lastAmt[Convert.ToString(dr["Pro_ID"])], 2);//舊進價
+                            decimal currentPrice = Math.Round(Convert.ToDecimal(dr["Inv_LastPrice"]), 2);//現在進價
+                            decimal sellPrice = Math.Round(Convert.ToDecimal(dr["Pro_RetailPrice"]), 2);//售價
+                            if (currentPrice > lastPrice)
+                            {
+                                msgPurchase += string.Format("{0} 貴{1}元" + "\r\n", proID, currentPrice - lastPrice);
+                            }
+                            if (currentPrice > sellPrice)//進價>售價
+                            {
+                                msgSell += string.Format("{0} 貴{1}元" + "\r\n", proID, currentPrice - sellPrice);
+                            }
+                        }
+                        if(!string.IsNullOrEmpty(msgPurchase))
+                        {
+                            msgPurchase = !string.IsNullOrEmpty(msgPurchase) ? "此次進價比【上次進價】貴：" + "\r\n" + msgPurchase : msgPurchase;
+                            msg += msgPurchase;
+                            msg += "\r\n";
+                        }
+                        if (!string.IsNullOrEmpty(msgSell))
+                        {
+                            msgSell = !string.IsNullOrEmpty(msgSell) ? "此次進價比【售價】貴，建議至商品設定修改售價：" + "\r\n" + msgSell : msgSell;
+                            msg += msgSell;
+                        }
+                        if (!string.IsNullOrEmpty(msg))
+                        {
+                            MessageWindow.ShowMessage(msg, MessageType.SUCCESS);
+                        }
+                    }
+                }
+                if (!CurrentStoreOrder.IsCancel)
+                {
                     ReloadState();
+                }
             }
             else
             {
@@ -603,7 +670,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                         }
                     }
                 }
-                CurrentStoreOrder.CalculateTotalPrice();
+                CurrentStoreOrder.CalculateTotalPrice(0);
             }
         }
         /// <summary>
@@ -631,7 +698,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     }
                     IsAllSelected = undo ? true : false;
                 }
-                CurrentStoreOrder.CalculateTotalPrice();
+                CurrentStoreOrder.CalculateTotalPrice(0);
             }
         }
 

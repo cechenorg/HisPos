@@ -12,9 +12,18 @@ using His_Pos.Service;
 
 namespace His_Pos.NewClass.Person.Employee
 {
-    public static class EmployeeDb
+    public interface IEmployeeDB
     {
-        public static IEnumerable<Employee> GetData()
+         void Insert(Employee e);
+         IEnumerable<Employee> GetData();
+         void Update(Employee e);
+         void Delete(int empId);
+         Employee EmployeeLogin(string inputAccount, string password);
+    }
+
+    public class EmployeeDb : IEmployeeDB
+    {
+        public IEnumerable<Employee> GetData()
         {
             List<Employee> result = null;
             SQLServerConnection.DapperQuery((conn) =>
@@ -47,7 +56,7 @@ namespace His_Pos.NewClass.Person.Employee
             return result;
         }
 
-        public static void Insert(Employee e)
+        public void Insert(Employee e)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
@@ -81,7 +90,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        public static void Update(Employee e)
+        public void Update(Employee e)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
@@ -109,7 +118,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        public static void Delete(int empId)
+        public void Delete(int empId)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("EmpId", empId));
@@ -128,7 +137,7 @@ namespace His_Pos.NewClass.Person.Employee
             return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeNewAccount]", parameterList);
         }
 
-        public static Employee EmployeeLogin(string inputAccount, string password)
+        public Employee EmployeeLogin(string inputAccount, string password)
         {
             Employee result = null;
             SQLServerConnection.DapperQuery((conn) =>

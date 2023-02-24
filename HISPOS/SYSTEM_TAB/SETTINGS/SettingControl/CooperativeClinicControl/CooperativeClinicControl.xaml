@@ -1,53 +1,23 @@
-﻿<UserControl
-    x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl.CooperativeClinicControl"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="500"
-    d:DesignWidth="920"
-    mc:Ignorable="d">
-    <UserControl.DataContext>
-        <local:CooperativeClinicControlViewModel />
-    </UserControl.DataContext>
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl.CooperativeClinicControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"       
+             xmlns:service="clr-namespace:His_Pos.Service" d:DesignHeight="500" d:DesignWidth="920" mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=local:CooperativeClinicControlViewModel}">
     <UserControl.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
         <DataTemplate x:Key="EnableInstitution" DataType="{x:Type TextBox}">
-            <TextBox
-                x:Name="ReleaseHospital"
-                Width="400"
-                Height="35"
-                HorizontalContentAlignment="Left"
-                VerticalContentAlignment="Center"
-                Background="Transparent"
-                BorderBrush="DimGray"
-                BorderThickness="0,0,0,1"
-                CaretBrush="Black"
-                FontSize="16"
-                FontStretch="ExtraExpanded"
-                Style="{StaticResource BoldTextBoxContent16}">
+            <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Black" FontSize="16" FontStretch="ExtraExpanded" Style="{StaticResource BoldTextBoxContent16}">
                 <TextBox.InputBindings>
-                    <KeyBinding
-                        Key="Enter"
-                        Command="{Binding DataContext.ShowInstitutionSelectionWindow, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                        CommandParameter="{Binding Text, ElementName=ReleaseHospital}" />
+                    <KeyBinding Key="Enter" Command="{Binding DataContext.ShowInstitutionSelectionWindow, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" />
                 </TextBox.InputBindings>
             </TextBox>
         </DataTemplate>
         <DataTemplate x:Key="DisableInstitution" DataType="{x:Type Label}">
-            <Label
-                x:Name="ReleaseHospital"
-                Width="400"
-                Height="35"
-                HorizontalContentAlignment="Left"
-                VerticalContentAlignment="Center"
-                Background="Transparent"
-                BorderBrush="DimGray"
-                BorderThickness="0,0,0,1"
-                Content="{Binding CooperavieClinic.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                FontSize="16"
-                FontStretch="ExtraExpanded"
-                Style="{StaticResource BoldLabelContent16}" />
+            <Label x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" Content="{Binding CooperavieClinic.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontStretch="ExtraExpanded" Style="{StaticResource BoldLabelContent16}" />
         </DataTemplate>
     </UserControl.Resources>
     <Grid Background="LightGray">
@@ -55,17 +25,10 @@
             <RowDefinition />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <DataGrid
-            Grid.Row="0"
-            Margin="10,10,10,0"
-            AutoGenerateColumns="False"
-            Background="{StaticResource GridBackGround}"
-            CanUserAddRows="True"
-            CellStyle="{StaticResource DataGridCellStyle}"
-            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-            ItemsSource="{Binding CooperativeClinicSettingCollection, UpdateSourceTrigger=PropertyChanged}"
-            SelectedItem="{Binding SelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            VirtualizingPanel.IsVirtualizing="True">
+        <DataGrid Grid.Row="0" Margin="10,10,10,0" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}"
+                  CanUserAddRows="{Binding }" CellStyle="{StaticResource DataGridCellStyle}"
+                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                  ItemsSource="{Binding CooperativeClinicSettingCollection, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VirtualizingPanel.IsVirtualizing="True">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -95,17 +58,16 @@
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="FontSize" Value="14" />
                     <Setter Property="Height" Value="40" />
+                    <Setter Property="IsEnabled" Value="{Binding  DataContext.IsEnableEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"></Setter>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="50" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image
-                                Name="DeleteDot"
-                                Width="18"
-                                Source="/Images/DeleteDot.png"
-                                Visibility="{Binding IsInstitutionEdit, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" 
+                                   Visibility="{Binding DataContext.IsEnableEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}},
+                                    FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Image.InputBindings>
                                     <MouseBinding Command="{Binding DataContext.DeleteInstitutionCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick" />
                                 </Image.InputBindings>
@@ -113,10 +75,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn
-                    Width="150"
-                    Header="院所代碼"
-                    IsReadOnly="True">
+                <DataGridTemplateColumn Width="150" Header="院所代碼" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ContentControl Content="{Binding}">
@@ -138,13 +97,39 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox
-                                    Margin="5,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Content="一般扣庫"
-                                    FontFamily="Segoe UI Semibold"
-                                    FontSize="18"
-                                    IsChecked="{Binding NormalIsBuckle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <CheckBox Margin="5,0,0,0" VerticalAlignment="Center" Content="一般扣庫" FontFamily="Segoe UI Semibold" FontSize="18" IsChecked="{Binding NormalIsBuckle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="100" Header="開始日期">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <xctk:MaskedTextBox x:Name="StartDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Foreground="{StaticResource ForeGround}"
+                                                    InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00" 
+                                                    PreviewKeyDown="StartDate_OnPreviewKeyDown" PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" ValueDataType="{x:Type xctk:DateTimeFormat}">
+                                    <Binding Converter="{StaticResource NullableDateConverter}" Mode="TwoWay" NotifyOnValidationError="True" Path="StartDate" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                                        <Binding.ValidationRules>
+                                            <service:DateValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </xctk:MaskedTextBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="100" Header="結束日期">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <xctk:MaskedTextBox x:Name="StartDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Foreground="{StaticResource ForeGround}" InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00" PreviewKeyDown="StartDate_OnPreviewKeyDown" PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" ValueDataType="{x:Type xctk:DateTimeFormat}">
+                                    <Binding Converter="{StaticResource NullableDateConverter}" Mode="TwoWay" NotifyOnValidationError="True" Path="EndDate" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                                        <Binding.ValidationRules>
+                                            <service:DateValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </xctk:MaskedTextBox>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -153,16 +138,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <ComboBox
-                                    Width="80"
-                                    Margin="10,0,0,0"
-                                    HorizontalContentAlignment="Center"
-                                    DisplayMemberPath="Name"
-                                    FontFamily="Segoe UI Semi"
-                                    FontSize="18"
-                                    ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                                    ItemsSource="{Binding DataContext.WareHouses, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
-                                    SelectedItem="{Binding NormalWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <ComboBox Width="80" Margin="10,0,0,0" HorizontalContentAlignment="Center" DisplayMemberPath="Name" FontFamily="Segoe UI Semi" FontSize="18" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding DataContext.WareHouses, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding NormalWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -171,13 +147,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox
-                                    Margin="5,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Content="慢箋扣庫"
-                                    FontFamily="Segoe UI Semibold"
-                                    FontSize="18"
-                                    IsChecked="{Binding ChronicIsBuckle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <CheckBox Margin="5,0,0,0" VerticalAlignment="Center" Content="慢箋扣庫" FontFamily="Segoe UI Semibold" FontSize="18" IsChecked="{Binding ChronicIsBuckle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -186,16 +156,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <ComboBox
-                                    Width="80"
-                                    Margin="10,0,0,0"
-                                    HorizontalContentAlignment="Center"
-                                    DisplayMemberPath="Name"
-                                    FontFamily="Segoe UI Semi"
-                                    FontSize="18"
-                                    ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                                    ItemsSource="{Binding DataContext.WareHouses, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
-                                    SelectedItem="{Binding ChronicWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <ComboBox Width="80" Margin="10,0,0,0" HorizontalContentAlignment="Center" DisplayMemberPath="Name" FontFamily="Segoe UI Semi" FontSize="18" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding DataContext.WareHouses, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" SelectedItem="{Binding ChronicWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -213,15 +174,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <ComboBox
-                                    Width="80"
-                                    Margin="10,0,0,0"
-                                    HorizontalContentAlignment="Center"
-                                    FontFamily="Segoe UI Semi"
-                                    FontSize="18"
-                                    ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                                    SelectedValuePath="content"
-                                    Text="{Binding TypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox Width="80" Margin="10,0,0,0" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedValuePath="content" Text="{Binding TypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     <ComboBoxItem>展望</ComboBoxItem>
                                     <ComboBoxItem>杏翔</ComboBoxItem>
                                 </ComboBox>
@@ -229,12 +182,12 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="100" Header="自動列印" >
+                <DataGridTemplateColumn Width="100" Header="自動列印">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <CheckBox  IsChecked="{Binding AutoPrint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                    
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <CheckBox IsChecked="{Binding AutoPrint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
                                 </CheckBox>
                             </StackPanel>
                         </DataTemplate>
@@ -244,44 +197,18 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock
-                                    Width="115"
-                                    Margin="10,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontFamily="Segoe UI Semibold"
-                                    FontSize="18"
-                                    Text="{Binding DisplayFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <Button
-                                    Width="50"
-                                    Margin="10,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="DimGray"
-                                    BorderThickness="0"
-                                    Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                    Content="..."
-                                    FontFamily="Segoe UI Semibold"
-                                    FontSize="18" />
+                                <TextBlock Width="115" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Text="{Binding DisplayFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button Width="50" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Background="DimGray" BorderThickness="0" Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Content="..." FontFamily="Segoe UI Semibold" FontSize="18" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel
-            Grid.Row="5"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
-            <Button
-                Width="150"
-                Margin="0,0,10,0"
-                Background="IndianRed"
-                BorderThickness="0"
-                Command="{Binding UpdateCommand}"
-                Content="更新"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16" />
+        <StackPanel Grid.Row="5" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Width="150" Margin="0,0,10,0" Background="IndianRed"
+                    IsEnabled="{Binding IsEnableEdit}"
+                    BorderThickness="0" Command="{Binding UpdateCommand}" Content="更新" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
     </Grid>
 </UserControl>

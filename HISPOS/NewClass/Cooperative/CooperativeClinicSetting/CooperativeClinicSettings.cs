@@ -80,11 +80,15 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                             }
                         }
                     }
-                    Function.ZipFiles(fileList, $"{c.FilePath}\\PurgeFile\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip");
-                    foreach (string fs in fileList)
+                    if (fileList != null && fileList.Count > 0)
                     {
-                        File.Delete(fs);
+                        Function.ZipFiles(fileList, $"{c.FilePath}\\PurgeFile\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip");
+                        foreach (string fs in fileList)
+                        {
+                            File.Delete(fs);
+                        }
                     }
+                    
 
                     List<string> fileListTxt = new List<string>();
                     DirectoryInfo ditxt = new DirectoryInfo(c.FilePath);
@@ -99,10 +103,13 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                             }
                         }
                     }
-                    Function.ZipFiles(fileListTxt, $"{c.FilePath}\\TxtFile\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip");
-                    foreach (string fs in fileListTxt)
+                    if (fileListTxt != null && fileListTxt.Count > 0)
                     {
-                        File.Delete(fs);
+                        Function.ZipFiles(fileListTxt, $"{c.FilePath}\\TxtFile\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip");
+                        foreach (string fs in fileListTxt)
+                        {
+                            File.Delete(fs);
+                        }
                     }
                 }
                 catch (Exception)
