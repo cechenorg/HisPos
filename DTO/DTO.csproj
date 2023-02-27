@@ -55,6 +55,7 @@
     <Compile Include="WebService\NHIMedicineDTO.cs" />
     <Compile Include="WebService\NHISmokeMedicineDTO.cs" />
     <Compile Include="WebService\NHISpecialMedicineDTO.cs" />
+    <Compile Include="WebService\PharmacyDTO.cs" />
     <Compile Include="WebService\ProductInfo.cs" />
     <Compile Include="WebService\SingdeFrequencyDTO.cs" />
     <Compile Include="WebService\SingdeOTCDTO.cs" />
