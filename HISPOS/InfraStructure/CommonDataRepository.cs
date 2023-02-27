@@ -107,6 +107,12 @@ namespace His_Pos.InfraStructure
                 new[] { new { Medicines = data.ConvertToDataTable() } });
         }
 
+        public void SyncAccounts(List<AccountDTO> data)
+        {
+            ExecProc($"{schemeName}.[DataSource].[SyncAccounts]",
+                new[] { new { Accounts = data.ConvertToDataTable() } });
+        }
+
         private void ExecProc( string spName,dynamic[] paramemter)
         {
             SQLServerConnection.DapperQuery((conn) =>
