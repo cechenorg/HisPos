@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using DomainModel;
+using System.Data.SqlClient;
+using His_Pos.Database;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 {
@@ -209,17 +211,16 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             {
                 return;
             }
+
             if (string.IsNullOrEmpty(SingInEmployee.Password) && string.IsNullOrEmpty(SingInEmployee.Account))
             {
                 MessageWindow.ShowMessage("請輸入帳號密碼!", MessageType.ERROR);
                 return;
             }
-            else
+
+            if (!CheckPassWord())
             {
-                if (!CheckPassWord())
-                {
-                    return;  //檢查帳密
-                } 
+                return;  //檢查帳密
             }
 
             SetStore();
@@ -283,7 +284,9 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         {
             CheckLines = new ObservableCollection<CommonBox>();
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dt = MainWindow.ServerConnection.ExecuteProc("[Get].[Pharmacy]");
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Group", ViewModelMainWindow.CurrentPharmacy.GroupServerName);
+            DataTable dt = MainWindow.ServerConnection.ExecuteProc("[Get].[Pharmacy]", parameterList);
             MainWindow.ServerConnection.CloseConnection();
 
             if (SingInEmployee.Authority == Authority.Admin || SingInEmployee.Authority == Authority.PharmacyManager || SingInEmployee.Authority == Authority.AccountingStaff) //需要看見各店的人(系統管理員、藥局經理、會計人員)
