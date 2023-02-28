@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using His_Pos.Service;
 using ZeroFormatter;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution
@@ -127,11 +128,22 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 
         public static Pharmacy GetCurrentPharmacy()
         {
+          
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]); 
             pharmacy.MedicalPersonnels.InitPharmacists();
-
             pharmacy.AllEmployees.Init();
+
+            HISPOSWebApiService hisposWebApiService = new HISPOSWebApiService();
+            var serverPharmacyInfo = hisposWebApiService.GetServerPharmacyInfo(pharmacy.ID);
+
+            if (serverPharmacyInfo != null)
+            {
+                pharmacy.GroupServerName = serverPharmacyInfo.PHAMAS_GroupServer;
+                pharmacy.TAXNUM = serverPharmacyInfo.PHAMAS_TAXNUM;
+                pharmacy.VerifyKey = serverPharmacyInfo.PHAMAS_VerifyKey;
+            }
+         
 
             return pharmacy;
         }
