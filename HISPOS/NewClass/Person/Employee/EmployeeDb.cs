@@ -134,6 +134,7 @@ namespace His_Pos.NewClass.Person.Employee
         public static DataTable GetEmployeeNewAccount()
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("GroupServer", ViewModelMainWindow.CurrentPharmacy.GroupServerName));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeNewAccount]", parameterList);
         }
 
