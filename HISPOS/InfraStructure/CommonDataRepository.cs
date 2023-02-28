@@ -113,6 +113,12 @@ namespace His_Pos.InfraStructure
                 new[] { new { Accounts = data.ConvertToDataTable() } });
         }
 
+        public void SyncInstitutionFromNHI(List<InstitutionFromnhiDTO> data)
+        {
+            ExecProc($"{schemeName}.[DataSource].[SyncInstitutionFromNHIs]",
+                new[] { new { InstitutionFromNHIs = data.ConvertToDataTable() } });
+        }
+
         private void ExecProc( string spName,dynamic[] paramemter)
         {
             SQLServerConnection.DapperQuery((conn) =>

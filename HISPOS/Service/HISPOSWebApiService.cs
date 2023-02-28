@@ -63,8 +63,9 @@ namespace His_Pos.Service
                 taskList.Add(SyncMedicineNHISingde());
             if (updateTableNameList.Contains("Accounts"))
                 taskList.Add(SyncAccounts());
+            if (updateTableNameList.Contains("InstitutionFromNHI"))
+                taskList.Add(SyncInstitutionFromNHI());
             
-
 
             return taskList;
         }
@@ -163,6 +164,11 @@ namespace His_Pos.Service
             _commonDataRepository.SyncAccounts(data.ToList());
         }
 
+        private async Task SyncInstitutionFromNHI()
+        {
+            var data = await GetAPIData<InstitutionFromnhiDTO>("GetInstitutionFromNHI");
+            _commonDataRepository.SyncInstitutionFromNHI(data.ToList());
+        }
         
 
         private async Task<IEnumerable<T>> GetAPIData<T>(string route)
