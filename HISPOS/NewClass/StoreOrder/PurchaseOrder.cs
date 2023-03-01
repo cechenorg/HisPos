@@ -48,9 +48,9 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 if (OrderProducts is null)
                 {
-                    return initProductCount;
+                    return InitProductCount;
                 }
-                else if (OrderProducts != null && OrderProducts.Count > 0 && OrderProducts[0].OrderStatus == OrderStatusEnum.DONE)//進退貨紀錄
+                else if (OrderProducts != null && OrderProducts.Count > 0 && (OrderProducts[0].OrderStatus == OrderStatusEnum.DONE || OrderProducts[0].OrderStatus == OrderStatusEnum.SCRAP))//進退貨紀錄
                 {
                     return OrderProducts.Count;
                 }

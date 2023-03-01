@@ -34,7 +34,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             get
             {
-                if (ReturnProducts is null) return initProductCount;
+                if (ReturnProducts is null) return InitProductCount;
                 else return ReturnProducts.Count;
             }
         }
@@ -128,7 +128,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
                 if (returnOrder.returnProducts.Count == 0)
                 {
-                    MessageWindow.ShowMessage("未選擇退貨項目 請重新設定後再傳送", MessageType.ERROR);
+                    MessageWindow.ShowMessage("未選擇退貨項目\r\n請重新設定後再傳送", MessageType.ERROR);
                     return false;
                 }
                 dataTable = StoreOrderDB.CheckReturnProductValid(returnOrder);
@@ -210,15 +210,24 @@ namespace His_Pos.NewClass.StoreOrder
                 TotalPrice = ReturnProducts.Where(w => w.IsChecked && w.TypeOTC != 4).Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
                 TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
             }
-            else
+            else if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING )
             {
-                ReturnStockValue = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => p.ReceiveAmount);//Sum(p => p.InventoryDetailCollection.Sum(s => s.ReturnStockValue));
+                ReturnStockValue = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => p.ReceiveAmount);
                 TotalPrice = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
                 TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
             }
-                
-
-            
+            else if (OrderStatus == OrderStatusEnum.DONE || OrderStatus == OrderStatusEnum.SCRAP)
+            {
+                ReturnStockValue = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => p.ReturnStockValue);
+                TotalPrice = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
+                TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
+            }
+            else
+            {
+                ReturnStockValue = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => p.ReturnStockValue);
+                TotalPrice = ReturnProducts.Where(w => w.TypeOTC != 4).Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
+                TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
+            }
             RaisePropertyChanged(nameof(ReturnDiff));
         }
 
@@ -246,10 +255,23 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                 }
             }
+            else
+            {
+                foreach (ReturnProduct returnProduct in ReturnProducts)
+                {
+                    //double value = 0;
+                    foreach (ReturnProductInventoryDetail item in returnProduct.InventoryDetailCollection)
+                    {
+                        returnProduct.ReturnStockValue = item.ReturnStockValue;
+                        continue;
+                        //value += item.ReturnStockValue;
+                    }
+                    
+                }
+            }
             
             OldReturnProducts = ReturnProducts.GetOldReturnProductsByStoreOrderID(ID);
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
-
             if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
                 ReturnProducts.SetReturnInventoryDetail();
 

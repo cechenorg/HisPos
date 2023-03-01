@@ -7,27 +7,54 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
     public class ReturnProductInventoryDetail : ObservableObject
     {
         #region ----- Define Variables -----
-
-        private double returnAmount;
-        private double returnStockValue;
-
-        public int ID { get; set; }
-        public string BatchNumber { get; set; }
-        public DateTime? ValidDate { get; set; }
-        public double Price { get; set; }
-
-        public double ReceiveAmount { get; set; }
-
-        public double Inventory { get; set; }
-
-        public int TypeOTC { get; set; }
-
+        public int ID
+        {
+            get { return id; }
+            set { Set(() => ID, ref id, value); }
+        }
+        private int id;
+        public string BatchNumber
+        {
+            get { return batchNumber; }
+            set { Set(() => BatchNumber, ref batchNumber, value); }
+        }
+        private string batchNumber;
+        public DateTime? ValidDate
+        {
+            get { return validDate; }
+            set { Set(() => ValidDate, ref validDate, value); }
+        }
+        private DateTime? validDate;
+        public double Price
+        {
+            get { return price; }
+            set { Set(() => Price, ref price, value); }
+        }
+        private double price;
+        public double ReceiveAmount
+        {
+            get { return receiveAmount; }
+            set { Set(() => ReceiveAmount, ref receiveAmount, value); }
+        }
+        private double receiveAmount;
+        public double Inventory
+        {
+            get { return inventory; }
+            set { Set(() => Inventory, ref inventory, value); }
+        }
+        private double inventory;
+        public int TypeOTC
+        {
+            get { return typeOTC; }
+            set { Set(() => TypeOTC, ref typeOTC, value); }
+        }
+        private int typeOTC;
         public double ReturnStockValue
         {
             get { return returnStockValue; }
             set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
-
+        private double returnStockValue;
         public double ReturnAmount
         {
             get { return returnAmount; }
@@ -37,6 +64,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 CalculateStockValue();
             }
         }
+        private double returnAmount;
 
         #endregion ----- Define Variables -----
 
@@ -53,10 +81,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             if (row.Table.Columns.Contains("Record_Amt") && row["Record_Amt"] != DBNull.Value)
                 returnStockValue = Convert.ToDouble(row["Record_Amt"]) * ReturnAmount;
             if(ReturnAmount != 0)
-                ReceiveAmount = ReturnStockValue / ReturnAmount;
-            //{
-            //    ReceiveAmount = TypeOTC != 4 ? ReturnStockValue / ReturnAmount : 0;
-            //}
+                receiveAmount = ReturnStockValue / ReturnAmount;
         }
 
         #region ----- Define Functions -----
