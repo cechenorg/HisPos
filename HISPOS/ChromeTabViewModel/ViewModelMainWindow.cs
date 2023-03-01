@@ -149,7 +149,9 @@ namespace His_Pos.ChromeTabViewModel
         public static Usages Usages { get; set; }
         public static Positions Positions { get; set; }
         public static int StoreOrderDays { get; set; }
+        public static bool PreAdjustDateControl { get; set; }
         public static DateTime ClosingDate { get; set; }
+        public static DateTime PrescriptionCloseDate { get; set; }
         public static Pharmacy CurrentPharmacy { get; set; }
         public static Employee CurrentUser { get; set; }
         public static Employees EmployeeCollection { get; set; }
@@ -165,9 +167,24 @@ namespace His_Pos.ChromeTabViewModel
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
             MainWindow.ServerConnection.OpenConnection();
-            StoreOrderDays = StoreOrderDB.GetStoreOrderDays();
+            
+            DataTable table = Pharmacy.GetParameters(string.Empty);
+            if (table != null && table.Rows.Count > 0)
+            {
+                if (table.Select("SysPar_Name = 'StoreOrderDays'").Count() > 0)
+                {
+                    StoreOrderDays = Convert.ToInt32(table.Select("SysPar_Name = 'StoreOrderDays'")[0]["SysPar_Value"]);
+                }
+                if (table.Select("SysPar_Name = 'PreAdjustDateControl'").Count() > 0)
+                {
+                    PreAdjustDateControl = Convert.ToBoolean(Convert.ToInt32(table.Select("SysPar_Name = 'PreAdjustDateControl'")[0]["SysPar_Value"]));
+                }
+            }
+
             CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
-            ClosingDate = Pharmacy.GetClosingDate();
+            ClosingDate = CurrentPharmacy.ClosingDate;
+            PrescriptionCloseDate = CurrentPharmacy.PrescriptionCloseDate;
+
             CurrentPharmacy.MedicalPersonnels = new Employees();
             CooperativeInstitutionID = WebApi.GetCooperativeClinicId(CurrentPharmacy.ID);
             MainWindow.ServerConnection.CloseConnection();

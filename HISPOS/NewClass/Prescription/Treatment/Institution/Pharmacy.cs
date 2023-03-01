@@ -34,6 +34,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             VerifyKey = r.Field<string>("PHAMAS_VerifyKey");
             MedicalPersonnels = new Employees();
             AllEmployees = new Employees();
+
+            ClosingDate = r["CurPha_ClosingDate"] != DBNull.Value ? Convert.ToDateTime(r["CurPha_ClosingDate"]) : new DateTime();
+            PrescriptionCloseDate = r["CurPha_PrescriptionClosingDate"] != DBNull.Value ? Convert.ToDateTime(r["CurPha_PrescriptionClosingDate"]) : new DateTime();
         }
 
         private string id;
@@ -115,6 +118,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 
         [IgnoreFormat]
         public string VerifyKey { get; set; }
+
+        [IgnoreFormat]
+        public DateTime ClosingDate { get; set; }
+        [IgnoreFormat]
+        public DateTime PrescriptionCloseDate { get; set; }
         #region Function
 
         public static Pharmacy GetCurrentPharmacy()
@@ -181,20 +189,21 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             return clone;
         }
 
-        internal static DateTime GetClosingDate()
+        internal static DataTable GetParameters(string sysParName)
         {
-            DateTime result = new DateTime();
-            try
-            {
-                SQLServerConnection.DapperQuery((conn) =>
-                {
-                    result = conn.QueryFirst<DateTime>(string.Format("Select Isnull(CurPha_ClosingDate, GETDATE()) As CurPha_ClosingDate From [{0}].[SystemInfo].[CurrentPharmacy]",
-                        Properties.Settings.Default.SystemSerialNumber),
-                         commandType: CommandType.Text);
-                });
-            }
-            catch { }
-            return result;
+            //DateTime result = new DateTime();
+            //try
+            //{
+            //    SQLServerConnection.DapperQuery((conn) =>
+            //    {
+            //        result = conn.QueryFirst<DateTime>(string.Format("Select Isnull(CurPha_ClosingDate, GETDATE()) As CurPha_ClosingDate From [{0}].[SystemInfo].[CurrentPharmacy]",
+            //            Properties.Settings.Default.SystemSerialNumber),
+            //             commandType: CommandType.Text);
+            //    });
+            //}
+            //catch { }
+            DataTable table = PharmacyDb.GetSystemParameters(sysParName);
+            return table;
         }
     }
 }

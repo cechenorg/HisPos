@@ -46,5 +46,15 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[GroupPharmacySchemaList]");
         }
+
+        public static DataTable GetSystemParameters(string sysParName)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            if (!string.IsNullOrEmpty(sysParName))
+            {
+                DataBaseFunction.AddSqlParameter(parameterList, "sysParName", sysParName);
+            }
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SystemParameters]", parameterList);
+        }
     }
 }
