@@ -10,21 +10,19 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Globalization;
 using His_Pos.ChromeTabViewModel;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder
 {
     public abstract class StoreOrder : ObservableObject, ICloneable
     {
-        #region ----- Define Variables -----
-
-        private Product.Product selectedItem;
-        private OrderStatusEnum orderStatus;
-        private double totalPrice;
-        private double depositPrice;
-        private StoreOrderHistorys storeOrderHistory;
-
-        protected int initProductCount;
-
+        #region ----- Define Variables ----- 
+        public int InitProductCount
+        {
+            get { return initProductCount; }
+            set { Set(() => InitProductCount, ref initProductCount, value); }
+        }
+        private int initProductCount;
         public Product.Product SelectedItem
         {
             get
@@ -36,98 +34,219 @@ namespace His_Pos.NewClass.StoreOrder
                 Set(() => SelectedItem, ref selectedItem, value); 
             }
         }
-
+        private Product.Product selectedItem;
         public StoreOrderHistorys StoreOrderHistory
         {
             get { return storeOrderHistory; }
             set { Set(() => StoreOrderHistory, ref storeOrderHistory, value); }
         }
-
+        private StoreOrderHistorys storeOrderHistory;
         public OrderStatusEnum OrderStatus
         {
             get { return orderStatus; }
             set { Set(() => OrderStatus, ref orderStatus, value); }
         }
-
-        private string orderTypeIsOTC;
-
+        private OrderStatusEnum orderStatus;
         public string OrderTypeIsOTC
         {
             get { return orderTypeIsOTC; }
             set { Set(() => OrderTypeIsOTC, ref orderTypeIsOTC, value); }
         }
-
-        private string displayType;
-
+        private string orderTypeIsOTC;
         public string DisplayType
         {
             get { return displayType; }
             set { Set(() => DisplayType, ref displayType, value); }
         }
-
-        private string orderIsPayCash;
-
+        private string displayType;
         public string OrderIsPayCash
         {
             get { return orderIsPayCash; }
             set { Set(() => OrderIsPayCash, ref orderIsPayCash, value); }
         }
-
-        private bool isPayCash = false;
-
+        private string orderIsPayCash;
         public bool IsPayCash
         {
             get { return isPayCash; }
             set { Set(() => IsPayCash, ref isPayCash, value); }
         }
-
-        public OrderTypeEnum OrderType { get; set; }
-        public string ID { get; set; }
-        public string ReceiveID { get; set; }
-        public string SourceID { get; set; }//來源單
-        public string CheckCode { get; set; }
-        public Manufactory.Manufactory OrderManufactory { get; set; }
-        public WareHouse.WareHouse OrderWarehouse { get; set; }
-        public string OrderEmployeeName { get; set; }
-        public string ReceiveEmployeeName { get; set; }
-        public DateTime CreateDateTime { get; set; }
-        public DateTime? DoneDateTime { get; set; }
-        public string Note { get; set; }
-        public string ModifyUser { get; set; }
-        public DateTime ModifyTime { get; set; }
-        public string VoidReason { get; set; }
-        public string TargetPreOrderCustomer { get; set; }
-        public DateTime Day { get; set; }
-        public int IsOTC { get; set; }
-        public bool IsEnable { get; set; }
-        public string IsEnableVoid { get; set; }
-        public bool IsScrap { get; set; }
-        public bool IsCanDelete { get; set; }
-        public bool IsCancel { get; set; }
-        public string Visibility { get; set; }
+        private bool isPayCash = false;
+        public OrderTypeEnum OrderType 
+        {
+            get { return orderType; }
+            set { Set(() => OrderType, ref orderType, value); }
+        }
+        private OrderTypeEnum orderType;
+        public string ID
+        {
+            get { return id; }
+            set { Set(() => ID, ref id, value); }
+        }
+        private string id;
+        public string ReceiveID
+        {
+            get { return receiveID; }
+            set { Set(() => ReceiveID, ref receiveID, value); }
+        }
+        private string receiveID;
+        /// <summary>
+        /// 來源單
+        /// </summary>
+        public string SourceID
+        {
+            get { return sourceID; }
+            set { Set(() => SourceID, ref sourceID, value); }
+        }
+        private string sourceID;
+        public string CheckCode
+        {
+            get { return checkCode; }
+            set { Set(() => CheckCode, ref checkCode, value); }
+        }
+        private string checkCode;
+        public Manufactory.Manufactory OrderManufactory
+        {
+            get { return orderManufactory; }
+            set { Set(() => OrderManufactory, ref orderManufactory, value); }
+        }
+        private Manufactory.Manufactory orderManufactory;
+        public WareHouse.WareHouse OrderWarehouse
+        {
+            get { return orderWarehouse; }
+            set { Set(() => OrderWarehouse, ref orderWarehouse, value); }
+        }
+        private WareHouse.WareHouse orderWarehouse;
+        public string OrderEmployeeName
+        {
+            get { return orderEmployeeName; }
+            set { Set(() => OrderEmployeeName, ref orderEmployeeName, value); }
+        }
+        private string orderEmployeeName;
+        public string ReceiveEmployeeName
+        {
+            get { return receiveEmployeeName; }
+            set { Set(() => receiveEmployeeName, ref receiveEmployeeName, value); }
+        }
+        private string receiveEmployeeName;
+        public DateTime CreateDateTime
+        {
+            get { return createDateTime; }
+            set { Set(() => CreateDateTime, ref createDateTime, value); }
+        }
+        private DateTime createDateTime;
+        public DateTime? DoneDateTime
+        {
+            get { return doneDateTime; }
+            set { Set(() => DoneDateTime, ref doneDateTime, value); }
+        }
+        private DateTime? doneDateTime;
+        public string Note
+        {
+            get { return note; }
+            set { Set(() => Note, ref note, value); }
+        }
+        private string note;
+        public string ModifyUser
+        {
+            get { return modifyUser; }
+            set { Set(() => ModifyUser, ref modifyUser, value); }
+        }
+        private string modifyUser;
+        public DateTime ModifyTime
+        {
+            get { return modifyTime; }
+            set { Set(() => ModifyTime, ref modifyTime, value); }
+        }
+        private DateTime modifyTime;
+        public string VoidReason
+        {
+            get { return voidReason; }
+            set { Set(() => VoidReason, ref voidReason, value); }
+        }
+        private string voidReason;
+        public Visibility DisplayVoid
+        {
+            get { return displayVoid; }
+            set { Set(() => DisplayVoid, ref displayVoid, value); }
+        }
+        private Visibility displayVoid = System.Windows.Visibility.Hidden;
+        public string TargetPreOrderCustomer
+        {
+            get { return targetPreOrderCustomer; }
+            set { Set(() => TargetPreOrderCustomer, ref targetPreOrderCustomer, value); }
+        }
+        private string targetPreOrderCustomer;
+        public DateTime Day
+        {
+            get { return day; }
+            set { Set(() => Day, ref day, value); }
+        }
+        private DateTime day;
+        public int IsOTC
+        {
+            get { return isOTC; }
+            set { Set(() => IsOTC, ref isOTC, value); }
+        }
+        private int isOTC;
+        public bool IsEnable
+        {
+            get { return isEnable; }
+            set { Set(() => IsEnable, ref isEnable, value); }
+        }
+        private bool isEnable;
+        public string IsEnableVoid
+        {
+            get { return isEnableVoid; }
+            set { Set(() => IsEnableVoid, ref isEnableVoid, value); }
+        }
+        private string isEnableVoid;
+        public bool IsScrap
+        {
+            get { return isScrap; }
+            set { Set(() => IsScrap, ref isScrap, value); }
+        }
+        private bool isScrap;
+        public bool IsCanDelete
+        {
+            get { return isCanDelete; }
+            set { Set(() => IsCanDelete, ref isCanDelete, value); }
+        }
+        private bool isCanDelete;
+        public bool IsCancel
+        {
+            get { return isCancel; }
+            set { Set(() => IsCancel, ref isCancel, value); }
+        }
+        private bool isCancel;
+        public string Visibility
+        {
+            get { return visibility; }
+            set { Set(() => Visibility, ref visibility, value); }
+        }
+        private string visibility;
         public int IsWaitOrder = 0;
         public double TotalPrice
         {
             get { return totalPrice; }
             set { Set(() => TotalPrice, ref totalPrice, value); }
         }
+        private double totalPrice;
         public double DepositPrice
         {
             get { return depositPrice; }
             set { Set(() => DepositPrice, ref depositPrice, value); }
         }
-        private string prescriptionID;
+        private double depositPrice;
         public string PrescriptionID
         {
             get { return prescriptionID; }
             set { Set(() => PrescriptionID, ref prescriptionID, value); }
         }
+        private string prescriptionID;
         #endregion ----- Define Variables -----
-
         protected StoreOrder()
         {
         }
-
         public StoreOrder(DataRow row)
         {
             OrderManufactory = new Manufactory.Manufactory(row);
@@ -179,7 +298,7 @@ namespace His_Pos.NewClass.StoreOrder
             TotalPrice = (double)Math.Round(row.Field<decimal>("Total"), 0, MidpointRounding.AwayFromZero);
             CreateDateTime = row.Field<DateTime>("StoOrd_CreateTime");
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
-            initProductCount = row.Field<int>("ProductCount");
+            InitProductCount = row.Field<int>("ProductCount");
             OrderTypeIsOTC = row.Field<string>("StoOrd_IsOTCType");
             DisplayType = (OrderTypeIsOTC == "OTC") ? "門市" : "藥品";
             OrderIsPayCash = row.Field<bool>("StoOrd_IsPayCash") ? "下貨付現" : "一般收貨";
@@ -196,7 +315,11 @@ namespace His_Pos.NewClass.StoreOrder
             if (row.Table.Columns.Contains("StoOrd_VoidReason"))
             {
                 if(!DBNull.Value.Equals(row["StoOrd_VoidReason"]))
+                {
                     VoidReason = row.Field<string>("StoOrd_VoidReason");
+                    DisplayVoid = string.IsNullOrEmpty(VoidReason) ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+                }
+                    
             }
             
             if (row.Table.Columns.Contains("StoOrd_IsEnable"))

@@ -15,13 +15,13 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
             <RowDefinition />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <StackPanel
             Grid.Row="0"
@@ -91,7 +91,7 @@
                 Foreground="Black"
                 Style="{StaticResource BoldLabelHeader25}" />
             <Label
-                Width="205"
+                Width="200"
                 VerticalAlignment="Center"
                 Content="{Binding ReceiveID}"
                 FontFamily="Segoe UI Semi"
@@ -138,8 +138,8 @@
                 FontSize="18"
                 Foreground="Black" 
                 Visibility="{Binding HasCustomer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-           
-            
+
+
         </StackPanel>
         <StackPanel
             Grid.Row="2"
@@ -385,136 +385,173 @@
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Label
-                Margin="850,0,0,0"
-                VerticalAlignment="Center"
-                Content="預定客戶"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                Foreground="Black" />
-            <Label
-                Width="120"
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Center"
-                Content="{Binding TargetPreOrderCustomer}"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Foreground="Black" />
-            <!--<Label Content="預定到貨日期" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0" />
-            <Label Content="{Binding PlanArriveDate, Converter={StaticResource DateConverter}}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalContentAlignment="Center" />-->
-        </StackPanel>
-        <StackPanel
-            Grid.Row="6"
-            Background="{StaticResource GridDarkerBackGround}"
-            Orientation="Horizontal">
-            <Label
-                Width="68"
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="總計 $"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                Foreground="Black" />
-            <TextBlock
-                Width="85"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                FontWeight="Bold"
-                Foreground="Black"
-                Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="寄售 $"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                Foreground="Black" />
-            <TextBlock
-                Width="85"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                FontWeight="Bold"
-                Foreground="Black"
-                Text="{Binding DepositPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
-            <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="共"
                 FontFamily="Segoe UI Semibold"
-                FontSize="20"
+                FontSize="16"
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
-                Width="40"
+                Width="50"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
                 Content="{Binding ProductCount, FallbackValue=0}"
                 FontFamily="Segoe UI Semibold"
-                FontSize="20"
+                FontSize="16"
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
                 VerticalAlignment="Center"
                 Content="品項"
                 FontFamily="Segoe UI Semibold"
-                FontSize="20"
+                FontSize="16"
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
-                x:Name="lbNormalPay"
+                VerticalAlignment="Center"
+                Content="總計 $"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="Black" />
+            <TextBlock
+                Width="90"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black"
+                Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
+            <Label
+                VerticalAlignment="Center"
+                Content="寄售 $"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="Black" />
+            <TextBlock
+                Width="90"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black"
+                Text="{Binding DepositPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
+
+            <Label
                 Margin="65,0,0,0"
+                Width="100"
+                x:Name="lbNormalPay"
                 VerticalAlignment="Center"
                 Content="{Binding OrderIsPayCash}"
                 FontFamily="Segoe UI Semibold"
-                FontSize="18"
+                FontSize="16"
                 Foreground="Black" />
             <Label
-                Margin="20,0,0,0"
+                Margin="140,0,0,0"
                 VerticalAlignment="Center"
-                Content="完成時間:"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                FontWeight="Bold"
-                Foreground="Black" />
-            <Label
-                Width="225"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Center"
-                Content="{Binding DoneDateTime, Converter={StaticResource DateTimeConverter}}"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                FontWeight="Bold"
-                Foreground="Black" />
-            <Button
-                Name="btnDelete"
-                Width="120"
-                Margin="10,10,0,8"
-                Background="IndianRed"
-                BorderThickness="0"
-                IsEnabled="{Binding IsScrap}"
-                Command="{Binding DataContext.DeleteOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                Content="刪除"
+                HorizontalContentAlignment="Right"
+                Content="預定客戶 :"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16"
-                Foreground="White" Cursor="Hand">
-                <!--<Button.Style>
-                    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding OrderStatus}" Value="SCRAP">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding OrderManufactory.ID}" Value="0">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ViewModelMainWindow.CurrentUser.ID, Source={StaticResource Locator}}" Value="1">
-                                <Setter Property="IsEnabled" Value="True" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>-->
-            </Button>
+                HorizontalAlignment="Right"
+                Foreground="Black" />
+            <Label
+                Width="100"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Left"
+                Content="{Binding TargetPreOrderCustomer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="Black" />
         </StackPanel>
+        <StackPanel
+            Grid.Row="6"
+            Background="{StaticResource GridDarkerBackGround}"
+            Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Left"
+                Content="最後修改人 :"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Width="100"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Left"
+                Content="{Binding ModifyUser}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                VerticalAlignment="Center"
+                Content="最後修改時間 :"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Width="160"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Left"
+                Content="{Binding ModifyTime, Mode=TwoWay, Converter={StaticResource DateTimeConverter}}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Left"
+                Content="完成時間 :"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Width="160"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Left"
+                Content="{Binding DoneDateTime, Converter={StaticResource DateTimeConverter}}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                VerticalAlignment="Center"
+                Content="作廢原因 :"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Visibility="{Binding DisplayVoid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Foreground="Black" />
+            <TextBlock
+                Width="130"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black"
+                Text="{Binding VoidReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+        <Button
+            Grid.Row="5"
+            Grid.RowSpan="2"
+            HorizontalAlignment="Right"
+            Name="btnDelete"
+            Width="120"
+            Margin="0,0,10,0"
+            Background="IndianRed"
+            BorderThickness="0"
+            IsEnabled="{Binding IsScrap}"
+            Command="{Binding DataContext.DeleteOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Content="刪除"
+            FontFamily="Segoe UI Semibold"
+            FontSize="16"
+            Foreground="White" 
+            Cursor="Hand" >
+        </Button>
     </Grid>
 </UserControl>
