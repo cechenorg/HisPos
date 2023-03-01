@@ -324,11 +324,12 @@ namespace His_Pos.NewClass.Person.Employee
         public static IEnumerable<Employee> EmployeeClockInListTest(string WYear, string WMonth,string StoreNo, string EmpId, int Permit)
         {
             List<Employee> result = null;
+            int isDirectSale = string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false ? 1 : 0;
             SQLServerConnection.DapperQuery((conn) =>
             {
                 result = conn.Query<Employee>(
                     $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[ClockInLogEmployees]",
-                    param: new { WYear, WMonth, StoreNo, Permit, Emp_ID = EmpId },
+                    param: new { WYear, WMonth, StoreNo, Permit, Emp_ID = EmpId , IsDirectSale = isDirectSale },
                     commandType: CommandType.StoredProcedure).ToList();
             });
 
