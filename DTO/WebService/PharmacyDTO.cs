@@ -22,5 +22,7 @@ namespace DTO.WebService
         public string PHAMAS_TAXNUM { get; set; }
         public string PHAMAS_GUID { get; set; }
 
+        public string Old_MedicalNumber { get; set; }
+        
     }
 }

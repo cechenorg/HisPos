@@ -30,6 +30,11 @@ namespace His_Pos.Service
             return data.FirstOrDefault();
         }
 
+        public void UpdatePharmacyIndo(PharmacyDTO pharmacyInfo)
+        {
+            Post(webapiPath + "UpdatePharmacyIndo",pharmacyInfo);
+        }
+
         public void SyncData()
         {
 
@@ -189,6 +194,35 @@ namespace His_Pos.Service
             var responseData =await GetResonseDataAsync<T>(request);
 
             return responseData;
+        }
+
+        private void Post<T>(string url,T postData)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            
+            string postBody = JsonConvert.SerializeObject(postData);//將匿名物件序列化為json字串
+            byte[] byteArray = Encoding.UTF8.GetBytes(postBody);//要發送的字串轉為byte[]
+
+            using (Stream reqStream = request.GetRequestStream())
+            {
+                reqStream.Write(byteArray, 0, byteArray.Length);
+            }
+
+            //發出Request
+            string responseStr = "";
+            using (WebResponse response = request.GetResponse())
+            {
+                using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+                {
+                    responseStr = reader.ReadToEnd();
+                }
+            }
+
+
+            //輸出Server端回傳字串
+            Console.WriteLine(responseStr);
         }
 
         private IEnumerable<T> GetAPIData<T>(string route)

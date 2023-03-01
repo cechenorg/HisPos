@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using DTO.WebService;
 using His_Pos.Service;
 using ZeroFormatter;
 
@@ -158,6 +159,19 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 
         public bool SetPharmacy()
         {
+            DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
+            Pharmacy originPharmacyInfo = new Pharmacy(tableCurrentPharmacy.Rows[0]);
+            HISPOSWebApiService webApiService = new HISPOSWebApiService();
+            PharmacyDTO pharmacyDto = new PharmacyDTO()
+            {
+                PHAMAS_MEDICALNUM = ID,
+                PHAMAS_NAME = Name,
+                PHAMAS_ADDR = Address,
+                PHAMAS_TEL = Tel,
+                PHAMAS_TAXNUM = TAXNUM,
+                Old_MedicalNumber = originPharmacyInfo.ID
+            };
+            webApiService.UpdatePharmacyIndo(pharmacyDto);
             return PharmacyDb.SetPharmacy(this).Rows[0].Field<string>("result") == "Success" ? true : false;
         }
 
