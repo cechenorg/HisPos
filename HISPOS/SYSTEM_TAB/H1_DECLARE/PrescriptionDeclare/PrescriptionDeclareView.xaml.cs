@@ -763,46 +763,46 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             pro.Start();
         }
 
-        private void AdjustDateTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                DateTime closingDate = ViewModelMainWindow.PrescriptionCloseDate.AddDays(1);
-                string senderText = (sender as MaskedTextBox).Text;
-                int year = Convert.ToInt32(senderText.Substring(0, 3)) + 1911;
-                int month = Convert.ToInt32(senderText.Substring(4, 2));
-                int day = Convert.ToInt32(senderText.Substring(7, 2));
-                DateTime senderDate = new DateTime(year, month, day);
-                if (ViewModelMainWindow.PreAdjustDateControl)
-                {
-                    List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
-                    if (DateTime.Compare(senderDate, DateTime.Today) < 0 && !auth.Contains(ViewModelMainWindow.CurrentUser.Authority))
-                    {
-                        MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.ERROR);
-                        string date = string.Format("{0}/{1}/{2}", Convert.ToString(DateTime.Today.Year - 1911).PadLeft(3, '0'), Convert.ToString(DateTime.Today.Month).PadLeft(2, '0'), Convert.ToString(DateTime.Today.Day).PadLeft(2, '0'));
-                        (sender as MaskedTextBox).Text = date;
-                    }
-                    else if (DateTime.Compare(senderDate, closingDate) < 0 && !auth.Contains(ViewModelMainWindow.CurrentUser.Authority))
-                    {
-                        MessageWindow.ShowMessage(string.Format("{0}已關帳 \r\n 不允許調劑", senderText), MessageType.ERROR);
-                        string date = string.Format("{0}/{1}/{2}", Convert.ToString(DateTime.Today.Year - 1911).PadLeft(3, '0'), Convert.ToString(DateTime.Today.Month).PadLeft(2, '0'), Convert.ToString(DateTime.Today.Day).PadLeft(2, '0'));
-                        (sender as MaskedTextBox).Text = date;
-                    }
-                }
-                //else
-                //{
-                //    if (DateTime.Compare(senderDate, DateTime.Today) < 0 && ViewModelMainWindow.CurrentUser.Authority != Authority.Admin)
-                //    {
-                //        MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.ERROR);
-                //        string date = string.Format("{0}/{1}/{2}", Convert.ToString(DateTime.Today.Year - 1911).PadLeft(3, '0'), Convert.ToString(DateTime.Today.Month).PadLeft(2, '0'), Convert.ToString(DateTime.Today.Day).PadLeft(2, '0'));
-                //        (sender as MaskedTextBox).Text = date;
-                //    }
-                //}
-            }
-            catch (Exception ex)
-            {
+        //private void AdjustDateTextBox_LostFocus(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        DateTime closingDate = ViewModelMainWindow.PrescriptionCloseDate.AddDays(1);
+        //        string senderText = (sender as MaskedTextBox).Text;
+        //        int year = Convert.ToInt32(senderText.Substring(0, 3)) + 1911;
+        //        int month = Convert.ToInt32(senderText.Substring(4, 2));
+        //        int day = Convert.ToInt32(senderText.Substring(7, 2));
+        //        DateTime senderDate = new DateTime(year, month, day);
+        //        if (ViewModelMainWindow.PreAdjustDateControl)
+        //        {
+        //            List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
+        //            if (DateTime.Compare(senderDate, DateTime.Today) < 0 && !auth.Contains(ViewModelMainWindow.CurrentUser.Authority))
+        //            {
+        //                MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.ERROR);
+        //                string date = string.Format("{0}/{1}/{2}", Convert.ToString(DateTime.Today.Year - 1911).PadLeft(3, '0'), Convert.ToString(DateTime.Today.Month).PadLeft(2, '0'), Convert.ToString(DateTime.Today.Day).PadLeft(2, '0'));
+        //                (sender as MaskedTextBox).Text = date;
+        //            }
+        //            else if (DateTime.Compare(senderDate, closingDate) < 0 && !auth.Contains(ViewModelMainWindow.CurrentUser.Authority))
+        //            {
+        //                MessageWindow.ShowMessage(string.Format("{0}已關帳 \r\n 不允許調劑", senderText), MessageType.ERROR);
+        //                string date = string.Format("{0}/{1}/{2}", Convert.ToString(DateTime.Today.Year - 1911).PadLeft(3, '0'), Convert.ToString(DateTime.Today.Month).PadLeft(2, '0'), Convert.ToString(DateTime.Today.Day).PadLeft(2, '0'));
+        //                (sender as MaskedTextBox).Text = date;
+        //            }
+        //        }
+        //        //else
+        //        //{
+        //        //    if (DateTime.Compare(senderDate, DateTime.Today) < 0 && ViewModelMainWindow.CurrentUser.Authority != Authority.Admin)
+        //        //    {
+        //        //        MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.ERROR);
+        //        //        string date = string.Format("{0}/{1}/{2}", Convert.ToString(DateTime.Today.Year - 1911).PadLeft(3, '0'), Convert.ToString(DateTime.Today.Month).PadLeft(2, '0'), Convert.ToString(DateTime.Today.Day).PadLeft(2, '0'));
+        //        //        (sender as MaskedTextBox).Text = date;
+        //        //    }
+        //        //}
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-        }
+        //    }
+        //}
     }
 }

@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
@@ -317,9 +318,37 @@ namespace His_Pos.NewClass.Prescription.Service
                 return false;
             }
 
-            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.Authority == DomainModel.Enum.Authority.MasterPharmacist || VM.CurrentUser.Authority == DomainModel.Enum.Authority.PharmacyManager) return true;
-            MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
-            return false;
+            if (VM.PreAdjustDateControl)
+            {
+                if (VM.CurrentUser.Authority == Authority.Admin || VM.CurrentUser.Authority == Authority.PharmacyManager || VM.CurrentUser.Authority == Authority.AccountingStaff)
+                {
+                    return true;
+                }
+                else
+                {
+                    if (VM.CurrentUser.Authority == Authority.MasterPharmacist && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(Current.AdjustDate)) < 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                if (DateTime.Compare(Convert.ToDateTime(Current.AdjustDate), DateTime.Today) >= 0 || VM.CurrentUser.Authority == Authority.Admin || VM.CurrentUser.Authority == Authority.MasterPharmacist || VM.CurrentUser.Authority == Authority.PharmacyManager)
+                {
+                    return true;
+                }
+                else
+                {
+                    MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
+                    return false;
+                }
+            }
         }
 
         private bool CheckAdjustDateFutureOutOfRange()
