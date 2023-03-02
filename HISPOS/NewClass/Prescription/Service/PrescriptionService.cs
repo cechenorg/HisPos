@@ -320,13 +320,14 @@ namespace His_Pos.NewClass.Prescription.Service
 
             if (VM.PreAdjustDateControl)
             {
-                if (VM.CurrentUser.Authority == Authority.Admin || VM.CurrentUser.Authority == Authority.PharmacyManager || VM.CurrentUser.Authority == Authority.AccountingStaff)
+                List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
+                if (auth.Contains(VM.CurrentUser.Authority) && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(Current.AdjustDate)) < 0)
                 {
                     return true;
                 }
                 else
                 {
-                    if (VM.CurrentUser.Authority == Authority.MasterPharmacist && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(Current.AdjustDate)) < 0)
+                    if (DateTime.Compare(DateTime.Today, Convert.ToDateTime(Current.AdjustDate)) <= 0)
                     {
                         return true;
                     }
