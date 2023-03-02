@@ -245,7 +245,7 @@ namespace His_Pos.NewClass.Prescription.Service
             //if (notCheckPast10Days)
             //    return CheckTreatDate() && CheckAdjustDate();
             //return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
-            return CheckTreatDate() && CheckTreatDateValid() && CheckAdjustDate() && CheckAdjustDatePast() /*&& CheckAdjustDateFutureOutOfRange()*/;
+            return CheckTreatDate() && CheckTreatDateValid() && CheckAdjustDate() && CheckAdjustDatePast() && CheckAdjustDateFutureOutOfRange();
         }
 
         protected bool CheckAdjustAndTreatDateFromEdit()
@@ -329,7 +329,7 @@ namespace His_Pos.NewClass.Prescription.Service
             var ts1 = new TimeSpan(endDate.Ticks);
             var ts2 = new TimeSpan(startDate.Ticks);
             var ts = ts1.Subtract(ts2).Duration();
-            if (ts.Days < 180) return true;
+            if (ts.Days <= 90) return true;
             MessageWindow.ShowMessage("調劑日超出合理範圍", MessageType.WARNING);
             return false;
         }
