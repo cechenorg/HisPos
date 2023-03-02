@@ -19,7 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
     public partial class PrescriptionEditWindow : Window
     {
         private int prevRowIndex = -1;
-
+        public bool IsCanDelete = false;
         public delegate Point GetDragDropPosition(IInputElement theElement);
 
         public PrescriptionEditWindow()
@@ -41,6 +41,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             Closing += (sender, e) => Messenger.Default.Unregister(this);
             PrescriptionMedicines.Drop += PrescriptionMedicines_Drop;
             DataContext = new PrescriptionEditViewModel(p, title);
+            IsCanDelete = ((PrescriptionEditViewModel)DataContext).IsCanDelete;
             ShowDialog();
         }
 

@@ -37,8 +37,7 @@ using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 using MedicineVirtual = His_Pos.NewClass.Medicine.Base.MedicineVirtual;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
-using His_Pos.NewClass.Medicine;
+using DomainModel.Enum;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -122,7 +121,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
 
-        private bool isCanDelete;
+        private bool isCanDelete = true;
         public bool IsCanDelete
         {
             get => isCanDelete;
@@ -180,10 +179,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
 
-        public bool CanEdit => !EditedPrescription.PrescriptionStatus.IsAdjust || 
+        public bool CanEdit => 
+            !EditedPrescription.PrescriptionStatus.IsAdjust ||
             EditedPrescription.InsertTime != null && 
-            EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.ID == 1 || 
-            VM.CurrentUser.IsPharmist();
+            ((VM.PreAdjustDateControl && 
+            (VM.CurrentUser.Authority == Authority.Admin || VM.CurrentUser.Authority == Authority.PharmacyManager || VM.CurrentUser.Authority == Authority.AccountingStaff)) ||
+           EditedPrescription.InsertTime >= DateTime.Today ||
+            VM.CurrentUser.Authority == Authority.Admin ||
+           VM.CurrentUser.IsPharmist());
+        //public bool CanEdit => !EditedPrescription.PrescriptionStatus.IsAdjust ||
+        //    EditedPrescription.InsertTime != null;
         public bool PriceReadOnly => !CanEdit;
 
         #endregion UIProperties
@@ -379,19 +384,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             OriginalPrescription = p;
             ChronicTimesCanEdit = !OriginalPrescription.AdjustCase.IsChronic();
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
-            //if (EditedPrescription.Institution != null)// && EditedPrescription.Institution.ID == "3532082753"
-            //{
-            //    PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
-            //}
-
             EditedPrescription.ID = p.ID;
             EditedPrescription.SourceId = p.SourceId;
+            if (VM.PreAdjustDateControl)
+            {
+                List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
+                IsCanDelete = (DateTime.Compare(VM.PrescriptionCloseDate, (DateTime)EditedPrescription.AdjustDate) < 0 && VM.CurrentUser.IsPharmist()) || auth.Contains(VM.CurrentUser.Authority);
+            }
+            else
+            {
+                IsCanDelete = true;
+            }
             InitialItemsSources();
             InitialCommandActions();
             InitPrescription();
             SelectedDetail = EditedPrescription.Patient.Name.Equals("匿名") ? "Option2" : "Option1";
             Messenger.Default.Register<NotificationMessage>("UpdateUsableAmountMessage", UpdateInventories);
-            IsCanDelete = DateTime.Compare(VM.ClosingDate.AddDays(1), (DateTime)EditedPrescription.AdjustDate) < 0;
+            
         }
 
         private void UpdateInventories(NotificationMessage msg)
@@ -499,7 +508,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void DataChangedAction()
         {
-            IsEdit = DateTime.Compare(VM.ClosingDate.AddDays(1), (DateTime)EditedPrescription.AdjustDate) < 0;
+            if (VM.PreAdjustDateControl)
+            {
+                List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
+                IsEdit = DateTime.Compare(VM.PrescriptionCloseDate, (DateTime)EditedPrescription.AdjustDate) < 0 || auth.Contains(VM.CurrentUser.Authority);
+            }
+            else
+            {
+                IsEdit = true;
+            }
         }
 
         private void MakeUpAction()
@@ -821,10 +838,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void DeleteAction()
         {
-            if(DateTime.Compare((DateTime)EditedPrescription.AdjustDate, VM.ClosingDate.AddDays(1)) < 0)
+            if (VM.PreAdjustDateControl)
             {
-                MessageWindow.ShowMessage(string.Format("關帳日:{0}，禁止刪除處方", VM.ClosingDate.ToString("yyyy/MM/dd")), MessageType.ERROR);
-                return;
+                List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
+                if (DateTime.Compare((DateTime)EditedPrescription.AdjustDate, VM.PrescriptionCloseDate) < 0 && !auth.Contains(VM.CurrentUser.Authority))
+                {
+                    MessageWindow.ShowMessage(string.Format("關帳日:{0}，禁止刪除處方", VM.PrescriptionCloseDate.ToString("yyyy/MM/dd")), MessageType.ERROR);
+                    return;
+                }
             }
             ConfirmWindow deleteConfirm = new ConfirmWindow("確定刪除此處方?", "刪除確認");
             var delete = deleteConfirm.DialogResult;
@@ -843,10 +864,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void RedoEditAction()
         {
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
-            //if (EditedPrescription.Institution.ID == "3532082753")
-            //{
-            //    PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
-            //}
             EditedPrescription.ID = OriginalPrescription.ID;
             EditedPrescription.SourceId = OriginalPrescription.SourceId;
             PrintEditedPrescription.ID = OriginalPrescription.ID;
@@ -1019,9 +1036,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private Inventorys GetMedicinesInventories()
         {
             MainWindow.ServerConnection.OpenConnection();
-            //Inventorys inventories = Inventorys.GetAllInventoryByProIDs(GetMedicinesIDsConcatenated(), EditedPrescription.WareHouse?.ID);
-            var table = MedicineDb.GetUsableAmountByPrescriptionID(EditedPrescription.ID);
-            Inventorys inventories = new Inventorys(table);
+            var inventories = Inventorys.GetAllInventoryByProIDs(GetMedicinesIDsConcatenated(), EditedPrescription.WareHouse?.ID);
             MainWindow.ServerConnection.CloseConnection();
             foreach (var med in OriginalPrescription.Medicines)
             {
@@ -1037,7 +1052,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             foreach (var inv in inventoryList)
             {
                 var editMedicines = EditedPrescription.Medicines.Where(m => m.InventoryID.Equals(inv.InvID));
-                if (inv.CanUseAmount - editMedicines.Sum(m => m.BuckleAmount) >= 0) continue;
+                if (inv.OnTheFrame - editMedicines.Sum(m => m.BuckleAmount) >= 0) continue;
                 negativeStock = EditedPrescription.Medicines.Where(med => !(med is MedicineVirtual))
                     .Where(med => med.InventoryID.Equals(inv.InvID))
                     .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));

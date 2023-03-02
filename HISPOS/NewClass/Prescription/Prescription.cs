@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.CooperativeInstitution;
@@ -105,6 +106,17 @@ namespace His_Pos.NewClass.Prescription
             SpecialTreat = VM.GetSpecialTreat(r.Field<string>("SpecialTreatID"));
             PrescriptionPoint = new PrescriptionPoint(r, type);
             PrescriptionStatus = new PrescriptionStatus(r, type);
+            if (VM.PreAdjustDateControl)
+            {
+                if (VM.CurrentUser.Authority != Authority.Admin && VM.CurrentUser.Authority != Authority.PharmacyManager)
+                {
+                    if (DateTime.Compare(Convert.ToDateTime(AdjustDate), VM.PrescriptionCloseDate) <= 0)
+                    {
+                        PrescriptionStatus.IsDeclare = true;
+                        PrescriptionStatus.IsGetCard = true;
+                    }
+                }
+            }
             MedicalNumber = string.IsNullOrEmpty(r.Field<string>("MedicalNumber")) ? r.Field<string>("MedicalNumber") : r.Field<string>("MedicalNumber").Trim();
             OriginalMedicalNumber = string.IsNullOrEmpty(r.Field<string>("OldMedicalNumber")) ? r.Field<string>("OldMedicalNumber") : r.Field<string>("OldMedicalNumber").Trim();
             if (AdjustCase.ID.Equals("2"))
