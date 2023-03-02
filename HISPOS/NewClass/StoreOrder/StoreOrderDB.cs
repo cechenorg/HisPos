@@ -327,6 +327,9 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 foreach (var inventoryDetail in pro.InventoryDetailCollection)
                 {
+                    if (inventoryDetail.ReturnAmount == 0)
+                        continue;
+
                     DataRow newRow = inventoryDetailTable.NewRow();
                     DataBaseFunction.AddColumnValue(newRow, "InvDet_ID", inventoryDetail.ID);
                     DataBaseFunction.AddColumnValue(newRow, "InvDet_ReturnAmount", inventoryDetail.ReturnAmount);
