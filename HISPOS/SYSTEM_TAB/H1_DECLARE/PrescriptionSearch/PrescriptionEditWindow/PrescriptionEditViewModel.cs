@@ -178,17 +178,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => SelectedDetail, ref selectedDetail, value);
             }
         }
+        private List<Authority> authorities = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff};
+        public bool CanEdit => (!VM.PreAdjustDateControl && (!EditedPrescription.PrescriptionStatus.IsAdjust ||
+            EditedPrescription.InsertTime != null &&
+            EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.Authority == Authority.Admin ||
+            VM.CurrentUser.IsPharmist())) ||
+            (VM.PreAdjustDateControl &&
+            ((authorities.Contains(VM.CurrentUser.Authority) && DateTime.Compare(Convert.ToDateTime(EditedPrescription.AdjustDate), VM.PrescriptionCloseDate) > 0) ||
+            DateTime.Compare(Convert.ToDateTime(EditedPrescription.AdjustDate), DateTime.Today) >= 0));
 
-        public bool CanEdit => 
-            !EditedPrescription.PrescriptionStatus.IsAdjust ||
-            EditedPrescription.InsertTime != null && 
-            ((VM.PreAdjustDateControl && 
-            (VM.CurrentUser.Authority == Authority.Admin || VM.CurrentUser.Authority == Authority.PharmacyManager || VM.CurrentUser.Authority == Authority.AccountingStaff)) ||
-           EditedPrescription.InsertTime >= DateTime.Today ||
-            VM.CurrentUser.Authority == Authority.Admin ||
-           VM.CurrentUser.IsPharmist());
-        //public bool CanEdit => !EditedPrescription.PrescriptionStatus.IsAdjust ||
-        //    EditedPrescription.InsertTime != null;
         public bool PriceReadOnly => !CanEdit;
 
         #endregion UIProperties
@@ -386,15 +384,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
             EditedPrescription.ID = p.ID;
             EditedPrescription.SourceId = p.SourceId;
-            if (VM.PreAdjustDateControl)
-            {
-                List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
-                IsCanDelete = (DateTime.Compare(VM.PrescriptionCloseDate, (DateTime)EditedPrescription.AdjustDate) < 0 && VM.CurrentUser.IsPharmist()) || auth.Contains(VM.CurrentUser.Authority);
-            }
-            else
-            {
-                IsCanDelete = true;
-            }
             InitialItemsSources();
             InitialCommandActions();
             InitPrescription();
@@ -508,15 +497,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void DataChangedAction()
         {
-            if (VM.PreAdjustDateControl)
-            {
-                List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
-                IsEdit = DateTime.Compare(VM.PrescriptionCloseDate, (DateTime)EditedPrescription.AdjustDate) < 0 || auth.Contains(VM.CurrentUser.Authority);
-            }
-            else
-            {
-                IsEdit = true;
-            }
+            IsEdit = true;
         }
 
         private void MakeUpAction()
@@ -838,15 +819,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void DeleteAction()
         {
-            if (VM.PreAdjustDateControl)
-            {
-                List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
-                if (DateTime.Compare((DateTime)EditedPrescription.AdjustDate, VM.PrescriptionCloseDate) < 0 && !auth.Contains(VM.CurrentUser.Authority))
-                {
-                    MessageWindow.ShowMessage(string.Format("關帳日:{0}，禁止刪除處方", VM.PrescriptionCloseDate.ToString("yyyy/MM/dd")), MessageType.ERROR);
-                    return;
-                }
-            }
+            bool isCanDelete = PrescriptionService.CheckAdjustDateOther(EditedPrescription, 3);
+            if (!isCanDelete)
+                return;
+
             ConfirmWindow deleteConfirm = new ConfirmWindow("確定刪除此處方?", "刪除確認");
             var delete = deleteConfirm.DialogResult;
             if ((bool)delete)
@@ -874,6 +850,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void EditCompleteAction()
         {
+            if (!PrescriptionService.CheckAdjustDateOther(EditedPrescription, 2)) return;
             if (!CheckSameOrIDEmptyMedicine()) return;
             if (!CheckMedicinesNegativeStock()) return;
             currentService = PrescriptionService.CreateService(EditedPrescription);

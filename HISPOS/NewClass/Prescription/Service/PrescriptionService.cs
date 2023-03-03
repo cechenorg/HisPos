@@ -246,7 +246,7 @@ namespace His_Pos.NewClass.Prescription.Service
             //if (notCheckPast10Days)
             //    return CheckTreatDate() && CheckAdjustDate();
             //return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
-            return CheckTreatDate() && CheckTreatDateValid() && CheckAdjustDate() && CheckAdjustDatePast() && CheckAdjustDateFutureOutOfRange();
+            return CheckTreatDate() && CheckTreatDateValid() && CheckAdjustDate() && CheckAdjustDatePast(Current, 1) && CheckAdjustDateFutureOutOfRange();
         }
 
         protected bool CheckAdjustAndTreatDateFromEdit()
@@ -310,9 +310,32 @@ namespace His_Pos.NewClass.Prescription.Service
             return true;
         }
 
-        private bool CheckAdjustDatePast()
+        public static bool CheckAdjustDateOther(Prescription prescription, int type)
         {
-            if (Current.AdjustDate < Current.TreatDate)
+            return CheckAdjustDatePast(prescription, type);
+        }
+        /// <summary>
+        /// 調劑日期判斷
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static bool CheckAdjustDatePast(Prescription prescription, int type)
+        {
+            string[] msg = new string[2];
+            switch(type)
+            {
+                case 1://新增處方
+                    msg = new string[2] { "調劑日不可小於關帳日", "調劑日不可小於今天" };
+                    break;
+                case 2://修改處方
+                    msg = new string[2] { "禁止修改已關帳處方", "禁止修改非今日處方" };
+                    break;
+                case 3://刪除處方
+                    msg = new string[2] { "禁止刪除已關帳處方", "禁止刪除今天以前處方" };
+                    break;
+            }
+
+            if (prescription.AdjustDate < prescription.TreatDate)
             {
                 MessageWindow.ShowMessage("調劑日不可小於就醫日", MessageType.WARNING);
                 return false;
@@ -321,26 +344,34 @@ namespace His_Pos.NewClass.Prescription.Service
             if (VM.PreAdjustDateControl)
             {
                 List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
-                if (auth.Contains(VM.CurrentUser.Authority) && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(Current.AdjustDate)) < 0)
+                if (auth.Contains(VM.CurrentUser.Authority) && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) < 0)
                 {
                     return true;
                 }
                 else
                 {
-                    if (DateTime.Compare(DateTime.Today, Convert.ToDateTime(Current.AdjustDate)) <= 0)
+                    if (auth.Contains(VM.CurrentUser.Authority))
                     {
-                        return true;
+                        MessageWindow.ShowMessage(msg[0], MessageType.WARNING);
+                        return false;
                     }
                     else
                     {
-                        MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
-                        return false;
+                        if (DateTime.Compare(DateTime.Today, Convert.ToDateTime(prescription.AdjustDate)) <= 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            MessageWindow.ShowMessage(msg[1], MessageType.WARNING);
+                            return false;
+                        }
                     }
                 }
             }
             else
             {
-                if (DateTime.Compare(Convert.ToDateTime(Current.AdjustDate), DateTime.Today) >= 0 || VM.CurrentUser.Authority == Authority.Admin || VM.CurrentUser.Authority == Authority.MasterPharmacist || VM.CurrentUser.Authority == Authority.PharmacyManager)
+                if (DateTime.Compare(Convert.ToDateTime(prescription.AdjustDate), DateTime.Today) >= 0 || VM.CurrentUser.Authority == Authority.Admin || VM.CurrentUser.Authority == Authority.MasterPharmacist || VM.CurrentUser.Authority == Authority.PharmacyManager)
                 {
                     return true;
                 }
