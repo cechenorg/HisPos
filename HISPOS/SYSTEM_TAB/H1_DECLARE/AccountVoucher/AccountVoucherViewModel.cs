@@ -274,7 +274,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         #region Function
         private void CopyDataAction()
         {
-            if (currentVoucher.JouMas_Status.Equals("F"))
+            if (currentVoucher.JouMas_Status.Equals("F") && currentVoucher.JouMas_Source == 1)
             {
                 JournalMaster journalMaster = currentVoucher;//紀錄目前傳票
                 bool isSuccess = InsertNewJournal();
@@ -282,20 +282,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 {
                     foreach (JournalDetail item in journalMaster.DebitDetails)
                     {
-                        CopyDetailData(item, true);
+                        CopyDetailData(CurrentVoucher.JouMas_ID, item, true);
                     }
                     foreach (JournalDetail item in journalMaster.CreditDetails)
                     {
-                        CopyDetailData(item, false);
+                        CopyDetailData(CurrentVoucher.JouMas_ID, item, false);
                     }
                     AccountsDb.UpdateJournalData("保存", CurrentVoucher);
                 }
             }
         }
-        private void CopyDetailData(JournalDetail detail, bool isDebit)
+        private void CopyDetailData(string newJouID, JournalDetail detail, bool isDebit)
         {
             JournalDetail item = new JournalDetail();
-            item.JouDet_ID = detail.JouDet_ID;
+            item.JouDet_ID = newJouID;
             item.JouDet_Type = detail.JouDet_Type;
             item.JouDet_Number = detail.JouDet_Number;
             item.JouDet_AcctLvl1 = detail.JouDet_AcctLvl1;
@@ -325,14 +325,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     EditContent = "取消修改";
                     BtnVisibilty = Visibility.Visible;
                     IsCanEdit = true;
-                    IsBtnEnable = true;
+                    IsBtnEnable = false;
                 }
                 else
                 {
                     EditContent = "修改傳票內容";
                     BtnVisibilty = Visibility.Hidden;
                     IsCanEdit = false;
-                    IsBtnEnable = false;
+                    IsBtnEnable = true;
                     GetDetailData(CurrentVoucher.JouMas_ID);
                 }
             }
