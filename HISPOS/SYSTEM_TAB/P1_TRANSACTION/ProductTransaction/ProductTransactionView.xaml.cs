@@ -1100,7 +1100,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void FillInCustomerData(DataTable result)
         {
             cusID = result.Rows[0]["Cus_ID"].ToString();
-            string res = result.Rows[0]["Prepay_Balance"].ToString();
+            string res = result.Rows[0]["Cus_Prepay_Balance"].ToString();
             PrepayBalance = string.IsNullOrEmpty(res) ? "0" : res;
             lbName.Content = result.Rows[0]["Cus_Name"].ToString();
             lbGender.Content = result.Rows[0]["Cus_Gender"].ToString();
