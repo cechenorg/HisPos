@@ -289,11 +289,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 col5.Width = 30;
                 var col6 = ws.Column("F");
                 col6.Width = 20;
-                ws.Cell("A2").Value = "科目種類";
-                ws.Cell("B2").Value = "科目群組代碼";
-                ws.Cell("C2").Value = "科目群組名稱";
-                ws.Cell("D2").Value = "科目代碼";
-                ws.Cell("E2").Value = "科目名稱";
+                ws.Cell("A2").Value = "會計科目代號1";
+                ws.Cell("B2").Value = "會計科目代號2";
+                ws.Cell("C2").Value = "會計科目名稱2";
+                ws.Cell("D2").Value = "會計科目代號3";
+                ws.Cell("E2").Value = "會計科目名稱3";
                 ws.Cell("F2").Value = "金額";
 
                 DataTable data = AccountsDb.GetBalanceSheet(_endDate);
