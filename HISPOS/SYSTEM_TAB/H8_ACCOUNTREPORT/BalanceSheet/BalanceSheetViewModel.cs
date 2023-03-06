@@ -19,6 +19,8 @@ using His_Pos.NewClass.StockValue;
 using System.Windows.Threading;
 using His_Pos.NewClass.Report;
 using System.Linq;
+using System.Diagnostics;
+using ClosedXML.Excel;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 {
@@ -205,6 +207,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         DataSet _outputDataSet;
         private void ExportCSVAction()
         {
+
+            DetailToExcel();
+            /*
             SaveFileDialog diag = new SaveFileDialog();
             diag.FileName = "資產負債表.csv";
             diag.Filter = "csv (*.csv)|*.csv";
@@ -251,8 +256,69 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     MessageWindow.ShowMessage(e.Message, MessageType.WARNING);
                 }
             }
+            */
         }
+        private void DetailToExcel()
+        {
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "資產負債表";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
+            fdlg.Filter = "XLSX檔案|*.xlsx";
+            fdlg.FileName = string.Format("資產負債表{0}", EndDate.ToString("yyyyMMdd"));
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
 
+                var ws = wb.Worksheets.Add("資產負債表");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+
+                var col1 = ws.Column("A");
+                col1.Width = 20;
+                var col2 = ws.Column("B");
+                col2.Width = 20;
+                var col3 = ws.Column("C");
+                col3.Width = 20;
+                var col4 = ws.Column("D");
+                col4.Width = 20;
+                var col5 = ws.Column("E");
+                col5.Width = 30;
+                var col6 = ws.Column("F");
+                col6.Width = 20;
+                ws.Cell("A2").Value = "科目種類";
+                ws.Cell("B2").Value = "科目群組代碼";
+                ws.Cell("C2").Value = "科目群組名稱";
+                ws.Cell("D2").Value = "科目代碼";
+                ws.Cell("E2").Value = "科目名稱";
+                ws.Cell("F2").Value = "金額";
+
+                DataTable data = AccountsDb.GetBalanceSheet(_endDate);
+                var items = data.AsEnumerable().Where(w => w.Field<decimal>("acctValue") != 0);
+                var rangeWithData = ws.Cell(3, 1).InsertData(items);
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                try
+                {
+                    wb.SaveAs(fdlg.FileName);
+                    myProcess.StartInfo.UseShellExecute = true;
+                    myProcess.StartInfo.FileName = fdlg.FileName;
+                    myProcess.StartInfo.CreateNoWindow = true;
+                    myProcess.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
+        }
+        /*
         /// <summary>
         /// 資產負債表明細匯出(20220419)
         /// </summary>
@@ -292,6 +358,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             }
             return result;
         }
+        */
 
         private void FirstAction()
         {
