@@ -1,5 +1,8 @@
-﻿using His_Pos.ChromeTabViewModel;
+﻿using Dapper;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Database;
 using His_Pos.NewClass.Person.Customer.ProductTransactionCustomer;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.ProductTransaction;
 using His_Pos.NewClass.Trade.TradeRecord;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
@@ -7,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using static ICSharpCode.SharpZipLib.Zip.ExtendedUnixData;
 
 namespace His_Pos.NewClass.Trade
@@ -61,8 +65,35 @@ namespace His_Pos.NewClass.Trade
             MainWindow.ServerConnection.CloseConnection();
             return result;
         }
+        public static DataTable GetTradeRecord(int traMas_ID)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>
+                {
+                    new SqlParameter("MasterID", traMas_ID),
+                    new SqlParameter("CustomerID", DBNull.Value),
+                    new SqlParameter("sDate", ""),
+                    new SqlParameter("eDate", ""),
+                    new SqlParameter("sInvoice", ""),
+                    new SqlParameter("eInvoice", ""),
+                    new SqlParameter("flag", "1"),
+                    new SqlParameter("ShowIrregular", DBNull.Value),
+                    new SqlParameter("ShowReturn", DBNull.Value),
+                    new SqlParameter("Cashier", -1),
+                    new SqlParameter("ProID", DBNull.Value),
+                    new SqlParameter("ProName", DBNull.Value)
+                };
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
 
-        public DataTable GetTradeRecordDetail(TradeQueryInfo info)
+            return result;
+        }
+        /// <summary>
+        /// 銷售明細
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public static DataTable GetTradeRecordDetail(TradeQueryInfo info)
         {
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parametersDetail = new List<SqlParameter>();
@@ -131,13 +162,13 @@ namespace His_Pos.NewClass.Trade
             dt.Columns.Add("TraDet_DepositAmount", typeof(int));
             dt.Columns.Add("TraDet_RewardPersonnel", typeof(string));
             dt.Columns.Add("TraDet_RewardPercent", typeof(int));
-            DataTable empList = GetEmployeeList();
+            IEnumerable<Employee> empList = GetPosEmployee();
             foreach (var item in detail)
             {
-                DataRow[] drs = empList.Select(string.Format("Emp_Name = '{0}'", Convert.ToString(item.Emp.Emp_Name)));
-                string Id = Convert.ToString(drs[0]["Emp_ID"]) == "0" ? null : Convert.ToString(drs[0]["Emp_ID"]);
-                string rewardPercent = item.TraDet_RewardPercent == 0 || item.TraDet_Amount == 0 ? null : Convert.ToString(item.TraDet_RewardPercent / item.TraDet_Amount);
+                IEnumerable<Employee> emp = empList.Where(w => w.Name == Convert.ToString(item.Emp.Name));
 
+                string Id = Convert.ToString(emp.First().ID) == "0" ? null : Convert.ToString(emp.First().ID);
+                string rewardPercent = item.TraDet_RewardPercent == 0 || item.TraDet_Amount == 0 ? null : Convert.ToString(Math.Round(Convert.ToDouble(item.TraDet_RewardPercent / item.TraDet_Amount), 0));
                 dt.Rows.Add(
                     item.TraDet_DetailID,
                     item.TraDet_ProductID,
@@ -177,9 +208,89 @@ namespace His_Pos.NewClass.Trade
         public static DataTable GetEmployeeList()
         {
             MainWindow.ServerConnection.OpenConnection();
+            DataTable table = new DataTable();
+            DataColumn dc1 = new DataColumn("Emp_ID", typeof(string));
+            DataColumn dc2 = new DataColumn("Emp_Account", typeof(string));
+            DataColumn dc3 = new DataColumn("Emp_Name", typeof(string));
+            DataColumn dc4 = new DataColumn("Emp_CashierID", typeof(string));
+            table.Columns.Add(dc1);
+            table.Columns.Add(dc2);
+            table.Columns.Add(dc3);
+            table.Columns.Add(dc4);
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
+            foreach (DataRow dr in result.Rows)
+            {
+                DataRow newRow = table.NewRow();
+                newRow["Emp_ID"] = Convert.ToString(dr["ID"]);
+                newRow["Emp_Account"] = Convert.ToString(dr["Account"]);
+                newRow["Emp_Name"] = Convert.ToString(dr["Name"]);
+                newRow["Emp_CashierID"] = Convert.ToString(dr["CashierID"]);
+                table.Rows.Add(newRow);
+            }
+            
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
+        public static IEnumerable<Employee> GetPosEmployee()
+        {
+            IEnumerable<Employee> result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[POS].[GetEmployee]",
+                    commandType: CommandType.StoredProcedure).ToList();
+            });
+
+            return result;
+        }
+        /// <summary>
+        /// 銷售紀錄
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public static DataTable GetTradeRecordTable(TradeQueryInfo info)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parameters.Add(new SqlParameter("MasterID", DBNull.Value));
+            parameters.Add(new SqlParameter("sDate", info.StartDate));
+            parameters.Add(new SqlParameter("eDate", info.EndDate));
+            parameters.Add(new SqlParameter("sInvoice", info.StartInvoice));
+            parameters.Add(new SqlParameter("eInvoice", info.EndInvoice));
+            parameters.Add(new SqlParameter("flag", info.Flag));
+            parameters.Add(new SqlParameter("ShowIrregular", info.ShowIrregular));
+            parameters.Add(new SqlParameter("ShowReturn", info.ShowReturn));
+            parameters.Add(new SqlParameter("Cashier", info.CashierID));
+            parameters.Add(new SqlParameter("ProID", info.ProID));
+            parameters.Add(new SqlParameter("ProName", info.ProName));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             return result;
+        }
+        /// <summary>
+        /// 銷售彙總
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public static DataTable GetTradeRecordSum(TradeQueryInfo info)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parametersSum = new List<SqlParameter>();
+            parametersSum.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parametersSum.Add(new SqlParameter("MasterID", DBNull.Value));
+            parametersSum.Add(new SqlParameter("sDate", info.StartDate));
+            parametersSum.Add(new SqlParameter("eDate", info.EndDate));
+            parametersSum.Add(new SqlParameter("sInvoice", info.StartInvoice));
+            parametersSum.Add(new SqlParameter("eInvoice", info.EndInvoice));
+            parametersSum.Add(new SqlParameter("flag", "0"));
+            parametersSum.Add(new SqlParameter("ShowIrregular", info.ShowIrregular));
+            parametersSum.Add(new SqlParameter("ShowReturn", info.ShowReturn));
+            parametersSum.Add(new SqlParameter("Cashier", info.CashierID));
+            parametersSum.Add(new SqlParameter("ProID", info.ProID));
+            parametersSum.Add(new SqlParameter("ProName", info.ProName));
+            DataTable resultSum = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordSum]", parametersSum);
+            MainWindow.ServerConnection.CloseConnection();
+            return resultSum;
         }
     }
 }

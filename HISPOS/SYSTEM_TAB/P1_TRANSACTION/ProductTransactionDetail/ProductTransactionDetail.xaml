@@ -620,7 +620,7 @@
                                 x:Name="cbCashier"
                                 Width="80"
                                 VerticalAlignment="Center"
-                                DisplayMemberPath="Emp_Name"
+                                DisplayMemberPath="Name"
                                 DropDownClosed="cbCashier_DropDownClosed"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="18"
@@ -628,7 +628,7 @@
                                 SelectedIndex="0"
                                 IsEnabled="{Binding IsReward_Format, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 IsReadOnly="{Binding IsReward_Format, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                SelectedValuePath="Emp_CashierID"
+                                SelectedValuePath="CashierID"
                                 SelectedItem="{Binding Emp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{Binding Emps, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>

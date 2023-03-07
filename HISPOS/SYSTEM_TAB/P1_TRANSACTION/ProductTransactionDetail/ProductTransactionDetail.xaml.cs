@@ -80,7 +80,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 dt = DateTime.Parse(lblTradeTime.Content.ToString());
             }
             Authority userAuthority = ViewModelMainWindow.CurrentUser.Authority;
-            if(userAuthority == Authority.Admin)
+            if (userAuthority == Authority.Admin)
             {
                 btnDelete.IsEnabled = true;
             }
@@ -96,7 +96,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             {
                 btnReturn.IsEnabled = false;
             }
-            if(masterRow.Table.Columns.Contains("TraMas_IsEnable"))
+            if (masterRow.Table.Columns.Contains("TraMas_IsEnable"))
             {
                 int isEnable = Convert.ToInt32(masterRow["TraMas_IsEnable"]);
                 if(isEnable == 0)
@@ -114,13 +114,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
         private List<TradeDetail> TableToClass(DataTable table)
         {
             List<TradeDetail> details = new List<TradeDetail>();
-            DataTable result = TradeService.GetEmployeeList();
+
             table.Columns.Add("TraDet_RewardPersonnelName", typeof(string));
             table.Columns.Add("IsReward_Format", typeof(bool));
             foreach (DataRow dr in table.Rows)
             {
                 TradeDetail trade = new TradeDetail();
-                trade.Emps = new List<TradeDetail.EmpList>();
                 trade.TraDet_DetailID = Convert.ToString(dr["TraDet_DetailID"]);
                 trade.TraDet_ProductID = Convert.ToString(dr["TraDet_ProductID"]);
                 trade.TraDet_ProductName = Convert.ToString(dr["TraDet_ProductName"]);
@@ -136,25 +135,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 trade.Pro_IsReward = Convert.ToBoolean(dr["Pro_IsReward"] is DBNull ? false : dr["Pro_IsReward"]);
                 trade.IsReward_Format = Convert.ToBoolean(dr["TraMas_IsEnable"] is DBNull ? false : dr["TraMas_IsEnable"]);
                 trade.Irr = Convert.ToString(dr["Irr"] is DBNull ? string.Empty : dr["Irr"]);
-                
-
-                foreach (DataRow item in result.Rows)
+                trade.Emps = TradeService.GetPosEmployee();
+                if (trade.Emps != null && trade.Emps.Count() > 0)
                 {
-                    TradeDetail.EmpList emp = new TradeDetail.EmpList();
-                    emp.Emp_ID = (int)item["Emp_ID"];
-                    emp.Emp_Name = (string)item["Emp_Name"];
-                    emp.Emp_Account = (string)item["Emp_Account"];
-                    emp.Emp_CashierID = (string)item["Emp_CashierID"];
-                    trade.Emps.Add(emp);
-                    int personID = 0;
-                    if (!string.IsNullOrEmpty(trade.TraDet_RewardPersonnel))
-                    {
-                        personID = Convert.ToInt32(trade.TraDet_RewardPersonnel);
-                    }
-                    if (emp.Emp_ID.Equals(Convert.ToInt32(personID)))
-                    {
-                        trade.Emp = emp;
-                    }
+                    trade.Emp = trade.Emps.First(w => w.CashierID == Convert.ToString(dr["TraDet_RewardPersonnel"]));
                 }
                 details.Add(trade);
             }
@@ -287,12 +271,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                     para.Add(new SqlParameter("Cus_Id", int.Parse(cusID)));
                     DataTable res = MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCusId]", para);
                     MainWindow.ServerConnection.CloseConnection();
-                    if (res.Rows.Count > 0)
+                    Customer customer = CustomerDb.GetCustomerByCusId(int.Parse(cusID));
+                    if (customer != null && !string.IsNullOrEmpty(customer.Name))
                     {
                         tbCusName.Text = res.Rows[0]["Person_Name"].ToString();
-                        MainWindow.ServerConnection.CloseConnection();
                         ChangeContent();
                     }
+                    //if (res.Rows.Count > 0)
+                    //{
+                    //    tbCusName.Text = res.Rows[0]["Person_Name"].ToString();
+                    //    MainWindow.ServerConnection.CloseConnection();
+                    //    ChangeContent();
+                    //}
                     return;
                 }
 
@@ -362,7 +352,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 {
                     MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
                 }
-                else if (result.Rows.Count > 1)
+                else if (result.Rows.Count > 0)
                 {
                     CustomerSearchWindow customerSearch;
                     if (Con == CustomerSearchCondition.Birthday)

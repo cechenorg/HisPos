@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Trade;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -95,18 +96,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             lblPrepay.Content = int.Parse(prepaybalance);
             prepayBalance = int.Parse(prepaybalance);
             isprepay = isPrepay;
-            GetEmployeeList();
+            EmployeeList = TradeService.GetEmployeeList();
             CardNumberControl();
             ChangeCount();
             tbTaxNum.Focus();
         }
 
-        private void GetEmployeeList()
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            EmployeeList = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
-            MainWindow.ServerConnection.CloseConnection();
-        }
+        //private void GetEmployeeList()
+        //{
+        //    MainWindow.ServerConnection.OpenConnection();
+        //    EmployeeList = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
+        //    MainWindow.ServerConnection.CloseConnection();
+        //}
 
         private bool IsEmployeeIDValid()
         {
