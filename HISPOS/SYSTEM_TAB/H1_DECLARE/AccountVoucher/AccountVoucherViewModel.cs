@@ -18,6 +18,9 @@ using System.Windows.Data;
 using System.Collections.ObjectModel;
 using System.Windows;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.InvalidWindow;
+using System.Diagnostics;
+using System.Windows.Forms;
+using ClosedXML.Excel;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 {
@@ -37,6 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             CopyDataCommand = new RelayCommand(CopyDataAction);
             StrikeCommand = new RelayCommand(StrikeAction);
             VisibilityBtnCommand = new RelayCommand(VisibilityBtnAction);
+            ExportCommand = new RelayCommand(ExportAction);
             FilterCommand = new RelayCommand<string>(FilterAction);
             DeleteDetailCommand = new RelayCommand<string>(DeleteDetailAction);
             AddNewDetailCommand = new RelayCommand<string>(AddNewDetailAction);
@@ -55,7 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         public RelayCommand AddCommand { get; set; }
         public RelayCommand SaveCommand { get; set; }
         public RelayCommand InvalidCommand { get; set; }
-        //public RelayCommand ClickSourceCommand { get; set; }
+        public RelayCommand ExportCommand { get; set; }
         #endregion
         #region
         public ICollectionView VoucherCollectionView
@@ -113,6 +117,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
         }
         private Visibility btnEditVisibilty = Visibility.Visible;//中間修改按鈕
+        public Visibility BtnExportVisibilty
+        {
+            get => btnExportVisibilty;
+            set
+            {
+                Set(() => BtnExportVisibilty, ref btnExportVisibilty, value);
+            }
+        }
+        private Visibility btnExportVisibilty = Visibility.Hidden;//中間匯出按鈕
         public bool IsBtnEnable
         {
             get => isBtnEnable;
@@ -241,9 +254,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 Set(() => CurrentVoucher, ref currentVoucher, value);
                 if (CurrentVoucher != null)
                 {
-                    if(CurrentVoucher.JouMas_ID != null && CurrentVoucher.JouMas_Status.Equals("T"))
+                    if (CurrentVoucher.JouMas_ID != null && CurrentVoucher.JouMas_Status.Equals("T"))
                     {
-                        if(CurrentVoucher.DebitDetails != null && CurrentVoucher.CreditDetails != null && CurrentVoucher.JouMas_IsEnable == 1)
+                        if (CurrentVoucher.DebitDetails != null && CurrentVoucher.CreditDetails != null && CurrentVoucher.JouMas_IsEnable == 1)
                         {
                             AccountsDb.UpdateJournalData("保存", CurrentVoucher);
                         }
@@ -260,11 +273,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     if (IsProce)
                     {
                         BtnEditVisibilty = Visibility.Visible;
+                        BtnExportVisibilty = Visibility.Visible;
                         EditContent = "修改傳票內容";
                     }
                 }
                 else
                 {
+                    BtnExportVisibilty = Visibility.Hidden;
                     BtnEditVisibilty = Visibility.Hidden;
                 }
             }
@@ -399,7 +414,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 if (VoucherCollectionView.CanFilter)
                 {
-                    Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                    System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                     {
                         VoucherCollectionView.Filter += VoucherFilter;
                         if (VoucherCollectionView.CurrentItem != null)
@@ -468,6 +483,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 BtnVisibilty = Visibility.Hidden;
                 BtnEditVisibilty = Visibility.Hidden;
+                BtnExportVisibilty = Visibility.Hidden;
                 DisplayVoidReason = Visibility.Visible;
                 if (jm.JouMas_IsEnable == 0)
                 {
@@ -481,6 +497,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 BtnVisibilty = Visibility.Visible;
                 BtnEditVisibilty = Visibility.Hidden;
+                BtnExportVisibilty = Visibility.Hidden;
                 DisplayVoidReason = Visibility.Hidden;
                 if (jm.JouMas_Status.Equals("T") && jm.JouMas_IsEnable == 1)
                 {
@@ -495,12 +512,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 BtnVisibilty = Visibility.Hidden;
                 BtnEditVisibilty = Visibility.Hidden;
                 DisplayVoidReason = Visibility.Hidden;
-                if (jm.JouMas_Status.Equals("F") && jm.JouMas_IsEnable == 1)
+                if (CurrentVoucher != null && !string.IsNullOrEmpty(CurrentVoucher.JouMas_ID))
                 {
                     BtnName = "修改";
                     IsBtnEnable = true;
                     IsCanEdit = false;
                     BtnEditVisibilty = Visibility.Visible;
+                    BtnExportVisibilty = Visibility.Visible;
+                }
+                if (jm.JouMas_Status.Equals("F") && jm.JouMas_IsEnable == 1)
+                {
                     return true;
                 }
             }
@@ -565,7 +586,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void SaveAction()
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action(delegate
             {
                 if (CurrentVoucher != null)
                 {
@@ -707,7 +728,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     invalidWindow.ShowDialog();
                     if ((bool)invalidWindow.DialogResult)
                     {
-                        Application.Current.Dispatcher.Invoke(new Action(delegate
+                        System.Windows.Application.Current.Dispatcher.Invoke(new Action(delegate
                         {
                             CurrentVoucher.JouMas_VoidReason = ((InvalidViewModel)invalidWindow.DataContext).VoidReason;
                             AccountsDb.UpdateJournalData("作廢", CurrentVoucher);
@@ -785,6 +806,77 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             }
             CurrentVoucher.DebitTotalAmount = (int)CurrentVoucher.DebitDetails.Sum(s => s.JouDet_Amount);
             CurrentVoucher.CreditTotalAmount = (int)CurrentVoucher.CreditDetails.Sum(s => s.JouDet_Amount);
+        }
+        private void ExportAction()
+        {
+            DataTable exportData = AccountsDb.GetJournalToExcel(CurrentVoucher.JouMas_ID);
+            if (exportData is null || exportData.Rows.Count == 0)
+                return;
+
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog
+            {
+                Title = "傳票",
+                InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath,
+                Filter = "XLSX檔案|*.xlsx",
+                FileName = string.Format("傳票{0}", CurrentVoucher.JouMas_ID),
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                IXLWorksheet ws = wb.Worksheets.Add("傳票");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+                
+                ws.Cell("A2").Value = "藥局名稱";
+                ws.Cell("B2").Value = "傳票日期";
+                ws.Cell("C2").Value = "單據來源";
+                ws.Cell("D2").Value = "傳票號碼";
+                ws.Cell("E2").Value = "借方 / 貸方";
+                ws.Cell("F2").Value = "項次";
+                ws.Cell("G2").Value = "會計科目代號1";
+                ws.Cell("H2").Value = "會計科目代號2";
+                ws.Cell("I2").Value = "會計科目代號3";
+                ws.Cell("J2").Value = "會計科目名稱";
+                ws.Cell("K2").Value = "金額";
+                ws.Cell("L2").Value = "摘要";
+                ws.Cell("M2").Value = "來源單號";
+                ws.Cell("N2").Value = "備註";
+                ws.Cell("O2").Value = "登錄時間";
+                ws.Cell("P2").Value = "登錄人";
+                ws.Cell("Q2").Value = "最後修改時間";
+                ws.Cell("R2").Value = "最後修改人";
+                ws.Cell("S2").Value = "單據狀態";
+                ws.Cell("T2").Value = "作廢原因";
+
+                IXLRange rangeWithData = ws.Cell(3, 1).InsertData(exportData.AsEnumerable());
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                ws.Columns().AdjustToContents();//欄位寬度根據資料調整
+                try
+                {
+                    wb.SaveAs(fdlg.FileName);
+                    ConfirmWindow cw = new ConfirmWindow("是否開啟檔案", "確認");
+                    if ((bool)cw.DialogResult)
+                    {
+                        myProcess.StartInfo.UseShellExecute = true;
+                        myProcess.StartInfo.FileName = fdlg.FileName;
+                        myProcess.StartInfo.CreateNoWindow = true;
+                        myProcess.Start();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
         }
         #endregion
     }

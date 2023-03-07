@@ -338,5 +338,15 @@ namespace His_Pos.NewClass.Report.Accounts
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
+
+        public static DataTable GetJournalToExcel(string jouID)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("jouID", jouID));
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[JournalToExcel]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
     }
 }
