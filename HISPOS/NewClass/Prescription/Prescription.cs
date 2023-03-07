@@ -106,15 +106,6 @@ namespace His_Pos.NewClass.Prescription
             SpecialTreat = VM.GetSpecialTreat(r.Field<string>("SpecialTreatID"));
             PrescriptionPoint = new PrescriptionPoint(r, type);
             PrescriptionStatus = new PrescriptionStatus(r, type);
-            if (VM.PreAdjustDateControl)
-            {
-                List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff};
-                bool result = auth.Contains(VM.CurrentUser.Authority) && DateTime.Compare(Convert.ToDateTime(AdjustDate), VM.PrescriptionCloseDate) > 0
-                    ? true
-                    : !auth.Contains(VM.CurrentUser.Authority) && DateTime.Compare(Convert.ToDateTime(AdjustDate), DateTime.Today) >= 0;
-                PrescriptionStatus.IsDeclare = !result;
-                PrescriptionStatus.IsGetCard = !result;
-            }
             MedicalNumber = string.IsNullOrEmpty(r.Field<string>("MedicalNumber")) ? r.Field<string>("MedicalNumber") : r.Field<string>("MedicalNumber").Trim();
             OriginalMedicalNumber = string.IsNullOrEmpty(r.Field<string>("OldMedicalNumber")) ? r.Field<string>("OldMedicalNumber") : r.Field<string>("OldMedicalNumber").Trim();
             if (AdjustCase.ID.Equals("2"))
