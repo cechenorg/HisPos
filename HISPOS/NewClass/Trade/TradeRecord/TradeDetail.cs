@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Product.ProductManagement;
 using System;
 using System.Collections.Generic;
@@ -101,7 +102,7 @@ namespace His_Pos.NewClass.Trade.TradeRecord
             set { Set(() => Pro_IsReward, ref pro_IsReward, value); }
         }
         private bool pro_IsReward;
-        public EmpList Emp
+        public Employee Emp
         {
             get { return emp; }
             set
@@ -110,40 +111,13 @@ namespace His_Pos.NewClass.Trade.TradeRecord
                 ChangePercent();
             }
         }
-        private EmpList emp;
-        public List<EmpList> Emps
+        private Employee emp;
+        public IEnumerable<Employee> Emps
         {
             get { return emps; }
             set { Set(() => Emps, ref emps, value); }
         }
-        private List<EmpList> emps;
-        public class EmpList : ObservableObject
-        {
-            public int Emp_ID 
-            {
-                get { return emp_ID; }
-                set { Set(() => Emp_ID, ref emp_ID, value); }
-            }
-            private int emp_ID;
-            public string Emp_Account
-            {
-                get { return emp_Account; }
-                set { Set(() => Emp_Account, ref emp_Account, value); }
-            }
-            private string emp_Account;
-            public string Emp_Name 
-            {
-                get { return emp_Name; }
-                set { Set(() => Emp_Name, ref emp_Name, value); }
-            }
-            private string emp_Name;
-            public string Emp_CashierID 
-            {
-                get { return emp_CashierID; }
-                set { Set(() => Emp_CashierID, ref emp_CashierID, value); }
-            }
-            private string emp_CashierID;
-        }
+        private IEnumerable<Employee> emps;
         public void ChangePercent()
         {
             if (Emp != null)
@@ -152,7 +126,7 @@ namespace His_Pos.NewClass.Trade.TradeRecord
                 if (table != null && table.Rows.Count > 0)
                 {
                     int percent = Convert.ToInt32(table.Rows[0]["Pro_RewardPercent"]);
-                    if (string.IsNullOrEmpty(Emp.Emp_Name) || percent == 0)
+                    if (string.IsNullOrEmpty(Emp.Name) || percent == 0)
                     {
                         TraDet_RewardPercent = 0;
                     }
