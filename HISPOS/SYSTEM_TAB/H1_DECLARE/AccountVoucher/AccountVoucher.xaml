@@ -187,6 +187,9 @@
                 <StackPanel Grid.Row="0" Grid.RowSpan="2">
                     <Button Grid.Column="0" Margin="150,5,0,0" Width="122" BorderThickness="0" FontSize="15" Height="30" Content="{Binding EditContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="RoyalBlue" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding VisibilityBtnCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding BtnEditVisibilty}"/>
                 </StackPanel>
+                <StackPanel Grid.Row="0" Grid.RowSpan="2">
+                    <Button Grid.Column="0" Margin="280,5,0,0" Width="100" BorderThickness="0" FontSize="15" Height="30" Content="匯出Excel" Background="SeaGreen" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding ExportCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding BtnExportVisibilty}" />
+                </StackPanel>
                 <StackPanel Grid.Row="0">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -194,7 +197,7 @@
                             <ColumnDefinition Width="300"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="{Binding CurrentVoucher.JouMas_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" FontSize="20"/>
-                        <Label Grid.Column="1" Content="傳票時間:" HorizontalAlignment="Right" FontSize="20" Margin="0,0,130,0"/>
+                        <Label Grid.Column="1" Content="傳票日期:" HorizontalAlignment="Right" FontSize="20" Margin="0,0,130,0"/>
                         <DatePicker Grid.Column="1" Width="130" Language="zh-cn" FontSize="20" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Center" 
                                     IsEnabled="{Binding IsCanEdit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Text="{Binding CurrentVoucher.JouMas_Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat= yyyy/MM/dd}">
@@ -287,7 +290,7 @@
                                         </HierarchicalDataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="會計科目" Width="Auto" >
+                                <DataGridTemplateColumn Header="會計科目" Width="420" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <HierarchicalDataTemplate>
                                             <ComboBox Width="Auto" FontSize="16" IsEditable="True" KeyUp="ComboBox_KeyUp" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" SelectedIndex="-1" IsTextSearchEnabled="False"
@@ -315,7 +318,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="160" Header="備註" >
+                                <DataGridTemplateColumn Width="335" Header="摘要" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_Memo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
@@ -435,7 +438,7 @@
                                         </HierarchicalDataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="會計科目" Width="Auto" >
+                                <DataGridTemplateColumn Header="會計科目" Width="420" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <HierarchicalDataTemplate>
                                             <ComboBox Width="Auto" FontSize="16" IsEditable="True" KeyUp="ComboBox_KeyUp" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" SelectedIndex="-1" IsTextSearchEnabled="False"
@@ -462,7 +465,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="160" Header="備註" >
+                                <DataGridTemplateColumn Width="335" Header="摘要" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_Memo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
