@@ -188,7 +188,7 @@
                     <Button Grid.Column="0" Margin="150,5,0,0" Width="122" BorderThickness="0" FontSize="15" Height="30" Content="{Binding EditContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="RoyalBlue" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding VisibilityBtnCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding BtnEditVisibilty}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.RowSpan="2">
-                    <Button Grid.Column="0" Margin="280,5,0,0" Width="100" BorderThickness="0" FontSize="15" Height="30" Content="匯出Excel" Background="SeaGreen" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding ExportCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding BtnExportVisibilty}" />
+                    <Button Grid.Column="0" Margin="280,5,0,0" Width="120" BorderThickness="0" FontSize="15" Height="30" Content="匯出Excel" Background="DarkCyan" BorderBrush="DarkCyan" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding ExportCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding BtnExportVisibilty}" />
                 </StackPanel>
                 <StackPanel Grid.Row="0">
                     <Grid>
