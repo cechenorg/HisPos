@@ -4,7 +4,7 @@
              xmlns:incomeStatement="clr-namespace:His_Pos.NewClass.Report.IncomeStatement"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              d:DataContext="{d:DesignInstance Type=local:NewIncomeStatement2ViewModel}"
-             d:Background="White" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe UI Semibold" />
@@ -317,6 +317,7 @@
                 </Button>
 
                 <Button Margin="10,0" Content="查詢" Background="DarkCyan" BorderThickness="0" Command="{Binding SearchCommand}" />
+                <Button Content="匯出Excel" Background="DarkCyan" BorderThickness="0" Command="{Binding ExportCommand}" />
             </StackPanel>
 
             <DataGrid Grid.Row="1" Margin="10,0" RowBackground="#A9D08E"

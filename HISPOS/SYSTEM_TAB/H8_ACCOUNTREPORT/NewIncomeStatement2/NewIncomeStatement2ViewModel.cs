@@ -10,6 +10,12 @@ using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.NewClass.Report;
 using His_Pos.NewClass.Report.IncomeStatement;
 using His_Pos.NewClass.StoreOrder;
+using System.Data;
+using System.Diagnostics;
+using System.Windows.Forms;
+using ClosedXML.Excel;
+using His_Pos.FunctionWindow;
+using His_Pos.Class;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
 {
@@ -59,6 +65,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
         public ICommand YearAddCommand { get; set; }
 
         public ICommand OpenDetailCommand { get; set; }
+        public ICommand ExportCommand { get; set; }
+        
 
         public NewIncomeStatement2ViewModel()
         {
@@ -66,7 +74,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
             YearAddCommand = new RelayCommand(YearAdd);
             YearMinusCommand = new RelayCommand(YearMinus);
             OpenDetailCommand = new RelayCommand(OpenDetail);
-
+            ExportCommand = new RelayCommand(ExportAction);
             Search();
         }
 
@@ -195,6 +203,88 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
             IncomeStatementData.Add(totalSumData);
 
             
+        }
+        private void ExportAction()
+        {
+            IEnumerable<IncomeStatementDetailData> exportData = ReportService.GetIncomeStatementDetail(Year, "0");
+            if (exportData is null || exportData.Count() == 0)
+                return;
+
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog
+            {
+                Title = "損益表",
+                InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath,
+                Filter = "XLSX檔案|*.xlsx",
+                FileName = string.Format("損益表{0}", Year),
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                IXLWorksheet ws = wb.Worksheets.Add("損益表");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+
+                ws.Cell("A1").Value = "年";
+                ws.Cell("B1").Value = "月";
+                ws.Cell("C1").Value = "會計科目種類";
+                ws.Cell("D1").Value = "會計科目";
+                ws.Cell("E1").Value = "會計科目代號";
+                ws.Cell("F1").Value = "會計科目子代號";
+                ws.Cell("G1").Value = "會計科目名稱";
+                ws.Cell("H1").Value = "金額";
+
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("YYYY",typeof(int)));
+                table.Columns.Add(new DataColumn("MM", typeof(string)));
+                table.Columns.Add(new DataColumn("ISType", typeof(string)));
+                table.Columns.Add(new DataColumn("ISGroup", typeof(string)));
+                table.Columns.Add(new DataColumn("AcctLvl2", typeof(string)));
+                table.Columns.Add(new DataColumn("AcctLvl3", typeof(string)));
+                table.Columns.Add(new DataColumn("JouDet_AcctName", typeof(string)));
+                table.Columns.Add(new DataColumn("AcctValue", typeof(int)));
+                foreach (IncomeStatementDetailData item in exportData)
+                {
+                    DataRow dr = table.NewRow();
+                    dr["YYYY"] = item.YYYY;
+                    dr["MM"] = Convert.ToString(item.MM).PadLeft(2, '0');
+                    dr["ISType"] = item.ISType;
+                    dr["ISGroup"] = item.ISGroup;
+                    dr["AcctLvl2"] = item.AcctLvl2;
+                    dr["AcctLvl3"] = item.AcctLvl3;
+                    dr["JouDet_AcctName"] = item.JouDet_AcctName;
+                    dr["AcctValue"] = item.AcctValue.ToString();
+                    table.Rows.Add(dr);
+                }
+
+                IXLRange rangeWithData = ws.Cell(2, 1).InsertData(table.AsEnumerable());
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                ws.Columns().AdjustToContents();//欄位寬度根據資料調整
+                try
+                {
+                    wb.SaveAs(fdlg.FileName);
+                    ConfirmWindow cw = new ConfirmWindow("是否開啟檔案", "確認");
+                    if ((bool)cw.DialogResult)
+                    {
+                        myProcess.StartInfo.UseShellExecute = true;
+                        myProcess.StartInfo.FileName = fdlg.FileName;
+                        myProcess.StartInfo.CreateNoWindow = true;
+                        myProcess.Start();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
         }
     }
 }
