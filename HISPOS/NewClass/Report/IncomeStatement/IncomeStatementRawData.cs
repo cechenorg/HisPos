@@ -73,5 +73,10 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         public string AcctNote { get; set; }
 
         public string AcctSource { get; set; }
+        public string AcctLvl2 { get; set; }
+        public string AcctLvl3 { get; set; }
+        public string JouDet_AcctName { get; set; }
+        public string ISType { get; set; }
+        public string ISGroup { get; set; }
     }
 }
