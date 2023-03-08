@@ -298,7 +298,7 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = "取得員工";
                 EmployeeCollection = new Employees();
                 EmployeeCollection.Init();
-                BusyContent = "準備回傳骨科拋轉資料";
+                BusyContent = "準備回傳合作診所拋轉資料";
                 while (WebApi.SendToCooperClinicLoop100())
                 {
                     BusyContent = "回傳合作診所處方中...";

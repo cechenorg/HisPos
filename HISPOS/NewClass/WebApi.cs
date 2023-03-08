@@ -35,7 +35,7 @@ namespace His_Pos.NewClass
             }
             else
             {
-                NewFunction.ShowMessageFromDispatcher("骨科回傳扣庫失敗, 請通知資訊人員", MessageType.ERROR);
+                NewFunction.ShowMessageFromDispatcher("合作診所回傳扣庫失敗, 請通知資訊人員", MessageType.ERROR);
             }
         }
 
@@ -136,7 +136,7 @@ namespace His_Pos.NewClass
                 CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatusTop100();
                 return true;
             }
-            NewFunction.ShowMessageFromDispatcher("骨科回傳扣庫失敗, 請通知資訊人員", MessageType.ERROR);
+            NewFunction.ShowMessageFromDispatcher("合作診所回傳扣庫失敗, 請通知資訊人員", MessageType.ERROR);
             return false;
         }
     }
