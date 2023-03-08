@@ -347,8 +347,15 @@
     <Compile Include="FunctionWindow\AddProductWindow\TradeAddProductWindow.xaml.cs">
       <DependentUpon>TradeAddProductWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InfraStructure\AccountService.cs" />
     <Compile Include="InfraStructure\ProductService.cs" />
     <Compile Include="NewClass\Accounts\Accounts.cs" />
+    <Compile Include="NewClass\Accounts\JournalAccount.cs" />
+    <Compile Include="NewClass\Accounts\JournalDetail.cs" />
+    <Compile Include="NewClass\Accounts\JournalDetails.cs" />
+    <Compile Include="NewClass\Accounts\JournalMaster.cs" />
+    <Compile Include="NewClass\Accounts\JournalType.cs" />
+    <Compile Include="NewClass\ClosingWork\ClosingWorkDB.cs" />
     <Compile Include="NewClass\Enum.cs" />
     <Compile Include="NewClass\Feature.cs" />
     <Compile Include="NewClass\Location\Location.cs" />
@@ -358,13 +365,15 @@
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockIn.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInDb.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInLog.cs" />
-    <Compile Include="NewClass\Person\Employee\EmployeeService.cs" />
+    <Compile Include="InfraStructure\EmployeeService.cs" />
     <Compile Include="NewClass\Pharmacy\PharmacyDBService.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadService2.cs" />
     <Compile Include="NewClass\ProductType\ProductTypes.cs" />
+    <Compile Include="NewClass\Report\Accounts\AccountsCommonItem.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositReportData.cs" />
-    <Compile Include="NewClass\Report\ReportService.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\IncomeStatementRawData.cs" />
+    <Compile Include="InfraStructure\ReportService.cs" />
     <Compile Include="NewClass\Trade\TradeRecord\TradeDetail.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
@@ -833,6 +842,18 @@
       <DependentUpon>ClosingCashSelect.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingCashSelectViwModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\AccountVoucher.xaml.cs">
+      <DependentUpon>AccountVoucher.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\AccountVoucherViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\FromSourceWindow\FromSourceViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\FromSourceWindow\FromSourceWindow.xaml.cs">
+      <DependentUpon>FromSourceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\InvalidWindow\InvalidViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\InvalidWindow\InvalidWindow.xaml.cs">
+      <DependentUpon>InvalidWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManage.xaml.cs">
       <DependentUpon>AdditionalCashFlowManage.xaml</DependentUpon>
     </Compile>
@@ -1464,6 +1485,14 @@
       <DependentUpon>InstitutionDeclarePointReport.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\InstitutionDeclarePointReport\InstitutionDeclarePointReportViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement2\AccountDetailViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement2\AccountDetailWindow.xaml.cs">
+      <DependentUpon>AccountDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement2\NewIncomeStatement2.xaml.cs">
+      <DependentUpon>NewIncomeStatement2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement2\NewIncomeStatement2ViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement\NewIncomeStatementView.xaml.cs">
       <DependentUpon>NewIncomeStatementView.xaml</DependentUpon>
     </Compile>
@@ -1736,6 +1765,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingCashSelect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\AccountVoucher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\FromSourceWindow\FromSourceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\InvalidWindow\InvalidWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2476,6 +2517,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\InstitutionDeclarePointReport\InstitutionDeclarePointReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement2\AccountDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\NewIncomeStatement2\NewIncomeStatement2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

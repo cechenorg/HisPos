@@ -20,36 +20,64 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
     {
         public string IDClone;
         public DateTime EndDate;
-        public ProductViewModel(string ID, DateTime endDate)
+        public ProductViewModel(DataTable table, string id)
         {
             DetailChangeCommand = new RelayCommand(DetailChangeAction);
-            AccData = new AccountsReport();
-            IDClone = ID;
-            EndDate = endDate;
+            //AccData = new AccountsReport();
+            //IDClone = ID;
+            //EndDate = endDate;
             //Init();
-            if (ID.Equals("006"))
+            //if (ID.Equals("006"))
+            //{
+            //    DataTable table = StockValueDb.GetStockVale(endDate.AddDays(-7), endDate);
+            //    foreach (DataRow dr in table.Rows)
+            //    {
+            //        AccData.Add(new AccountsReports(dr));
+            //    }
+            //}
+            //else
+            //{
+            //    DataTable table = AccountsDb.GetAccountsDetail(IDClone, EndDate);
+            //    foreach (DataRow dr in table.Rows)
+            //    {
+            //        AccData.Add(new AccountsReports(dr));
+            //    }
+            //}
+            AccData = new AccountsReport();
+            foreach (DataRow dr in table.Rows)
             {
-                DataTable table = StockValueDb.GetStockVale(endDate.AddDays(-7), endDate);
-                foreach (DataRow dr in table.Rows)
+                string acctLevel2 = Convert.ToString(dr["acctLevel2"]);
+                if (acctLevel2.Equals(id))
                 {
-                    AccData.Add(new AccountsReports(dr));
-                }
-            }
-            else
-            {
-                DataTable table = AccountsDb.GetAccountsDetail(IDClone, EndDate);
-                foreach (DataRow dr in table.Rows)
-                {
-                    AccData.Add(new AccountsReports(dr));
+                    string acctLevel3 = Convert.ToString(dr["acctLevel3"]);
+                    string acctName3 = Convert.ToString(dr["acctName3"]);
+                    int acctValue = Convert.ToInt32(dr["acctValue"]);
+                    if (acctValue == 0)
+                        continue;
+
+                    if (!string.IsNullOrEmpty(acctName3))
+                    {
+                        if(!AccData.Contains(new AccountsReports(acctName3, acctValue, acctLevel3)))
+                        {
+                            AccData.Add(new AccountsReports(acctName3, acctValue, acctLevel3));
+                        }
+                    }
+                    else
+                    {
+                        string acctName2 = Convert.ToString(dr["acctName2"]);
+                        if (!AccData.Contains(new AccountsReports(acctName2, acctValue, acctLevel2)))
+                        {
+                            AccData.Add(new AccountsReports(acctName2, acctValue, acctLevel2));
+                        }
+                    }
                 }
             }
             
-            
-            SelectedIndex = 0;
-            if (Selected != null)
-            {
-                Selected = AccData[0];
-            }
+            //SelectedIndex = 0;
+            //if (Selected != null)
+            //{
+            //    Selected = AccData[0];
+            //}
             //DetailChangeAction();
         }
         public ProductViewModel()

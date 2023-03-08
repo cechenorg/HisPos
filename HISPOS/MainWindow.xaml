@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:AccountsManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage"
+    xmlns:AccountVoucher="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher"
     xmlns:AdditionalCashFlowManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage"
     xmlns:InstitutionDeclarePointReport="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport"
     xmlns:activityManage="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ActivityManage"
@@ -50,6 +51,7 @@
         xmlns:newtodaycashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport"
     xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:newIncomeStatement2="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
     Height="{Binding Height, Source={x:Static SystemParameters.WorkArea}}"
@@ -140,6 +142,9 @@
         <DataTemplate DataType="{x:Type AccountsManage:AccountsManageViewModel}">
             <AccountsManage:AccountsManage />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type AccountVoucher:AccountVoucherViewModel}">
+            <AccountVoucher:AccountVoucher />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type InstitutionDeclarePointReport:InstitutionDeclarePointReportViewModel}">
             <InstitutionDeclarePointReport:InstitutionDeclarePointReport />
         </DataTemplate>
@@ -166,6 +171,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type incomeStatement:NewIncomeStatementViewModel}">
             <incomeStatement:NewIncomeStatementView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type newIncomeStatement2:NewIncomeStatement2ViewModel}">
+            <newIncomeStatement2:NewIncomeStatement2 />
         </DataTemplate>
         <DataTemplate DataType="{x:Type balanceSheet:BalanceSheetViewModel}">
             <balanceSheet:BalanceSheetView />

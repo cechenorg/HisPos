@@ -21,11 +21,11 @@
             ItemsSource="{Binding AccData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <i:Interaction.Triggers>
+            <!--<i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding DetailChangeCommand}" />
                 </i:EventTrigger>
-            </i:Interaction.Triggers>
+            </i:Interaction.Triggers>-->
             <DataGrid.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="Background" Value="#FFA8A8A8" />

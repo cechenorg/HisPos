@@ -212,7 +212,7 @@
                                 Content="{Binding TradeCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="OTC_CASH" />
+                            <CheckBox x:Name="OTC_CASH" IsChecked="{Binding OtcCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="6"
@@ -233,7 +233,7 @@
                                 Content="{Binding TradeCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="OTC_CARD" />
+                            <CheckBox x:Name="OTC_CARD" IsChecked="{Binding OtcCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="7"
@@ -254,7 +254,7 @@
                                 Content="{Binding TradeDiscount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="OTC_TICKET" />
+                            <CheckBox x:Name="OTC_TICKET" IsChecked="{Binding OtcTicket, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="8"
@@ -275,7 +275,7 @@
                                 Content="{Binding TradeCashCoupon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="OTC_CASHTICKET" />
+                            <CheckBox x:Name="OTC_CASHTICKET" IsChecked="{Binding OtcCashTicket, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="9"
@@ -329,7 +329,7 @@
                                 Content="{Binding Extra, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="OTHER_CASH" />
+                            <CheckBox x:Name="OTHER_CASH" IsChecked="{Binding OtherCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="14"
@@ -350,7 +350,7 @@
                                 Content="{Binding StoreOrderPayCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="PAY_CASH" />
+                            <CheckBox x:Name="PAY_CASH" IsChecked="{Binding PayCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="15"
@@ -407,8 +407,20 @@
                                 Content="確認現金"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
-                                IsEnabled="{Binding Enable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                PreviewMouseDown="Button_PreviewMouseDown" />
+                                IsEnabled="{Binding Enable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Button
+                                Width="150"
+                                Height="40"
+                                Margin="15,0,0,0"
+                                VerticalAlignment="Center"
+                                Background="IndianRed"
+                                BorderThickness="0"
+                                Command="{Binding ToJournalCommand}"
+                                Content="確認轉立帳"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20"
+                                IsEnabled="{Binding IsCanToJonual}"
+                                Visibility="{Binding BtnVisibility}" />
                             <Button
                                 Width="150"
                                 Height="40"
@@ -604,7 +616,7 @@
                                 Content="{Binding CashTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="MED_CASH" />
+                            <CheckBox x:Name="MED_CASH" IsChecked="{Binding MedCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="8"
@@ -637,7 +649,7 @@
                                 Content="{Binding PreCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="PREPAY_CASH" />
+                            <CheckBox x:Name="PREPAY_CASH" IsChecked="{Binding PrepayCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="10"
@@ -658,7 +670,7 @@
                                 Content="{Binding PreCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="PREPAY_CARD" />
+                            <CheckBox x:Name="PREPAY_CARD" IsChecked="{Binding PrepayCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="11"
@@ -679,7 +691,7 @@
                                 Content="{Binding ReturnPreCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="RETURN_PRECASH" />
+                            <CheckBox x:Name="RETURN_PRECASH" IsChecked="{Binding RePreCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="12"
@@ -700,7 +712,7 @@
                                 Content="{Binding ReturnPreCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="RETURN_PRECARD" />
+                            <CheckBox x:Name="RETURN_PRECARD" IsChecked="{Binding RePreCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="13"

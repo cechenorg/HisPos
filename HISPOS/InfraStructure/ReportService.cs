@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 using His_Pos.Database;
+using His_Pos.NewClass.Report.IncomeStatement;
 using His_Pos.NewClass.Report.PrescriptionDetailReport.PrescriptionDetailMedicineRepot;
 using His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
@@ -24,7 +27,7 @@ namespace His_Pos.NewClass.Report
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", startDAte);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", endDate);
-            var result = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList, schema:schema);
+            var result = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList, schema: schema);
             MainWindow.ServerConnection.CloseConnection();
 
             return result;
@@ -56,22 +59,22 @@ namespace His_Pos.NewClass.Report
         {
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("Id", Id)); 
+            parameters.Add(new SqlParameter("Id", Id));
             parameters.Add(new SqlParameter("sDate", sDate));
-            parameters.Add(new SqlParameter("eDate", eDate));    
+            parameters.Add(new SqlParameter("eDate", eDate));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
             return result;
         }
 
-        public static IEnumerable<StockTakingDetailRecordReport> GetStockTakingDetailRecordByDate(string Id, DateTime sDate, DateTime eDate )
+        public static IEnumerable<StockTakingDetailRecordReport> GetStockTakingDetailRecordByDate(string Id, DateTime sDate, DateTime eDate)
         {
             IEnumerable<StockTakingDetailRecordReport> result = default;
             SQLServerConnection.DapperQuery((conn) =>
             {
                 result = conn.Query<StockTakingDetailRecordReport>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[StockTakingDetailRecordByDate]",
-                    param: new { Id = Id , sDate = sDate ,eDate = eDate},
+                    param: new { Id = Id, sDate = sDate, eDate = eDate },
                     commandType: CommandType.StoredProcedure);
 
             });
@@ -79,7 +82,7 @@ namespace His_Pos.NewClass.Report
             return result;
         }
 
-        public static IEnumerable<PrescriptionDetailMedicineRepot> GetPrescriptionDetailMedicineReportById(int id ,DateTime? startDate, DateTime? endDate)
+        public static IEnumerable<PrescriptionDetailMedicineRepot> GetPrescriptionDetailMedicineReportById(int id, DateTime? startDate, DateTime? endDate)
         {
             IEnumerable<PrescriptionDetailMedicineRepot> result = default;
             SQLServerConnection.DapperQuery((conn) =>
@@ -87,7 +90,7 @@ namespace His_Pos.NewClass.Report
                 result = conn.Query<PrescriptionDetailMedicineRepot>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[PrescriptionDetailMedicineReportById]",
                     param: new
                     {
-                        Id = id ,
+                        Id = id,
                         sDate = startDate,
                         eDate = endDate
                     },
@@ -96,5 +99,58 @@ namespace His_Pos.NewClass.Report
             });
             return result;
         }
+
+        public static IEnumerable<IncomeStatementRawData> GetIncomeExpense(int year, string accID = null)
+        {
+            IEnumerable<IncomeStatementRawData> result = default;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<IncomeStatementRawData>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[ISExpenses]",
+                param: new
+                    {
+                        YEAR = year,
+                        AccID = accID
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+            });
+            return result;
+        }
+
+        public static IEnumerable<IncomeStatementRawData> GetIncomeStatement(int year)
+        {
+            IEnumerable<IncomeStatementRawData> result = default;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<IncomeStatementRawData>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[IncomeStatement]",
+                    param: new
+                    {
+                        YEAR = year
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+            });
+            return result;
+        }
+
+        public static IEnumerable<IncomeStatementDetailData> GetIncomeStatementDetail(int year,string iSTypeNo = null,string acctID = null)
+        {
+            IEnumerable<IncomeStatementDetailData> result = default;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<IncomeStatementDetailData>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[IncomeStatement]",
+                    param: new
+                    {
+                        YEAR = year,
+                        ISTypeNo = iSTypeNo,
+                        AcctID = acctID
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+            });
+            return result;
+        }
+
+
     }
 }

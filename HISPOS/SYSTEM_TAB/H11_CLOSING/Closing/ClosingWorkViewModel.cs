@@ -9,14 +9,15 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Media;
 using His_Pos.NewClass.Person.Employee;
+using System.Windows;
+using DomainModel.Enum;
+using His_Pos.NewClass.ClosingWork;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 {
     public class ClosingWorkViewModel : TabBase
-
     {
-        private DateTime startDate = DateTime.Today;
-
         public DateTime StartDate
         {
             get => startDate;
@@ -25,8 +26,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => StartDate, ref startDate, value);
             }
         }
-
-        private int trade;
+        private DateTime startDate = DateTime.Today;
 
         public int Trade
         {
@@ -36,8 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Trade, ref trade, value);
             }
         }
-
-        private int tradeTodayStock;
+        private int trade;
 
         public int TradeTodayStock
         {
@@ -47,8 +46,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeTodayStock, ref tradeTodayStock, value);
             }
         }
-
-        private int tradeTodayProfit;
+        private int tradeTodayStock;
 
         public int TradeTodayProfit
         {
@@ -58,8 +56,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeTodayProfit, ref tradeTodayProfit, value);
             }
         }
-
-        private int coop;
+        private int tradeTodayProfit;
 
         public int Coop
         {
@@ -69,8 +66,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Coop, ref coop, value);
             }
         }
-
-        private int other;
+        private int coop;
 
         public int Other
         {
@@ -80,8 +76,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Other, ref other, value);
             }
         }
-
-        private int cashTotal;
+        private int other;
 
         public int CashTotal
         {
@@ -91,8 +86,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => CashTotal, ref cashTotal, value);
             }
         }
-
-        private int self;
+        private int cashTotal;
 
         public int Self
         {
@@ -102,8 +96,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Self, ref self, value);
             }
         }
-
-        private int count;
+        private int self;
 
         public int Count
         {
@@ -113,10 +106,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Count, ref count, value);
             }
         }
-
-        //-------------
-
-        private int tradeCard;
+        private int count;
 
         public int TradeCard
         {
@@ -126,8 +116,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeCard, ref tradeCard, value);
             }
         }
-
-        private int tradeCash;
+        private int tradeCard;
 
         public int TradeCash
         {
@@ -137,8 +126,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeCash, ref tradeCash, value);
             }
         }
-
-        private int tradeCashCoupon;
+        private int tradeCash;
 
         public int TradeCashCoupon
         {
@@ -148,8 +136,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeCashCoupon, ref tradeCashCoupon, value);
             }
         }
-
-        private int tradeDiscount;
+        private int tradeCashCoupon;
 
         public int TradeDiscount
         {
@@ -159,8 +146,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeDiscount, ref tradeDiscount, value);
             }
         }
-
-        private int tradeReward;
+        private int tradeDiscount;
 
         public int TradeReward
         {
@@ -170,8 +156,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeReward, ref tradeReward, value);
             }
         }
-
-        private int extra;
+        private int tradeReward;
 
         public int Extra
         {
@@ -181,8 +166,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Extra, ref extra, value);
             }
         }
-
-        private int total;
+        private int extra;
 
         public int Total
         {
@@ -192,8 +176,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Total, ref total, value);
             }
         }
-
-        private int checkTotal;
+        private int total;
 
         public int CheckTotal
         {
@@ -203,8 +186,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => CheckTotal, ref checkTotal, value);
             }
         }
-
-        private int closed;
+        private int checkTotal;
 
         public int Closed
         {
@@ -214,8 +196,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Closed, ref closed, value);
             }
         }
-
-        private int closeCash_Total;
+        private int closed;
 
         public int CloseCash_Total
         {
@@ -225,8 +206,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => CloseCash_Total, ref closeCash_Total, value);
             }
         }
-
-        private string checkClosed;
+        private int closeCash_Total;
 
         public string CheckClosed
         {
@@ -236,8 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => CheckClosed, ref checkClosed, value);
             }
         }
-
-        private int preCash;
+        private string checkClosed;
 
         public int PreCash
         {
@@ -247,8 +226,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => PreCash, ref preCash, value);
             }
         }
-
-        private int preCard;
+        private int preCash;
 
         public int PreCard
         {
@@ -258,8 +236,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => PreCard, ref preCard, value);
             }
         }
-
-        private int returnPreCash;
+        private int preCard;
 
         public int ReturnPreCash
         {
@@ -269,8 +246,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => ReturnPreCash, ref returnPreCash, value);
             }
         }
-
-        private int returnPreCard;
+        private int returnPreCash;
 
         public int ReturnPreCard
         {
@@ -280,8 +256,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => ReturnPreCard, ref returnPreCard, value);
             }
         }
-
-        private int prepayToday;
+        private int returnPreCard;
 
         public int PrepayToday
         {
@@ -291,8 +266,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => PrepayToday, ref prepayToday, value);
             }
         }
-
-        private Brush checkColor;
+        private int prepayToday;
 
         public Brush CheckColor
         {
@@ -302,8 +276,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => CheckColor, ref checkColor, value);
             }
         }
-
-        private bool enable;
+        private Brush checkColor;
 
         public bool Enable
         {
@@ -313,8 +286,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Enable, ref enable, value);
             }
         }
-
-        private int storeOrderPayCash;
+        private bool enable;
 
         public int StoreOrderPayCash
         {
@@ -324,7 +296,173 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => StoreOrderPayCash, ref storeOrderPayCash, value);
             }
         }
+        private int storeOrderPayCash;
 
+        public Visibility BtnVisibility
+        {
+            get => btnVisibility;
+            set
+            {
+                Set(() => BtnVisibility, ref btnVisibility, value);
+            }
+        }
+        private Visibility btnVisibility = VM.CurrentUser.Authority == Authority.Admin || VM.CurrentUser.Authority == Authority.AccountingStaff ? Visibility.Visible : Visibility.Collapsed;
+
+        /// <summary>
+        /// OTC現金確認
+        /// </summary>
+        public bool OtcCash
+        {
+            get => otcCash;
+            set
+            {
+                Set(() => OtcCash, ref otcCash, value);
+            }
+        }
+        private bool otcCash;
+
+        /// <summary>
+        /// OTC信用卡確認
+        /// </summary>
+        public bool OtcCard
+        {
+            get => otcCard;
+            set
+            {
+                Set(() => OtcCard, ref otcCard, value);
+            }
+        }
+        private bool otcCard;
+
+        /// <summary>
+        /// OTC禮券確認
+        /// </summary>
+        public bool OtcTicket
+        {
+            get => otcTicket;
+            set
+            {
+                Set(() => OtcTicket, ref otcTicket, value);
+            }
+        }
+        private bool otcTicket;
+
+        /// <summary>
+        /// OTC現金券確認
+        /// </summary>
+        public bool OtcCashTicket
+        {
+            get => otcCashTicket;
+            set
+            {
+                Set(() => OtcCashTicket, ref otcCashTicket, value);
+            }
+        }
+        private bool otcCashTicket;
+
+        /// <summary>
+        /// 額外收支確認
+        /// </summary>
+        public bool OtherCash
+        {
+            get => otherCash;
+            set
+            {
+                Set(() => OtherCash, ref otherCash, value);
+            }
+        }
+        private bool otherCash;
+
+        /// <summary>
+        /// 下貨付現確認
+        /// </summary>
+        public bool PayCash
+        {
+            get => payCash;
+            set
+            {
+                Set(() => PayCash, ref payCash, value);
+            }
+        }
+        private bool payCash;
+
+        /// <summary>
+        /// 自費現金確認
+        /// </summary>
+        public bool MedCash
+        {
+            get => medCash;
+            set
+            {
+                Set(() => MedCash, ref medCash, value);
+            }
+        }
+        private bool medCash;
+
+        /// <summary>
+        /// 當日收訂金(現金)確認
+        /// </summary>
+        public bool PrepayCash
+        {
+            get => prepayCash;
+            set
+            {
+                Set(() => PrepayCash, ref prepayCash, value);
+            }
+        }
+        private bool prepayCash;
+
+        /// <summary>
+        /// 當日收訂金(信用卡)確認
+        /// </summary>
+        public bool PrepayCard
+        {
+            get => prepayCard;
+            set
+            {
+                Set(() => PrepayCard, ref prepayCard, value);
+            }
+        }
+        private bool prepayCard;
+
+        /// <summary>
+        /// 當日退訂金(現金)確認
+        /// </summary>
+        public bool RePreCash
+        {
+            get => rePreCash;
+            set
+            {
+                Set(() => RePreCash, ref rePreCash, value);
+            }
+        }
+        private bool rePreCash;
+
+        /// <summary>
+        /// 當日退訂金(信用卡)確認
+        /// </summary>
+        public bool RePreCard
+        {
+            get => rePreCard;
+            set
+            {
+                Set(() => RePreCard, ref rePreCard, value);
+            }
+        }
+        private bool rePreCard;
+
+        /// <summary>
+        /// 是否可轉傳票
+        /// </summary>
+        public bool IsCanToJonual
+        {
+            get => isCanToJonual;
+            set
+            {
+                Set(() => IsCanToJonual, ref isCanToJonual, value);
+            }
+        }
+        private bool isCanToJonual = true;
         public override TabBase getTab()
         {
             return this;
@@ -336,6 +474,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         public RelayCommand ConfirmCommand { get; set; }
         public RelayCommand HistoryCommand { get; set; }
         public RelayCommand UpdateCommand { get; set; }
+        public RelayCommand ToJournalCommand { get; set; }
 
         #endregion ----- Define Commands -----
 
@@ -345,6 +484,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             ConfirmCommand = new RelayCommand(ConfirmAction);
             HistoryCommand = new RelayCommand(HistoryAction);
             UpdateCommand = new RelayCommand(UpdateAction);
+            ToJournalCommand = new RelayCommand(ToJournalAction);
             ReloadAction();
         }
 
@@ -362,12 +502,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 
         private void ReloadAction()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("sDate", StartDate));
-            parameters.Add(new SqlParameter("eDate", StartDate));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[ClosingWorkByDate]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
+            DataTable result = ClosingWorkDB.ClosingWorkByDate(StartDate);
 
             Trade = (int)result.Rows[0]["trade"];
             Coop = (int)result.Rows[0]["coop"];
@@ -410,16 +545,25 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             {
                 CheckTotal = CloseCash_Total;
             }
+
+            IsCanToJonual = CheckClosed.Equals("未關班") ? false : true;
+            ClearCheckBox();
         }
 
         private void ConfirmAction()
         {
+            if (!IsChkAllOn())
+            {
+                MessageWindow.ShowMessage("請確認所有項目！", MessageType.ERROR);
+                return;
+            }
+
             if (CheckTotal == 0)
             {
                 MessageWindow.ShowMessage("請輸入點算現金", MessageType.ERROR);
                 return;
             }
-            if (StartDate != DateTime.Today && ViewModelMainWindow.CurrentUser.Authority != DomainModel.Enum.Authority.Admin && ViewModelMainWindow.CurrentUser.Authority != DomainModel.Enum.Authority.AccountingStaff)
+            if (StartDate != DateTime.Today && ViewModelMainWindow.CurrentUser.Authority != Authority.Admin && ViewModelMainWindow.CurrentUser.Authority != Authority.AccountingStaff)
             {
                 MessageWindow.ShowMessage("僅能關今天的班", MessageType.ERROR);
                 return;
@@ -433,14 +577,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             if (!(bool)cw.DialogResult)
                 return;
 
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("EMP", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("Value", Total - CheckTotal));
-            parameters.Add(new SqlParameter("Total", CheckTotal));
-            parameters.Add(new SqlParameter("Close_Date", StartDate));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCloseCash]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
+            DataTable result = ClosingWorkDB.InsertCloseCash(Total, CheckTotal, StartDate);
             if (result.Rows[0]["RESULT"].ToString() == "FAIL")
             {
                 MessageWindow.ShowMessage("今日已輸入過", MessageType.ERROR);
@@ -476,6 +613,73 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             MainWindow.ServerConnection.OpenConnection();
             repo.InsertDailyClosingAccountRecord(data);
             MainWindow.ServerConnection.CloseConnection();
+        }
+        private void ToJournalAction()
+        {
+            if (!IsChkAllOn())
+            {
+                MessageWindow.ShowMessage("請確認所有項目！", MessageType.ERROR);
+                return;
+            }
+            if (CheckClosed.Equals("已關班"))
+            {
+                DataTable table = ClosingWorkDB.GetClosingWorkToJournal(StartDate);
+                if (table != null && table.Rows.Count > 0)
+                {
+                    string orderID = string.Empty;
+                    foreach (DataRow dr in table.Rows)
+                    {
+                        orderID += Convert.ToString(dr["JouMas_ID"]) + "\r\n";
+                    }
+                    MessageWindow.ShowMessage(string.Format("已有關班傳票\r\n{0}", orderID), MessageType.ERROR);
+                    return;
+                }
+                else
+                {
+                    ClosingWorkDB.SetClosingWorkToJournal(StartDate);
+                    table = ClosingWorkDB.GetClosingWorkToJournal(StartDate);
+                    if (table != null && table.Rows.Count > 0)
+                    {
+                        string orderID = string.Empty;
+                        foreach (DataRow dr in table.Rows)
+                        {
+                            orderID += Convert.ToString(dr["JouMas_ID"]) + "\r\n";
+                        }
+                        MessageWindow.ShowMessage(string.Format("關班傳票新增成功\r\n{0}", orderID), MessageType.ERROR);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                MessageWindow.ShowMessage("尚未關班", MessageType.ERROR);
+                return;
+            }
+        }
+        private void ClearCheckBox()
+        {
+            OtcCash = false;
+            OtcCard = false;
+            OtcTicket = false;
+            OtcCashTicket = false;
+            OtherCash  = false;
+            PayCash = false;
+            MedCash = false;
+            PrepayCash = false;
+            PrepayCard = false;
+            RePreCash = false;
+            RePreCard = false;
+        }
+        private bool IsChkAllOn()
+        {
+            if (OtcCash && OtcCard && OtcTicket && OtcCashTicket && OtherCash && PayCash && MedCash && PrepayCash && PrepayCard && RePreCash && RePreCard)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
