@@ -276,7 +276,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
                 var ws = wb.Worksheets.Add("資產負債表");
                 ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
-
+                /*
                 var col1 = ws.Column("A");
                 col1.Width = 20;
                 var col2 = ws.Column("B");
@@ -287,30 +287,37 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 col4.Width = 20;
                 var col5 = ws.Column("E");
                 col5.Width = 30;
+                */
                 var col6 = ws.Column("F");
                 col6.Width = 20;
-                ws.Cell("A2").Value = "會計科目代號1";
-                ws.Cell("B2").Value = "會計科目代號2";
-                ws.Cell("C2").Value = "會計科目名稱2";
-                ws.Cell("D2").Value = "會計科目代號3";
-                ws.Cell("E2").Value = "會計科目名稱3";
-                ws.Cell("F2").Value = "金額";
+                
+                ws.Cell("A1").Value = "會計科目代號1";
+                ws.Cell("B1").Value = "會計科目代號2";
+                ws.Cell("C1").Value = "會計科目名稱2";
+                ws.Cell("D1").Value = "會計科目代號3";
+                ws.Cell("E1").Value = "會計科目名稱3";
+                ws.Cell("F1").Value = "金額";
 
                 DataTable data = AccountsDb.GetBalanceSheet(_endDate);
                 var items = data.AsEnumerable().Where(w => w.Field<decimal>("acctValue") != 0);
-                var rangeWithData = ws.Cell(3, 1).InsertData(items);
+                var rangeWithData = ws.Cell(2, 1).InsertData(items);
                 rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                 rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                ws.Columns().AdjustToContents();//欄位寬度根據資料調整
                 try
                 {
                     wb.SaveAs(fdlg.FileName);
-                    myProcess.StartInfo.UseShellExecute = true;
-                    myProcess.StartInfo.FileName = fdlg.FileName;
-                    myProcess.StartInfo.CreateNoWindow = true;
-                    myProcess.Start();
+                    ConfirmWindow cw = new ConfirmWindow("是否開啟檔案", "確認");
+                    if ((bool)cw.DialogResult)
+                    {
+                        myProcess.StartInfo.UseShellExecute = true;
+                        myProcess.StartInfo.FileName = fdlg.FileName;
+                        myProcess.StartInfo.CreateNoWindow = true;
+                        myProcess.Start();
+                    }
                 }
                 catch (Exception ex)
                 {
