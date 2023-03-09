@@ -341,14 +341,18 @@ namespace His_Pos.NewClass.Prescription.Service
                 return false;
             }
 
-            if (VM.PreAdjustDateControl)
+            if (VM.PreAdjustDateControl)//新判斷
             {
                 List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
-                if (auth.Contains(VM.CurrentUser.Authority) && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) < 0)
+                if (auth.Contains(VM.CurrentUser.Authority) && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) < 0)//以上權限"可以 新增、修改、刪除 "調劑日">"處方關帳日"的處方
                 {
                     return true;
                 }
-                else
+                else if (VM.CurrentUser.Authority == Authority.MasterPharmacist && type == 2 && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) < 0)//負責藥師"可以 修改 "調劑日">"處方關帳日"的處方
+                {
+                    return true;
+                }
+                else//其他權限只能新增修改刪除當日處方
                 {
                     if (auth.Contains(VM.CurrentUser.Authority))
                     {
@@ -369,7 +373,7 @@ namespace His_Pos.NewClass.Prescription.Service
                     }
                 }
             }
-            else
+            else//原判斷
             {
                 if (DateTime.Compare(Convert.ToDateTime(prescription.AdjustDate), DateTime.Today) >= 0 || VM.CurrentUser.Authority == Authority.Admin || VM.CurrentUser.Authority == Authority.MasterPharmacist || VM.CurrentUser.Authority == Authority.PharmacyManager)
                 {
