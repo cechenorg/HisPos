@@ -38,6 +38,8 @@ using MedicineVirtual = His_Pos.NewClass.Medicine.Base.MedicineVirtual;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using His_Pos.ChromeTabViewModel;
 using DomainModel.Enum;
+using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
+using His_Pos.NewClass.Medicine;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -1013,7 +1015,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private Inventorys GetMedicinesInventories()
         {
             MainWindow.ServerConnection.OpenConnection();
-            var inventories = Inventorys.GetAllInventoryByProIDs(GetMedicinesIDsConcatenated(), EditedPrescription.WareHouse?.ID);
+            Inventorys inventories;
+            if (EditedPrescription != null && EditedPrescription.ID != 0)
+            {
+                var table = MedicineDb.GetUsableAmountByPrescriptionID(EditedPrescription.ID);
+                inventories = new Inventorys(table);
+            }
+            else
+            {
+                inventories = Inventorys.GetAllInventoryByProIDs(GetMedicinesIDsConcatenated(), EditedPrescription.WareHouse?.ID);
+            }
+
             MainWindow.ServerConnection.CloseConnection();
             foreach (var med in OriginalPrescription.Medicines)
             {
@@ -1029,7 +1041,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             foreach (var inv in inventoryList)
             {
                 var editMedicines = EditedPrescription.Medicines.Where(m => m.InventoryID.Equals(inv.InvID));
-                if (inv.OnTheFrame - editMedicines.Sum(m => m.BuckleAmount) >= 0) continue;
+                if (inv.CanUseAmount - editMedicines.Sum(m => m.BuckleAmount) >= 0) continue;
                 negativeStock = EditedPrescription.Medicines.Where(med => !(med is MedicineVirtual))
                     .Where(med => med.InventoryID.Equals(inv.InvID))
                     .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
