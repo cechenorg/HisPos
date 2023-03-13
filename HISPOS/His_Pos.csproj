@@ -355,6 +355,7 @@
     <Compile Include="NewClass\Accounts\JournalDetails.cs" />
     <Compile Include="NewClass\Accounts\JournalMaster.cs" />
     <Compile Include="NewClass\Accounts\JournalType.cs" />
+    <Compile Include="NewClass\Accounts\LedgerDetail.cs" />
     <Compile Include="NewClass\ClosingWork\ClosingWorkDB.cs" />
     <Compile Include="NewClass\Enum.cs" />
     <Compile Include="NewClass\Feature.cs" />
@@ -853,6 +854,10 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\InvalidWindow\InvalidViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\InvalidWindow\InvalidWindow.xaml.cs">
       <DependentUpon>InvalidWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\LedgerWindow\LedgerViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\LedgerWindow\LedgerWindow.xaml.cs">
+      <DependentUpon>LedgerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManage.xaml.cs">
       <DependentUpon>AdditionalCashFlowManage.xaml</DependentUpon>
@@ -1777,6 +1782,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\InvalidWindow\InvalidWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\AccountVoucher\LedgerWindow\LedgerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
