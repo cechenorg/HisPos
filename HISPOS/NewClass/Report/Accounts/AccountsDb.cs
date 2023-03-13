@@ -348,5 +348,160 @@ namespace His_Pos.NewClass.Report.Accounts
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
+
+        public static IEnumerable<LedgerDetail> GetLedgerData(int ledgerType, DateTime sDate, DateTime eDate, string acct1, string acct2, string acct3, string keyWord)
+        {
+            IEnumerable<LedgerDetail> result = null;
+            string acctID = string.Empty;
+            acctID += string.IsNullOrEmpty(acct1) ? string.Empty : acct1;
+            acctID += string.IsNullOrEmpty(acct2) ? string.Empty : "-" + acct2;
+            acctID += string.IsNullOrEmpty(acct3) ? string.Empty : "-" + acct3;
+
+            keyWord = string.Format("%{0}%", keyWord);
+            string sql = string.Format(@"
+                DECLARE @CurPha_Name nvarchar(30) = (Select TOP 1 CurPha_Name From [{0}].[SystemInfo].[CurrentPharmacy]);
+
+	            SELECT m.JouMas_Date
+	                ,CASE m.JouMas_Source WHEN '1' THEN '傳票作業' WHEN '2' THEN '關班轉入' 
+		            WHEN '3' THEN '進退貨轉入' ELSE m.JouMas_Source END AS JouMas_Source
+		            ,m.JouMas_ID
+	                ,CASE d.JouDet_Type WHEN 'D' THEN '借' WHEN 'C' THEN '貸' 
+		            ELSE d.JouDet_Type END AS JouDet_Type
+		            ,d.JouDet_Number,d.JouDet_AcctLvl1,d.JouDet_AcctLvl2,d.JouDet_AcctLvl3
+		            ,CASE WHEN ISNULL(d.JouDet_AcctLvl3,'') = '' THEN d.JouDet_AcctLvl1 + '-' + d.JouDet_AcctLvl2
+		            ELSE d.JouDet_AcctLvl1 + '-' + d.JouDet_AcctLvl2 + '-' + d.JouDet_AcctLvl3 END AS AcctID
+		            ,CASE WHEN ISNULL(d.JouDet_AcctLvl3,'') = '' THEN a2.acct_Name
+		            ELSE a2.acct_Name + '-' + a3.acct_Name END AS JouDet_AcctName
+		            ,d.JouDet_Amount,d.JouDet_Memo,d.JouDet_SourceID,m.JouMas_Memo
+		            ,m.JouMas_InsertTime,ei.Emp_Name InsertEmpName,m.JouMas_ModifyTime,em.Emp_Name ModifyEmpName
+	            INTO #tempJournal
+	            FROM [{0}].[dbo].[JournalMaster] m 
+	            INNER JOIN [{0}].[dbo].[JournalDetail] d ON m.JouMas_ID = d.JouDet_ID
+	            LEFT JOIN (SELECT * FROM [{0}].[dbo].[Accounts] WHERE acct_Level ='1') a1 ON d.JouDet_AcctLvl1 = a1.acct_ID
+	            LEFT JOIN (SELECT * FROM [{0}].[dbo].[Accounts] WHERE acct_Level ='2') a2 ON d.JouDet_AcctLvl1 = a2.acct_PreLevel AND d.JouDet_AcctLvl2 = a2.acct_ID
+	            LEFT JOIN (SELECT * FROM [{0}].[dbo].[Accounts] WHERE acct_Level ='3') a3 ON d.JouDet_AcctLvl2 = a3.acct_PreLevel AND d.JouDet_AcctLvl3 = a3.acct_ID
+	            LEFT JOIN [{0}].[Employee].[Master] ei ON m.JouMas_InsertEmpID = ei.Emp_ID
+	            LEFT JOIN [{0}].[Employee].[Master] em ON m.JouMas_ModifyEmpID = em.Emp_ID
+	            WHERE m.JouMas_Date BETWEEN '{1}' AND '{2}'
+	                AND m.JouMas_Status = 'F'
+	                AND m.JouMas_IsEnable = 1
+
+                ", Properties.Settings.Default.SystemSerialNumber, sDate.ToString("yyyy-MM-dd"), eDate.ToString("yyyy-MM-dd"));
+
+            if (ledgerType == 0)
+            {
+                sql += string.Format(@"
+                    SELECT @CurPha_Name as CurPha_Name,* 
+		            FROM #tempJournal
+		            WHERE (ISNULL('{0}','') = '' OR AcctID = '{0}')
+		                AND (ISNULL('{1}','') = '' 
+		                OR JouDet_AcctName LIKE '{1}'
+			            OR JouDet_AcctLvl1 LIKE '{1}'
+			            OR JouDet_AcctLvl2 LIKE '{1}'
+			            OR JouDet_AcctLvl3 LIKE '{1}'
+			            OR JouDet_Memo LIKE '{1}'
+			            OR JouDet_SourceID LIKE '{1}'
+			            OR JouMas_Memo LIKE '{1}'
+			            OR InsertEmpName LIKE '{1}'
+			            OR ModifyEmpName LIKE '{1}')
+		                ORDER BY JouMas_Date,JouMas_ID,JouDet_Type,JouDet_Number
+
+                ", acctID, keyWord);
+            }
+            if (ledgerType == 1)
+            {
+                sql += string.Format(@"
+
+                    SELECT @CurPha_Name as CurPha_Name, * FROM 
+		            (
+			            SELECT JouDet_AcctLvl1,JouDet_AcctLvl2,JouDet_AcctLvl3,JouDet_AcctName
+				            ,JouMas_Date,JouMas_Source,JouMas_ID,JouDet_Number,JouDet_Amount AS DAmount,0 AS CAmount,0 AS Balance
+				            ,JouDet_Memo,JouDet_SourceID,JouMas_Memo,JouMas_InsertTime,InsertEmpName,JouMas_ModifyTime,ModifyEmpName
+			            FROM #tempJournal
+			            WHERE JouDet_Type = '借'
+			            UNION ALL
+			            SELECT JouDet_AcctLvl1,JouDet_AcctLvl2,JouDet_AcctLvl3,JouDet_AcctName
+				            ,JouMas_Date,JouMas_Source,JouMas_ID,JouDet_Number,0 AS DAmount,JouDet_Amount AS CAmount,0 AS Balance
+				            ,JouDet_Memo,JouDet_SourceID,JouMas_Memo,JouMas_InsertTime,InsertEmpName,JouMas_ModifyTime,ModifyEmpName
+			            FROM #tempJournal
+			            WHERE JouDet_Type = '貸'
+		            ) T
+		            WHERE JouDet_AcctLvl1 = '{0}' AND JouDet_AcctLvl2 = '{1}' AND JouDet_AcctLvl3 = '{2}'
+		            ORDER BY JouDet_AcctLvl1,JouDet_AcctLvl2,JouDet_AcctLvl3,JouMas_Date,JouMas_ID		 
+
+                ", acct1, acct2, acct3);
+            }
+
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<LedgerDetail>(sql,
+                    commandType: CommandType.Text);
+            });
+            return result;
+        }
+        public static int GetLedgerFirst(DateTime sDate, string acct1, string acct2, string acct3)
+        {
+            int result = 0;
+            string sql = string.Format(@"
+
+                DECLARE @sDate date
+                DECLARE @AccBalDate date
+                DECLARE @AccBalAmount money
+                DECLARE @AcctLvl1 varchar(1)
+                DECLARE @AcctLvl2 varchar(4)
+                DECLARE @AcctLvl3 varchar(4)
+                set @sDate = '{1}'
+                set @AcctLvl1 = '{2}'
+                set @AcctLvl2 = '{3}'
+                set @AcctLvl3 = '{4}'
+	
+                --已結轉會科的金額
+                SELECT TOP 1 @AccBalDate=AccBal_Date,@AccBalAmount = AccBal_Amount
+                FROM [{0}].[dbo].[AccountsBalance]
+                WHERE AccBal_AcctLvl1 = @AcctLvl1
+                AND AccBal_AcctLvl2 = @AcctLvl2
+                AND AccBal_AcctLvl3 = @AcctLvl3
+                AND AccBal_Date <= @sDate
+                ORDER BY AccBal_Date DESC
+
+                IF @AccBalDate IS NULL
+                BEGIN
+	                SET @AccBalDate = dateadd(d,-1,@sDate)
+                END
+                IF @AccBalAmount IS NULL
+                BEGIN
+	                SET @AccBalAmount = 0
+                END
+
+                --結轉後的傳票資料
+                /* JouDet_AcctLvl1 為 1.5.6.8 = 期初 + 借 - 貸
+                   JouDet_AcctLvl1 為 2.3.4.7 = 期初 + 貸 - 借 */
+
+                SELECT @AccBalAmount = @AccBalAmount + ISNULL(SUM(JouDet_Amount),0)
+                FROM (	SELECT JouDet_Type,JouDet_AcctLvl1,JouDet_AcctLvl2,JouDet_AcctLvl3,
+                              CASE WHEN (JouDet_AcctLvl1 IN ('1','5','6','8') AND JouDet_Type = 'D')
+                                OR (JouDet_AcctLvl1 IN ('2','3','4','7') AND JouDet_Type = 'C') 
+					THEN JouDet_Amount ELSE JouDet_Amount*-1 END AS JouDet_Amount
+		        FROM [{0}].[dbo].[JournalMaster] m
+		        INNER JOIN [{0}].[dbo].[JournalDetail] d ON m.JouMas_ID = d.JouDet_ID
+		        WHERE m.JouMas_Date >= @AccBalDate 
+		        AND m.JouMas_Date < @sDate --不含查詢當天
+		        AND JouMas_Status = 'F'
+		        AND JouMas_IsEnable = 1	
+		        AND JouDet_AcctLvl1 = @AcctLvl1
+		        AND JouDet_AcctLvl2 = @AcctLvl2
+		        AND JouDet_AcctLvl3 = @AcctLvl3
+                ) j
+
+                SELECT @AccBalAmount
+
+                ", Properties.Settings.Default.SystemSerialNumber, sDate.ToString("yyyy-MM-dd"), acct1, acct2, acct3);
+
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.QueryFirst<int>(sql, commandType: CommandType.Text);
+            });
+            return result;
+        }
     }
 }

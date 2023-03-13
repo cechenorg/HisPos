@@ -46,6 +46,14 @@
                 SelectedItem="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Width="100" BorderThickness="0" FontSize="16" Content="日記帳"
+                Margin="10,0,10,0" Background="RoyalBlue" CommandParameter="0"
+                Command="{Binding ClickDetailCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                FontFamily="Segoe UI Semibold"/>
+            <Button Width="100" BorderThickness="0" FontSize="16" Content="明細帳"
+                Margin="10,0,10,0" Background="RoyalBlue" CommandParameter="1"
+                Command="{Binding ClickDetailCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                FontFamily="Segoe UI Semibold"/>
             <Button Width="100" BorderThickness="0" FontSize="16" Content="清除"
                 Margin="10,0,10,0" Background="IndianRed"
                 Command="{Binding ClearCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

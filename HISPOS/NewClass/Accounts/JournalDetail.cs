@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_ID, ref jouDet_ID, value);
             }
         }
-        public string jouDet_Type;
+        private string jouDet_Type;
         public string JouDet_Type
         {
             get => jouDet_Type;
@@ -28,7 +28,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_Type, ref jouDet_Type, value);
             }
         }
-        public int jouDet_Number;
+        private int jouDet_Number;
         public int JouDet_Number 
         {
             get => jouDet_Number;
@@ -37,7 +37,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_Number, ref jouDet_Number, value);
             }
         }
-        public string jouDet_AcctLvl1;
+        private string jouDet_AcctLvl1;
         public string JouDet_AcctLvl1
         {
             get => jouDet_AcctLvl1;
@@ -46,7 +46,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_AcctLvl1, ref jouDet_AcctLvl1, value);
             }
         }
-        public string jouDet_AcctLvl2;
+        private string jouDet_AcctLvl2;
         public string JouDet_AcctLvl2
         {
             get => jouDet_AcctLvl2;
@@ -55,7 +55,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_AcctLvl2, ref jouDet_AcctLvl2, value);
             }
         }
-        public string jouDet_AcctLvl3;
+        private string jouDet_AcctLvl3;
         public string JouDet_AcctLvl3
         {
             get => jouDet_AcctLvl3;
@@ -64,7 +64,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_AcctLvl3, ref jouDet_AcctLvl3, value);
             }
         }
-        public string jouDet_AcctLvl1Name;
+        private string jouDet_AcctLvl1Name;
         public string JouDet_AcctLvl1Name
         {
             get => jouDet_AcctLvl1Name;
@@ -73,7 +73,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_AcctLvl1Name, ref jouDet_AcctLvl1Name, value);
             }
         }
-        public string jouDet_AcctLvl2Name;
+        private string jouDet_AcctLvl2Name;
         public string JouDet_AcctLvl2Name 
         {
             get => jouDet_AcctLvl2Name;
@@ -82,7 +82,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_AcctLvl2Name, ref jouDet_AcctLvl2Name, value);
             }
         }
-        public string jouDet_AcctLvl3Name;
+        private string jouDet_AcctLvl3Name;
         public string JouDet_AcctLvl3Name
         {
             get => jouDet_AcctLvl3Name;
@@ -100,7 +100,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_Amount, ref jouDet_Amount, value);
             }
         }
-        public string jouDet_Memo;
+        private string jouDet_Memo;
         public string JouDet_Memo
         {
             get => jouDet_Memo;
@@ -109,7 +109,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_Memo, ref jouDet_Memo, value);
             }
         }
-        public IEnumerable<JournalAccount> accounts;
+        private IEnumerable<JournalAccount> accounts;
         public IEnumerable<JournalAccount> Accounts
         {
             get => accounts;
@@ -118,7 +118,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => Accounts, ref accounts, value);
             }
         }
-        public JournalAccount account;
+        private JournalAccount account;
         public JournalAccount Account
         {
             get => account;
@@ -127,7 +127,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => Account, ref account, value);
             }
         }
-        public string jouDet_Source;
+        private string jouDet_Source;
         public string JouDet_Source
         {
             get => jouDet_Source;
@@ -136,7 +136,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_Source, ref jouDet_Source, value);
             }
         }
-        public string jouDet_SourceID;
+        private string jouDet_SourceID;
         public string JouDet_SourceID
         {
             get => jouDet_SourceID;
@@ -145,7 +145,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_SourceID, ref jouDet_SourceID, value);
             }
         }
-        public string jouDet_WriteOffID;
+        private string jouDet_WriteOffID;
         public string JouDet_WriteOffID
         {
             get => jouDet_WriteOffID;
@@ -154,7 +154,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouDet_WriteOffID, ref jouDet_WriteOffID, value);
             }
         }
-        public int jouDet_WriteOffNumber;
+        private int jouDet_WriteOffNumber;
         public int JouDet_WriteOffNumber 
         {
             get => jouDet_WriteOffNumber;
