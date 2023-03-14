@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:AccountDetailViewModel}" WindowStartupLocation="CenterScreen"
-        Title="損益詳細" Height="450" Width="600">
+        Title="損益詳細" Height="450" Width="700">
     <Grid>
         <DataGrid  RowBackground="#A9D08E" ItemsSource="{Binding IncomeStatementDetailDataList,UpdateSourceTrigger=PropertyChanged}" 
                    AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" Background="#E2EFDA" CanUserDeleteRows="False" VerticalContentAlignment="Top">
@@ -15,12 +15,12 @@
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="年" Binding="{Binding YYYY}" IsReadOnly="True" />
-                <DataGridTextColumn Header="月" Binding="{Binding MM}" IsReadOnly="True" />
-                <DataGridTextColumn Header="會計科目代號" Binding="{Binding AcctLvl2}" IsReadOnly="True" />
-                <DataGridTextColumn Header="會計科目子代號" Binding="{Binding AcctLvl3}" IsReadOnly="True" />
-                <DataGridTextColumn Header="會計科目名稱" Binding="{Binding JouDet_AcctName}" IsReadOnly="True" />
-                <DataGridTextColumn Header="金額" Binding="{Binding AcctValue}" IsReadOnly="True" />
+                <DataGridTextColumn Header="年" Binding="{Binding YYYY}" FontSize="16" IsReadOnly="True" />
+                <DataGridTextColumn Header="月" Binding="{Binding MM}" FontSize="16" IsReadOnly="True" />
+                <DataGridTextColumn Header="會計科目代號" Binding="{Binding AcctLvl2}" FontSize="16" IsReadOnly="True" />
+                <DataGridTextColumn Header="會計科目子代號" Binding="{Binding AcctLvl3}" FontSize="16" IsReadOnly="True" />
+                <DataGridTextColumn Header="會計科目名稱" Binding="{Binding JouDet_AcctName}" FontSize="16" IsReadOnly="True" />
+                <DataGridTextColumn Header="金額" Binding="{Binding AcctValue}" FontSize="16" IsReadOnly="True" />
                 <!--<DataGridTextColumn Header="年" Binding="{Binding YYYY}" IsReadOnly="True" />
                 <DataGridTextColumn Header="月" Binding="{Binding MM}" IsReadOnly="True" />
                 <DataGridTextColumn Header="分類" Binding="{Binding AcctName}" IsReadOnly="True" />
