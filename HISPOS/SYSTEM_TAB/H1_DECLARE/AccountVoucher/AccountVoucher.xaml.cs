@@ -127,7 +127,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 bool isSubmit = ((FromSourceViewModel)fromSourceWindow.DataContext).IsSubmit;
                 if (isSubmit)
                 {
-                    DataTable table = ((FromSourceViewModel)fromSourceWindow.DataContext).SoureTable;
+                    DataTable table = ((FromSourceViewModel)fromSourceWindow.DataContext).SelectTable;
                     if (table != null && table.Columns.Contains("IsChecked"))
                     {
                         DataRow[] selectRow = table.Select("IsChecked = true");
