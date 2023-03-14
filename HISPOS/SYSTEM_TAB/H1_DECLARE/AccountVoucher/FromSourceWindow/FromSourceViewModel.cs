@@ -19,7 +19,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
             CheckAllCommand = new RelayCommand(OnCheckAll);
             CheckCommand = new RelayCommand(OnCheck);
             SubmitCommand = new RelayCommand(SubmitAction);
+            FilterCommand = new RelayCommand(FilterAction);
             IsSubmit = false;
+            FilterAction();
         }
         private bool isSubmit;
         public bool IsSubmit
@@ -33,13 +35,59 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
             get { return isAllSelected; }
             set { Set(() => IsAllSelected, ref isAllSelected, value); }
         }
+
+        private DateTime beginDate = DateTime.Today;
+        public DateTime BeginDate
+        {
+            get { return beginDate; }
+            set { Set(() => BeginDate, ref beginDate, value); }
+        }
+        private DateTime endDate = DateTime.Today;
+        public DateTime EndDate
+        {
+            get { return endDate; }
+            set { Set(() => EndDate, ref endDate, value); }
+        }
+        private int selectCount;
+        public int SelectCount
+        {
+            get { return selectCount; }
+            set { Set(() => SelectCount, ref selectCount, value); }
+        }
+        private int unSelectCount;
+        public int UnSelectCount
+        {
+            get { return unSelectCount; }
+            set { Set(() => UnSelectCount, ref unSelectCount, value); }
+        }
+        private int unCheckCash;
+        public int UnCheckCash
+        {
+            get { return unCheckCash; }
+            set { Set(() => UnCheckCash, ref unCheckCash, value); }
+        }
+
+        private int checkCash;
+        public int CheckCash
+        {
+            get { return checkCash; }
+            set { Set(() => CheckCash, ref checkCash, value); }
+        }
+
         private DataTable soureTable;
         public DataTable SoureTable
         {
             get { return soureTable; }
             set { Set(() => SoureTable, ref soureTable, value); }
         }
+        private DataTable selectTable;
+        public DataTable SelectTable
+        {
+            get { return selectTable; }
+            set { Set(() => SelectTable, ref selectTable, value); }
+        }
         public RelayCommand SubmitCommand { get; set; }
+        public RelayCommand FilterCommand { get; set; }
         public RelayCommand CheckAllCommand { get; set; }
         public RelayCommand CheckCommand { get; set; }
         private void SubmitAction()
@@ -52,13 +100,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
         /// </summary>
         private void OnCheckAll()
         {
-            DataTable table = SoureTable;
-            if (SoureTable != null)
+            DataTable table = SelectTable;
+            if (SelectTable != null)
             {
                 foreach (DataRow item in table.Rows)
                 {
                     item["IsChecked"] = IsAllSelected;
                 }
+                SetTotalCash();
             }
         }
         /// <summary>
@@ -66,12 +115,41 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
         /// </summary>
         private void OnCheck()
         {
-            DataTable table = SoureTable;
-            if (SoureTable != null)
+            DataTable table = SelectTable;
+            if (SelectTable != null)
             {
                 DataRow[] drs = table.Select("IsChecked = false");
                 IsAllSelected = (drs != null && drs.Count() > 0) ? false : true;
             }
+            SetTotalCash();
+        }
+        private void SetTotalCash()
+        {
+            if (SelectTable != null)
+            {
+                SelectCount = Convert.ToInt32(SelectTable.Compute("Count(JouDet_Amount)", "IsChecked = true"));
+                UnSelectCount = Convert.ToInt32(SelectTable.Compute("Count(JouDet_Amount)", "IsChecked = false"));
+                CheckCash = Convert.ToInt32(SelectCount > 0 ? SelectTable.Compute("Sum(JouDet_Amount)", "IsChecked = true") : 0);
+                UnCheckCash = Convert.ToInt32(UnSelectCount > 0 ? SelectTable.Compute("Sum(JouDet_Amount)", "IsChecked = false") : 0);
+            }
+        }
+        private void FilterAction()
+        {
+            if (SoureTable != null && SoureTable.Rows.Count > 0)
+            {
+                SelectTable = new DataTable();
+                SelectTable = SoureTable.Clone();
+
+                foreach (DataRow dr in SoureTable.Rows)
+                {
+                    DateTime date = Convert.ToDateTime(dr["JouMas_Date"]);
+                    if (DateTime.Compare(beginDate, date) <= 0 && DateTime.Compare(endDate, date) >= 0)
+                    {
+                        SelectTable.ImportRow(dr);
+                    }
+                }
+            }
+            SetTotalCash();
         }
     }
 }

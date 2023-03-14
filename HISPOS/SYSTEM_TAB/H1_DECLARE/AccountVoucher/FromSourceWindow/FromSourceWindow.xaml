@@ -9,7 +9,7 @@
         Title="選擇來源"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Height="540" Width="900">
+        Height="550" Width="900">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
@@ -19,10 +19,24 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="450"/>
+            <RowDefinition Height="420"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}">
-            <Button Width="100" BorderThickness="0" FontSize="16" Content="確定" Background="RoyalBlue"
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+            <Label VerticalAlignment="Center" Content="日期:" FontSize="18" />
+            <DatePicker Width="120" Language="zh-cn" FontSize="16"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Text="{Binding BeginDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            </DatePicker>
+            <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="~" FontSize="18" />
+            <DatePicker Width="120" Language="zh-cn" FontSize="16"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                    Text="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            </DatePicker>
+            <Button Width="80" BorderThickness="0" FontSize="16" Content="篩選" Background="RoyalBlue"
+                Command="{Binding FilterCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="380,10,10,0"/>
+            <Button Width="80" BorderThickness="0" FontSize="16" Content="確定" Background="RoyalBlue"
                 Command="{Binding SubmitCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,10,0"/>
         </StackPanel>
@@ -37,11 +51,24 @@
                 CanUserResizeColumns="False"
                 CanUserSortColumns="False"
                 CellStyle="{StaticResource DataGridCellStyle}"
-                ItemsSource="{Binding SoureTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                ItemsSource="{Binding SelectTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Resources>
-                    <Style TargetType="ScrollBar">
-                        <Setter Property="Background" Value="#FFA8A8A8" />
-                        <Setter Property="Foreground" Value="#FF535353" />
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="15" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="15" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.RowStyle>
@@ -154,6 +181,18 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+            <Label Width="auto" VerticalAlignment="Center" Content="已勾選:" FontSize="18" />
+            <Label Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding SelectCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" />
+            <Label Width="auto" VerticalAlignment="Center" Content="筆" FontSize="18" />
+            <Label Width="auto" Margin="5" VerticalAlignment="Center" Content="總金額:" FontSize="18" />
+            <Label Width="80" VerticalAlignment="Center" Content="{Binding CheckCash, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" />
+            <Label Width="auto" VerticalAlignment="Center" Content="未勾選:" FontSize="18" />
+            <Label Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding UnSelectCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" />
+            <Label Width="auto" VerticalAlignment="Center" Content="筆" FontSize="18" />
+            <Label Width="auto" Margin="5" VerticalAlignment="Center" Content="總金額:" FontSize="18" />
+            <Label Width="80" VerticalAlignment="Center" Content="{Binding UnCheckCash, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" />
         </StackPanel>
     </Grid>
 </Window>
