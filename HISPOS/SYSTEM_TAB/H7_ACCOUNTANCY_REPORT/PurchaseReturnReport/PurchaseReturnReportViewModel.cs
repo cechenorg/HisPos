@@ -154,16 +154,23 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
         private void ExportCSVAction()
         {
-            CurrentManufactoryOrder.ExportToCSV(SearchStartDate, SearchEndDate);
+            if (CurrentManufactoryOrder != null)
+                CurrentManufactoryOrder.ExportToCSV(SearchStartDate, SearchEndDate);
         }
 
         private void ExportCSVDetailTotalAction()
         {
-            CurrentManufactoryOrder.ExportToCSVTotalDetail(SearchStartDate, SearchEndDate, SelectedWareHouse.ID);
+            if (CurrentManufactoryOrder != null && SelectedWareHouse != null)
+            {
+                CurrentManufactoryOrder.ExportToCSVTotalDetail(SearchStartDate, SearchEndDate, SelectedWareHouse.ID);
+            }
         }
 
         private void ExportCSVTotalAction()
         {
+            if (ManufactoryOrderCollection is null || ManufactoryOrderCollection.Count == 0)
+                return;
+
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "進退貨報表存檔";
             fdlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);

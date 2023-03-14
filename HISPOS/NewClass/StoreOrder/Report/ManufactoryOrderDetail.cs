@@ -66,11 +66,11 @@ namespace His_Pos.NewClass.StoreOrder.Report
             InitialPrice = (double)dataRow.Field<decimal>("PRICE");
             ReturnStockValue = (double)dataRow.Field<decimal>("RETURN_PRICE");
             Name = dataRow.Field<string>("Man_Name");
-            CheckCode = dataRow.Field<string>("StoOrd_CheckCode");
-            OTCType = dataRow.Field<string>("StoOrd_IsOTCType");
-            Note = dataRow.Field<string>("StoOrd_Note");
-            IsFrozen = dataRow.Field<int>("IsFrozen");
-            IsControl = dataRow.Field<int>("IsControl");
+            CheckCode = dataRow.Table.Columns.Contains("StoOrd_CheckCode") ? dataRow.Field<string>("StoOrd_CheckCode") : string.Empty;
+            OTCType = dataRow.Table.Columns.Contains("StoOrd_IsOTCType") ? dataRow.Field<string>("StoOrd_IsOTCType") : string.Empty;
+            Note = dataRow.Table.Columns.Contains("StoOrd_Note") ? dataRow.Field<string>("StoOrd_Note") : string.Empty;
+            IsFrozen = dataRow.Table.Columns.Contains("IsFrozen") ? dataRow.Field<int>("IsFrozen") : 0;
+            IsControl = dataRow.Table.Columns.Contains("IsControl") ? dataRow.Field<int>("IsControl") : 0;
             CalculateTax();
         }
 
