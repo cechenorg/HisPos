@@ -36,14 +36,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
             set { Set(() => IsAllSelected, ref isAllSelected, value); }
         }
 
-        private DateTime beginDate = DateTime.Today;
-        public DateTime BeginDate
+        private DateTime? beginDate;
+        public DateTime? BeginDate
         {
             get { return beginDate; }
             set { Set(() => BeginDate, ref beginDate, value); }
         }
-        private DateTime endDate = DateTime.Today;
-        public DateTime EndDate
+        private DateTime? endDate;
+        public DateTime? EndDate
         {
             get { return endDate; }
             set { Set(() => EndDate, ref endDate, value); }
@@ -133,7 +133,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
                 UnCheckCash = Convert.ToInt32(UnSelectCount > 0 ? SelectTable.Compute("Sum(JouDet_Amount)", "IsChecked = false") : 0);
             }
         }
-        private void FilterAction()
+        public void FilterAction()
         {
             if (SoureTable != null && SoureTable.Rows.Count > 0)
             {
@@ -143,7 +143,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
                 foreach (DataRow dr in SoureTable.Rows)
                 {
                     DateTime date = Convert.ToDateTime(dr["JouMas_Date"]);
-                    if (DateTime.Compare(beginDate, date) <= 0 && DateTime.Compare(endDate, date) >= 0)
+                    if (beginDate == null || endDate == null)
+                    {
+                        if (beginDate == null && endDate != null)
+                        {
+                            SelectTable.ImportRow(dr);
+                            continue;
+                        }
+                        else if (beginDate != null && endDate == null)
+                        {
+                            if (DateTime.Compare((DateTime)beginDate, date) <= 0)
+                            {
+                                SelectTable.ImportRow(dr);
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            SelectTable.ImportRow(dr);
+                            continue;
+                        }
+                    }
+
+                    if (DateTime.Compare((DateTime)beginDate, date) <= 0 && DateTime.Compare((DateTime)endDate, date) >= 0)
                     {
                         SelectTable.ImportRow(dr);
                     }

@@ -26,6 +26,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow
         {
             InitializeComponent();
             ((FromSourceViewModel)DataContext).SoureTable = table;
+            ((FromSourceViewModel)DataContext).FilterAction();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 switch (notificationMessage.Notification)

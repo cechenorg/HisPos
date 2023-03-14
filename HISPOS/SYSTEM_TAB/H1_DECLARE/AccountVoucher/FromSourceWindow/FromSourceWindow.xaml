@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.FromSourceWindow"
         mc:Ignorable="d"
-        xmlns:service="clr-namespace:His_Pos.Service"
+        xmlns:service="clr-namespace:His_Pos.Service" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="選擇來源"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -24,15 +24,21 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
             <Label VerticalAlignment="Center" Content="日期:" FontSize="18" />
-            <DatePicker Width="120" Language="zh-cn" FontSize="16"
-                    HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Text="{Binding BeginDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            </DatePicker>
+            <xctk:MaskedTextBox Width="100" Height="35" FontSize="16" InputScope="Number" PromptChar="-" Mask="0000/00/00"
+                        HorizontalContentAlignment="Center" InsertKeyMode="Overwrite"
+                        InputMethod.IsInputMethodEnabled="False"
+                        Style="{StaticResource MaterialDesignTextBox}">
+                <Binding Mode="TwoWay" NotifyOnValidationError="True" StringFormat="yyyy/MM/dd" Path="BeginDate" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                </Binding>
+            </xctk:MaskedTextBox>
             <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="~" FontSize="18" />
-            <DatePicker Width="120" Language="zh-cn" FontSize="16"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                    Text="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            </DatePicker>
+            <xctk:MaskedTextBox Width="100" Height="35" FontSize="16" InputScope="Number" PromptChar="-" Mask="0000/00/00"
+                        HorizontalContentAlignment="Center" InsertKeyMode="Overwrite"
+                        InputMethod.IsInputMethodEnabled="False"
+                        Style="{StaticResource MaterialDesignTextBox}">
+                <Binding Mode="TwoWay" NotifyOnValidationError="True" StringFormat="yyyy/MM/dd" Path="EndDate" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                </Binding>
+            </xctk:MaskedTextBox>
             <Button Width="80" BorderThickness="0" FontSize="16" Content="查詢" Background="RoyalBlue"
                 Command="{Binding FilterCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="30,10,10,0"/>
