@@ -326,7 +326,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="335" Header="摘要" >
+                                <DataGridTemplateColumn Width="310" Header="摘要" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_Memo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
@@ -473,7 +473,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="335" Header="摘要" >
+                                <DataGridTemplateColumn Width="310" Header="摘要" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_Memo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
