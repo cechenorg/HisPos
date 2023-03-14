@@ -315,7 +315,7 @@ namespace His_Pos.NewClass.Report.Accounts
             parameters.Add(new SqlParameter("DetType", detail.JouDet_Type));
             parameters.Add(new SqlParameter("DetAcctLvl1", Convert.ToString(detail.Account.acctLevel1).PadLeft(1, '0')));
             parameters.Add(new SqlParameter("DetAcctLvl2", Convert.ToString(detail.Account.acctLevel2).PadLeft(4, '0')));
-            parameters.Add(new SqlParameter("DetAcctLvl3", Convert.ToString(detail.Account.acctLevel3).PadLeft(4, '0')));
+            parameters.Add(new SqlParameter("DetAcctLvl3", string.IsNullOrEmpty(Convert.ToString(detail.Account.acctLevel3)) ? null : Convert.ToString(detail.Account.acctLevel3).PadLeft(4, '0')));
             DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[JournalWriteOff]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             return table;
