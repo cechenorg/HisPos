@@ -466,7 +466,17 @@ namespace His_Pos.NewClass.Report.Accounts
 
                 IF @AccBalDate IS NULL
                 BEGIN
+	                SELECT TOP 1 @AccBalDate=AccBal_Date,@AccBalAmount = AccBal_Amount
+		            FROM [{0}].[dbo].[AccountsBalance]
+	                WHERE AccBal_AcctLvl1 = @AcctLvl1
+	                AND AccBal_AcctLvl2 = @AcctLvl2
+	                AND AccBal_AcctLvl3 = @AcctLvl3
+	                ORDER BY AccBal_Date
+
+	                IF @AccBalDate >= @sDate
+	                BEGIN
 	                SET @AccBalDate = dateadd(d,-1,@sDate)
+	                END
                 END
                 IF @AccBalAmount IS NULL
                 BEGIN
