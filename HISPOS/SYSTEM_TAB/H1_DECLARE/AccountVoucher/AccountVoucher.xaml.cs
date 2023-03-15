@@ -91,29 +91,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 return;
             }
             DataTable sourceTable = AccountsDb.GetSourceData(currentDetail);
-            //DataTable sourceTable = tb.Clone();
 
-            foreach (JournalDetail item in currentViewModel.CurrentVoucher.DebitDetails)
+            if (sourceTable != null && sourceTable.Rows.Count > 0)
             {
-                if (item != currentDetail)
+                foreach (JournalDetail item in currentViewModel.CurrentVoucher.DebitDetails)
                 {
-                    if (!string.IsNullOrEmpty(item.JouDet_WriteOffID))
+                    if (item != currentDetail)
                     {
-                        DataRow[] drs = sourceTable.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = '{1}' And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID));
-                        if (drs != null && drs.Count() > 0)
+                        if (!string.IsNullOrEmpty(item.JouDet_WriteOffID))
                         {
-                            foreach (DataRow dr in drs)
+                            DataRow[] drs = sourceTable.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = '{1}' And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID));
+                            if (drs != null && drs.Count() > 0)
                             {
-                                sourceTable.Rows.Remove(dr);
+                                foreach (DataRow dr in drs)
+                                {
+                                    sourceTable.Rows.Remove(dr);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-
-            if (sourceTable != null && sourceTable.Rows.Count > 0)
-            {
                 DataColumn dc = new DataColumn("IsChecked", typeof(bool));
                 sourceTable.Columns.Add(dc);
                 sourceTable.Columns["IsChecked"].DefaultValue = false;
