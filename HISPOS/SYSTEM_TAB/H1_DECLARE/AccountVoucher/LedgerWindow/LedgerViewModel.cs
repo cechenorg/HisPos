@@ -200,13 +200,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.LedgerWindow
                 List<string> header_en_name = new List<string>();
                 if (LedgerType == 0)
                 {
-                    header_ch_name = new List<string>() { "藥局名稱", "會計科目代號1", "會計科目代號2", "會計科目代號3", "會計科目完整名稱", "傳票日期", "單據來源", "傳票號碼", "借方/貸方", "項次", "金額", "摘要", "來源單號", "備註", "登錄時間", "登錄人", "最後修改時間", "最後修改人" };
-                    header_en_name = new List<string>() { "CurPha_Name", "JouDet_AcctLvl1", "JouDet_AcctLvl2", "JouDet_AcctLvl3", "JouDet_AcctName", "JouMas_Date", "JouMas_Source", "JouMas_ID", "JouDet_Type", "JouDet_Number", "JouDet_Amount", "JouDet_Memo", "JouDet_SourceID", "JouMas_Memo", "JouMas_InsertTime", "InsertEmpName", "JouMas_ModifyTime", "ModifyEmpName" };
+                    header_ch_name = new List<string>() { "藥局名稱", "傳票日期", "單據來源", "傳票號碼", "借方/貸方", "項次", "會計科目代號1", "會計科目代號2", "會計科目代號3", "會計科目完整名稱", "金額", "摘要", "來源單號", "備註", "登錄時間", "登錄人", "最後修改時間", "最後修改人" };
+                    header_en_name = new List<string>() { "CurPha_Name", "JouMas_Date", "JouMas_Source", "JouMas_ID", "JouDet_Type", "JouDet_Number", "JouDet_AcctLvl1", "JouDet_AcctLvl2", "JouDet_AcctLvl3", "JouDet_AcctName", "JouDet_Amount", "JouDet_Memo", "JouDet_SourceID", "JouMas_Memo", "JouMas_InsertTime", "InsertEmpName", "JouMas_ModifyTime", "ModifyEmpName" };
                 }
                 else
                 {
-                    header_ch_name = new List<string>() { "藥局名稱", "會計科目代號1", "會計科目代號2", "會計科目代號3", "會計科目完整名稱", "傳票日期", "單據來源", "傳票號碼", "項次", "借方金額", "貸方金額", "餘額", "摘要", "來源單號", "備註", "登錄時間", "登錄人", "最後修改時間", "最後修改人" };
-                    header_en_name = new List<string>() { "CurPha_Name", "JouDet_AcctLvl1", "JouDet_AcctLvl2", "JouDet_AcctLvl3", "JouDet_AcctName", "JouMas_Date", "JouMas_Source", "JouMas_ID", "JouDet_Number", "DAmount", "CAmount", "Balance", "JouDet_Amount", "JouDet_Memo", "JouDet_SourceID", "JouMas_Memo", "JouMas_InsertTime", "InsertEmpName", "JouMas_ModifyTime", "ModifyEmpName" };
+                    header_ch_name = new List<string>() { "藥局名稱", "傳票日期", "單據來源", "傳票號碼", "借方/貸方", "項次", "會計科目代號1", "會計科目代號2", "會計科目代號3", "會計科目完整名稱", "借方金額", "貸方金額", "餘額", "摘要", "來源單號", "備註", "登錄時間", "登錄人", "最後修改時間", "最後修改人" };
+                    header_en_name = new List<string>() { "CurPha_Name", "JouMas_Date", "JouMas_Source", "JouMas_ID", "JouDet_Type", "JouDet_Number", "JouDet_AcctLvl1", "JouDet_AcctLvl2", "JouDet_AcctLvl3", "JouDet_AcctName", "DAmount", "CAmount", "Balance", "JouDet_Memo", "JouDet_SourceID", "JouMas_Memo", "JouMas_InsertTime", "InsertEmpName", "JouMas_ModifyTime", "ModifyEmpName" };
                 }
 
                 DataTable table = new DataTable();
