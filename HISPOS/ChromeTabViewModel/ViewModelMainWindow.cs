@@ -150,6 +150,7 @@ namespace His_Pos.ChromeTabViewModel
         public static Positions Positions { get; set; }
         public static int StoreOrderDays { get; set; }
         public static bool PreAdjustDateControl { get; set; }
+        public static bool AutoAddJournal { get; set; }
         public static DateTime ClosingDate { get; set; }
         public static DateTime PrescriptionCloseDate { get; set; }
         public static Pharmacy CurrentPharmacy { get; set; }
@@ -178,6 +179,10 @@ namespace His_Pos.ChromeTabViewModel
                 if (table.Select("SysPar_Name = 'PreAdjustDateControl'").Count() > 0)
                 {
                     PreAdjustDateControl = Convert.ToBoolean(Convert.ToInt32(table.Select("SysPar_Name = 'PreAdjustDateControl'")[0]["SysPar_Value"]));
+                }
+                if (table.Select("SysPar_Name = 'AutoAddJournal'").Count() > 0)
+                {
+                    AutoAddJournal = Convert.ToBoolean(Convert.ToInt32(table.Select("SysPar_Name = 'AutoAddJournal'")[0]["SysPar_Value"]));
                 }
             }
 
