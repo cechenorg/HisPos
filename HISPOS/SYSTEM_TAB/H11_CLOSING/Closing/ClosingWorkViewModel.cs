@@ -588,6 +588,10 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             }
             ReloadAction();
             InsertToClosingAccoutRecord();
+            if (VM.AutoAddJournal)
+            {
+                InsertJournal();
+            }
         }
 
         private void InsertToClosingAccoutRecord()
@@ -636,7 +640,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 }
                 else
                 {
-                    ClosingWorkDB.SetClosingWorkToJournal(StartDate);
+                    InsertJournal();
                     table = ClosingWorkDB.GetClosingWorkToJournal(StartDate);
                     if (table != null && table.Rows.Count > 0)
                     {
@@ -645,7 +649,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                         {
                             orderID += Convert.ToString(dr["JouMas_ID"]) + "\r\n";
                         }
-                        MessageWindow.ShowMessage(string.Format("關班傳票新增成功\r\n{0}", orderID), MessageType.ERROR);
+                        MessageWindow.ShowMessage(string.Format("關班傳票新增成功\r\n{0}", orderID), MessageType.SUCCESS);
                         return;
                     }
                 }
@@ -655,6 +659,10 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 MessageWindow.ShowMessage("尚未關班", MessageType.ERROR);
                 return;
             }
+        }
+        private void InsertJournal()
+        {
+            ClosingWorkDB.SetClosingWorkToJournal(StartDate);
         }
         private void ClearCheckBox()
         {
