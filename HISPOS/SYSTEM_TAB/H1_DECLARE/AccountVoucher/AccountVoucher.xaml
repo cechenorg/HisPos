@@ -444,7 +444,7 @@
                                 <DataGridTemplateColumn Header="項次" Width="45">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <HierarchicalDataTemplate>
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding JouDet_Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding JouDet_RowNo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                         </HierarchicalDataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
