@@ -130,7 +130,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     {
                         DataRow[] selectRow = table.Select("IsChecked = true");
                         int i = (((JournalDetail)textBox.DataContext).JouDet_Type == "D") ?
-                            currentViewModel.CurrentVoucher.DebitDetails.Count + 1 : currentViewModel.CurrentVoucher.CreditDetails.Count + 1;
+                            currentViewModel.CurrentVoucher.DebitDetails.Max(m => m.JouDet_Number) + 1 : currentViewModel.CurrentVoucher.CreditDetails.Max(m => m.JouDet_Number) + 1;
                         bool updCurrentRow = true;
                         foreach (DataRow dr in selectRow)
                         {
@@ -142,18 +142,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                                     index = currentViewModel.CurrentVoucher.DebitDetails.IndexOf(currentDetail);
                                     currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Amount = Convert.ToInt32(dr["JouDet_Amount"]);
                                     currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_SourceID = Convert.ToString(dr["JouDet_SourceID"]);
-                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Source = "StoOrd_ID";
+                                    currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Source = Convert.ToString(dr["JouDet_Source"]);
                                     currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_WriteOffID = Convert.ToString(dr["JouDet_ID"]);
                                     currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_WriteOffNumber = Convert.ToInt32(dr["JouDet_Number"]);
+                                    if (string.IsNullOrEmpty(currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Memo))
+                                    {
+                                        currentViewModel.CurrentVoucher.DebitDetails[index].JouDet_Memo = Convert.ToString(dr["JouDet_Memo"]);
+                                    }
                                 }
                                 else
                                 {
                                     index = currentViewModel.CurrentVoucher.CreditDetails.IndexOf(currentDetail);
                                     currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_Amount = Convert.ToInt32(dr["JouDet_Amount"]);
                                     currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_SourceID = Convert.ToString(dr["JouDet_SourceID"]);
-                                    currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_Source = "StoOrd_ID";
+                                    currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_Source = Convert.ToString(dr["JouDet_Source"]);
                                     currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_WriteOffID = Convert.ToString(dr["JouDet_ID"]);
                                     currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_WriteOffNumber = Convert.ToInt32(dr["JouDet_Number"]);
+                                    if (string.IsNullOrEmpty(currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_Memo))
+                                    {
+                                        currentViewModel.CurrentVoucher.CreditDetails[index].JouDet_Memo = Convert.ToString(dr["JouDet_Memo"]);
+                                    }
                                 }
                                 updCurrentRow = false;
                             }
@@ -170,6 +178,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                                 detail.JouDet_SourceID = Convert.ToString(dr["JouDet_SourceID"]);
                                 detail.JouDet_WriteOffID = Convert.ToString(dr["JouDet_ID"]);
                                 detail.JouDet_WriteOffNumber = Convert.ToInt32(dr["JouDet_Number"]);
+                                detail.JouDet_Memo = Convert.ToString(dr["JouDet_Memo"]);
                                 if (((JournalDetail)textBox.DataContext).JouDet_Type == "D")
                                 {
                                     currentViewModel.CurrentVoucher.DebitDetails.Add(detail);
@@ -249,6 +258,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 item.JouDet_WriteOffNumber = 0;
                 item.JouDet_SourceID = string.Empty;
                 item.JouDet_Source = string.Empty;
+            }
+        }
+
+        private void ComboBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ComboBox box = (ComboBox)sender;
+            if (!box.IsDropDownOpen)
+            {
+                e.Handled = true;
             }
         }
     }

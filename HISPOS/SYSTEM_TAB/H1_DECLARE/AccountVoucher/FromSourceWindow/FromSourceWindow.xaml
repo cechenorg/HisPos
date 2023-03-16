@@ -9,7 +9,7 @@
         Title="選擇來源"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Height="550" Width="900">
+        Height="550" Width="1000">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
@@ -48,7 +48,7 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <DataGrid
-                Width="885"
+                Width="990"
                 AutoGenerateColumns="False"
                 Background="{StaticResource GridBackGround}"
                 CanUserAddRows="False"
@@ -177,6 +177,18 @@
                         Width="150"
                         Binding="{Binding Path=JouDet_Amount, StringFormat=N0}"
                         Header="金額"
+                        IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Width="auto"
+                        Binding="{Binding Path=JouDet_Memo}"
+                        Header="摘要"
                         IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
