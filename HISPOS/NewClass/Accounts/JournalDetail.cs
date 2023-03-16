@@ -10,6 +10,15 @@ namespace His_Pos.NewClass.Accounts
 {
     public class JournalDetail : ObservableObject
     {
+        private int jouDet_RowNo;
+        public int JouDet_RowNo
+        {
+            get => jouDet_RowNo;
+            set
+            {
+                Set(() => JouDet_RowNo, ref jouDet_RowNo, value);
+            }
+        }
         private string jouDet_ID;
         public string JouDet_ID
         {

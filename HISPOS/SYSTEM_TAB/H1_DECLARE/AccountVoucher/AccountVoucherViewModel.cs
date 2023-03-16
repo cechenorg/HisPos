@@ -324,6 +324,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             item.Accounts = detail.Accounts;
             item.Account = detail.Account;
             item.JouDet_Memo = detail.JouDet_Memo;
+            item.JouDet_Amount = detail.JouDet_Amount;
             if (isDebit)
             {
                 CurrentVoucher.DebitDetails.Add(item);
@@ -442,10 +443,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                         case "0":
                             CurrentVoucher.DebitDetails.Remove(CurrentVoucher.SelectedDebitDetail);
                             CurrentVoucher.DebitTotalAmount = (int)CurrentVoucher.DebitDetails.Sum(s => s.JouDet_Amount);
+                            int i = 1;
+                            foreach (JournalDetail item in CurrentVoucher.DebitDetails)
+                            {
+                                item.JouDet_RowNo = i;
+                                i++;
+                            }
                             break;
                         case "1":
                             CurrentVoucher.CreditDetails.Remove(CurrentVoucher.SelectedCreditDetail);
                             CurrentVoucher.CreditTotalAmount = (int)CurrentVoucher.CreditDetails.Sum(s => s.JouDet_Amount);
+                            int j = 1;
+                            foreach (JournalDetail item in CurrentVoucher.CreditDetails)
+                            {
+                                item.JouDet_RowNo = j;
+                                j++;
+                            }
                             break;
                     }
                 }
@@ -461,7 +474,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     detail.Accounts = AccountsDb.GetJournalAccount("傳票作業");
                     detail.JouDet_ID = CurrentVoucher.JouMas_ID;
                     detail.JouDet_Type = gridCondition.Equals("0") ? "D" : "C";
-                    detail.JouDet_Number = gridCondition.Equals("0") ? CurrentVoucher.DebitDetails.Count + 1 : CurrentVoucher.CreditDetails.Count + 1;
+                    if ((gridCondition.Equals("0") ? CurrentVoucher.DebitDetails.Count() : CurrentVoucher.CreditDetails.Count()) > 0)
+                    {
+                        detail.JouDet_Number = gridCondition.Equals("0") ? CurrentVoucher.DebitDetails.Max(m => m.JouDet_Number) + 1 : CurrentVoucher.CreditDetails.Max(m => m.JouDet_Number) + 1;
+                        detail.JouDet_RowNo = gridCondition.Equals("0") ? CurrentVoucher.DebitDetails.Max(m => m.JouDet_RowNo) + 1 : CurrentVoucher.CreditDetails.Max(m => m.JouDet_RowNo) + 1;
+                    }
+                    else
+                    {
+                        detail.JouDet_Number = 1;
+                        detail.JouDet_RowNo = 1;
+                    }
                     switch (gridCondition)
                     {
                         case "0":
@@ -788,6 +810,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 
             IEnumerable<JournalAccount> orgAccounts = AccountsDb.GetJournalAccount("ALL");
 
+            int rowNoD = 1;
+            int rowNoC = 1;
             foreach (JournalDetail item in details)
             {
                 string level1 = item.JouDet_AcctLvl1;
@@ -807,11 +831,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 }
                 if (item.JouDet_Type.Equals("D"))
                 {
+                    item.JouDet_RowNo = rowNoD;
                     CurrentVoucher.DebitDetails.Add(item);
+                    rowNoD++;
                 }
                 else
                 {
+                    item.JouDet_RowNo = rowNoC;
                     CurrentVoucher.CreditDetails.Add(item);
+                    rowNoC++;
                 }
             }
             CurrentVoucher.DebitTotalAmount = (int)CurrentVoucher.DebitDetails.Sum(s => s.JouDet_Amount);

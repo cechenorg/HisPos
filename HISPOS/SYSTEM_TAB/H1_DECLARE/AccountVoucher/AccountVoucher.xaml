@@ -70,6 +70,7 @@
             <Label Margin="20,0,0,0" VerticalAlignment="Center" Content="會計科目:" FontSize="18" />
             <ComboBox Width="450" FontSize="18" IsEditable="True" IsTextSearchEnabled="False"
                 DisplayMemberPath="AcctFullName" KeyUp="ComboBox_KeyUp" StaysOpenOnEdit="True"
+                      PreviewMouseWheel="ComboBox_PreviewMouseWheel"
                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBox.ItemsPanel>
@@ -294,7 +295,7 @@
                                 <DataGridTemplateColumn Header="項次" Width="45">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <HierarchicalDataTemplate>
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding JouDet_Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding JouDet_RowNo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                         </HierarchicalDataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -303,6 +304,7 @@
                                         <HierarchicalDataTemplate>
                                             <ComboBox Width="Auto" FontSize="16" IsEditable="True" KeyUp="ComboBox_KeyUp" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" SelectedIndex="-1" IsTextSearchEnabled="False"
                                                 DisplayMemberPath="AcctFullName" DropDownOpened="ComboBox_DropDownOpened" DropDownClosed="ComboBox_DropDownClosed"
+                                                      PreviewMouseWheel="ComboBox_PreviewMouseWheel"
                                                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                 SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                 <ComboBox.ItemsPanel>
@@ -451,6 +453,7 @@
                                         <HierarchicalDataTemplate>
                                             <ComboBox Width="Auto" FontSize="16" IsEditable="True" KeyUp="ComboBox_KeyUp" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" SelectedIndex="-1" IsTextSearchEnabled="False"
                                                 DisplayMemberPath="AcctFullName" DropDownOpened="ComboBox_DropDownOpened" DropDownClosed="ComboBox_DropDownClosed"
+                                                      PreviewMouseWheel="ComboBox_PreviewMouseWheel"
                                                 ItemsSource="{Binding Accounts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                 SelectedItem="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                 <ComboBox.ItemsPanel>
