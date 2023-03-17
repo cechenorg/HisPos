@@ -393,9 +393,10 @@ namespace His_Pos.NewClass.Prescription
             //第一行
             dtlData.Append(p.ID.ToString().PadLeft(8, '0')); //藥局病歷號
             dtlData.Append(p.Patient.Name.PadRight(20 - NewFunction.HowManyChinese(p.Patient.Name), ' ')); //病患姓名
-            dtlData.Append(p.Patient.IDNumber.PadRight(10, ' ')); //身分證字號
+            dtlData.Append(p.Patient.IDNumber.Substring(0, 2).PadRight(10, '0')); //身分證字號
             Debug.Assert(p.Patient.Birthday != null, "p.Patient.Birthday != null");
-            dtlData.Append(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday)); //出生年月日
+            //dtlData.Append(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday)); //出生年月日
+            dtlData.Append("0000000"); //出生年月日
             p.Patient.CheckGender();
             var gender = p.Patient.Gender.Equals("男") ? "1" : "2";
             dtlData.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
