@@ -20,10 +20,11 @@
     <xctk:BusyIndicator BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Margin="10" Background="{StaticResource GridDarkerBackGround}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350" />
@@ -266,7 +267,7 @@
                 DataContext="{Binding DeclareFile.SelectedDayPreview, UpdateSourceTrigger=PropertyChanged}"
                 Orientation="Vertical">
                 <StackPanel
-                    Height="80"
+                    Height="70"
                     Margin="10,10,10,5"
                     Orientation="Horizontal">
                     <StackPanel Orientation="Horizontal">
@@ -520,14 +521,15 @@
                 <Label
                     Margin="10,0,0,0"
                     Content="異常結案 :"
-                    Style="{StaticResource BoldLabelContent16}" />
+                    Style="{StaticResource BoldLabelContent16}" 
+                    FontSize="15" />
                 <Label
                     Width="70"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
                     Content="{Binding NotDeclareCount, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="16" />
+                    FontSize="15" />
                 <Label
                     Margin="10,0,0,0"
                     Content="一般箋 :"
@@ -540,7 +542,7 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16" />
                 <Label
-                    Margin="10,0,0,0"
+                    Margin="50,0,0,0"
                     Content="一般點數 :"
                     Style="{StaticResource BoldLabelContent16}" />
                 <Label
@@ -551,7 +553,39 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16" />
                 <Label
-                    Margin="10,0,0,0"
+                    Margin="50,0,0,0"
+                    Content="總藥品點數 :"
+                    Style="{StaticResource BoldLabelContent16}" />
+                <Label
+                    Width="70"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Left"
+                    Content="{Binding TotalMedPoint, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16" />
+                <Label
+                    Margin="66,0,0,0"
+                    Content="申報件數 :"
+                    Style="{StaticResource BoldLabelContent16}" />
+                <Label
+                    Width="100"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Left"
+                    Content="{Binding DeclareCount, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,0,10,0"
+                Background="{StaticResource Shadow}"
+                DataContext="{Binding DeclareFile, UpdateSourceTrigger=PropertyChanged}"
+                Orientation="Horizontal">
+                <Label
+                    Margin="185,0,0,0"
+                    Width="50"
                     Content="慢箋 :"
                     Style="{StaticResource BoldLabelContent16}" />
                 <Label
@@ -562,7 +596,7 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16" />
                 <Label
-                    Margin="10,0,0,0"
+                    Margin="50,0,0,0"
                     Content="慢箋點數 :"
                     Style="{StaticResource BoldLabelContent16}" />
                 <Label
@@ -573,37 +607,51 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16" />
                 <Label
-                    Margin="10,0,0,0"
-                    Content="申報件數 :"
+                    Margin="50,0,0,0"
+                    Content="總藥服點數 :"
                     Style="{StaticResource BoldLabelContent16}" />
                 <Label
                     Width="70"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
-                    Content="{Binding DeclareCount, UpdateSourceTrigger=PropertyChanged}"
+                    Content="{Binding TotalServerPoint, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16" />
                 <Label
-                    Margin="10,0,0,0"
+                    Margin="50,0,0,0"
                     Content="總申請點數 :"
                     Style="{StaticResource BoldLabelContent16}" />
                 <Label
-                    Width="70"
+                    Width="100"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
                     Content="{Binding TotalDeclarePoint, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="3"
+                Grid.Column="1"
+                Grid.RowSpan="2"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <Button
+                    Width="120"
+                    Margin="0,0,10,0"
+                    Background="DarkCyan"
+                    BorderThickness="0"
+                    Command="{Binding DataContext.ExportDetailCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                    Content="匯出申報明細" />
                 <Button
                     Width="100"
-                    Margin="10,0,0,0"
+                    Margin="0,0,10,0"
                     Background="RoyalBlue"
                     BorderThickness="0"
                     Command="{Binding DataContext.AdjustPharmacistOfMonth, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                     Content="整月調整" />
                 <Button
                     Width="105"
-                    Margin="10,0,10,0"
+                    Margin="0,0,30,0"
                     Background="IndianRed"
                     BorderThickness="0"
                     Command="{Binding DataContext.CreateDeclareFileCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"

@@ -70,7 +70,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
         }
 
         private int normalPoint;
-
+        
         public int NormalPoint
         {
             get => normalPoint;
@@ -108,7 +108,21 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             get => totalDeclarePoint;
             set { Set(() => TotalDeclarePoint, ref totalDeclarePoint, value); }
         }
+        private int totalServerPoint;
 
+        public int TotalServerPoint
+        {
+            get => totalServerPoint;
+            set { Set(() => TotalServerPoint, ref totalServerPoint, value); }
+        }
+
+        private int totalMedPoint;
+
+        public int TotalMedPoint
+        {
+            get => totalMedPoint;
+            set { Set(() => TotalMedPoint, ref totalMedPoint, value); }
+        }
         public DateTime DeclareDate { get; set; }
 
         internal void GetSearchPrescriptions(DateTime sDate, DateTime eDate, string pharmacyID)
@@ -139,6 +153,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             ChronicPoint = chronic.Sum(p => p.ApplyPoint);
             DeclareCount = declareList.Count;
             TotalDeclarePoint = declareList.Sum(p => p.ApplyPoint);
+            TotalMedPoint = declareList.Sum(s => s.MedicinePoint);
+            TotalServerPoint = declareList.Sum(s => s.MedicalServicePoint);
             foreach (var d in DeclarePreviews)
             {
                 var presOfDayDeclareList = d.PresOfDay.Where(p => p.IsDeclare).ToList();

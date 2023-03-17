@@ -13,6 +13,7 @@ using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.Service;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -1221,6 +1222,88 @@ namespace His_Pos.NewClass.Prescription
             SQLServerConnection.DapperQuery((conn) =>
             {
                 result = conn.QueryFirst<string>(sql, commandType: CommandType.Text);
+            });
+            return result;
+        }
+
+        public static DataTable GetDuplicateExport(DateTime sdate, DateTime edate)
+        {
+            DataTable result = null;
+
+            string sql = string.Format(
+                @"DECLARE @sDate date,@eDate date,@pharmacyID nvarchar(15),@CooFlag int	
+                    SET @pharmacyID = '{1}'
+                    SET @sDate = '{2}'
+                    SET @eDate = '{3}'
+                    
+                    
+                SELECT @CooFlag = COUNT(*)
+                FROM [{0}].[HIS].[CooperativeClinic]
+                WHERE [CooCli_ClinicType] = 1 /*合作診所:骨科*/
+                    AND (@sDate BETWEEN CooCli_StartDate AND CooCli_EndDate
+                    OR @eDate BETWEEN CooCli_StartDate AND CooCli_EndDate );
+
+                SELECT PreMas_PharmacyID	/* 藥局機構代號 */
+	                ,PreMas_ID			/* 處方單號 */
+                    ,Cus_Name				/* 病患姓名 */
+	                ,PreMas_InstitutionID	/* 釋出院所機構代號 */
+	                ,Ins_Name				/* 釋出院所 */
+	                ,PreMas_DivisionID	/* 科別代號 */
+	                ,Div_Name				/* 科別 */
+	                ,PreMas_AdjustDate	/* 調劑日期 */
+	                ,Emp_Name				/* 調劑藥師 */
+	                ,PreMas_MedicinePoint	/* 藥品點數 */
+	                ,PreMas_MedicalServicePoint	/* 藥服費 */
+	                ,PreMas_TotalPoint	/* 總點數 */
+	                ,PreMas_AdjustCaseID	/* 案件代號 */
+	                ,Adj_Name				/* 調劑案件 */
+	                ,PreMas_ApplyPoint	/* 申請點數 */
+	                ,PreMas_CopaymentPoint/* 部分負擔 */
+	                ,PreMas_InsertTime	/* 調劑時間 */
+                INTO #tempDeclarePres
+                FROM [{0}].[HIS].[PrescriptionMaster] p
+                INNER JOIN [{0}].[Customer].[Master] c ON p.PreMas_CustomerID = c.Cus_ID
+                INNER JOIN HIS_POS_Server.DataSource.Institution i ON p.PreMas_InstitutionID = i.Ins_ID
+                INNER JOIN HIS_POS_Server.DataSource.Division d ON p.PreMas_DivisionID = d.Div_ID
+                INNER JOIN [{0}].[Employee].[Master] e ON p.PreMas_PharmacistIDNumber = e.Emp_IDNumber
+                INNER JOIN HIS_POS_Server.DataSource.AdjustCase a ON  p.PreMas_AdjustCaseID = a.Adj_ID
+                WHERE p.PreMas_AdjustDate Between @sDate and @eDate
+                AND p.PreMas_IsDeposit = 0
+                AND p.PreMas_AdjustCaseID <> '0'
+                AND p.PreMas_EnableStatus <> 0
+                AND p.PreMas_IsAdjust = 1
+                AND p.PreMas_PharmacyID = @pharmacyID
+
+                IF ISNULL(@CooFlag,0) > 0
+                BEGIN
+	                SELECT p.*,CASE WHEN ISNULL(CashFlow_SourceID,'') <> '' THEN 'Y' ELSE 'N' END AS CooVIP /* 合作診所員眷註記 */
+	                FROM #tempDeclarePres p
+	                LEFT JOIN (	SELECT CashFlow_SourceID
+				                FROM [{0}].[Report].[CashFlow]
+				                WHERE CashFlow_Source = 'PreMasId'
+					            AND CashFlow_IsEnable = 1
+					            AND CashFlow_Name IN ('部分負擔','部分負擔免收')
+					            AND CashFlow_SourceID IN (SELECT PreMas_ID FROM #tempDeclarePres)
+				    GROUP BY CashFlow_SourceID
+				    HAVING SUM(CashFlow_Value) = 0
+	            ) r ON cast(p.PreMas_ID as nvarchar(15)) = r.CashFlow_SourceID
+	            ORDER BY PreMas_AdjustDate,PreMas_InsertTime
+                END
+                ELSE
+                BEGIN
+	                SELECT *
+	                FROM #tempDeclarePres
+	                ORDER BY PreMas_AdjustDate,PreMas_InsertTime
+                END
+
+                DROP TABLE #tempDeclarePres
+                ", Properties.Settings.Default.SystemSerialNumber, ViewModelMainWindow.CurrentPharmacy.ID, sdate.ToString("yyyy-MM-dd"), edate.ToString("yyyy-MM-dd"));
+
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                var dapper = conn.Query(sql, commandType: CommandType.Text);
+                string json = JsonConvert.SerializeObject(dapper);//序列化成JSON
+                result = JsonConvert.DeserializeObject<DataTable>(json);//反序列化成DataTable
             });
             return result;
         }

@@ -1,9 +1,11 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using ClosedXML.Excel;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePharmacy;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
@@ -14,10 +16,12 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using StringRes = His_Pos.Properties.Resources;
 
@@ -162,6 +166,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         public RelayCommand SetDecFilePreViewSummary { get; set; }
         public RelayCommand CreateDeclareFileCommand { get; set; }
         public RelayCommand AddToEditListCommand { get; set; }
+        public RelayCommand ExportDetailCommand { get; set; }
 
         #endregion Commands
 
@@ -206,6 +211,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             SetDecFilePreViewSummary = new RelayCommand(SetDecFilePreViewSummaryAction);
             CreateDeclareFileCommand = new RelayCommand(CreateDeclareFileAction);
             AddToEditListCommand = new RelayCommand(AddToEditListAction);
+            ExportDetailCommand = new RelayCommand(ExportDetailAction);
         }
 
         #endregion Initial
@@ -455,6 +461,67 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             };
             IsBusy = true;
             worker.RunWorkerAsync();
+        }
+
+        private void ExportDetailAction()
+        {
+            DataTable table = PrescriptionDb.GetDuplicateExport(Convert.ToDateTime(DeclareDateStart), Convert.ToDateTime(DeclareDateEnd));
+            if (table is null && table.Rows.Count == 0)
+                return;
+
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog
+            {
+                Title = "申報明細",
+                InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath,
+                Filter = "XLSX檔案|*.xlsx",
+                FileName = string.Format("申報明細_{0}_{1}", Convert.ToDateTime(DeclareDateStart).ToString("yyyyMMdd"), Convert.ToDateTime(DeclareDateEnd).ToString("yyyyMMdd")),
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                var ws = wb.Worksheets.Add("申報明細");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+
+                List<string> headName = new List<string>() { "藥局機構代號", "處方單號", "病患姓名", "釋出院所機構代號", "釋出院所", "科別代號", "科別", "調劑日期", "調劑藥師", "藥品點數", "藥服費", "總點數", "案件代號", "調劑案件", "申請點數", "部分負擔", "調劑時間" };
+                int i = 65;
+                foreach (DataColumn dc in table.Columns)
+                {
+                    string alpha = ((char)i).ToString();
+                    ws.Cell(string.Format("{0}1", alpha)).Value = headName[i - 65];
+                    i++;
+                }
+
+                IXLRange rangeWithData = ws.Cell(2, 1).InsertData(table);
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                ws.Columns().AdjustToContents();//欄位寬度根據資料調整
+
+                try
+                {
+                    wb.SaveAs(fdlg.FileName);
+                    ConfirmWindow cw = new ConfirmWindow("是否開啟檔案", "確認");
+                    if ((bool)cw.DialogResult)
+                    {
+                        myProcess.StartInfo.UseShellExecute = true;
+                        myProcess.StartInfo.FileName = fdlg.FileName;
+                        myProcess.StartInfo.CreateNoWindow = true;
+                        myProcess.Start();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
         }
 
         #endregion Functions
