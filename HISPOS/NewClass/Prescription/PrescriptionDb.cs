@@ -1226,7 +1226,7 @@ namespace His_Pos.NewClass.Prescription
             return result;
         }
 
-        public static DataTable GetDuplicateExport(DateTime sdate, DateTime edate)
+        public static DataTable GetDuplicateExport(DateTime sdate, DateTime edate, string pharmacyID)
         {
             DataTable result = null;
 
@@ -1297,7 +1297,7 @@ namespace His_Pos.NewClass.Prescription
                 END
 
                 DROP TABLE #tempDeclarePres
-                ", Properties.Settings.Default.SystemSerialNumber, ViewModelMainWindow.CurrentPharmacy.ID, sdate.ToString("yyyy-MM-dd"), edate.ToString("yyyy-MM-dd"));
+                ", Properties.Settings.Default.SystemSerialNumber, pharmacyID, sdate.ToString("yyyy-MM-dd"), edate.ToString("yyyy-MM-dd"));
 
             SQLServerConnection.DapperQuery((conn) =>
             {

@@ -465,7 +465,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void ExportDetailAction()
         {
-            DataTable table = PrescriptionDb.GetDuplicateExport(Convert.ToDateTime(DeclareDateStart), Convert.ToDateTime(DeclareDateEnd));
+            DataTable table = PrescriptionDb.GetDuplicateExport(Convert.ToDateTime(DeclareDateStart), Convert.ToDateTime(DeclareDateEnd), SelectedPharmacy.ID);
             if (table is null || table.Rows.Count == 0)
                 return;
 
