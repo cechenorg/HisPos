@@ -1240,8 +1240,8 @@ namespace His_Pos.NewClass.Prescription
                 SELECT @CooFlag = COUNT(*)
                 FROM [{0}].[HIS].[CooperativeClinic]
                 WHERE [CooCli_ClinicType] = 1 /*合作診所:骨科*/
-                    AND (@sDate BETWEEN CooCli_StartDate AND CooCli_EndDate
-                    OR @eDate BETWEEN CooCli_StartDate AND CooCli_EndDate );
+                    AND (@sDate BETWEEN CooCli_StartDate AND Isnull(CooCli_EndDate, GETDATE())
+                    OR @eDate BETWEEN CooCli_StartDate AND Isnull(CooCli_EndDate, GETDATE()) );
 
                 SELECT PreMas_PharmacyID	/* 藥局機構代號 */
 	                ,PreMas_ID			/* 處方單號 */

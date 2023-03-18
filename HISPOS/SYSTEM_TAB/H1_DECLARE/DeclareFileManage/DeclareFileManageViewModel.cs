@@ -488,7 +488,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 var ws = wb.Worksheets.Add("申報明細");
                 ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
 
-                List<string> headName = new List<string>() { "藥局機構代號", "處方單號", "病患姓名", "釋出院所機構代號", "釋出院所", "科別代號", "科別", "調劑日期", "調劑藥師", "藥品點數", "藥服費", "總點數", "案件代號", "調劑案件", "申請點數", "部分負擔", "調劑時間" };
+                List<string> headName = new List<string>() { "藥局機構代號", "處方單號", "病患姓名", "釋出院所機構代號", "釋出院所", "科別代號", "科別", "調劑日期", "調劑藥師", "藥品點數", "藥服費", "總點數", "案件代號", "調劑案件", "申請點數", "部分負擔", "調劑時間", "合作診所員眷註記" };
                 int i = 65;
                 foreach (DataColumn dc in table.Columns)
                 {
