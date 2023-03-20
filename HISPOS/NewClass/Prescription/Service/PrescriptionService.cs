@@ -969,7 +969,8 @@ namespace His_Pos.NewClass.Prescription.Service
         private static void CheckAdminLogin(Prescription selected)
         {
             if (selected is null) return;
-            if (VM.CurrentUser.Authority == DomainModel.Enum.Authority.Admin || VM.CurrentUser.IsPharmist() )
+            List<Authority> auths = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff};
+            if (auths.Contains(VM.CurrentUser.Authority) || VM.CurrentUser.IsPharmist())
             {
                 var title = "處方修改 PreMasID:" + selected.ID;
                 var edit = new PrescriptionEditWindow(selected, title);
