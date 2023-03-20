@@ -11,6 +11,9 @@ using System;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet;
 using His_Pos.NewClass.Report.CashReport;
 using His_Pos.NewClass.BalanceSheet;
+using System.Linq;
+using System.Windows;
+using His_Pos.NewClass.Accounts;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
@@ -69,6 +72,24 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(StrikeValue));
             }
         }
+        public DataTable NoStrikeData { get; set; }
+        public class AccountsLevel
+        {
+            public AccountsLevel(string acct1, string acct2, string acct3, string acctName, int acctValue)
+            {
+                AcctLvl1 = acct1;
+                AcctLvl2 = acct2;
+                AcctLvl3 = acct3;
+                AcctName = acctName;
+                AcctValue = acctValue;
+            }
+            public string AcctLvl1 { get; set; }
+            public string AcctLvl2 { get; set; }
+            public string AcctLvl3 { get; set; }
+            public string AcctName { get; set; }
+            public int AcctValue { get; set; }
+        }
+
 
         private AccountsReport accData;
 
@@ -78,6 +99,16 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             set
             {
                 Set(() => AccData, ref accData, value);
+            }
+        }
+        private List<AccountsLevel> accLvlData;
+
+        public List<AccountsLevel> AccLvlData
+        {
+            get => accLvlData;
+            set
+            {
+                Set(() => AccLvlData, ref accLvlData, value);
             }
         }
 
@@ -122,6 +153,20 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             set
             {
                 Set(() => Selected, ref selected, value);
+            }
+        }
+
+        private AccountsLevel selectLvlData;
+        public AccountsLevel SelectLvlData
+        {
+            get => selectLvlData;
+            set
+            {
+                Set(() => SelectLvlData, ref selectLvlData, value);
+                if (value != null)
+                {
+                    GetNoStrikeData(value.AcctLvl1, value.AcctLvl2, value.AcctLvl3);
+                }
             }
         }
 
@@ -181,8 +226,44 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         #endregion ----- Define Variables -----
+        public NormalViewModel(DataTable table, DataTable noStrikeTable, string id, DateTime endDate)
+        {
+            NoStrikeData = noStrikeTable;
+            EndDate = endDate;
+            AccLvlData = new List<AccountsLevel>();
+            foreach (DataRow dr in table.Rows)
+            {
+                string acctLevel2 = Convert.ToString(dr["acctLevel2"]);
+                if (acctLevel2.Equals(id))
+                {
+                    string acctLvl1 = Convert.ToString(dr["acctLevel1"]);
+                    string acctLvl2 = Convert.ToString(dr["acctLevel2"]);
+                    string acctLvl3 = Convert.ToString(dr["acctLevel3"]);
+                    string acctName = Convert.ToString(dr["acctName3"]);
+                    int acctValue = Convert.ToInt32(dr["acctValue"]);
+                    if (acctValue == 0)
+                        continue;
 
-        public NormalViewModel(string ID,DateTime endDate)
+                    if (!string.IsNullOrEmpty(acctName))
+                    {
+                        if (!AccLvlData.Contains(new AccountsLevel(acctLvl1, acctLvl2, acctLvl3, acctName, acctValue)))
+                        {
+                            AccLvlData.Add(new AccountsLevel(acctLvl1, acctLvl2, acctLvl3, acctName, acctValue));
+                        }
+                    }
+                    else
+                    {
+                        string acctName2 = Convert.ToString(dr["acctName2"]);
+                        if (!AccLvlData.Contains(new AccountsLevel(acctLvl1, acctLvl2, acctLvl3, acctName2, acctValue)))
+                        {
+                            AccLvlData.Add(new AccountsLevel(acctLvl1, acctLvl2, acctLvl3, acctName2, acctValue));
+                        }
+                    }
+                }
+            }
+        }
+        
+        public NormalViewModel(string ID, DateTime endDate)
         {
             AccDataDetail = new AccountsDetailReport();
             SelectedType = new List<AccountsReports>();
@@ -207,6 +288,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             DetailChangeCommand = new RelayCommand(DetailChangeAction);
             StrikeFinalCommand = new RelayCommand<RelayCommand>(StrikeFinalAction);
         }
+        
 
         private void StrikeFinalAction(RelayCommand command)
         {
@@ -274,7 +356,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             //SelectedDetailCopy = SelectDetailClone;
             SelectedDetailindex = nowindex;
         }
-
+        
         public NormalViewModel()
         {
             DataTable table = AccountsDb.GetBankByAccountsID();
@@ -292,7 +374,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         {
 
         }
-
         public void Init()
         {
             AccData = new AccountsReport();
@@ -325,7 +406,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 }
             }
         }
-
+        
         public void DeleteAction()
         {
             if (Selected == null)
@@ -614,6 +695,66 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             table.Columns.Add(dcID);
             table.Columns.Add(dcStrikeValue);
             return table;
+        }
+
+        private void GetNoStrikeData(string acct1, string acct2, string acct3)
+        {
+            //DataTable table = AccountsDb.GetSourceDataInLocal(acct1, acct2, acct3, EndDate);
+            DataRow[] table = NoStrikeData.Select(string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3));
+            
+            DataTable firstData = AccountsDb.GetAccountFirst(acct1, acct2, acct3);
+            int first = 0;
+            DateTime maxDate;
+            DataRow drs = firstData.NewRow();
+            if (firstData != null && firstData.Rows.Count > 0)
+            {
+                maxDate = Convert.ToDateTime(firstData.AsEnumerable().Max(m => m["AccBal_Date"]));
+                drs = firstData.Select(string.Format("AccBal_Date = '{0}'", maxDate)).First();
+                first = drs != null ? Convert.ToInt32(drs["AccBal_Amount"]) : 0;
+            }
+            else
+            {
+                first = 0;
+            }
+            
+            AccDataDetail = new AccountsDetailReport();
+            if (table != null && table.Length > 0)
+            {
+                if (first != 0)
+                {
+                    if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
+                    {
+                        AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM"), Convert.ToDecimal(drs["AccBal_Amount"]), string.Empty));
+                    }
+                    else
+                    {
+                        AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM/dd"), Convert.ToDecimal(drs["AccBal_Amount"]), string.Empty));
+                    }
+                }
+
+                if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
+                {
+                    foreach (DataRow dr in table)
+                    {
+                        string ym = Convert.ToDateTime(dr["JouMas_Date"]).ToString("yyyy/MM");
+                        if (AccDataDetail.Count(c => c.Name.Equals(ym)) > 0)
+                        {
+                            AccDataDetail.Where(w => w.Name.Equals(ym)).First().Value += Convert.ToDecimal(dr["JouDet_Amount"]);
+                        }
+                        else
+                        {
+                            AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(dr["JouMas_Date"]).ToString("yyyy/MM"), Convert.ToDecimal(dr["JouDet_Amount"]), string.Empty));
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (DataRow dr in table)
+                    {
+                        AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(dr["JouMas_Date"]).ToString("yyyy/MM/dd"), Convert.ToDecimal(dr["JouDet_Amount"]), Convert.ToString(dr["JouDet_ID"])));
+                    }
+                }
+            }
         }
 
     }

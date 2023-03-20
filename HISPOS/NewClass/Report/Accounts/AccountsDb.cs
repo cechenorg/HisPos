@@ -4,6 +4,7 @@ using His_Pos.Class;
 using His_Pos.Database;
 using His_Pos.NewClass.Accounts;
 using His_Pos.NewClass.Report.Accounts.AccountsRecordDetails;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -320,6 +321,73 @@ namespace His_Pos.NewClass.Report.Accounts
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
+        public static DataTable GetSourceDataInLocal(DateTime endDate)
+        {
+            DataTable table = new DataTable();
+            string sql = string.Format(@"
+                Declare @date date = '{1}'
+
+                SELECT CASE WHEN ISNULL(a3.acct_ID,'') = '' THEN a1.acct_Name + '(' + a1.acct_ID + ')-' + a2.acct_Name + '(' + a2.acct_ID + ')'
+                ELSE a1.acct_Name + a2.acct_Name + a3.acct_Name + '(' + a1.acct_ID + '-' + a2.acct_ID + '-' + a3.acct_ID + ')' END AS acctFullName
+                , j.*
+                FROM (
+                    SELECT d.JouDet_AcctLvl1, d.JouDet_AcctLvl2, d.JouDet_AcctLvl3
+                    , m.JouMas_Date, d.JouDet_ID, d.JouDet_Number, d.JouDet_SourceID, (d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount
+                    FROM [{0}].[dbo].[JournalMaster] m
+                    INNER JOIN [{0}].[dbo].[JournalDetail] d on m.JouMas_ID = d.JouDet_ID
+                    LEFT JOIN(SELECT JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID, SUM(JouDet_Amount) JouDet_Amount
+                    FROM [{0}].[dbo].[JournalMaster] wm
+                    INNER JOIN [{0}].[dbo].[JournalDetail] wd on wm.JouMas_ID = wd.JouDet_ID
+                    WHERE wm.JouMas_Status = 'F'
+                    AND wm.JouMas_IsEnable = 1
+                    AND wd.JouDet_Type = 'D'
+                    AND JouDet_AcctLvl1 IN ('2','3','4','7')
+                    AND ISNULL(wd.JouDet_WriteOffID,'') <> '' AND ISNULL(wd.JouDet_WriteOffNumber,0) > 0
+                    AND Cast(wm.JouMas_InsertTime as date) <= @date
+                GROUP BY JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID
+                ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber AND d.JouDet_SourceID = w.JouDet_SourceID
+                WHERE JouMas_Status = 'F'
+                AND JouMas_IsEnable = 1
+                AND JouDet_Type = 'C'
+                AND JouDet_AcctLvl1 IN('2','3','4','7')
+                AND(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) <> 0
+                AND Cast(m.JouMas_InsertTime as date) <= @date
+                UNION ALL
+                SELECT d.JouDet_AcctLvl1,d.JouDet_AcctLvl2,d.JouDet_AcctLvl3
+                ,m.JouMas_Date,d.JouDet_ID,d.JouDet_Number,d.JouDet_SourceID,(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount
+                FROM [{0}].[dbo].[JournalMaster] m
+                INNER JOIN [{0}].[dbo].[JournalDetail] d on m.JouMas_ID = d.JouDet_ID
+                LEFT JOIN (SELECT JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID, SUM(JouDet_Amount) JouDet_Amount
+                FROM [{0}].[dbo].[JournalMaster] wm
+                INNER JOIN [{0}].[dbo].[JournalDetail] wd on wm.JouMas_ID = wd.JouDet_ID
+                WHERE wm.JouMas_Status = 'F'
+                AND wm.JouMas_IsEnable = 1
+                AND wd.JouDet_Type = 'C'
+                AND JouDet_AcctLvl1 IN ('1','5','6','8')
+                AND ISNULL(wd.JouDet_WriteOffID,'') <> '' AND ISNULL(wd.JouDet_WriteOffNumber,0) > 0
+                AND Cast(wm.JouMas_InsertTime as date) <= @date
+                GROUP BY JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID
+                ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber AND d.JouDet_SourceID = w.JouDet_SourceID
+                WHERE JouMas_Status = 'F'
+                AND JouMas_IsEnable = 1
+                AND JouDet_Type = 'D'
+                AND JouDet_AcctLvl1 IN('1','5','6','8')
+                AND (d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) <> 0
+                AND Cast(m.JouMas_InsertTime as date) <= @date
+                ) j
+                LEFT JOIN (SELECT* FROM [HIS_POS_Server].[dbo].[Accounts] WHERE acct_Level = '1') a1 ON j.JouDet_AcctLvl1 = a1.acct_ID
+                LEFT JOIN (SELECT* FROM [HIS_POS_Server].[dbo].[Accounts] WHERE acct_Level = '2') a2 ON j.JouDet_AcctLvl1 = a2.acct_PreLevel AND j.JouDet_AcctLvl2 = a2.acct_ID
+                LEFT JOIN (SELECT* FROM [HIS_POS_Server].[dbo].[Accounts] WHERE acct_Level = '3') a3 ON j.JouDet_AcctLvl2 = a3.acct_PreLevel AND j.JouDet_AcctLvl3 = a3.acct_ID
+                ORDER BY 1,2,3,4", Properties.Settings.Default.SystemSerialNumber, endDate.ToString("yyyy-MM-dd"));
+            
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                var dapper = conn.Query(sql, commandType: CommandType.Text);
+                string json = JsonConvert.SerializeObject(dapper);//序列化成JSON
+                table = JsonConvert.DeserializeObject<DataTable>(json);//反序列化成DataTable
+            });
+            return table;
+        }
 
         public static DataTable GetSourceData()
         {
@@ -512,6 +580,21 @@ namespace His_Pos.NewClass.Report.Accounts
                 result = conn.QueryFirst<int>(sql, commandType: CommandType.Text);
             });
             return result;
+        }
+
+        public static DataTable GetAccountFirst(string acct1, string acct2, string acct3)
+        {
+            DataTable table = new DataTable();
+            string sql = string.Format(@"
+                Select * From [{0}].[dbo].[AccountsBalance]
+                Where AccBal_AcctLvl1 = '{1}' and AccBal_AcctLvl2 = '{2}' and AccBal_AcctLvl3 = '{3}'", Properties.Settings.Default.SystemSerialNumber, acct1, acct2, acct3);
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                var dapper = conn.Query(sql, commandType: CommandType.Text);
+                string json = JsonConvert.SerializeObject(dapper);//序列化成JSON
+                table = JsonConvert.DeserializeObject<DataTable>(json);//反序列化成DataTable
+            });
+            return table;
         }
     }
 }
