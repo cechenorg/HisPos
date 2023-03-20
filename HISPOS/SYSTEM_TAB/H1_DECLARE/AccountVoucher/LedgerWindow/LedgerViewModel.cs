@@ -165,10 +165,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.LedgerWindow
             if (LedgerType == 1)
             {
                 int first = AccountsDb.GetLedgerFirst(BeginDate, acct1, acct2, acct3);
-                foreach (LedgerDetail item in Details)
+                List<string> posNum = new List<string>() { "1", "5", "6", "8" };
+                if (posNum.Contains(acct1))
                 {
-                    item.Balance = first + item.DAmount - item.CAmount;
-                    first = item.Balance;
+                    foreach (LedgerDetail item in Details)
+                    {
+                        item.Balance = first + item.DAmount - item.CAmount;
+                        first = item.Balance;
+                    }
+                }
+                else
+                {
+                    foreach (LedgerDetail item in Details)
+                    {
+                        item.Balance = first - item.DAmount + item.CAmount;
+                        first = item.Balance;
+                    }
                 }
             }
         }
