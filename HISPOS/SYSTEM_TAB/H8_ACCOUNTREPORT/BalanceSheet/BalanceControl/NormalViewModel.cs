@@ -700,7 +700,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         private void GetNoStrikeData(string acct1, string acct2, string acct3)
         {
             //DataTable table = AccountsDb.GetSourceDataInLocal(acct1, acct2, acct3, EndDate);
-            DataRow[] table = NoStrikeData.Select(string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3));
+            DataRow[] table = NoStrikeData.Select(string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3), "JouMas_Date");
             
             DataTable firstData = AccountsDb.GetAccountFirst(acct1, acct2, acct3);
             int first = 0;
@@ -718,20 +718,21 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
             
             AccDataDetail = new AccountsDetailReport();
+
+            if (first != 0)
+            {
+                if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
+                {
+                    AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM"), Convert.ToDecimal(drs["AccBal_Amount"]), string.Empty));
+                }
+                else
+                {
+                    AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM/dd"), Convert.ToDecimal(drs["AccBal_Amount"]), string.Empty));
+                }
+            }
+
             if (table != null && table.Length > 0)
             {
-                if (first != 0)
-                {
-                    if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
-                    {
-                        AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM"), Convert.ToDecimal(drs["AccBal_Amount"]), string.Empty));
-                    }
-                    else
-                    {
-                        AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM/dd"), Convert.ToDecimal(drs["AccBal_Amount"]), string.Empty));
-                    }
-                }
-
                 if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
                 {
                     foreach (DataRow dr in table)

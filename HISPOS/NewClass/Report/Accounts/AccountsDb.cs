@@ -327,12 +327,9 @@ namespace His_Pos.NewClass.Report.Accounts
             string sql = string.Format(@"
                 Declare @date date = '{1}'
 
-                SELECT CASE WHEN ISNULL(a3.acct_ID,'') = '' THEN a1.acct_Name + '(' + a1.acct_ID + ')-' + a2.acct_Name + '(' + a2.acct_ID + ')'
-                ELSE a1.acct_Name + a2.acct_Name + a3.acct_Name + '(' + a1.acct_ID + '-' + a2.acct_ID + '-' + a3.acct_ID + ')' END AS acctFullName
-                , j.*
+                SELECT j.*
                 FROM (
-                    SELECT d.JouDet_AcctLvl1, d.JouDet_AcctLvl2, d.JouDet_AcctLvl3
-                    , m.JouMas_Date, d.JouDet_ID, d.JouDet_Number, d.JouDet_SourceID, (d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount
+                    SELECT d.JouDet_AcctLvl1, d.JouDet_AcctLvl2, d.JouDet_AcctLvl3, m.JouMas_Date, d.JouDet_ID,(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount
                     FROM [{0}].[dbo].[JournalMaster] m
                     INNER JOIN [{0}].[dbo].[JournalDetail] d on m.JouMas_ID = d.JouDet_ID
                     LEFT JOIN(SELECT JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID, SUM(JouDet_Amount) JouDet_Amount
@@ -345,7 +342,7 @@ namespace His_Pos.NewClass.Report.Accounts
                     AND ISNULL(wd.JouDet_WriteOffID,'') <> '' AND ISNULL(wd.JouDet_WriteOffNumber,0) > 0
                     AND Cast(wm.JouMas_InsertTime as date) <= @date
                 GROUP BY JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID
-                ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber AND d.JouDet_SourceID = w.JouDet_SourceID
+                ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber
                 WHERE JouMas_Status = 'F'
                 AND JouMas_IsEnable = 1
                 AND JouDet_Type = 'C'
@@ -353,8 +350,7 @@ namespace His_Pos.NewClass.Report.Accounts
                 AND(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) <> 0
                 AND Cast(m.JouMas_InsertTime as date) <= @date
                 UNION ALL
-                SELECT d.JouDet_AcctLvl1,d.JouDet_AcctLvl2,d.JouDet_AcctLvl3
-                ,m.JouMas_Date,d.JouDet_ID,d.JouDet_Number,d.JouDet_SourceID,(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount
+                SELECT d.JouDet_AcctLvl1,d.JouDet_AcctLvl2,d.JouDet_AcctLvl3,m.JouMas_Date,d.JouDet_ID,(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount
                 FROM [{0}].[dbo].[JournalMaster] m
                 INNER JOIN [{0}].[dbo].[JournalDetail] d on m.JouMas_ID = d.JouDet_ID
                 LEFT JOIN (SELECT JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID, SUM(JouDet_Amount) JouDet_Amount
@@ -367,7 +363,7 @@ namespace His_Pos.NewClass.Report.Accounts
                 AND ISNULL(wd.JouDet_WriteOffID,'') <> '' AND ISNULL(wd.JouDet_WriteOffNumber,0) > 0
                 AND Cast(wm.JouMas_InsertTime as date) <= @date
                 GROUP BY JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID
-                ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber AND d.JouDet_SourceID = w.JouDet_SourceID
+                ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber
                 WHERE JouMas_Status = 'F'
                 AND JouMas_IsEnable = 1
                 AND JouDet_Type = 'D'
@@ -375,9 +371,6 @@ namespace His_Pos.NewClass.Report.Accounts
                 AND (d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) <> 0
                 AND Cast(m.JouMas_InsertTime as date) <= @date
                 ) j
-                LEFT JOIN (SELECT* FROM [HIS_POS_Server].[dbo].[Accounts] WHERE acct_Level = '1') a1 ON j.JouDet_AcctLvl1 = a1.acct_ID
-                LEFT JOIN (SELECT* FROM [HIS_POS_Server].[dbo].[Accounts] WHERE acct_Level = '2') a2 ON j.JouDet_AcctLvl1 = a2.acct_PreLevel AND j.JouDet_AcctLvl2 = a2.acct_ID
-                LEFT JOIN (SELECT* FROM [HIS_POS_Server].[dbo].[Accounts] WHERE acct_Level = '3') a3 ON j.JouDet_AcctLvl2 = a3.acct_PreLevel AND j.JouDet_AcctLvl3 = a3.acct_ID
                 ORDER BY 1,2,3,4", Properties.Settings.Default.SystemSerialNumber, endDate.ToString("yyyy-MM-dd"));
             
             SQLServerConnection.DapperQuery((conn) =>
