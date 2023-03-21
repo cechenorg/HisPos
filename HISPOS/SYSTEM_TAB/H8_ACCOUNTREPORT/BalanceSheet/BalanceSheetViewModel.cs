@@ -63,6 +63,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         #region ----- Define Variables -----
         private DataTable balanceData;
         private DataTable noStrikeData;
+        private DataTable noSourceData;
         private BalanceSheetTypeEnum balanceSheetType = BalanceSheetTypeEnum.NoDetail;
         private BalanceSheetData leftSelectedData;
         private BalanceSheetData rightSelectedData;
@@ -459,13 +460,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         {
             if (LeftSelectedData != null)
             {
-                NormalViewModel = new NormalViewModel(balanceData, noStrikeData, LeftSelectedData.ID, EndDate);
+                NormalViewModel = new NormalViewModel(balanceData, noStrikeData, noSourceData, LeftSelectedData.ID, EndDate);
                 BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                 BalanceSheetType = BalanceSheetTypeEnum.Normal;
             }
             else if (RightSelectedData != null)
             {
-                NormalViewModel = new NormalViewModel(balanceData, noStrikeData, RightSelectedData.ID, EndDate);
+                NormalViewModel = new NormalViewModel(balanceData, noStrikeData, noSourceData, RightSelectedData.ID, EndDate);
                 BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                 BalanceSheetType = BalanceSheetTypeEnum.Normal;
             }
@@ -673,6 +674,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         {
             balanceData = AccountsDb.GetBalanceSheet(_endDate);
             noStrikeData = AccountsDb.GetSourceDataInLocal(_endDate);
+            noSourceData = AccountsDb.GetNoSourceDataInLocal(_endDate);
+
 
             DataTable tbLeftGrid = balanceData.Clone();
             DataTable tbRightGrid = balanceData.Clone();

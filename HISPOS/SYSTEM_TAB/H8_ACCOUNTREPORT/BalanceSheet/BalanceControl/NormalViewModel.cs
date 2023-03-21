@@ -73,6 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
         }
         public DataTable NoStrikeData { get; set; }
+        public DataTable NoSourceData { get; set; }
         public class AccountsLevel
         {
             public AccountsLevel(string acct1, string acct2, string acct3, string acctName, int acctValue)
@@ -226,9 +227,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         #endregion ----- Define Variables -----
-        public NormalViewModel(DataTable table, DataTable noStrikeTable, string id, DateTime endDate)
+        public NormalViewModel(DataTable table, DataTable noStrikeTable, DataTable noSourceData, string id, DateTime endDate)
         {
             NoStrikeData = noStrikeTable;
+            NoSourceData = noSourceData;
             EndDate = endDate;
             AccLvlData = new List<AccountsLevel>();
             foreach (DataRow dr in table.Rows)
@@ -719,15 +721,26 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             
             AccDataDetail = new AccountsDetailReport();
 
+            int noSourceCount = NoSourceData.Select(string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3)).Count();
+            if (noSourceCount > 0)
+            {
+                int noSourceAmt = Convert.ToInt32(NoSourceData.Compute("SUM(JouDet_Amount)", string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3)));
+
+                if (noSourceAmt != 0)
+                {
+                    first = first - noSourceAmt;
+                }
+            }
+
             if (first != 0)
             {
                 if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
                 {
-                    AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM"), Convert.ToDecimal(drs["AccBal_Amount"]), string.Empty));
+                    AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM"), first, "期初"));
                 }
                 else
                 {
-                    AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM/dd"), Convert.ToDecimal(drs["AccBal_Amount"]), string.Empty));
+                    AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM/dd"), first, "期初"));
                 }
             }
 

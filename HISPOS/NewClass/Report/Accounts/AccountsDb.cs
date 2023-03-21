@@ -382,6 +382,30 @@ namespace His_Pos.NewClass.Report.Accounts
             return table;
         }
 
+        public static DataTable GetNoSourceDataInLocal(DateTime endDate)
+        {
+            DataTable table = new DataTable();
+            string sql = string.Format(@"
+                    Select d.JouDet_AcctLvl1,d.JouDet_AcctLvl2,Isnull(d.JouDet_AcctLvl3, '') as JouDet_AcctLvl3,sum(d.JouDet_Amount) as JouDet_Amount
+                    From [{0}].[dbo].[JournalMaster] m
+                    Inner Join [{0}].[dbo].[JournalDetail] d
+                    on m.JouMas_ID= d.JouDet_ID
+                    where (m.JouMas_IsEnable = 1 or (m.JouMas_IsEnable = 0 and cast(m.JouMas_ModifyTime as date) >= '{1}')) and 
+                            d.JouDet_WriteOffID = '' and m.JouMas_Status = 'F' and m.JouMas_Source = '1' and
+                            (d.JouDet_Type = 'C' and d.JouDet_AcctLvl1 in ('1','5','6','8') or (d.JouDet_Type = 'D' and d.JouDet_AcctLvl1 in ('2','4','7'))) and
+                            cast(m.JouMas_InsertTime as date) <= '{1}'
+                    group by d.JouDet_AcctLvl1, d.JouDet_AcctLvl2, d.JouDet_AcctLvl3
+                    order by d.JouDet_AcctLvl1,d.JouDet_AcctLvl2,d.JouDet_AcctLvl3", Properties.Settings.Default.SystemSerialNumber, endDate.ToString("yyyy-MM-dd"));
+
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                var dapper = conn.Query(sql, commandType: CommandType.Text);
+                string json = JsonConvert.SerializeObject(dapper);//序列化成JSON
+                table = JsonConvert.DeserializeObject<DataTable>(json);//反序列化成DataTable
+            });
+            return table;
+        }
+
         public static DataTable GetSourceData()
         {
             MainWindow.ServerConnection.OpenConnection();
