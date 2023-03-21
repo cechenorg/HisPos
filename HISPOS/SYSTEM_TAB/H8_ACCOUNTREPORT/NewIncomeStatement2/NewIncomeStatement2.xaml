@@ -232,7 +232,7 @@
                                             <Grid Background="#F1F7ED">
                                                 <DataGrid d:DataContext="{d:DesignInstance Type=incomeStatement:IncomeStatementDisplayData}" ColumnHeaderHeight="0" 
                                                           PreviewMouseWheel="dg_PreviewMouseWheel" AutoGenerateColumns="False" CanUserAddRows="False"
-                                                          Background="#F1F7ED" Margin="25,0,0,0" 
+                                                          Background="#F1F7ED" Margin="25,0,0,0" SelectedItem="{Binding DataContext.SelectedIncomeStatementData, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                           ItemsSource="{Binding Childs,UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="MouseDoubleClick">
