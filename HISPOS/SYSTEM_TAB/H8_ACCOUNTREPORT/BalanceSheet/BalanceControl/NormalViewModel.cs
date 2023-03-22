@@ -72,8 +72,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(StrikeValue));
             }
         }
-        public DataTable NoStrikeData { get; set; }
-        public DataTable NoSourceData { get; set; }
         public class AccountsLevel
         {
             public AccountsLevel(string acct1, string acct2, string acct3, string acctName, int acctValue)
@@ -227,10 +225,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         #endregion ----- Define Variables -----
-        public NormalViewModel(DataTable table, DataTable noStrikeTable, DataTable noSourceData, string id, DateTime endDate)
+        public NormalViewModel(DataTable table, string id, DateTime endDate)
         {
-            NoStrikeData = noStrikeTable;
-            NoSourceData = noSourceData;
             EndDate = endDate;
             AccLvlData = new List<AccountsLevel>();
             foreach (DataRow dr in table.Rows)
@@ -698,78 +694,132 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             table.Columns.Add(dcStrikeValue);
             return table;
         }
-
         private void GetNoStrikeData(string acct1, string acct2, string acct3)
         {
-            //DataTable table = AccountsDb.GetSourceDataInLocal(acct1, acct2, acct3, EndDate);
-            DataRow[] table = NoStrikeData.Select(string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3), "JouMas_Date");
-            
-            DataTable firstData = AccountsDb.GetAccountFirst(acct1, acct2, acct3);
+            List<string> posNum = new List<string>() { "1", "5", "6", "8" };
+            string type = posNum.Contains(acct1) ? "C" : "D";
+            DataTable firstData = AccountsDb.GetAccountBalFirst(acct1, acct2, acct3, EndDate, type);
             int first = 0;
-            DateTime maxDate;
+            DateTime maxDate = new DateTime();
             DataRow drs = firstData.NewRow();
             if (firstData != null && firstData.Rows.Count > 0)
             {
-                maxDate = Convert.ToDateTime(firstData.AsEnumerable().Max(m => m["AccBal_Date"]));
-                drs = firstData.Select(string.Format("AccBal_Date = '{0}'", maxDate)).First();
-                first = drs != null ? Convert.ToInt32(drs["AccBal_Amount"]) : 0;
+                maxDate = Convert.ToDateTime(firstData.Rows[0]["AccBal_Date"]);
+                first = Convert.ToInt32(firstData.Rows[0]["AccBal_Amount"]);
             }
             else
             {
                 first = 0;
             }
             
+            
+            DataTable table = AccountsDb.GetSourceDataInLocal(type, acct1, acct2, acct3, EndDate);//可沖帳
+
             AccDataDetail = new AccountsDetailReport();
-
-            int noSourceCount = NoSourceData.Select(string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3)).Count();
-            if (noSourceCount > 0)
+            if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
             {
-                int noSourceAmt = Convert.ToInt32(NoSourceData.Compute("SUM(JouDet_Amount)", string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3)));
-
-                if (noSourceAmt != 0)
+                if (first != 0)
                 {
-                    first = first - noSourceAmt;
+                    AccDataDetail.Add(new AccountsDetailReports(maxDate.ToString("yyyy/MM/dd"), first, "期初"));
+                }
+                foreach (DataRow item in table.Rows)
+                {
+                    string ym = Convert.ToDateTime(item["JouMas_Date"]).ToString("yyyy/MM");
+                    int jouDet_Amount = Convert.ToInt32(item["JouDet_Amount"]);
+                    string jouMas_ID = Convert.ToString(item["JouDet_ID"]);
+                    AccDataDetail.Add(new AccountsDetailReports(ym, jouDet_Amount, string.Empty));
                 }
             }
-
-            if (first != 0)
+            else
             {
-                if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
+                if (first != 0)
                 {
-                    AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM"), first, "期初"));
+                    AccDataDetail.Add(new AccountsDetailReports(maxDate.ToString("yyyy/MM/dd"), first, "期初"));
                 }
-                else
+                foreach (DataRow item in table.Rows)
                 {
-                    AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM/dd"), first, "期初"));
-                }
-            }
-
-            if (table != null && table.Length > 0)
-            {
-                if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
-                {
-                    foreach (DataRow dr in table)
+                    string jouMas_Date = Convert.ToDateTime(item["JouMas_Date"]).ToString("yyyy/MM/dd");
+                    int jouDet_Amount = Convert.ToInt32(item["JouDet_Amount"]);
+                    string jouMas_ID = Convert.ToString(item["JouDet_ID"]);
+                    if (jouDet_Amount != 0)
                     {
-                        string ym = Convert.ToDateTime(dr["JouMas_Date"]).ToString("yyyy/MM");
-                        if (AccDataDetail.Count(c => c.Name.Equals(ym)) > 0)
-                        {
-                            AccDataDetail.Where(w => w.Name.Equals(ym)).First().Value += Convert.ToDecimal(dr["JouDet_Amount"]);
-                        }
-                        else
-                        {
-                            AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(dr["JouMas_Date"]).ToString("yyyy/MM"), Convert.ToDecimal(dr["JouDet_Amount"]), string.Empty));
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (DataRow dr in table)
-                    {
-                        AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(dr["JouMas_Date"]).ToString("yyyy/MM/dd"), Convert.ToDecimal(dr["JouDet_Amount"]), Convert.ToString(dr["JouDet_ID"])));
+                        AccDataDetail.Add(new AccountsDetailReports(jouMas_Date, jouDet_Amount, jouMas_ID));
                     }
                 }
             }
         }
+
+        //private void GetNoStrikeData(string acct1, string acct2, string acct3)
+        //{
+        //    //DataTable table = AccountsDb.GetSourceDataInLocal(acct1, acct2, acct3, EndDate);
+        //    DataRow[] table = NoStrikeData.Select(string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3), "JouMas_Date");
+
+        //    DataTable firstData = AccountsDb.GetAccountFirst(acct1, acct2, acct3);
+        //    int first = 0;
+        //    DateTime maxDate;
+        //    DataRow drs = firstData.NewRow();
+        //    if (firstData != null && firstData.Rows.Count > 0)
+        //    {
+        //        maxDate = Convert.ToDateTime(firstData.AsEnumerable().Max(m => m["AccBal_Date"]));
+        //        drs = firstData.Select(string.Format("AccBal_Date = '{0}'", maxDate)).First();
+        //        first = drs != null ? Convert.ToInt32(drs["AccBal_Amount"]) : 0;
+        //    }
+        //    else
+        //    {
+        //        first = 0;
+        //    }
+
+        //    AccDataDetail = new AccountsDetailReport();
+
+        //    int noSourceCount = NoSourceData.Select(string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3)).Count();
+        //    if (noSourceCount > 0)
+        //    {
+        //        int noSourceAmt = Convert.ToInt32(NoSourceData.Compute("SUM(JouDet_Amount)", string.Format("JouDet_AcctLvl1 = '{0}' and JouDet_AcctLvl2 = '{1}' and JouDet_AcctLvl3 = '{2}'", acct1, acct2, acct3)));
+
+        //        if (noSourceAmt != 0)
+        //        {
+        //            first = first - noSourceAmt;
+        //        }
+        //    }
+
+        //    if (first != 0)
+        //    {
+        //        if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
+        //        {
+        //            AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM"), first, "期初"));
+        //        }
+        //        else
+        //        {
+        //            AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(drs["AccBal_Date"]).ToString("yyyy/MM/dd"), first, "期初"));
+        //        }
+        //    }
+
+        //    if (table != null && table.Length > 0)
+        //    {
+        //        if (acct1.Equals("1") && acct2.Equals("1123") && acct3.Equals("0003"))
+        //        {
+        //            foreach (DataRow dr in table)
+        //            {
+        //                string ym = Convert.ToDateTime(dr["JouMas_Date"]).ToString("yyyy/MM");
+        //                if (AccDataDetail.Count(c => c.Name.Equals(ym)) > 0)
+        //                {
+        //                    AccDataDetail.Where(w => w.Name.Equals(ym)).First().Value += Convert.ToDecimal(dr["JouDet_Amount"]);
+        //                }
+        //                else
+        //                {
+        //                    AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(dr["JouMas_Date"]).ToString("yyyy/MM"), Convert.ToDecimal(dr["JouDet_Amount"]), string.Empty));
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            foreach (DataRow dr in table)
+        //            {
+        //                AccDataDetail.Add(new AccountsDetailReports(Convert.ToDateTime(dr["JouMas_Date"]).ToString("yyyy/MM/dd"), Convert.ToDecimal(dr["JouDet_Amount"]), Convert.ToString(dr["JouDet_ID"])));
+        //            }
+        //        }
+        //    }
+        //}
 
     }
 }

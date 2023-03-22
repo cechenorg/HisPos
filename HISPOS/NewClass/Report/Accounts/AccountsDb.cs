@@ -321,82 +321,78 @@ namespace His_Pos.NewClass.Report.Accounts
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
-        public static DataTable GetSourceDataInLocal(DateTime endDate)
+        public static DataTable GetSourceDataInLocal(string type, string acct1, string acct2, string acct3, DateTime endDate)
         {
             DataTable table = new DataTable();
             string sql = string.Format(@"
-                Declare @date date = '{1}'
 
-                SELECT j.*
-                FROM (
-                    SELECT d.JouDet_AcctLvl1, d.JouDet_AcctLvl2, d.JouDet_AcctLvl3, m.JouMas_Date, d.JouDet_ID,(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount
-                    FROM [{0}].[dbo].[JournalMaster] m
-                    INNER JOIN [{0}].[dbo].[JournalDetail] d on m.JouMas_ID = d.JouDet_ID
-                    LEFT JOIN(SELECT JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID, SUM(JouDet_Amount) JouDet_Amount
-                    FROM [{0}].[dbo].[JournalMaster] wm
-                    INNER JOIN [{0}].[dbo].[JournalDetail] wd on wm.JouMas_ID = wd.JouDet_ID
-                    WHERE wm.JouMas_Status = 'F'
-                    AND wm.JouMas_IsEnable = 1
-                    AND wd.JouDet_Type = 'D'
-                    AND JouDet_AcctLvl1 IN ('2','3','4','7')
-                    AND ISNULL(wd.JouDet_WriteOffID,'') <> '' AND ISNULL(wd.JouDet_WriteOffNumber,0) > 0
-                    AND Cast(wm.JouMas_InsertTime as date) <= @date
-                GROUP BY JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID
-                ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber
-                WHERE JouMas_Status = 'F'
-                AND JouMas_IsEnable = 1
-                AND JouDet_Type = 'C'
-                AND JouDet_AcctLvl1 IN('2','3','4','7')
-                AND(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) <> 0
-                AND Cast(m.JouMas_InsertTime as date) <= @date
-                UNION ALL
-                SELECT d.JouDet_AcctLvl1,d.JouDet_AcctLvl2,d.JouDet_AcctLvl3,m.JouMas_Date,d.JouDet_ID,(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount
-                FROM [{0}].[dbo].[JournalMaster] m
-                INNER JOIN [{0}].[dbo].[JournalDetail] d on m.JouMas_ID = d.JouDet_ID
-                LEFT JOIN (SELECT JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID, SUM(JouDet_Amount) JouDet_Amount
-                FROM [{0}].[dbo].[JournalMaster] wm
-                INNER JOIN [{0}].[dbo].[JournalDetail] wd on wm.JouMas_ID = wd.JouDet_ID
-                WHERE wm.JouMas_Status = 'F'
-                AND wm.JouMas_IsEnable = 1
-                AND wd.JouDet_Type = 'C'
-                AND JouDet_AcctLvl1 IN ('1','5','6','8')
-                AND ISNULL(wd.JouDet_WriteOffID,'') <> '' AND ISNULL(wd.JouDet_WriteOffNumber,0) > 0
-                AND Cast(wm.JouMas_InsertTime as date) <= @date
-                GROUP BY JouDet_WriteOffID, JouDet_WriteOffNumber, JouDet_SourceID
-                ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber
-                WHERE JouMas_Status = 'F'
-                AND JouMas_IsEnable = 1
-                AND JouDet_Type = 'D'
-                AND JouDet_AcctLvl1 IN('1','5','6','8')
-                AND (d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) <> 0
-                AND Cast(m.JouMas_InsertTime as date) <= @date
-                ) j
-                ORDER BY 1,2,3,4", Properties.Settings.Default.SystemSerialNumber, endDate.ToString("yyyy-MM-dd"));
+                 Declare @DetType varchar(1) = '{1}'
+		         Declare @DetAcctLvl1 varchar(1) = '{2}'
+		         Declare @DetAcctLvl2 varchar(4) = '{3}'
+		         Declare @DetAcctLvl3 varchar(4) = '{4}'
+		         Declare @date date = '{5}'
+
+                IF (@DetType = 'D' AND @DetAcctLvl1 = '2')
+	            BEGIN
+		            SELECT m.JouMas_Date,d.JouDet_ID,d.JouDet_Number,ISNULL(d.JouDet_SourceID,'') JouDet_SourceID,(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount, d.JouDet_Memo, d.JouDet_Source
+		            FROM [{0}].[dbo].[JournalMaster] m
+		            INNER JOIN [{0}].[dbo].[JournalDetail] d on m.JouMas_ID = d.JouDet_ID
+		            LEFT JOIN (	SELECT JouDet_WriteOffID,JouDet_WriteOffNumber,JouDet_SourceID,SUM(JouDet_Amount) JouDet_Amount
+					FROM [{0}].[dbo].[JournalMaster] wm
+					INNER JOIN [{0}].[dbo].[JournalDetail] wd on wm.JouMas_ID = wd.JouDet_ID
+					WHERE wm.JouMas_Status = 'F'
+					  AND wm.JouMas_IsEnable = 1
+					  AND wd.JouDet_Type = 'D'
+					  AND JouDet_AcctLvl1 = @DetAcctLvl1
+					  AND JouDet_AcctLvl2 = @DetAcctLvl2
+					  AND ISNULL(JouDet_AcctLvl3,'') = ISNULL(@DetAcctLvl3,'')
+					  AND ISNULL(wd.JouDet_WriteOffID,'') <> '' AND ISNULL(wd.JouDet_WriteOffNumber,0) > 0
+                      AND JouMas_Date <= @date
+					GROUP BY JouDet_WriteOffID,JouDet_WriteOffNumber,JouDet_SourceID
+		            ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber AND ISNULL(d.JouDet_SourceID,'') = ISNULL(w.JouDet_SourceID,'')
+		            WHERE JouMas_Status = 'F'
+			            AND JouMas_IsEnable = 1
+ 			            AND JouDet_Type = 'C'
+			            AND JouDet_AcctLvl1 = @DetAcctLvl1
+			            AND JouDet_AcctLvl2 = @DetAcctLvl2
+			            AND ISNULL(JouDet_AcctLvl3,'') = ISNULL(@DetAcctLvl3,'')
+			            AND (d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) <> 0
+                        AND JouMas_Date <= @date
+		            ORDER BY 1,2,3
+	            END
+	            ELSE IF (@DetType = 'C' AND @DetAcctLvl1='1')
+	            BEGIN
+		            SELECT m.JouMas_Date,d.JouDet_ID,d.JouDet_Number,ISNULL(d.JouDet_SourceID,'') JouDet_SourceID,(d.JouDet_Amount - ISNULL(c.JouDet_Amount,0) - ISNULL(w.JouDet_Amount,0)) JouDet_Amount, d.JouDet_Memo, d.JouDet_Source
+		            FROM [{0}].[dbo].[JournalMaster] m
+		            INNER JOIN [{0}].[dbo].[JournalDetail] d ON m.JouMas_ID = d.JouDet_ID
+		            LEFT JOIN [{0}].[dbo].[JournalDetail] c ON m.JouMas_ID = c.JouDet_ID
+		            AND c.JouDet_Type = 'C' AND c.JouDet_AcctLvl1 = @DetAcctLvl1
+		            AND c.JouDet_AcctLvl2 = @DetAcctLvl2
+		            AND ISNULL(c.JouDet_AcctLvl3,'') = ISNULL(@DetAcctLvl3,'')
+		            LEFT JOIN (	SELECT JouDet_WriteOffID,JouDet_WriteOffNumber,JouDet_SourceID,SUM(JouDet_Amount) JouDet_Amount
+					FROM [{0}].[dbo].[JournalMaster] wm
+					INNER JOIN [{0}].[dbo].[JournalDetail] wd on wm.JouMas_ID = wd.JouDet_ID
+					WHERE wm.JouMas_Status = 'F'
+					  AND wm.JouMas_IsEnable = 1
+					  AND wd.JouDet_Type = 'C'
+					  AND JouDet_AcctLvl1 = @DetAcctLvl1
+					  AND JouDet_AcctLvl2 = @DetAcctLvl2
+					  AND ISNULL(JouDet_AcctLvl3,'') = ISNULL(@DetAcctLvl3,'')
+					  AND ISNULL(wd.JouDet_WriteOffID,'') <> '' AND ISNULL(wd.JouDet_WriteOffNumber,0) > 0
+                      AND JouMas_Date <= @date
+					GROUP BY JouDet_WriteOffID,JouDet_WriteOffNumber,JouDet_SourceID
+		            ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber AND ISNULL(d.JouDet_SourceID,'') = ISNULL(w.JouDet_SourceID,'')
+		            WHERE m.JouMas_Status = 'F'
+			        AND m.JouMas_IsEnable = 1
+ 			        AND d.JouDet_Type = 'D'
+			        AND d.JouDet_AcctLvl1 = @DetAcctLvl1
+			        AND d.JouDet_AcctLvl2 = @DetAcctLvl2
+			        AND ISNULL(d.JouDet_AcctLvl3,'') = ISNULL(@DetAcctLvl3,'')
+			        AND (d.JouDet_Amount - ISNULL(c.JouDet_Amount,0) - ISNULL(w.JouDet_Amount,0)) <> 0
+                    AND JouMas_Date <= @date
+		            ORDER BY 1,2,3
+                END", Properties.Settings.Default.SystemSerialNumber, type, acct1, acct2, acct3, endDate.ToString("yyyy -MM-dd"));
             
-            SQLServerConnection.DapperQuery((conn) =>
-            {
-                var dapper = conn.Query(sql, commandType: CommandType.Text);
-                string json = JsonConvert.SerializeObject(dapper);//序列化成JSON
-                table = JsonConvert.DeserializeObject<DataTable>(json);//反序列化成DataTable
-            });
-            return table;
-        }
-
-        public static DataTable GetNoSourceDataInLocal(DateTime endDate)
-        {
-            DataTable table = new DataTable();
-            string sql = string.Format(@"
-                    Select d.JouDet_AcctLvl1,d.JouDet_AcctLvl2,Isnull(d.JouDet_AcctLvl3, '') as JouDet_AcctLvl3,sum(d.JouDet_Amount) as JouDet_Amount
-                    From [{0}].[dbo].[JournalMaster] m
-                    Inner Join [{0}].[dbo].[JournalDetail] d
-                    on m.JouMas_ID= d.JouDet_ID
-                    where (m.JouMas_IsEnable = 1 or (m.JouMas_IsEnable = 0 and cast(m.JouMas_ModifyTime as date) >= '{1}')) and 
-                            d.JouDet_WriteOffID = '' and m.JouMas_Status = 'F' and m.JouMas_Source = '1' and
-                            (d.JouDet_Type = 'C' and d.JouDet_AcctLvl1 in ('1','5','6','8') or (d.JouDet_Type = 'D' and d.JouDet_AcctLvl1 in ('2','4','7'))) and
-                            cast(m.JouMas_InsertTime as date) <= '{1}'
-                    group by d.JouDet_AcctLvl1, d.JouDet_AcctLvl2, d.JouDet_AcctLvl3
-                    order by d.JouDet_AcctLvl1,d.JouDet_AcctLvl2,d.JouDet_AcctLvl3", Properties.Settings.Default.SystemSerialNumber, endDate.ToString("yyyy-MM-dd"));
-
             SQLServerConnection.DapperQuery((conn) =>
             {
                 var dapper = conn.Query(sql, commandType: CommandType.Text);
@@ -599,12 +595,29 @@ namespace His_Pos.NewClass.Report.Accounts
             return result;
         }
 
-        public static DataTable GetAccountFirst(string acct1, string acct2, string acct3)
+        public static DataTable GetAccountBalFirst(string acct1, string acct2, string acct3, DateTime edate, string type)
         {
             DataTable table = new DataTable();
             string sql = string.Format(@"
-                Select * From [{0}].[dbo].[AccountsBalance]
-                Where AccBal_AcctLvl1 = '{1}' and AccBal_AcctLvl2 = '{2}' and AccBal_AcctLvl3 = '{3}'", Properties.Settings.Default.SystemSerialNumber, acct1, acct2, acct3);
+                select top 1 *
+                into #temp
+                from [{0}].[dbo].[AccountsBalance]
+                where AccBal_AcctLvl1 = '{1}' and AccBal_AcctLvl2 = '{2}' and AccBal_AcctLvl3 = '{3}'
+                order By AccBal_Date desc
+
+                Declare @AccBal_Amount int = (select AccBal_Amount from #temp)
+				Declare @AccBal_Date date = (select AccBal_Date from #temp)
+
+                if @AccBal_Amount <> 0
+                begin
+                    Set @AccBal_Amount = @AccBal_Amount - (
+                    Select Isnull(Sum(d.JouDet_Amount), 0) From [{0}].[dbo].[JournalMaster] m
+                    Inner Join [{0}].[dbo].[JournalDetail] d
+                    on m.JouMas_ID = d.JouDet_ID
+                    Where JouDet_AcctLvl1 = '{1}' and JouDet_AcctLvl2 = '{2}' and JouDet_AcctLvl3 = '{3}' and d.JouDet_Type = '{4}' and JouMas_Date <= '{5}' and Isnull(JouDet_WriteOffID, '') = '' and m.JouMas_Source = 1)
+                end
+
+                select Isnull(@AccBal_Amount, 0) as AccBal_Amount,isnull(@AccBal_Date, '') as AccBal_Date", Properties.Settings.Default.SystemSerialNumber, acct1, acct2, acct3, type,edate.ToString("yyyy-MM-dd"));
             SQLServerConnection.DapperQuery((conn) =>
             {
                 var dapper = conn.Query(sql, commandType: CommandType.Text);
