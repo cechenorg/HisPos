@@ -696,6 +696,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
         private void GetNoStrikeData(string acct1, string acct2, string acct3)
         {
+            if (acct1.Equals("1") && acct2.Equals("1112"))
+                return;
+
             List<string> posNum = new List<string>() { "1", "5", "6", "8" };
             string type = posNum.Contains(acct1) ? "C" : "D";
             DataTable firstData = AccountsDb.GetAccountBalFirst(acct1, acct2, acct3, EndDate, type);
@@ -727,7 +730,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                     string ym = Convert.ToDateTime(item["JouMas_Date"]).ToString("yyyy/MM");
                     int jouDet_Amount = Convert.ToInt32(item["JouDet_Amount"]);
                     string jouMas_ID = Convert.ToString(item["JouDet_ID"]);
-                    AccDataDetail.Add(new AccountsDetailReports(ym, jouDet_Amount, string.Empty));
+                    if (AccDataDetail.Where(w=>w.Name.Equals(ym)).Count() > 0)
+                    {
+                        AccDataDetail.Where(w => w.Name.Equals(ym)).First().Value += Convert.ToDecimal(item["JouDet_Amount"]);
+                    }
+                    else
+                    {
+                        AccDataDetail.Add(new AccountsDetailReports(ym, jouDet_Amount, string.Empty));
+                    }
                 }
             }
             else
