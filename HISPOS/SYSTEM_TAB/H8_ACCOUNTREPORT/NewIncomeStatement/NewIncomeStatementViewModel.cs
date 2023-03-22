@@ -24,12 +24,18 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
 
         private BackgroundWorker bgWorker = new BackgroundWorker();
         
-        private int _inputYear = DateTime.Today.Year;
+        private int _inputYear = 2022;
 
         public int InputYear
         {
             get { return _inputYear; }
-            set { Set(() => InputYear, ref _inputYear, value); }
+            set 
+            {
+                if (value <= 2022)
+                {
+                    Set(() => InputYear, ref _inputYear, value);
+                }
+            }
         }
 
         private string _busyContent;
