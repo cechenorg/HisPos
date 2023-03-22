@@ -39,6 +39,12 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
 using His_Pos.NewClass.Report.DepositReport;
+using System.Diagnostics;
+using System.Windows.Forms;
+using ClosedXML.Excel;
+using His_Pos.FunctionWindow;
+using His_Pos.Class;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 {
@@ -1589,6 +1595,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand AllPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitTicketReportSelectionChangedCommand { get; set; }
         public RelayCommand PrintTradeProfitDetailCommand { get; set; }
+        public RelayCommand PrintTradeCrashProfitCommand { get; set; }
 
         public RelayCommand<ReportDetailType> ViewReportDetailCommand { get; set; }
         #endregion Command
@@ -1669,6 +1676,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             TradeChangeReportSelectionChangedCommand = new RelayCommand(TradeChangeReportSelectionChangedAction);
             RewardExcelCommand = new RelayCommand(RewardExcelAction);
             PrintTradeProfitDetailCommand = new RelayCommand(PrintTradeProfitDetailAction);
+            PrintTradeCrashProfitCommand = new RelayCommand(PrintTradeCrashProfitAction);
             ViewReportDetailCommand = new RelayCommand<ReportDetailType>(ViewReportDetailAction);
         }
 
@@ -1906,6 +1914,53 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrintService.PrintTradeProfitDetail(TradeProfitDetailReportCollection, StartDate, EndDate);
         }
 
+        private void PrintTradeCrashProfitAction()
+        {
+            DataTable table = CashReportDb.GetExportCashData(StartDate, EndDate);
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "調劑押金";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
+            fdlg.Filter = "XLSX檔案|*.xlsx";
+            fdlg.FileName = StartDate.ToString("yyyyMMdd") + "-" + EndDate.ToString("yyyyMMdd") + "調劑押金";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+
+                AdjustCases cases = ViewModelMainWindow.AdjustCases;
+                foreach (DataRow dr in table.Rows)
+                {
+                    string adjustCase = Convert.ToString(dr["PreMas_AdjustCaseID"]);
+                    if (!string.IsNullOrEmpty(adjustCase))
+                    {
+                        dr["PreMas_AdjustCaseID"] = cases.Where(w => w.ID.Equals(adjustCase)).FirstOrDefault().Name;
+                    }
+                }
+                
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+                var ws = wb.Worksheets.Add("調劑押金");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+                ws.Cell("A1").Value = "調劑編號";
+                ws.Cell("B1").Value = "調劑案件";
+                ws.Cell("C1").Value = "藥局名稱";
+                ws.Cell("D1").Value = "客人名稱";
+                ws.Cell("E1").Value = "部分負擔";
+                ws.Cell("F1").Value = "自費";
+                ws.Cell("G1").Value = "自費調劑";
+                ws.Cell("H1").Value = "押金";
+                ws.Cell("I1").Value = "其他";
+
+                var rangeWithData = ws.Cell(2, 1).InsertData(table.AsEnumerable());
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.Columns().AdjustToContents();//欄位寬度根據資料調整
+                wb.SaveAs(fdlg.FileName);
+                MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+            }
+        }
         private void CashDetailMouseDoubleClickAction()
         {
             PrescriptionService.ShowPrescriptionEditWindow(CashDetailReportSelectItem.Id);

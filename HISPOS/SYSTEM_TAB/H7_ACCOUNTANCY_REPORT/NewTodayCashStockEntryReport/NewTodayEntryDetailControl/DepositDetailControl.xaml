@@ -25,6 +25,9 @@
             <Label Content="{Binding DepositDetailReportCollection.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25" />
             <Label Content="筆" FontFamily="Segoe UI Semibold" FontSize="25" />
         </StackPanel>
+        <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
+            <Button Width="145" Margin="423,3,0,0" Background="DarkCyan" BorderBrush="DarkCyan" Command="{Binding PrintTradeCrashProfitCommand}" Content="現金帳資料匯出" FontFamily="Segoe UI Semibold" FontSize="16" />
+        </StackPanel>
         <FrameworkElement x:Name="dummyElement" Visibility="Collapsed" />
         <DataGrid Grid.Row="1" AutoGenerateColumns="False" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding DepositDetailReportCollection, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedDepositDetailReport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <i:Interaction.Triggers>
