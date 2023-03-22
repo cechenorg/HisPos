@@ -1919,10 +1919,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             DataTable table = CashReportDb.GetExportCashData(StartDate, EndDate);
             Process myProcess = new Process();
             SaveFileDialog fdlg = new SaveFileDialog();
-            fdlg.Title = "調劑押金";
+            fdlg.Title = "調劑現金帳";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
             fdlg.Filter = "XLSX檔案|*.xlsx";
-            fdlg.FileName = StartDate.ToString("yyyyMMdd") + "-" + EndDate.ToString("yyyyMMdd") + "調劑押金";
+            fdlg.FileName = StartDate.ToString("yyyyMMdd") + "-" + EndDate.ToString("yyyyMMdd") + "調劑現金帳";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
@@ -1941,15 +1941,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 XLWorkbook wb = new XLWorkbook();
                 var style = XLWorkbook.DefaultStyle;
                 style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
-                var ws = wb.Worksheets.Add("調劑押金");
+                var ws = wb.Worksheets.Add("調劑現金帳");
                 ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
-                ws.Cell("A1").Value = "調劑編號";
+                ws.Cell("A1").Value = "處方單號";
                 ws.Cell("B1").Value = "調劑案件";
-                ws.Cell("C1").Value = "藥局名稱";
-                ws.Cell("D1").Value = "客人名稱";
+                ws.Cell("C1").Value = "醫療院所";
+                ws.Cell("D1").Value = "姓名";
                 ws.Cell("E1").Value = "部分負擔";
                 ws.Cell("F1").Value = "自費";
-                ws.Cell("G1").Value = "自費調劑";
+                ws.Cell("G1").Value = "配藥";
                 ws.Cell("H1").Value = "押金";
                 ws.Cell("I1").Value = "其他";
 
