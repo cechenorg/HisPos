@@ -696,7 +696,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
         private void GetNoStrikeData(string acct1, string acct2, string acct3)
         {
-            if ((acct1.Equals("1") && acct2.Equals("1112")) || (acct1.Equals("1") && acct2.Equals("1130") && (acct3.Equals("0001") || acct3.Equals("0002"))))//銀行存款&存貨
+            if ((acct1.Equals("1") && acct2.Equals("1112")) || (acct1.Equals("1") && acct2.Equals("1130")) || (acct1.Equals("1") && acct2.Equals("1140")))//銀行存款&存貨&預付款項
                 return;
 
             List<string> posNum = new List<string>() { "1", "5", "6", "8" };
