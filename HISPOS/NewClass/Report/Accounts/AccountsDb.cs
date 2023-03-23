@@ -599,25 +599,48 @@ namespace His_Pos.NewClass.Report.Accounts
         {
             DataTable table = new DataTable();
             string sql = string.Format(@"
-                select top 1 *
-                into #temp
-                from [{0}].[dbo].[AccountsBalance]
-                where AccBal_AcctLvl1 = '{1}' and AccBal_AcctLvl2 = '{2}' and AccBal_AcctLvl3 = '{3}'
-                order By AccBal_Date desc
+                SELECT bm.AccBal_Date,bm.AccBal_AcctLvl1,bm.AccBal_AcctLvl2,bm.AccBal_AcctLvl3,bm.AccBal_Amount
+                ,bd.AccBal_Number,bd.AccBal_Item,bd.AccBal_Amount AS AccBalDetailAmount
+                INTO #tempAcc
+                FROM (	SELECT TOP 1 AccBal_Date,AccBal_AcctLvl1,AccBal_AcctLvl2,AccBal_AcctLvl3,AccBal_Amount
+		                FROM [{0}].[dbo].[AccountsBalance]
+		                WHERE AccBal_AcctLvl1 = '{1}'
+		                  AND AccBal_AcctLvl2 = '{2}'
+		                  AND AccBal_AcctLvl3 = '{3}'
+		                  AND AccBal_Date <= '{5}'
+		                ORDER BY AccBal_Date DESC
+                 ) bm 
+                 LEFT JOIN [{0}].[dbo].[AccountsBalanceDetail] bd ON bm.AccBal_Date = bd.AccBal_Date 
+                   AND bm.AccBal_AcctLvl1 = bd.AccBal_AcctLvl1 AND bm.AccBal_AcctLvl2 = bd.AccBal_AcctLvl2 AND bm.AccBal_AcctLvl3 = bd.AccBal_AcctLvl3 
+ 
+                SELECT m.JouMas_Date,d.JouDet_ID,d.JouDet_Number
+	                   ,d.JouDet_AcctLvl1,d.JouDet_AcctLvl2,d.JouDet_AcctLvl3
+	                   ,CASE WHEN d.JouDet_Type = '{4}' THEN d.JouDet_Amount*-1 ELSE d.JouDet_Amount END AS JouDet_Amount
+	                   ,d.JouDet_Memo,d.JouDet_WriteOffID,d.JouDet_WriteOffNumber 
+                INTO #tempJou
+                FROM [{0}].[dbo].[JournalMaster] m
+                INNER JOIN [{0}].[dbo].[JournalDetail] d ON m.JouMas_ID = d.JouDet_ID
+                WHERE m.JouMas_Status = 'F' 
+	                AND m.JouMas_IsEnable = 1
+	                AND m.JouMas_Source = '1'
+	                AND m.JouMas_Date <= '{5}'
+	                AND d.JouDet_AcctLvl1 = '{1}'
+	                AND d.JouDet_AcctLvl2 = '{2}'
+	                AND d.JouDet_AcctLvl3 = '{3}'
 
-                Declare @AccBal_Amount int = (select AccBal_Amount from #temp)
-				Declare @AccBal_Date date = (select AccBal_Date from #temp)
-
-                if @AccBal_Amount <> 0
-                begin
-                    Set @AccBal_Amount = @AccBal_Amount - (
-                    Select Isnull(Sum(d.JouDet_Amount), 0) From [{0}].[dbo].[JournalMaster] m
-                    Inner Join [{0}].[dbo].[JournalDetail] d
-                    on m.JouMas_ID = d.JouDet_ID
-                    Where JouDet_AcctLvl1 = '{1}' and JouDet_AcctLvl2 = '{2}' and JouDet_AcctLvl3 = '{3}' and d.JouDet_Type = '{4}' and JouMas_Date <= '{5}' and Isnull(JouDet_WriteOffID, '') = '' and m.JouMas_Source = 1)
-                end
-
-                select Isnull(@AccBal_Amount, 0) as AccBal_Amount,isnull(@AccBal_Date, '') as AccBal_Date", Properties.Settings.Default.SystemSerialNumber, acct1, acct2, acct3, type,edate.ToString("yyyy-MM-dd"));
+                SELECT ISNULL(AccBal_Item,cast(t.AccBal_Date as nvarchar(20))) AS AccBal_Date
+                      ,(ISNULL(AccBalDetailAmount,AccBal_Amount) + ISNULL(JouDet_Amount,0)) AS AccBal_Amount
+                FROM #tempAcc t
+                LEFT JOIN 
+                (	 SELECT JouDet_AcctLvl1,JouDet_AcctLvl2,JouDet_AcctLvl3,JouDet_WriteOffID,JouDet_WriteOffNumber,SUM(JouDet_Amount) JouDet_Amount
+                     FROM #tempJou
+	                 GROUP BY JouDet_AcctLvl1,JouDet_AcctLvl2,JouDet_AcctLvl3,JouDet_WriteOffID,JouDet_WriteOffNumber
+                ) j ON t.AccBal_AcctLvl1 = j.JouDet_AcctLvl1
+                   AND t.AccBal_AcctLvl2 = j.JouDet_AcctLvl2
+                   AND t.AccBal_AcctLvl3 = j.JouDet_AcctLvl3
+                   AND cast(t.AccBal_Date as varchar(12)) = ISNULL(j.JouDet_WriteOffID,cast(t.AccBal_Date as varchar(12)))
+                   AND ISNULL(t.AccBal_Number,0) = ISNULL(JouDet_WriteOffNumber,0)
+                ORDER BY 1 ", Properties.Settings.Default.SystemSerialNumber, acct1, acct2, acct3, type,edate.ToString("yyyy-MM-dd"));
             SQLServerConnection.DapperQuery((conn) =>
             {
                 var dapper = conn.Query(sql, commandType: CommandType.Text);

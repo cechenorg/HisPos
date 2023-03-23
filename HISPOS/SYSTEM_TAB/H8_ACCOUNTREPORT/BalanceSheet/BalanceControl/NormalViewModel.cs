@@ -715,20 +715,34 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             DataTable firstData = AccountsDb.GetAccountBalFirst(acct1, acct2, acct3, EndDate, type);
             int first = 0;
             DateTime maxDate = new DateTime();
+            AccDataDetail = new AccountsDetailReport();
             DataRow drs = firstData.NewRow();
             if (firstData != null && firstData.Rows.Count > 0)
             {
-                maxDate = Convert.ToDateTime(firstData.Rows[0]["AccBal_Date"]);
-                first = Convert.ToInt32(firstData.Rows[0]["AccBal_Amount"]);
+                if (firstData.Rows.Count == 1)
+                {
+                    maxDate = Convert.ToDateTime(firstData.Rows[0]["AccBal_Date"]);
+                    first = Convert.ToInt32(firstData.Rows[0]["AccBal_Amount"]);
+                }
+                else
+                { 
+                    foreach (DataRow item in firstData.Rows)
+                    {
+                        string jouMas_Date = Convert.ToString(item["AccBal_Date"]);
+                        int jouDet_Amount = Convert.ToInt32(item["AccBal_Amount"]);
+                        if (jouDet_Amount != 0)
+                        {
+                            AccDataDetail.Add(new AccountsDetailReports(jouMas_Date, jouDet_Amount, string.Empty));
+                        }
+                    }                
+                }
             }
             else
             {
                 first = 0;
             }
-            
-            DataTable table = AccountsDb.GetSourceDataInLocal(type, acct1, acct2, acct3, EndDate);//可沖帳
 
-            AccDataDetail = new AccountsDetailReport();
+            DataTable table = AccountsDb.GetSourceDataInLocal(type, acct1, acct2, acct3, EndDate);//可沖帳
 
             bool isMerge = false;
             foreach (DataRow dr in setMerge)
