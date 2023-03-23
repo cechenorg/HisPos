@@ -321,6 +321,16 @@ namespace His_Pos.NewClass.Prescription.Service
         /// <returns></returns>
         private static bool CheckAdjustDatePast(Prescription prescription, int type)
         {
+            if (prescription != null)
+            {
+                if (prescription.AdjustCase != null)
+                {
+                    if (prescription.AdjustCase.ID.Equals("0"))
+                    {
+                        return true;
+                    }
+                }
+            }
             string[] msg = new string[2];
             switch(type)
             {
