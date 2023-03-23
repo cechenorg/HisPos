@@ -626,5 +626,23 @@ namespace His_Pos.NewClass.Report.Accounts
             });
             return table;
         }
+
+        public static DataTable GetAccountSetting()
+        {
+            DataTable table = new DataTable();
+            string sql = string.Format(@"
+                Select a.acct_ID as acct1,b.acct_ID as acct2,c.acct_ID as acct3, c.acct_Name, c.acct_BSDisplayMode
+                From (Select * From [{0}].[dbo].[Accounts] Where acct_Level = 1) a
+                Inner Join (Select * From [{0}].[dbo].[Accounts] Where acct_Level = 2) b on a.acct_ID = b.acct_PreLevel
+                Inner Join (Select * From [{0}].[dbo].[Accounts] Where acct_Level = 3) c on b.acct_ID = c.acct_PreLevel
+                Order By acct1, acct2, acct3", Properties.Settings.Default.SystemSerialNumber);
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                var dapper = conn.Query(sql, commandType: CommandType.Text);
+                string json = JsonConvert.SerializeObject(dapper);//序列化成JSON
+                table = JsonConvert.DeserializeObject<DataTable>(json);//反序列化成DataTable
+            });
+            return table;
+        }
     }
 }
