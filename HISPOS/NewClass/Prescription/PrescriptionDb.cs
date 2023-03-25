@@ -1253,6 +1253,7 @@ namespace His_Pos.NewClass.Prescription
 	                ,PreMas_AdjustDate	/* 調劑日期 */
 	                ,Emp_Name				/* 調劑藥師 */
 	                ,PreMas_MedicinePoint	/* 藥品點數 */
+                    ,PreMas_SpecialMaterialPoint	/* 特材點數 */
 	                ,PreMas_MedicalServicePoint	/* 藥服費 */
 	                ,PreMas_TotalPoint	/* 總點數 */
 	                ,PreMas_AdjustCaseID	/* 案件代號 */
