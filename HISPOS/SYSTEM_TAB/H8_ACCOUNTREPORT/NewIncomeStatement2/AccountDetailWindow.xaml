@@ -5,42 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:AccountDetailViewModel}" WindowStartupLocation="CenterScreen"
-        Title="損益詳細" Height="450" Width="700">
+        Title="損益詳細" Height="450" Width="850">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="35" />
         </Grid.RowDefinitions>
         <DataGrid  RowBackground="#A9D08E" ItemsSource="{Binding IncomeStatementDetailDataList,UpdateSourceTrigger=PropertyChanged}" 
                    AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" Background="#E2EFDA" CanUserDeleteRows="False" VerticalContentAlignment="Top" Grid.Row="0">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
                     <Setter Property="Padding" Value="0" />
+                    <Setter Property="FontSize" Value="20" />
                 </Style>
             </DataGrid.CellStyle>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="FontSize" Value="20"/>
+                    <Setter Property="Background" Value="#E2EFDA" />
+                    <Setter Property="MinWidth" Value="50" />
+                    <Setter Property="Width" Value="auto" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="年" Binding="{Binding YYYY}" FontSize="16" IsReadOnly="True" />
-                <DataGridTextColumn Header="月" Binding="{Binding MM}" FontSize="16" IsReadOnly="True" />
-                <DataGridTextColumn Header="會計科目代號" Binding="{Binding AcctLvl2}" FontSize="16" IsReadOnly="True" />
-                <DataGridTextColumn Header="會計科目子代號" Binding="{Binding AcctLvl3}" FontSize="16" IsReadOnly="True" />
-                <DataGridTextColumn Header="會計科目名稱" Binding="{Binding JouDet_AcctName}" FontSize="16" IsReadOnly="True" />
-                <DataGridTextColumn Header="金額" Binding="{Binding AcctValue}" FontSize="16" IsReadOnly="True" />
-                <!--<DataGridTextColumn Header="年" Binding="{Binding YYYY}" IsReadOnly="True" />
-                <DataGridTextColumn Header="月" Binding="{Binding MM}" IsReadOnly="True" />
-                <DataGridTextColumn Header="分類" Binding="{Binding AcctName}" IsReadOnly="True" />
-                <DataGridTextColumn Header="科目" Binding="{Binding AcctSubName}" IsReadOnly="True" />
-                <DataGridTextColumn Header="金額" Binding="{Binding AcctValue}" IsReadOnly="True" />-->
-                <!--<DataGridTextColumn Header="名稱" Binding="{Binding AcctName}"/>
-                <DataGridTextColumn Header="日期" Binding="{Binding AcctDate,StringFormat='{}{0:yyyy/MM/dd hh:mm:ss}'}" />
-                <DataGridTextColumn Header="金額" Binding="{Binding AcctValue}" />
-                <DataGridTextColumn Header="備註" Binding="{Binding AcctNote}" />
-                <DataGridTextColumn Header="來源" Binding="{Binding AcctSource}" />-->
-
+                <DataGridTextColumn Header="年" MinWidth="50" Width="auto" Binding="{Binding YYYY}" IsReadOnly="True" />
+                <DataGridTextColumn Header="月" MinWidth="50" Width="auto" Binding="{Binding MM}" IsReadOnly="True" />
+                <DataGridTextColumn Header="會計科目代號"  MinWidth="180" Width="auto" Binding="{Binding AcctLvl2}" IsReadOnly="True" />
+                <DataGridTextColumn Header="會計科目子代號" MinWidth="180" Width="auto" Binding="{Binding AcctLvl3}" IsReadOnly="True" />
+                <DataGridTextColumn Header="會計科目名稱" MinWidth="180" Width="auto" Binding="{Binding JouDet_AcctName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="金額" Width="auto" Binding="{Binding AcctValue, StringFormat=N0}" IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Background="#A9D08E" Width="auto" Orientation="Horizontal" >
-            <Label Content="總計:" FontSize="17" Height="30" />
-            <Label Margin="10,0,0,0" Width="auto" FontSize="17" Content="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label Content="總計:" FontSize="20" Height="35" />
+            <TextBlock Margin="5,5,5,5" Width="auto" FontSize="20" Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" />
         </StackPanel>
     </Grid>
 </Window>
