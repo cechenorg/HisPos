@@ -634,7 +634,102 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
         }
+        private void btn_Click(object sender, RoutedEventArgs e)
+        {
+            DownloadMonTradeReportAction();
+        }
+        private void DownloadMonTradeReportAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Id", null));
+            parameters.Add(new SqlParameter("sDate", ConvertMaskedDate(StartDate.Text)));
+            parameters.Add(new SqlParameter("eDate", ConvertMaskedDate(EndDate.Text)));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeProfitDetailEmpRecordByDate]", parameters);
 
+            List<SqlParameter> parameters2 = new List<SqlParameter>();
+            parameters2.Add(new SqlParameter("Id", "1"));
+            parameters2.Add(new SqlParameter("sDate", ConvertMaskedDate(StartDate.Text)));
+            DataTable result2 = MainWindow.ServerConnection.ExecuteProc("[GET].[InvoiceRecordByDate]", parameters2);
 
+            MainWindow.ServerConnection.CloseConnection();
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog
+            {
+                Title = "下載發票",
+                InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath,
+                Filter = "XLSX檔案|*.xlsx",
+                FileName = Convert.ToDateTime(ConvertMaskedDate(StartDate.Text)).ToString("yyyyMM") + "-" + "當月發票",
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                #region 工作列1
+                XLWorkbook wb = new XLWorkbook();
+                IXLStyle style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                IXLWorksheet ws = wb.Worksheets.Add("發票明細");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+                IXLColumn col = ws.Column("E");
+                col.Width = 55;
+
+                ws.Cell(1, 1).Value = "發票明細";
+                ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "時間";
+                ws.Cell("B2").Value = "發票號碼";
+                ws.Cell("C2").Value = "發票金額";
+                ws.Cell("D2").Value = "作廢發票號碼";
+                ws.Cell("E2").Value = "作廢發票金額";
+
+                if (result.Rows.Count > 0)
+                {
+                    IXLRange rangeWithData = ws.Cell(3, 1).InsertData(result.AsEnumerable());
+                    ws.Columns().AdjustToContents();//欄位寬度根據資料調整
+                    rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                }
+                #endregion
+
+                #region 工作列2
+                ws = wb.Worksheets.Add("發票明細2");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+                col = ws.Column("B");
+                col.Width = 15;
+
+                ws.Cell(1, 1).Value = "發票明細";
+                ws.Range(1, 1, 1, 4).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "日期";
+                ws.Cell("B2").Value = "發票金額";
+                ws.Cell("C2").Value = "發票號碼";
+                ws.Cell("D2").Value = "統一編號";
+                ws.Cell("E2").Value = "作廢";
+
+                if (result2.Rows.Count > 0)
+                {
+                    IXLRange rangeWithData = ws.Cell(3, 1).InsertData(result2.AsEnumerable());
+                    rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                }
+                #endregion
+                try
+                {
+                    ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                    ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                    ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                    ws.Columns().AdjustToContents();//欄位寬度根據資料調整
+                    wb.SaveAs(fdlg.FileName);
+                    myProcess.StartInfo.UseShellExecute = true;
+                    myProcess.StartInfo.FileName = fdlg.FileName;
+                    myProcess.StartInfo.CreateNoWindow = true;
+                    myProcess.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
+        }
     }
 }
