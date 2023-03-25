@@ -194,6 +194,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     }
                     currentViewModel.CurrentVoucher.DebitTotalAmount = (int)currentViewModel.CurrentVoucher.DebitDetails.Sum(s => s.JouDet_Amount);
                     currentViewModel.CurrentVoucher.CreditTotalAmount = (int)currentViewModel.CurrentVoucher.CreditDetails.Sum(s => s.JouDet_Amount);
+                    currentViewModel.ResetRowNo();
                 }
             }
             else

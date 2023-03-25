@@ -569,7 +569,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     int count = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID)).Count();
                     if (count == 0)
                     {
-                        MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳來源不存在\r\n請確認來源", item.JouDet_Number), MessageType.ERROR);
+                        MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳來源不存在\r\n請確認來源", item.JouDet_RowNo), MessageType.ERROR);
                         return false;
                     }
                     else
@@ -580,7 +580,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                             int amount = Convert.ToInt32(drs[0]["JouDet_Amount"]);
                             if (item.JouDet_Amount > amount)
                             {
-                                MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳金額超過來源金額\r\n請確認金額", item.JouDet_Number), MessageType.ERROR);
+                                MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳金額超過來源金額\r\n請確認金額", item.JouDet_RowNo), MessageType.ERROR);
                                 return false;
                             }
                         }
@@ -916,6 +916,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 catch (Exception ex)
                 {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
+        }
+        public void ResetRowNo()
+        {
+            if (CurrentVoucher != null)
+            {
+                if (CurrentVoucher.DebitDetails != null)
+                {
+                    int i = 1;
+                    foreach (JournalDetail item in CurrentVoucher.DebitDetails)
+                    {
+                        item.JouDet_RowNo = i;
+                        i++;
+                    }
+                }
+                if (CurrentVoucher.CreditDetails != null)
+                {
+                    int i = 1;
+                    foreach (JournalDetail item in CurrentVoucher.CreditDetails)
+                    {
+                        item.JouDet_RowNo = i;
+                        i++;
+                    }
                 }
             }
         }
