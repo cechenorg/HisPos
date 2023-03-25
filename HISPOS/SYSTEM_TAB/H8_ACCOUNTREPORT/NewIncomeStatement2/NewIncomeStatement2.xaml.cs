@@ -29,5 +29,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
         {
             scrollviewer.ScrollToVerticalOffset(scrollviewer.VerticalOffset - e.Delta);
         }
+
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock box = (TextBlock)sender;
+            Grid grid = (Grid)box.Parent;
+            int index = grid.Children.IndexOf(box);
+            ((NewIncomeStatement2ViewModel)DataContext).CurrentMonth = index;
+        }
     }
 }

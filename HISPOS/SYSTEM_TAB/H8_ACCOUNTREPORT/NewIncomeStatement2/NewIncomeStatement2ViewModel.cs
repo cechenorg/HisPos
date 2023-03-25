@@ -58,7 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                 Set(() => SelectedIncomeStatementData, ref _selectedIncomeStatementData, value);
             }
         }
-
+        public int CurrentMonth { get; set; }
 
         public ICommand SearchCommand { get; set; }
         public ICommand YearMinusCommand { get; set; }
@@ -85,12 +85,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
 
             var expenseDatas = ReportService.GetIncomeStatementDetail(_year, Convert.ToString(_selectedIncomeStatementData.TypeID), Convert.ToString(_selectedIncomeStatementData.AccID)).ToList();
 
-
+            var filterData = expenseDatas.Where(w => w.MM == CurrentMonth).ToList();
             if (expenseDatas.Count > 0)
             {
+                AccountDetailViewModel detailViewModel = new AccountDetailViewModel(filterData);
+                detailViewModel.TotalAmount = filterData.Sum(s => s.AcctValue);
                 AccountDetailWindow accountDetailWindow = new AccountDetailWindow()
                 {
-                    DataContext = new AccountDetailViewModel(expenseDatas)
+                    DataContext = detailViewModel
                 };
                 accountDetailWindow.ShowDialog();
             }

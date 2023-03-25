@@ -7,8 +7,12 @@
         mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:AccountDetailViewModel}" WindowStartupLocation="CenterScreen"
         Title="損益詳細" Height="450" Width="700">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
         <DataGrid  RowBackground="#A9D08E" ItemsSource="{Binding IncomeStatementDetailDataList,UpdateSourceTrigger=PropertyChanged}" 
-                   AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" Background="#E2EFDA" CanUserDeleteRows="False" VerticalContentAlignment="Top">
+                   AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" Background="#E2EFDA" CanUserDeleteRows="False" VerticalContentAlignment="Top" Grid.Row="0">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellStyle}">
                     <Setter Property="Padding" Value="0" />
@@ -34,5 +38,9 @@
 
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel Grid.Row="1" Background="#A9D08E" Width="auto" Orientation="Horizontal" >
+            <Label Content="總計:" FontSize="17" Height="30" />
+            <Label Margin="10,0,0,0" Width="auto" FontSize="17" Content="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
     </Grid>
 </Window>

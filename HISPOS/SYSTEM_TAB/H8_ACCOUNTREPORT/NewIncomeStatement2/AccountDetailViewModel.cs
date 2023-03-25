@@ -22,12 +22,19 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2
                 Set(() => IncomeStatementDetailDataList, ref _incomeStatementDetailDataList, value);
             }
         }
-
-
         public AccountDetailViewModel(List<IncomeStatementDetailData>  data)
         {
             IncomeStatementDetailDataList = data;
         }
 
+        public int TotalAmount
+        {
+            get => totalAmount;
+            set
+            {
+                Set(() => TotalAmount, ref totalAmount, value);
+            }
+        }
+        private int totalAmount;
     }
 }
