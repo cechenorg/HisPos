@@ -660,10 +660,15 @@ namespace His_Pos.NewClass.Report.Accounts
         {
             DataTable table = new DataTable();
             string sql = string.Format(@"
-                Select a.acct_ID as acct1,b.acct_ID as acct2,c.acct_ID as acct3, c.acct_Name, c.acct_BSDisplayMode
+                 Select 
+					a.acct_ID as acct1,
+					b.acct_ID as acct2,
+					Isnull(c.acct_ID, '') as acct3, 
+					Isnull(c.acct_Name, b.acct_Name) as acct_Name, 
+					Isnull(c.acct_BSDisplayMode, b.acct_BSDisplayMode) as acct_BSDisplayMode
                 From (Select * From [{0}].[dbo].[Accounts] Where acct_Level = 1) a
                 Inner Join (Select * From [{0}].[dbo].[Accounts] Where acct_Level = 2) b on a.acct_ID = b.acct_PreLevel
-                Inner Join (Select * From [{0}].[dbo].[Accounts] Where acct_Level = 3) c on b.acct_ID = c.acct_PreLevel
+                Left Join (Select * From [{0}].[dbo].[Accounts] Where acct_Level = 3) c on b.acct_ID = c.acct_PreLevel
                 Order By acct1, acct2, acct3", Properties.Settings.Default.SystemSerialNumber);
             SQLServerConnection.DapperQuery((conn) =>
             {
