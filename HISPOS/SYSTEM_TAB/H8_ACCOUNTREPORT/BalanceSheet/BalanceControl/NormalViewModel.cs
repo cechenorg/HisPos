@@ -697,6 +697,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
         private void GetNoStrikeData(string acct1, string acct2, string acct3)
         {
+            AccDataDetail = new AccountsDetailReport();
             DataRow[] setCollapsed = acountSettingDB.Select("acct_BSDisplayMode = 0");
             //var setCollapsed = acountSettingDB.Select("acct_BSDisplayMode = 0").ToList();
             DataRow[] setMerge = acountSettingDB.Select("acct_BSDisplayMode = 2");
@@ -715,7 +716,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             DataTable firstData = AccountsDb.GetAccountBalFirst(acct1, acct2, acct3, EndDate, type);
             int first = 0;
             DateTime maxDate = new DateTime();
-            AccDataDetail = new AccountsDetailReport();
             DataRow drs = firstData.NewRow();
             if (firstData != null && firstData.Rows.Count > 0)
             {
