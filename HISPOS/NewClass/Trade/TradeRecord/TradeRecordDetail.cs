@@ -241,6 +241,15 @@ namespace His_Pos.NewClass.Trade.TradeRecord
             set { Set(() => ProfitPercent, ref profitPercent, value); }
         }
         private decimal profitPercent;
+        /// <summary>
+        /// 總成本
+        /// </summary>
+        public int TotalCost
+        {
+            get { return totalCost; }
+            set { Set(() => TotalCost, ref totalCost, value); }
+        }
+        private int totalCost;
 
         public TradeRecordDetail(DataRow row)
         {
@@ -281,6 +290,7 @@ namespace His_Pos.NewClass.Trade.TradeRecord
             TraDet_RewardPersonnel = row.Table.Columns.Contains("TraDet_RewardPersonnel") && row["TraDet_RewardPersonnel"] != DBNull.Value ? Convert.ToString(row["TraDet_RewardPersonnel"]) : string.Empty;
             TraDet_RewardPersonnelName = row.Table.Columns.Contains("TraDet_RewardPersonnelName") && row["TraDet_RewardPersonnelName"] != DBNull.Value ? Convert.ToString(row["TraDet_RewardPersonnelName"]) : string.Empty;
             TraCount = row.Table.Columns.Contains("TraCount") && row["TraCount"] != DBNull.Value ? Convert.ToInt32(row["TraCount"]) : 0;
+            TotalCost = row.Table.Columns.Contains("TotalCost") && row["TotalCost"] != DBNull.Value ? Convert.ToInt32(row["TotalCost"]) : 0;
             Profit = row.Table.Columns.Contains("Profit") && row["Profit"] != DBNull.Value ? Convert.ToInt32(row["Profit"]) : 0;
             ProfitPercent = row.Table.Columns.Contains("ProfitPercent") && row["ProfitPercent"] != DBNull.Value ? Convert.ToDecimal(row["ProfitPercent"]) : 0;
         }

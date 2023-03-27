@@ -148,27 +148,27 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         /// <summary>
         /// 毛利率
         /// </summary>
-        //public float SProfitPercent
-        //{
-        //    get { return sProfitPercent; }
-        //    set
-        //    {
-        //        Set(() => SProfitPercent, ref sProfitPercent, value);
-        //    }
-        //}
-        //private float sProfitPercent = 0;
+        public float SProfitPercent
+        {
+            get { return sProfitPercent; }
+            set
+            {
+                Set(() => SProfitPercent, ref sProfitPercent, value);
+            }
+        }
+        private float sProfitPercent = 0;
         /// <summary>
         /// 毛利率
         /// </summary>
-        //public float EProfitPercent
-        //{
-        //    get { return eProfitPercent; }
-        //    set
-        //    {
-        //        Set(() => EProfitPercent, ref eProfitPercent, value);
-        //    }
-        //}
-        //private float eProfitPercent = 1;
+        public float EProfitPercent
+        {
+            get { return eProfitPercent; }
+            set
+            {
+                Set(() => EProfitPercent, ref eProfitPercent, value);
+            }
+        }
+        private float eProfitPercent = 1;
         /// <summary>
         /// 銷售筆數
         /// </summary>
@@ -257,6 +257,28 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         }
         private TradeRecordDetail currentRecordSum;
 
+        
+        /// <summary>
+        /// 銷售彙總
+        /// </summary>
+        public TradeRecordDetails CustomSumList
+        {
+            get { return customSumList; }
+            set
+            {
+                Set(() => CustomSumList, ref customSumList, value);
+            }
+        }
+        private TradeRecordDetails customSumList;
+        public TradeRecordDetail CurrentCustomSum
+        {
+            get { return currentCustomSum; }
+            set
+            {
+                Set(() => CurrentCustomSum, ref currentCustomSum, value);
+            }
+        }
+        private TradeRecordDetail currentCustomSum;
         public ProductTransactionRecordViewModel()
         {
             PrintCommand = new RelayCommand(PrintAction);
@@ -307,7 +329,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     CashierID = cashierID,
                     ProID = SearchProductID,
                     ProName = SearchProductName,
-                    Flag = "0"
+                    Flag = "0",
+                    sProfitPercent = sProfitPercent,
+                    eProfitPercent = eProfitPercent
                 };
                 DataTable result = TradeService.GetTradeRecordTable(queryInfo);//銷售紀錄
                 RecordList = new TradeRecordDetails(result);
@@ -315,6 +339,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 RecordDetailList = new TradeRecordDetails(resultDetail);
                 DataTable resultSum = TradeService.GetTradeRecordSum(queryInfo);//銷售彙總
                 RecordSumList = new TradeRecordDetails(resultSum);
+                DataTable resultCusSum = TradeService.GetTradeRecordCusSum(queryInfo);//客戶彙總
+                CustomSumList = new TradeRecordDetails(resultCusSum);
                 ChangeUiTypeAction(string.Empty);
             }
             else
