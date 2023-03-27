@@ -346,10 +346,10 @@ namespace His_Pos.NewClass.Trade
 	                Order By Sum(TD.TraDet_Amount) Desc
 
 	            Select TraDet_ProductID, TraDet_ProductName, TraDet_Amount,TraDet_PriceSum, abs(InvRec_ValueDifference) as TotalCost,
-	            (TraDet_PriceSum+InvRec_ValueDifference) Profit, case when Isnull(InvRec_ValueDifference, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end ProfitPercent
+	            (TraDet_PriceSum+InvRec_ValueDifference) Profit, case when Isnull(TraDet_PriceSum, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end ProfitPercent
                 From #temp 
-                Where case when TraDet_PriceSum <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end between @sProfitPercent and @eProfitPercent
-                Order By case when Isnull(InvRec_ValueDifference, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end Desc",
+                Where case when Isnull(TraDet_PriceSum, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end between @sProfitPercent and @eProfitPercent
+                Order By case when Isnull(TraDet_PriceSum, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end Desc",
                 Properties.Settings.Default.SystemSerialNumber, info.StartDate, info.EndDate, info.StartInvoice, info.EndInvoice, info.ShowIrregular ? 1 : 0, info.ShowReturn ? 1 : 0, info.CashierID, info.ProID, info.ProName, info.sProfitPercent,info.eProfitPercent);
             SQLServerConnection.DapperQuery((conn) =>
             {
