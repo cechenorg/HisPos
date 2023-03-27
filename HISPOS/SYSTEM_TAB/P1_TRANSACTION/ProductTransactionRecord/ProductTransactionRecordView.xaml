@@ -394,8 +394,8 @@
                     <Label x:Name="lblTotal" Width="170" Height="35" Style="{StaticResource BoldLabelContent18}" />
                     <Button x:Name="btn" Margin="700,0,0,0" Width="100" Background="Green" BorderThickness="0" Click="btn_Click" Content="下載發票" FontFamily="Segoe UI Semibold" FontSize="16" />
                     <Button x:Name="btnPrint1" Width="100" Margin="10,0,0,0" Background="RoyalBlue" BorderBrush="RoyalBlue" Click="btnPrint1_Click" Content="匯出紀錄" />
-                    <Button x:Name="btnPrint2" Width="100" Margin="800,0,0,0" Background="RoyalBlue" BorderBrush="RoyalBlue" Click="btnPrint2_Click" Content="匯出紀錄" Visibility="Collapsed" />
-                    <Button x:Name="btnPrint3" Width="100" Margin="800,0,0,0" Background="RoyalBlue" BorderBrush="RoyalBlue" Click="btnPrint3_Click" Content="匯出紀錄" Visibility="Collapsed" />
+                    <Button x:Name="btnPrint2" Width="100" Margin="10,0,0,0" Background="RoyalBlue" BorderBrush="RoyalBlue" Click="btnPrint2_Click" Content="匯出紀錄" Visibility="Collapsed" />
+                    <Button x:Name="btnPrint3" Width="100" Margin="10,0,0,0" Background="RoyalBlue" BorderBrush="RoyalBlue" Click="btnPrint3_Click" Content="匯出紀錄" Visibility="Collapsed" />
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>
