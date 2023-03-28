@@ -632,7 +632,7 @@ namespace His_Pos.NewClass.Report.Accounts
 				From [{0}].[dbo].[JournalMaster] a
 				inner join [{0}].[dbo].[JournalDetail] b
 				on a.JouMas_ID = b.JouDet_ID
-				where b.JouDet_AcctLvl1 = '{1}' and b.JouDet_AcctLvl2 = '{2}' and JouDet_AcctLvl3 = '{3}' and a.JouMas_IsEnable = 1 and a.JouMas_Source = '1' and Isnull(JouDet_WriteOffID, '') = '' and cast(a.JouMas_Date as date) <= '{5}' and b.JouDet_Type = '{4}')
+				where b.JouDet_AcctLvl1 = '{1}' and b.JouDet_AcctLvl2 = '{2}' and JouDet_AcctLvl3 = '{3}' and a.JouMas_IsEnable = 1 and a.JouMas_Status = 'F' and a.JouMas_Source = '1' and Isnull(JouDet_WriteOffID, '') = '' and cast(a.JouMas_Date as date) <= '{5}' and b.JouDet_Type = '{4}')
 
                 SELECT ISNULL(AccBal_Item,cast(t.AccBal_Date as nvarchar(20))) AS AccBal_Date
                       ,(ISNULL(AccBalDetailAmount,AccBal_Amount) + ISNULL(JouDet_Amount,0) - ISNULL(@noSourceAmount, 0)) AS AccBal_Amount
