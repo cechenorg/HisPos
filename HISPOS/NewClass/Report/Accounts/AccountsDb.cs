@@ -634,8 +634,11 @@ namespace His_Pos.NewClass.Report.Accounts
 				on a.JouMas_ID = b.JouDet_ID
 				where b.JouDet_AcctLvl1 = '{1}' and b.JouDet_AcctLvl2 = '{2}' and JouDet_AcctLvl3 = '{3}' and a.JouMas_IsEnable = 1 and a.JouMas_Status = 'F' and a.JouMas_Source = '1' and Isnull(JouDet_WriteOffID, '') = '' and cast(a.JouMas_Date as date) <= '{5}' and b.JouDet_Type = '{4}')
 
+                SELECT AccBal_Date,CASE WHEN AccBal_Seq = 1 THEN AccBal_Amount - ISNULL(@noSourceAmount, 0) ELSE AccBal_Amount END AS AccBal_Amount
+                FROM (
                 SELECT ISNULL(AccBal_Item,cast(t.AccBal_Date as nvarchar(20))) AS AccBal_Date
-                      ,(ISNULL(AccBalDetailAmount,AccBal_Amount) + ISNULL(JouDet_Amount,0) - ISNULL(@noSourceAmount, 0)) AS AccBal_Amount
+                      ,(ISNULL(AccBalDetailAmount,AccBal_Amount) + ISNULL(JouDet_Amount,0)) AS AccBal_Amount
+                      ,ROW_NUMBER() OVER (ORDER BY ISNULL(AccBal_Item,cast(t.AccBal_Date as nvarchar(20)))) AS AccBal_Seq
                 FROM #tempAcc t
                 LEFT JOIN 
                 (	 SELECT JouDet_AcctLvl1,JouDet_AcctLvl2,JouDet_AcctLvl3,JouDet_WriteOffID,JouDet_WriteOffNumber,SUM(JouDet_Amount) JouDet_Amount
@@ -646,6 +649,7 @@ namespace His_Pos.NewClass.Report.Accounts
                    AND t.AccBal_AcctLvl3 = j.JouDet_AcctLvl3
                    AND cast(t.AccBal_Date as varchar(12)) = ISNULL(j.JouDet_WriteOffID,cast(t.AccBal_Date as varchar(12)))
                    AND ISNULL(t.AccBal_Number,0) = ISNULL(JouDet_WriteOffNumber,0)
+               ) a
                 ORDER BY 1 ", Properties.Settings.Default.SystemSerialNumber, acct1, acct2, acct3, type, edate.ToString("yyyy-MM-dd"));
             SQLServerConnection.DapperQuery((conn) =>
             {
