@@ -617,6 +617,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 return;
             }
+            else if (CurrentPrescription.Patient != null && CurrentPrescription.Patient.ID != 0)
+            {
+                ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.ID.ToString();
+            }
+            /*
             else if (CurrentPrescription.Patient.CellPhone != null || CurrentPrescription.Patient.CellPhone != "")
             {
                 ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.CellPhone;
@@ -625,6 +630,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.Tel;
             }
+            */
             else
             {
                 return;
