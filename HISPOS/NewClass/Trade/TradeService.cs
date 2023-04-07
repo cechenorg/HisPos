@@ -136,7 +136,8 @@ namespace His_Pos.NewClass.Trade
             {
                 DataRow[] drs = empList.Select(string.Format("Emp_Name = '{0}'", Convert.ToString(item.Emp.Emp_Name)));
                 string Id = Convert.ToString(drs[0]["Emp_ID"]) == "0" ? null : Convert.ToString(drs[0]["Emp_ID"]);
-                string rewardPercent = item.TraDet_RewardPercent == 0 ? null : Convert.ToString(item.TraDet_RewardPercent);
+                string rewardPercent = item.TraDet_RewardPercent == 0 || item.TraDet_Amount == 0 ? null : Convert.ToString(item.TraDet_RewardPercent / item.TraDet_Amount);
+
                 dt.Rows.Add(
                     item.TraDet_DetailID,
                     item.TraDet_ProductID,
