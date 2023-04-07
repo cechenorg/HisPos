@@ -500,6 +500,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             historyWindow.ShowDialog();
         }
 
+        /// <summary>
+        /// 重新整理畫面，讀取關班紀錄
+        /// </summary>
         private void ReloadAction()
         {
             DataTable result = ClosingWorkDB.ClosingWorkByDate(StartDate);
@@ -585,15 +588,19 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             else
             {
                 MessageWindow.ShowMessage("成功", MessageType.SUCCESS);
-            }
-            ReloadAction();
-            InsertToClosingAccoutRecord();
-            if (VM.AutoAddJournal)
-            {
-                InsertJournal();
+
+                ReloadAction();
+                InsertToClosingAccoutRecord();
+                if (VM.AutoAddJournal)
+                {
+                    InsertJournal();
+                }
             }
         }
 
+        /// <summary>
+        /// 新增關班紀錄，SD_MainServer
+        /// </summary>
         private void InsertToClosingAccoutRecord()
         {
             DailyClosingAccount data = new DailyClosingAccount()
@@ -660,6 +667,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 return;
             }
         }
+        /// <summary>
+        /// 新增關班傳票
+        /// </summary>
         private void InsertJournal()
         {
             ClosingWorkDB.SetClosingWorkToJournal(StartDate);
