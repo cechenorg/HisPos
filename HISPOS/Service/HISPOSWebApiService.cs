@@ -18,9 +18,9 @@ namespace His_Pos.Service
     internal class HISPOSWebApiService
     {
 
-        //private const string webapiPath = @"https://kaokaodepon.singde.com.tw:60005/ServerWebAPI/";
+        private const string webapiPath = @"https://kaokaodepon.singde.com.tw:60005/ServerWebAPI/";
 
-        private const string webapiPath = @"https://localhost:7129/ServerWebAPI/";
+        //private const string webapiPath = @"https://localhost:7129/ServerWebAPI/";
 
         private CommonDataRepository _commonDataRepository = new CommonDataRepository();
 
