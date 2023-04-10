@@ -20,5 +20,13 @@ namespace His_Pos.NewClass.Report.RewardDetailReport
                 Add(new RewardDetailReport(r));
             }
         }
+        public RewardDetailReports(DataTable table)
+        {
+            Clear();
+            foreach (DataRow dr in table.Rows)
+            {
+                Add(new RewardDetailReport(dr));
+            }
+        }
     }
 }

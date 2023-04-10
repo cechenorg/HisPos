@@ -2487,11 +2487,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                MainWindow.ServerConnection.OpenConnection();
-                BusyContent = "報表查詢中";
-                RewardDetailReportCollection = new RewardDetailReports("0", StartDate, EndDate);
+                //MainWindow.ServerConnection.OpenConnection();
+                //BusyContent = "報表查詢中";
+                //RewardDetailReportCollection = new RewardDetailReports("0", StartDate, EndDate);
 
-                MainWindow.ServerConnection.CloseConnection();
+                //MainWindow.ServerConnection.CloseConnection();
+
+                RewardDetailReportCollection = new RewardDetailReports(Ds.Tables[12]);
+
+
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -2717,9 +2721,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void CalculateTotalRewardProfit()
         {
-            RewardReportCollection = new RewardReports(schema, StartDate, EndDate);
-            TotalRewardReport.RewardAmountSum = -RewardReportCollection.Sum(c => c.RewardAmount);
-            TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
+            //RewardReportCollection = new RewardReports(schema, StartDate, EndDate);
+            //TotalRewardReport.RewardAmountSum = -RewardReportCollection.Sum(c => c.RewardAmount);
+            //TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
+            RewardDetailReportCollection = new RewardDetailReports(Ds.Tables[12]);
+            TotalRewardReport.RewardAmountSum = -RewardDetailReportCollection.Sum(c => c.RewardAmount);
+            TotalRewardReport.RewardAmount = -RewardDetailReportCollection.Sum(c => c.RewardAmount);
         }
 
         private void AdjustCaseFilter(object sender, FilterEventArgs e)

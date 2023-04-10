@@ -8,11 +8,11 @@ namespace His_Pos.NewClass.Report.RewardDetailReport
     {
         public RewardDetailReport(DataRow r)
         {
-            RewardAmount = r.Field<double>("RewardAmount");
-            Emp_Name = r.Field<string>("Emp_Name");
-            TraDet_RewardPersonnel = r.Field<string>("TraDet_RewardPersonnel");
+            RewardAmount = r.Table.Columns.Contains("RewardAmount") ? r.Field<double>("RewardAmount") : 0;
+            Emp_Name = r.Table.Columns.Contains("Emp_Name") ? r.Field<string>("Emp_Name") : string.Empty;
+            TraDet_RewardPersonnel = r.Table.Columns.Contains("TraDet_RewardPersonnel") ? r.Field<string>("TraDet_RewardPersonnel") : string.Empty;
             RewardAmount = Math.Ceiling(RewardAmount);
-            Free = r.Field<double>("Free");
+            Free = r.Table.Columns.Contains("Free") ? r.Field<double>("Free") : 0;
         }
 
         public double RewardAmount { get; set; }
