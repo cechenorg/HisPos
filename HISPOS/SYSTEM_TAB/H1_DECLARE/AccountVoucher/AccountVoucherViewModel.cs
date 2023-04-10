@@ -516,9 +516,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 BtnEditVisibilty = Visibility.Hidden;
                 BtnExportVisibilty = Visibility.Hidden;
                 DisplayVoidReason = Visibility.Visible;
+                IsCanEdit = false;
+                BtnName = "新增";
                 if (jm.JouMas_IsEnable == 0)
                 {
-                    BtnName = "新增";
                     IsBtnEnable = false;
                     IsCanEdit = true;
                     return true;
@@ -530,9 +531,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 BtnEditVisibilty = Visibility.Hidden;
                 BtnExportVisibilty = Visibility.Hidden;
                 DisplayVoidReason = Visibility.Hidden;
+                IsCanEdit = false;
+                BtnName = "新增";
                 if (jm.JouMas_Status.Equals("T") && jm.JouMas_IsEnable == 1)
                 {
-                    BtnName = "新增";
                     IsBtnEnable = true;
                     IsCanEdit = true;
                     return true;
@@ -542,15 +544,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 BtnVisibilty = Visibility.Hidden;
                 BtnEditVisibilty = Visibility.Hidden;
+                BtnExportVisibilty = Visibility.Hidden;
                 DisplayVoidReason = Visibility.Hidden;
+                IsCanEdit = false;
+                BtnName = "修改";
                 if (CurrentVoucher != null && !string.IsNullOrEmpty(CurrentVoucher.JouMas_ID))
                 {
-                    BtnName = "修改";
                     IsBtnEnable = true;
-                    IsCanEdit = false;
                     BtnEditVisibilty = Visibility.Visible;
                     BtnExportVisibilty = Visibility.Visible;
                 }
+
                 if (jm.JouMas_Status.Equals("F") && jm.JouMas_IsEnable == 1)
                 {
                     return true;
