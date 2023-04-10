@@ -140,7 +140,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 
             if (serverPharmacyInfo != null)
             {
-                pharmacy.GroupServerName = serverPharmacyInfo.PHAMAS_GroupServer;
+                //pharmacy.GroupServerName = serverPharmacyInfo.PHAMAS_GroupServer;
                 pharmacy.TAXNUM = serverPharmacyInfo.PHAMAS_TAXNUM;
                 pharmacy.VerifyKey = serverPharmacyInfo.PHAMAS_VerifyKey;
             }

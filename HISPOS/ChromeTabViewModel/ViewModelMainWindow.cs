@@ -297,8 +297,8 @@ namespace His_Pos.ChromeTabViewModel
                 Positions = new Positions();
                 BusyContent = "藥袋量計算中";
                 ProductDB.UpdateAllInventoryMedBagAmount();
-                BusyContent = "同步員工資料";
-                EmployeeDb.SyncData();
+                //BusyContent = "同步員工資料";
+                //EmployeeDb.SyncData();
                 BusyContent = "取得員工";
                 EmployeeCollection = new Employees();
                 EmployeeCollection.Init();
