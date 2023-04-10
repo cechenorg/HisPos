@@ -313,6 +313,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PreId", prescription.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Type.ToString());
+            DataBaseFunction.AddSqlParameter(parameterList, "empID", ViewModelMainWindow.CurrentUser.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);
         }
 
