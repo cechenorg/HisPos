@@ -757,7 +757,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                         dr["TraDet_PriceSum"] = record.TraDet_PriceSum;
                         dr["TotalCost"] = record.TotalCost;
                         dr["Profit"] = record.Profit;
-                        dr["ProfitPercent"] = record.ProfitPercent;
+                        dr["ProfitPercent"] = record.ProfitPercent.ToString("P");
                         table.Rows.Add(dr);
                     }
                     break;
