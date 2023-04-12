@@ -40,6 +40,10 @@ using His_Pos.ChromeTabViewModel;
 using DomainModel.Enum;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine;
+using His_Pos.NewClass.StoreOrder;
+using System.Data;
+using System.Globalization;
+using System.Reflection;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -184,10 +188,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public bool CanEdit => (!VM.PreAdjustDateControl && (!EditedPrescription.PrescriptionStatus.IsAdjust ||
             EditedPrescription.InsertTime != null &&
             EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.Authority == Authority.Admin ||
-            VM.CurrentUser.IsPharmist())) ||
-            (VM.PreAdjustDateControl &&
-            ((authorities.Contains(VM.CurrentUser.Authority) && DateTime.Compare(Convert.ToDateTime(EditedPrescription.AdjustDate), VM.PrescriptionCloseDate) > 0) ||
-            DateTime.Compare(Convert.ToDateTime(EditedPrescription.AdjustDate), DateTime.Today) >= 0));
+            VM.CurrentUser.IsPharmist())); //||
+            //(VM.PreAdjustDateControl &&
+            //((authorities.Contains(VM.CurrentUser.Authority) && DateTime.Compare(Convert.ToDateTime(EditedPrescription.AdjustDate), VM.PrescriptionCloseDate) > 0) ||
+            //DateTime.Compare(Convert.ToDateTime(EditedPrescription.AdjustDate), DateTime.Today) >= 0));
 
         public bool PriceReadOnly => !CanEdit;
 
@@ -830,7 +834,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if ((bool)delete)
             {
                 MainWindow.ServerConnection.OpenConnection();
+                DataTable table = PrescriptionDb.GetStoreOrderIDByPrescriptionID(EditedPrescription.ID);
                 EditedPrescription.Delete();
+                foreach (DataRow dr in table.Rows)
+                {
+                    string preOrder = Convert.ToString(dr["StoOrd_ID"]);
+                    string update = DateTime.Now.ToString("yyyy/MM/dd");
+                    string uptime = DateTime.Now.ToString("HHmmss");
+                    DateTime dt = DateTime.Parse(update);
+                    CultureInfo culture = new CultureInfo("zh-TW");
+                    culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                    update = dt.ToString("yyyMMdd", culture);
+                    string voidReason = "5.其他:來源處方已刪除";
+                    StoreOrderDB.UpdateOrderToScrap(preOrder, update, uptime, voidReason);//更新杏德訂單資料
+                }
+
                 MainWindow.ServerConnection.CloseConnection();
                 Messenger.Default.Send(EditedPrescription.Type.Equals(PrescriptionType.ChronicReserve)
                     ? new NotificationMessage("ReservePrescriptionEdited")
@@ -844,6 +862,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
             EditedPrescription.ID = OriginalPrescription.ID;
             EditedPrescription.SourceId = OriginalPrescription.SourceId;
+
+            PrintEditedPrescription = new Prescription();
             PrintEditedPrescription.ID = OriginalPrescription.ID;
             PrintEditedPrescription.SourceId = OriginalPrescription.SourceId;
             InitPrescription();

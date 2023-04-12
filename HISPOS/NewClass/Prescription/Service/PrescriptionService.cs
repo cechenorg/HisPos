@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Medicine.MedBag;
 using His_Pos.NewClass.Medicine.ReserveMedicine;
 using His_Pos.NewClass.Person.Customer;
@@ -350,7 +351,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 MessageWindow.ShowMessage("調劑日不可小於就醫日", MessageType.WARNING);
                 return false;
             }
-
+            
             if (VM.PreAdjustDateControl)//新判斷
             {
                 List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
@@ -361,6 +362,19 @@ namespace His_Pos.NewClass.Prescription.Service
                 else if (VM.CurrentUser.Authority == Authority.MasterPharmacist && type == 2 && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) < 0)//負責藥師"可以 修改 "調劑日">"處方關帳日"的處方
                 {
                     return true;
+                }
+                else if ((VM.CurrentUser.Authority == Authority.PharmacyManager || VM.CurrentUser.Authority == Authority.Admin) && type == 2 && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) >= 0)//藥局經理"可以 修改 "調劑日"<"處方關帳日"的處方，限欄位
+                {
+                    string errMsg = PharmacyManagerCheck(prescription);
+                    if (!string.IsNullOrEmpty(errMsg))
+                    {
+                        MessageWindow.ShowMessage(errMsg, MessageType.WARNING);
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
                 }
                 else//其他權限只能新增修改刪除當日處方
                 {
@@ -395,6 +409,82 @@ namespace His_Pos.NewClass.Prescription.Service
                     return false;
                 }
             }
+        }
+
+        private static string PharmacyManagerCheck(Prescription prescription)
+        {
+            string msg = string.Empty;
+            DataTable tableMaster = PrescriptionDb.GetPrescriptionByID(prescription.ID);
+            DataTable tableDetail = MedicineDb.GetDataByPrescriptionId(prescription.ID);
+            if (prescription != null && prescription.Medicines != null && tableMaster != null && tableMaster.Rows.Count > 0 && tableDetail != null)
+            {
+                int newMedCount = prescription.Medicines.Count;
+                int count = tableDetail.Rows.Count;
+                if (count != newMedCount)
+                    return "已關帳，禁止新增藥品";
+
+                var treatDate = Convert.ToDateTime(tableMaster.Rows[0]["TreatmentDate"]);//就醫日期
+                var newtreatDate = prescription.TreatDate;
+                if (treatDate.Date.CompareTo(newtreatDate) != 0)
+                    return "已關帳，禁止異動就醫日期";
+
+                var adjustDate = Convert.ToDateTime(tableMaster.Rows[0]["AdjustDate"]);//調劑日期
+                var newAdjustDate = prescription.AdjustDate;
+                if (adjustDate.Date.CompareTo(newAdjustDate) != 0)
+                    return "已關帳，禁止異動調劑日期";
+
+                var preCase = Convert.ToString(tableMaster.Rows[0]["PrescriptionCaseID"]);//部分負擔
+                var newPreCase = prescription.PrescriptionCase;
+                if (preCase != newPreCase.ID)
+                {
+                    int copay = Convert.ToInt32(tableMaster.Rows[0]["CopaymentPoint"]);//部分負擔金額
+                    int newCopay = prescription.PrescriptionPoint.CopaymentPoint;
+                    if (copay != newCopay)
+                    {
+                        return "已關帳，禁止異動申報點數";
+                    }
+                }
+
+                var spePoint = Convert.ToInt32(tableMaster.Rows[0]["SpecialMaterialPoint"]);//特材點數
+                var newSpePoint = prescription.PrescriptionPoint.SpecialMaterialPoint;
+                if (spePoint != newSpePoint)
+                {
+                    return "已關帳，禁止異動申報點數";
+                }
+
+                foreach (DataRow dr in tableDetail.Rows)
+                {
+                    bool isPaySelf = Convert.ToBoolean(dr["PaySelf"]);//自費
+                    bool paySelf = prescription.Medicines.Where(w => w.Order == Convert.ToInt32(dr["OrderNumber"])).FirstOrDefault().PaySelf;
+                    if (isPaySelf == paySelf)
+                    {
+                        if (isPaySelf)
+                        {
+                            double selfPrice = Convert.ToDouble(dr["Pro_SelfPayPrice"]);//自費價
+                            double self = prescription.Medicines.Where(w => w.Order == Convert.ToInt32(dr["OrderNumber"])).FirstOrDefault().Price;
+                            if (selfPrice != self)
+                            {
+                                return "已關帳，禁止異動申報點數";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return "已關帳，禁止異動申報點數";
+                    }
+
+                    double totalAmount = Convert.ToDouble(dr["TotalAmount"]);//總量
+                    double amount = prescription.Medicines.Where(w => w.Order == Convert.ToInt32(dr["OrderNumber"])).FirstOrDefault().Amount;
+                    if (totalAmount != amount)
+                        return "已關帳，禁止異動申報點數";
+
+                    double totalPoint = Math.Round(totalAmount * (isPaySelf ? Convert.ToDouble(dr["PaySelfValue"]) : Convert.ToDouble(dr["Med_Price"])), 0);//總價
+                    double point = prescription.Medicines.Where(w => w.Order == Convert.ToInt32(dr["OrderNumber"])).FirstOrDefault().TotalPrice;
+                    if (totalPoint != point)
+                        return "已關帳，禁止異動申報點數";
+                }
+            }
+            return string.Empty;
         }
 
         private bool CheckAdjustDateFutureOutOfRange()

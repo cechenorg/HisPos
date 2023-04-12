@@ -24,7 +24,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.InvalidWindow
             }
         }
         private string voidReason;
-        
+
+        public bool IsInvalid
+        {
+            get => isInvalid;
+            set
+            {
+                Set(() => IsInvalid, ref isInvalid, value);
+            }
+        }
+        private bool isInvalid;
+
         public RelayCommand SubmitCommand { get; set; }
 
         private void SubmitAction()

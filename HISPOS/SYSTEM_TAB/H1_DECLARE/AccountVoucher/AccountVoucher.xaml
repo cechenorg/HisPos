@@ -171,9 +171,16 @@
                                         </ContextMenu>
                                     </Grid.ContextMenu>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition />
+                                        <RowDefinition Height="40" />
+                                        <RowDefinition Height="35" />
                                     </Grid.RowDefinitions>
-                                    <Label Content="{Binding JouMas_ID}" FontSize="24"/>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="120" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding JouMas_ID}" FontSize="24"/>
+                                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" Content="{Binding JouMas_Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" ContentStringFormat="{}{0:yyyy/MM/dd}" Foreground="RoyalBlue"/>
+                                    <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Content="{Binding DebitTotalAmount,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Foreground="IndianRed"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -207,7 +214,7 @@
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="{Binding CurrentVoucher.JouMas_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" FontSize="20"/>
                         <Label Grid.Column="1" Content="傳票日期:" HorizontalAlignment="Right" FontSize="20" Margin="0,0,130,0"/>
-                        <DatePicker Grid.Column="1" Width="130" Language="zh-cn" FontSize="20" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                        <DatePicker Grid.Column="1" Width="130" Language="zh-cn" FontSize="20" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Center" DisplayDateStart="{Binding ClosingDate, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                     IsEnabled="{Binding IsCanEdit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Text="{Binding CurrentVoucher.JouMas_Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat= yyyy/MM/dd}">
                         </DatePicker>
@@ -336,17 +343,17 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="120" Header="來源單號" >
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_SourceID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Width="120" Header="沖帳來源單號" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_WriteOffID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MouseDoubleClick="TextBox_MouseDoubleClick" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" KeyUp="TextBox_KeyUp"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="120" Header="來源單號" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_SourceID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -484,17 +491,17 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="120" Header="來源單號" >
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_SourceID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Width="120" Header="沖帳來源單號" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_WriteOffID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MouseDoubleClick="TextBox_MouseDoubleClick" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" KeyUp="TextBox_KeyUp"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="120" Header="來源單號" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" Text="{Binding JouDet_SourceID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -542,8 +549,9 @@
             </Grid>
         </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center">
-            <Button Width="Auto" BorderThickness="0" FontSize="40" Content="+" Foreground="Black" Background="Transparent" 
-                    Command="{Binding AddCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" Height="Auto" Margin="0,0,0,30"/>
+            <Button Width="auto" BorderThickness="0" FontSize="14" Content="新增傳票" Height="auto" Background="IndianRed" FontFamily="Segoe UI Semibold" Command="{Binding AddCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,18"/>
+            <!--<Button Width="Auto" BorderThickness="0" FontSize="40" Content="+" Foreground="Black" Background="Transparent" 
+                    Command="{Binding AddCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" Height="Auto" Margin="0,0,0,30"/>-->
         </StackPanel>
     </Grid>
 </UserControl>
