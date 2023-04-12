@@ -64,6 +64,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         public RelayCommand ExportCommand { get; set; }
         #endregion
         #region
+
+        public DateTime? ClosingDate
+        {
+            get => closingDate;
+            set
+            {
+                Set(() => ClosingDate, ref closingDate, value);
+            }
+        }
+
+        private DateTime? closingDate = ViewModelMainWindow.ClosingDate.AddDays(1);
         public ICollectionView VoucherCollectionView
         {
             get => voucherCollectionView;
@@ -762,7 +773,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 {
                     var invalidWindow = new InvalidWindow.InvalidWindow();
                     invalidWindow.ShowDialog();
-                    if ((bool)invalidWindow.DialogResult)
+                    bool isInvalid = ((InvalidViewModel)invalidWindow.DataContext).IsInvalid;
+                    if (isInvalid)
                     {
                         System.Windows.Application.Current.Dispatcher.Invoke(new Action(delegate
                         {

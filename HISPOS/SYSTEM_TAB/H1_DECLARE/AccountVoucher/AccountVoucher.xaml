@@ -207,7 +207,7 @@
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="{Binding CurrentVoucher.JouMas_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" FontSize="20"/>
                         <Label Grid.Column="1" Content="傳票日期:" HorizontalAlignment="Right" FontSize="20" Margin="0,0,130,0"/>
-                        <DatePicker Grid.Column="1" Width="130" Language="zh-cn" FontSize="20" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                        <DatePicker Grid.Column="1" Width="130" Language="zh-cn" FontSize="20" Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Center" DisplayDateStart="{Binding ClosingDate, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                     IsEnabled="{Binding IsCanEdit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Text="{Binding CurrentVoucher.JouMas_Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat= yyyy/MM/dd}">
                         </DatePicker>

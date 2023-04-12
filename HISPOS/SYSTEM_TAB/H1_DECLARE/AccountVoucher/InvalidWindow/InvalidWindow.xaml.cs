@@ -28,12 +28,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.InvalidWindow
                 switch (notificationMessage.Notification)
                 {
                     case "YesAction":
-                        DialogResult = true;
+                        ((InvalidViewModel)DataContext).IsInvalid = true;
                         Close();
                         break;
 
                     case "NoAction":
-                        DialogResult = false;
+                        ((InvalidViewModel)DataContext).IsInvalid = false;
                         Close();
                         break;
                 }
