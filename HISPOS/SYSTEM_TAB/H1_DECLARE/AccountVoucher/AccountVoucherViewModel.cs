@@ -732,7 +732,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private void AddAction()
         {
-            InsertNewJournal();
+            Type = Types.FirstOrDefault(w => w.JournalTypeID == 1);//切換到傳票作業
+            bool isSuccess = InsertNewJournal();
         }
         private bool InsertNewJournal()
         {
