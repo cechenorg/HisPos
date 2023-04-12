@@ -2725,8 +2725,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             //TotalRewardReport.RewardAmountSum = -RewardReportCollection.Sum(c => c.RewardAmount);
             //TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
             RewardDetailReportCollection = new RewardDetailReports(Ds.Tables[12]);
-            TotalRewardReport.RewardAmountSum = -RewardDetailReportCollection.Sum(c => c.RewardAmount);
-            TotalRewardReport.RewardAmount = -RewardDetailReportCollection.Sum(c => c.RewardAmount);
+            TotalRewardReport.RewardAmountSum = RewardDetailReportCollection.Sum(c => c.RewardAmount);
+            TotalRewardReport.RewardAmount = RewardDetailReportCollection.Sum(c => c.RewardAmount);
         }
 
         private void AdjustCaseFilter(object sender, FilterEventArgs e)
