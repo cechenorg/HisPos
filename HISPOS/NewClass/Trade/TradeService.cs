@@ -378,6 +378,7 @@ namespace His_Pos.NewClass.Trade
                 Declare @ProName nvarchar(50) = '{7}'
                 Declare @sProfitPercent float = {8}
                 Declare @eProfitPercent float = {9}
+                Declare @Cashier int = {10}
                 Declare @IsAvgCost int = (Select SysPar_Value From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'AvgCost')
                 
                 if @sInvoice is null
@@ -403,6 +404,7 @@ namespace His_Pos.NewClass.Trade
 		            Cast(a.TraMas_ChkoutTime as date) between @sdate and @edate and
 		            (TRY_CAST(substring(a.TraMas_InvoiceNumber, 3,8) as int)>=TRY_CAST(@sInvoice as int) OR @sInvoice is null or @sInvoice = '') and
 		            (TRY_CAST(substring(a.TraMas_InvoiceNumber, 3,8) as int)<=TRY_CAST(@eInvoice as int) OR @eInvoice is null or @eInvoice = '') and
+                    (a.TraMas_Cashier = @Cashier or @Cashier is null or @Cashier=''or @Cashier=-1) and 
                     (tm.TraDet_ProductID like '%'+@ProID+'%' or @ProID is null or @ProID='') and
 	                (pm.Pro_ChineseName like '%'+@ProName+'%' or @ProName is null or @ProName='') and 
 		            ((@IsReturn = 0 and a.TraMas_IsEnable = 1) Or (@IsReturn = 1 and TraMas_IsEnable = 0 and a.TraMas_UpdateTime is not null))
@@ -416,7 +418,7 @@ namespace His_Pos.NewClass.Trade
 					(@sProfitPercent = -1 and @eProfitPercent = -1 and ProfitPercent < 0) or--顯示負毛利
 					(ProfitPercent between @sProfitPercent and @eProfitPercent)--區間查詢
 	            Order By ProfitPercent Desc
-            ", Properties.Settings.Default.SystemSerialNumber, info.StartDate, info.EndDate, info.StartInvoice, info.EndInvoice, info.ShowReturn ? 1 : 0, info.ProID, info.ProName, info.sProfitPercent, info.eProfitPercent);
+            ", Properties.Settings.Default.SystemSerialNumber, info.StartDate, info.EndDate, info.StartInvoice, info.EndInvoice, info.ShowReturn ? 1 : 0, info.ProID, info.ProName, info.sProfitPercent, info.eProfitPercent, info.CashierID);
             SQLServerConnection.DapperQuery((conn) =>
             {
                 var dapper = conn.Query(sql, commandType: CommandType.Text);
