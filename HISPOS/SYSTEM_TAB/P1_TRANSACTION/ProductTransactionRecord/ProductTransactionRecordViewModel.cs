@@ -10,6 +10,7 @@ using His_Pos.NewClass.Trade.TradeRecord;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -156,7 +157,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 Set(() => SProfitPercent, ref sProfitPercent, value);
             }
         }
-        private float sProfitPercent = 0;
+        private float sProfitPercent = -100;
         /// <summary>
         /// 毛利率
         /// </summary>
@@ -168,7 +169,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 Set(() => EProfitPercent, ref eProfitPercent, value);
             }
         }
-        private float eProfitPercent = 1;
+        private float eProfitPercent = 100;
         /// <summary>
         /// 銷售筆數
         /// </summary>
@@ -259,7 +260,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
         
         /// <summary>
-        /// 銷售彙總
+        /// 顧客彙總
         /// </summary>
         public TradeRecordDetails CustomSumList
         {
@@ -285,11 +286,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             SubmitCommand = new RelayCommand(SubmitAction);
             ClearCommand = new RelayCommand(ClearAction);
             ChangeUiTypeCommand = new RelayCommand<string>(ChangeUiTypeAction);
+            DownloadInvoiceCommand = new RelayCommand(DownloadInvoiceAction);
             GetEmployeeList();
         }
         public RelayCommand PrintCommand { get; set; }
         public RelayCommand ClearCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
+        public RelayCommand DownloadInvoiceCommand { get; set; }
         public RelayCommand<string> ChangeUiTypeCommand { get; set; }
         private void GetEmployeeList()
         {
@@ -330,8 +333,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     ProID = SearchProductID,
                     ProName = SearchProductName,
                     Flag = "0",
-                    sProfitPercent = sProfitPercent,
-                    eProfitPercent = eProfitPercent
+                    sProfitPercent = sProfitPercent / 100,
+                    eProfitPercent = eProfitPercent / 100
                 };
                 DataTable result = TradeService.GetTradeRecordTable(queryInfo);//銷售紀錄
                 RecordList = new TradeRecordDetails(result);
@@ -391,6 +394,100 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 SearchProductID = string.Empty;
                 SearchProductName = string.Empty;
             });
+        }
+        private void DownloadInvoiceAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Id", null));
+            parameters.Add(new SqlParameter("sDate", Convert.ToDateTime(ConvertMaskedDate(StartDate))));
+            parameters.Add(new SqlParameter("eDate", Convert.ToDateTime(ConvertMaskedDate(EndDate))));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeProfitDetailEmpRecordByDate]", parameters);
+
+            List<SqlParameter> parameters2 = new List<SqlParameter>();
+            parameters2.Add(new SqlParameter("Id", "1"));
+            parameters2.Add(new SqlParameter("sDate", Convert.ToDateTime(ConvertMaskedDate(StartDate))));
+            DataTable result2 = MainWindow.ServerConnection.ExecuteProc("[GET].[InvoiceRecordByDate]", parameters2);
+            MainWindow.ServerConnection.CloseConnection();
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog
+            {
+                Title = "下載發票",
+                InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath,
+                Filter = "XLSX檔案|*.xlsx",
+                FileName = Convert.ToDateTime(ConvertMaskedDate(StartDate)).ToString("yyyyMM") + "-" + "當月發票",
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                #region 工作列1
+                XLWorkbook wb = new XLWorkbook();
+                IXLStyle style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                IXLWorksheet ws = wb.Worksheets.Add("發票明細");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+                IXLColumn col = ws.Column("E");
+                col.Width = 55;
+
+                ws.Cell(1, 1).Value = "發票明細";
+                ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "時間";
+                ws.Cell("B2").Value = "發票號碼";
+                ws.Cell("C2").Value = "發票金額";
+                ws.Cell("D2").Value = "作廢發票號碼";
+                ws.Cell("E2").Value = "作廢發票金額";
+
+                if (result.Rows.Count > 0)
+                {
+                    IXLRange rangeWithData = ws.Cell(3, 1).InsertData(result.AsEnumerable());
+                    ws.Columns().AdjustToContents();//欄位寬度根據資料調整
+                    rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                }
+                #endregion
+
+                #region 工作列2
+                ws = wb.Worksheets.Add("發票明細2");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+
+                col = ws.Column("B");
+                col.Width = 15;
+
+                ws.Cell(1, 1).Value = "發票明細";
+                ws.Range(1, 1, 1, 4).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "日期";
+                ws.Cell("B2").Value = "發票金額";
+                ws.Cell("C2").Value = "發票號碼";
+                ws.Cell("D2").Value = "統一編號";
+                ws.Cell("E2").Value = "作廢";
+
+                if (result2.Rows.Count > 0)
+                {
+                    IXLRange rangeWithData = ws.Cell(3, 1).InsertData(result2.AsEnumerable());
+                    rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                }
+                #endregion
+
+                try
+                {
+                    ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                    ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                    ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                    ws.Columns().AdjustToContents();//欄位寬度根據資料調整
+                    wb.SaveAs(fdlg.FileName);
+                    myProcess.StartInfo.UseShellExecute = true;
+                    myProcess.StartInfo.FileName = fdlg.FileName;
+                    myProcess.StartInfo.CreateNoWindow = true;
+                    myProcess.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
         }
         private void ChangeUiTypeAction(string type)
         {
@@ -455,6 +552,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     fileTitle = "銷售彙總";
                     break;
 
+                case 4:
+                    fileTitle = "顧客彙總";
+                    break;
+
                 default:
                     break;
             }
@@ -514,11 +615,24 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     worksheet.Cell("B2").Value = "商品名稱";
                     worksheet.Cell("C2").Value = "數量";
                     worksheet.Cell("D2").Value = "總售價";
+                    worksheet.Cell("E2").Value = "總成本";
+                    worksheet.Cell("F2").Value = "總毛利";
+                    worksheet.Cell("G2").Value = "毛利率";
+                }
+                else if (SelectTab == 4)
+                {
+                    worksheet.Cell(1, 1).Value = fileTitle;
+                    worksheet.Range(1, 1, 1, 4).Merge().AddToNamed("Titles");
+                    worksheet.Cell("A2").Value = "顧客姓名";
+                    worksheet.Cell("B2").Value = "總金額";
+                    worksheet.Cell("C2").Value = "總毛利";
+                    worksheet.Cell("D2").Value = "毛利率";
                 }
                 try
                 {
                     DataTable table = SetPrintStructure();
                     IXLRange rangeWithData = worksheet.Cell(3, 1).InsertData(table.AsEnumerable());
+
                     worksheet.Columns().AdjustToContents();
                     if (rangeWithData != null)
                     {
@@ -623,10 +737,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     DataColumn dc3_2 = new DataColumn("TraDet_ProductName", typeof(string));
                     DataColumn dc3_3 = new DataColumn("TraDet_Amount", typeof(string));
                     DataColumn dc3_4 = new DataColumn("TraDet_PriceSum", typeof(string));
+                    DataColumn dc3_5 = new DataColumn("TotalCost", typeof(string));
+                    DataColumn dc3_6 = new DataColumn("Profit", typeof(string));
+                    DataColumn dc3_7 = new DataColumn("ProfitPercent", typeof(string));
                     table.Columns.Add(dc3_1);
                     table.Columns.Add(dc3_2);
                     table.Columns.Add(dc3_3);
                     table.Columns.Add(dc3_4);
+                    table.Columns.Add(dc3_5);
+                    table.Columns.Add(dc3_6);
+                    table.Columns.Add(dc3_7);
+
                     foreach (TradeRecordDetail record in RecordSumList)
                     {
                         DataRow dr = table.NewRow();
@@ -634,6 +755,29 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                         dr["TraDet_ProductName"] = record.TraDet_ProductName;
                         dr["TraDet_Amount"] = record.TraDet_Amount;
                         dr["TraDet_PriceSum"] = record.TraDet_PriceSum;
+                        dr["TotalCost"] = record.TotalCost;
+                        dr["Profit"] = record.Profit;
+                        dr["ProfitPercent"] = record.ProfitPercent;
+                        table.Rows.Add(dr);
+                    }
+                    break;
+
+                case 4:
+                    DataColumn dc4_1 = new DataColumn("Cus_Name", typeof(string));
+                    DataColumn dc4_2 = new DataColumn("TraMas_RealTotal", typeof(string));
+                    DataColumn dc4_3 = new DataColumn("Profit", typeof(string));
+                    DataColumn dc4_4 = new DataColumn("ProfitPercent", typeof(string));
+                    table.Columns.Add(dc4_1);
+                    table.Columns.Add(dc4_2);
+                    table.Columns.Add(dc4_3);
+                    table.Columns.Add(dc4_4);
+                    foreach (TradeRecordDetail record in CustomSumList)
+                    {
+                        DataRow dr = table.NewRow();
+                        dr["Cus_Name"] = record.Cus_Name;
+                        dr["TraMas_RealTotal"] = record.TraMas_RealTotal;
+                        dr["Profit"] = record.Profit;
+                        dr["ProfitPercent"] = record.ProfitPercent.ToString("P");
                         table.Rows.Add(dr);
                     }
                     break;

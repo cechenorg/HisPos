@@ -11,20 +11,118 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using His_Pos.NewClass.Trade;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
+using His_Pos.NewClass.Trade.TradeRecord;
+using System.Text.RegularExpressions;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 {
     /// <summary>
     /// ProductTransactionRecordView.xaml 的互動邏輯
     /// </summary>
-    public partial class ProductTransactionRecordView : System.Windows.Controls.UserControl
+    public partial class ProductTransactionRecordView : UserControl
     {
+        public ProductTransactionRecordView()
+        {
+            InitializeComponent();
+        }
+        private void btnTab_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Button button = (Button)sender;
+            if (button.Content.Equals("銷售紀錄"))
+            {
+                btnTrade.Foreground = Brushes.White;
+                btnTrade.Background = Brushes.DimGray;
+
+                btnTradeDetail.Foreground = Brushes.DimGray;
+                btnTradeDetail.Background = Brushes.Transparent;
+
+                btnTradeSum.Foreground = Brushes.DimGray;
+                btnTradeSum.Background = Brushes.Transparent;
+
+                btnCusSum.Foreground = Brushes.DimGray;
+                btnCusSum.Background = Brushes.Transparent;
+
+                RecordGrid.Visibility = Visibility.Visible;
+                RecordDetailGrid.Visibility = Visibility.Collapsed;
+                RecordSumGrid.Visibility = Visibility.Collapsed;
+                CustomSumGrid.Visibility = Visibility.Collapsed;
+            }
+            else if (button.Content.Equals("銷售明細"))
+            {
+                btnTrade.Foreground = Brushes.DimGray;
+                btnTrade.Background = Brushes.Transparent;
+
+                btnTradeDetail.Foreground = Brushes.White;
+                btnTradeDetail.Background = Brushes.DimGray;
+
+                btnTradeSum.Foreground = Brushes.DimGray;
+                btnTradeSum.Background = Brushes.Transparent;
+
+                btnCusSum.Foreground = Brushes.DimGray;
+                btnCusSum.Background = Brushes.Transparent;
+
+                RecordGrid.Visibility = Visibility.Collapsed;
+                RecordDetailGrid.Visibility = Visibility.Visible;
+                RecordSumGrid.Visibility = Visibility.Collapsed;
+                CustomSumGrid.Visibility = Visibility.Collapsed;
+            }
+            else if (button.Content.Equals("銷售彙總"))
+            {
+                btnTrade.Foreground = Brushes.DimGray;
+                btnTrade.Background = Brushes.Transparent;
+
+                btnTradeDetail.Foreground = Brushes.DimGray;
+                btnTradeDetail.Background = Brushes.Transparent;
+
+                btnTradeSum.Foreground = Brushes.White;
+                btnTradeSum.Background = Brushes.DimGray;
+
+                btnCusSum.Foreground = Brushes.DimGray;
+                btnCusSum.Background = Brushes.Transparent;
+
+                RecordGrid.Visibility = Visibility.Collapsed;
+                RecordDetailGrid.Visibility = Visibility.Collapsed;
+                RecordSumGrid.Visibility = Visibility.Visible;
+                CustomSumGrid.Visibility = Visibility.Collapsed;
+            }
+            else if (button.Content.Equals("客戶彙總"))
+            {
+                btnTrade.Foreground = Brushes.DimGray;
+                btnTrade.Background = Brushes.Transparent;
+
+                btnTradeDetail.Foreground = Brushes.DimGray;
+                btnTradeDetail.Background = Brushes.Transparent;
+
+                btnTradeSum.Foreground = Brushes.DimGray;
+                btnTradeSum.Background = Brushes.Transparent;
+
+                btnCusSum.Foreground = Brushes.White;
+                btnCusSum.Background = Brushes.DimGray;
+
+                RecordGrid.Visibility = Visibility.Collapsed;
+                RecordDetailGrid.Visibility = Visibility.Collapsed;
+                RecordSumGrid.Visibility = Visibility.Collapsed;
+                CustomSumGrid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                return;
+            }
+        }
+        private void ShowSelectedDetailWindow(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow gridRow = (DataGridRow)sender;
+            TradeRecordDetail detail = (TradeRecordDetail)gridRow.DataContext;
+            ((ProductTransactionRecordViewModel)DataContext).ShowSaleRecord(detail.TraMas_ID);
+        }
+
+        #region old code
+        /*
         public DataTable RecordList;
         public DataTable RecordDetailList;
         public DataTable RecordSumList;
@@ -56,7 +154,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             MainWindow.ServerConnection.CloseConnection();
             cbCashier.ItemsSource = result.DefaultView;
         }
-
+        //取得當下點選明細的index
         private int GetRowIndex(MouseButtonEventArgs e)
         {
             DataGridRow dgr = null;
@@ -70,7 +168,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             int rowIdx = dgr.GetIndex();
             return rowIdx;
         }
-
+        //取得當天日期(民國年)
         private string GetDefaultDate()
         {
             DateTime dt = DateTime.Today;
@@ -82,7 +180,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 );
             return dts;
         }
-
+        //查詢
         private void GetData(int querytype)
         {
             GetDefaultDate();
@@ -252,7 +350,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     break;
             }
         }
-
+        //日期格式轉換
         private void FormatData(DataTable result)
         {
             result.Columns.Add("TransTime_Format", typeof(string));
@@ -264,7 +362,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 dr["TransTime_Format"] = formatTransTime;
             }
         }
-
+        //民國年轉西元年
         private string ConvertMaskedDate(string dateString)
         {
             string[] strArr = dateString.Split('/');
@@ -273,7 +371,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             string date = string.Format("{0:D2}", strArr[2]);
             return year + "-" + month + "-" + date;
         }
-
+        //雙擊明細開啟銷售紀錄
         private void ShowSelectedDetailWindow(object sender, MouseButtonEventArgs e)
         {
             int index = GetRowIndex(e);
@@ -342,7 +440,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         {
             GetData(queryTab);
         }
-
+        //清除畫面
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -353,7 +451,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 cbCashier.SelectedIndex = -1;
             }), DispatcherPriority.ContextIdle);
         }
-
+        //點選銷售紀錄-切顯示明細&改變按鈕顏色
         private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             GetData(1);
@@ -372,7 +470,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             btnPrint2.Visibility = Visibility.Collapsed;
             btnPrint3.Visibility = Visibility.Collapsed;
         }
-
+        //點選銷售明細-切顯示明細&改變按鈕顏色
         private void btnTradeDetail_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             GetData(2);
@@ -390,7 +488,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             btnPrint2.Visibility = Visibility.Visible;
             btnPrint3.Visibility = Visibility.Collapsed;
         }
-
+        //點選銷售彙總-切顯示明細&改變按鈕顏色
         private void btnTradeSum_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             GetData(3);
@@ -408,7 +506,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             btnPrint2.Visibility = Visibility.Collapsed;
             btnPrint3.Visibility = Visibility.Visible;
         }
-
+        //匯出銷售紀錄
         private void btnPrint1_Click(object sender, RoutedEventArgs e)
         {
             GetData(4);
@@ -483,7 +581,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
         }
-
+        //匯出銷售明細
         private void btnPrint2_Click(object sender, RoutedEventArgs e)
         {
             GetData(5);
@@ -565,7 +663,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
         }
-
+        //匯出銷售彙總
         private void btnPrint3_Click(object sender, RoutedEventArgs e)
         {
             Process myProcess = new Process();
@@ -634,102 +732,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
         }
-        private void btn_Click(object sender, RoutedEventArgs e)
+
+        */
+        #endregion
+
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            DownloadMonTradeReportAction();
-        }
-        private void DownloadMonTradeReportAction()
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("Id", null));
-            parameters.Add(new SqlParameter("sDate", ConvertMaskedDate(StartDate.Text)));
-            parameters.Add(new SqlParameter("eDate", ConvertMaskedDate(EndDate.Text)));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeProfitDetailEmpRecordByDate]", parameters);
-
-            List<SqlParameter> parameters2 = new List<SqlParameter>();
-            parameters2.Add(new SqlParameter("Id", "1"));
-            parameters2.Add(new SqlParameter("sDate", ConvertMaskedDate(StartDate.Text)));
-            DataTable result2 = MainWindow.ServerConnection.ExecuteProc("[GET].[InvoiceRecordByDate]", parameters2);
-
-            MainWindow.ServerConnection.CloseConnection();
-            Process myProcess = new Process();
-            SaveFileDialog fdlg = new SaveFileDialog
-            {
-                Title = "下載發票",
-                InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath,
-                Filter = "XLSX檔案|*.xlsx",
-                FileName = Convert.ToDateTime(ConvertMaskedDate(StartDate.Text)).ToString("yyyyMM") + "-" + "當月發票",
-                FilterIndex = 2,
-                RestoreDirectory = true
-            };
-            if (fdlg.ShowDialog() == DialogResult.OK)
-            {
-                #region 工作列1
-                XLWorkbook wb = new XLWorkbook();
-                IXLStyle style = XLWorkbook.DefaultStyle;
-                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
-
-                IXLWorksheet ws = wb.Worksheets.Add("發票明細");
-                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
-                IXLColumn col = ws.Column("E");
-                col.Width = 55;
-
-                ws.Cell(1, 1).Value = "發票明細";
-                ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
-                ws.Cell("A2").Value = "時間";
-                ws.Cell("B2").Value = "發票號碼";
-                ws.Cell("C2").Value = "發票金額";
-                ws.Cell("D2").Value = "作廢發票號碼";
-                ws.Cell("E2").Value = "作廢發票金額";
-
-                if (result.Rows.Count > 0)
-                {
-                    IXLRange rangeWithData = ws.Cell(3, 1).InsertData(result.AsEnumerable());
-                    ws.Columns().AdjustToContents();//欄位寬度根據資料調整
-                    rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-                    rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                }
-                #endregion
-
-                #region 工作列2
-                ws = wb.Worksheets.Add("發票明細2");
-                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
-                col = ws.Column("B");
-                col.Width = 15;
-
-                ws.Cell(1, 1).Value = "發票明細";
-                ws.Range(1, 1, 1, 4).Merge().AddToNamed("Titles");
-                ws.Cell("A2").Value = "日期";
-                ws.Cell("B2").Value = "發票金額";
-                ws.Cell("C2").Value = "發票號碼";
-                ws.Cell("D2").Value = "統一編號";
-                ws.Cell("E2").Value = "作廢";
-
-                if (result2.Rows.Count > 0)
-                {
-                    IXLRange rangeWithData = ws.Cell(3, 1).InsertData(result2.AsEnumerable());
-                    rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-                    rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                }
-                #endregion
-                try
-                {
-                    ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
-                    ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
-                    ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
-                    ws.Columns().AdjustToContents();//欄位寬度根據資料調整
-                    wb.SaveAs(fdlg.FileName);
-                    myProcess.StartInfo.UseShellExecute = true;
-                    myProcess.StartInfo.FileName = fdlg.FileName;
-                    myProcess.StartInfo.CreateNoWindow = true;
-                    myProcess.Start();
-                }
-                catch (Exception ex)
-                {
-                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                }
-            }
+            //e.Handled = new Regex(@"[^0-9]").IsMatch(e.Text);
         }
     }
 }

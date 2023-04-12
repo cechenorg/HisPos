@@ -330,8 +330,8 @@ namespace His_Pos.NewClass.Trade
                 Left Join [{0}].[Customer].[Master] C on C.Cus_ID = convert(int,TM.TraMas_CustomerID)
                 Left Join [{0}].[Employee].[Master] E on try_convert(int, TM.TraMas_Cashier) = E.Emp_CashierID
                 Left Join [{0}].[Product].[ProductInventory] PP on TD.TraDet_ProductID = PP.ProInv_ProductID and ProInv_WareHouseID = case when Pro_TypeID = 4 then 9 else 0 end 
-                Left Join (Select InvRec_InventoryID, InvRec_ProTypeID, Sum(InvRec_ValueDifference) as InvRec_ValueDifference From [{0}].[Product].[InventoryRecord] Where Cast(InvRec_Time as date) between @sDate and @eDate and InvRec_Source = 'TraMasId' Group By InvRec_InventoryID, InvRec_ProTypeID) IR on @IsAvgCost = 0 and IR.InvRec_InventoryID = PP.ProInv_InventoryID and IR.InvRec_ProTypeID = M.Pro_TypeID
-                Left Join (Select InvRec_InventoryID, InvRec_ProTypeID, Sum(InvRec_ChangeValue) as InvRec_ChangeValue From [{0}].[Product].[InventoryRecordMA] Where Cast(InvRec_Time as date) between @sDate and @eDate and InvRec_Source = 'TraMasId' Group By InvRec_InventoryID, InvRec_ProTypeID) MA on @IsAvgCost = 1 and MA.InvRec_InventoryID = PP.ProInv_InventoryID and MA.InvRec_ProTypeID = M.Pro_TypeID
+                Left Join (Select InvRec_InventoryID, InvRec_ProTypeID, Sum(InvRec_ValueDifference) as InvRec_ValueDifference From [{0}].[Product].[InventoryRecord] Where Cast(InvRec_Time as date) between @sDate and @eDate and InvRec_Source = 'TraMasId' and InvRec_Type not in ('銷售退貨', '銷售刪單') Group By InvRec_InventoryID, InvRec_ProTypeID) IR on @IsAvgCost = 0 and IR.InvRec_InventoryID = PP.ProInv_InventoryID and IR.InvRec_ProTypeID = M.Pro_TypeID
+                Left Join (Select InvRec_InventoryID, InvRec_ProTypeID, Sum(InvRec_ChangeValue) as InvRec_ChangeValue From [{0}].[Product].[InventoryRecordMA] Where Cast(InvRec_Time as date) between @sDate and @eDate and InvRec_Source = 'TraMasId' and InvRec_Type not in ('銷售退貨', '銷售刪單') Group By InvRec_InventoryID, InvRec_ProTypeID) MA on @IsAvgCost = 1 and MA.InvRec_InventoryID = PP.ProInv_InventoryID and MA.InvRec_ProTypeID = M.Pro_TypeID
                 Where　
 	                cast(TraMas_ChkoutTime as Date) between @sDate and @eDate and
 	                (try_convert(int, SUBSTRING([TraMas_InvoiceNumber], 3,8)) >=try_convert(int, @sInvoice) or @sInvoice IS NULL OR @sInvoice='') and
@@ -346,10 +346,14 @@ namespace His_Pos.NewClass.Trade
 	                Order By Sum(TD.TraDet_Amount) Desc
 
 	            Select TraDet_ProductID, TraDet_ProductName, TraDet_Amount,TraDet_PriceSum, abs(InvRec_ValueDifference) as TotalCost,
-	            (TraDet_PriceSum+InvRec_ValueDifference) Profit, case when Isnull(TraDet_PriceSum, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end ProfitPercent
+	            (TraDet_PriceSum+InvRec_ValueDifference) Profit, case when Isnull(TraDet_PriceSum, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else (TraDet_PriceSum+InvRec_ValueDifference)/1 end ProfitPercent
                 From #temp 
-                Where case when Isnull(TraDet_PriceSum, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end between @sProfitPercent and @eProfitPercent
-                Order By case when Isnull(TraDet_PriceSum, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end Desc",
+                Where 
+                    (@sProfitPercent = -1 and @eProfitPercent = 1) or--全部顯示
+					(@sProfitPercent = 0 and @eProfitPercent = 1 and case when Isnull(TraDet_PriceSum, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end > 0 ) or--正毛利
+					(@sProfitPercent = -1 and @eProfitPercent = -1 and case when Isnull(TraDet_PriceSum, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end < 0) or--顯示負毛利
+					(case when Isnull(TraDet_PriceSum, 0) <> 0 then (TraDet_PriceSum+InvRec_ValueDifference)/TraDet_PriceSum else 0 end between @sProfitPercent and @eProfitPercent)--區間查詢
+                Order By ProfitPercent Desc",
                 Properties.Settings.Default.SystemSerialNumber, info.StartDate, info.EndDate, info.StartInvoice, info.EndInvoice, info.ShowIrregular ? 1 : 0, info.ShowReturn ? 1 : 0, info.CashierID, info.ProID, info.ProName, info.sProfitPercent,info.eProfitPercent);
             SQLServerConnection.DapperQuery((conn) =>
             {
@@ -384,15 +388,15 @@ namespace His_Pos.NewClass.Trade
 	            Select f.Cus_Name, Count(a.TraMas_ID) as TraCount, Sum(tm.TraDet_PriceSum) as TraMas_RealTotal, 
 	                case when @IsAvgCost = 1 then (Sum(tm.TraDet_PriceSum)+Sum(c.InvRec_ChangeValue)) 
 	                else (Sum(tm.TraDet_PriceSum)+Sum(b.InvRec_ValueDifference)) end as Profit, 
-	                case when @IsAvgCost = 1 then (Round(Cast((Sum(tm.TraDet_PriceSum)+Sum(c.InvRec_ChangeValue)) as float)/Sum(tm.TraDet_PriceSum), 4)) 
-	                else (Round(Cast((Sum(tm.TraDet_PriceSum)+Sum(b.InvRec_ValueDifference)) as float)/Sum(tm.TraDet_PriceSum), 4)) end as ProfitPercent
+	                case when @IsAvgCost = 1 then (Round(Cast((Sum(tm.TraDet_PriceSum)+Sum(c.InvRec_ChangeValue)) as float)/Case When Sum(tm.TraDet_PriceSum) = 0 then 1 else Sum(tm.TraDet_PriceSum) end, 4)) 
+	                else (Round(Cast((Sum(tm.TraDet_PriceSum)+Sum(b.InvRec_ValueDifference)) as float)/Case When Sum(tm.TraDet_PriceSum) = 0 then 1 else Sum(tm.TraDet_PriceSum) end, 4)) end as ProfitPercent
 	            into #temp
 	            From [{0}].[Pos].[TradeMaster] a
                 Inner Join (Select TraDet_MasterID, TraDet_ProductID, Sum(TraDet_PriceSum) as TraDet_PriceSum From [{0}].[Pos].[TradeDetails] Group By TraDet_MasterID, TraDet_ProductID) tm on a.TraMas_ID = tm.TraDet_MasterID
                 Inner Join [{0}].[Product].[Master] pm on tm.TraDet_ProductID = pm.Pro_ID
                 Inner Join [{0}].[Product].[ProductInventory] pp on tm.TraDet_ProductID = pp.ProInv_ProductID and pp.ProInv_WareHouseID = case when pm.Pro_TypeID = 4 then 9 else 0 end
-                Inner Join (Select InvRecSourceID, InvRec_ProTypeID, Sum(InvRec_ValueDifference) as InvRec_ValueDifference, InvRec_InventoryID From [{0}].[Product].[InventoryRecord] Where InvRec_Source = 'TraMasId' and cast(InvRec_Time as date) between @sdate and @edate Group By InvRecSourceID, InvRec_ProTypeID, InvRec_InventoryID) b on Convert(nvarchar(20), a.TraMas_ID) = b.InvRecSourceID and b.InvRec_ProTypeID = pm.Pro_TypeID and pp.ProInv_InventoryID = b.InvRec_InventoryID
-                Inner Join (Select InvRec_SourceID, InvRec_ProTypeID, Sum(InvRec_ChangeValue) as InvRec_ChangeValue, InvRec_InventoryID From [{0}].[Product].[InventoryRecordMA] Where InvRec_Source = 'TraMasId' and cast(InvRec_Time as date) between @sdate and @edate Group By InvRec_SourceID, InvRec_ProTypeID, InvRec_InventoryID) c on Convert(nvarchar(20), a.TraMas_ID) = c.InvRec_SourceID and c.InvRec_ProTypeID = pm.Pro_TypeID and pp.ProInv_InventoryID = c.InvRec_InventoryID
+                Inner Join (Select InvRecSourceID, InvRec_ProTypeID, Sum(InvRec_ValueDifference) as InvRec_ValueDifference, InvRec_InventoryID From [{0}].[Product].[InventoryRecord] Where InvRec_Source = 'TraMasId' and InvRec_Type not in ('銷售退貨', '銷售刪單') and cast(InvRec_Time as date) between @sdate and @edate Group By InvRecSourceID, InvRec_ProTypeID, InvRec_InventoryID) b on Convert(nvarchar(20), a.TraMas_ID) = b.InvRecSourceID and b.InvRec_ProTypeID = pm.Pro_TypeID and pp.ProInv_InventoryID = b.InvRec_InventoryID
+                Inner Join (Select InvRec_SourceID, InvRec_ProTypeID, Sum(InvRec_ChangeValue) as InvRec_ChangeValue, InvRec_InventoryID From [{0}].[Product].[InventoryRecordMA] Where InvRec_Source = 'TraMasId' and InvRec_Type not in ('銷售退貨', '銷售刪單') and cast(InvRec_Time as date) between @sdate and @edate Group By InvRec_SourceID, InvRec_ProTypeID, InvRec_InventoryID) c on Convert(nvarchar(20), a.TraMas_ID) = c.InvRec_SourceID and c.InvRec_ProTypeID = pm.Pro_TypeID and pp.ProInv_InventoryID = c.InvRec_InventoryID
                 Inner Join [{0}].[Customer].[Master] f on a.TraMas_CustomerID = f.Cus_ID
 	            Where 
                     tm.TraDet_ProductID <> 'PREPAY' and
@@ -406,7 +410,11 @@ namespace His_Pos.NewClass.Trade
 	            Order By Profit Desc
 	
 	            Select * From #temp
-	            Where ProfitPercent between @sProfitPercent and @eProfitPercent
+	            Where
+                    (@sProfitPercent = -1 and @eProfitPercent = 1) or--全部顯示
+					(@sProfitPercent = 0 and @eProfitPercent = 1 and ProfitPercent > 0 ) or--正毛利
+					(@sProfitPercent = -1 and @eProfitPercent = -1 and ProfitPercent < 0) or--顯示負毛利
+					(ProfitPercent between @sProfitPercent and @eProfitPercent)--區間查詢
 	            Order By ProfitPercent Desc
             ", Properties.Settings.Default.SystemSerialNumber, info.StartDate, info.EndDate, info.StartInvoice, info.EndInvoice, info.ShowReturn ? 1 : 0, info.ProID, info.ProName, info.sProfitPercent, info.eProfitPercent);
             SQLServerConnection.DapperQuery((conn) =>
