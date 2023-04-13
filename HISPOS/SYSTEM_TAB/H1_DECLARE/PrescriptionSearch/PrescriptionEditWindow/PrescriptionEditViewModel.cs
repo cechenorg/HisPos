@@ -127,16 +127,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
 
-        private bool isCanDelete = true;
-        public bool IsCanDelete
-        {
-            get => isCanDelete;
-            set
-            {
-                Set(() => IsCanDelete, ref isCanDelete, value);
-            }
-        }
-
         private bool customerEdited;
 
         public bool CustomerEdited
@@ -185,13 +175,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
         private List<Authority> authorities = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff};
-        public bool CanEdit => (!VM.PreAdjustDateControl && (!EditedPrescription.PrescriptionStatus.IsAdjust ||
+        public bool CanEdit =>
+            !EditedPrescription.PrescriptionStatus.IsAdjust ||
             EditedPrescription.InsertTime != null &&
-            EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.Authority == Authority.Admin ||
-            VM.CurrentUser.IsPharmist())); //||
-            //(VM.PreAdjustDateControl &&
-            //((authorities.Contains(VM.CurrentUser.Authority) && DateTime.Compare(Convert.ToDateTime(EditedPrescription.AdjustDate), VM.PrescriptionCloseDate) > 0) ||
-            //DateTime.Compare(Convert.ToDateTime(EditedPrescription.AdjustDate), DateTime.Today) >= 0));
+            EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.ID == 1 ||
+            VM.CurrentUser.IsPharmist();
+
+
+
+        //(VM.PreAdjustDateControl &&
+        //((authorities.Contains(VM.CurrentUser.Authority) && DateTime.Compare(Convert.ToDateTime(EditedPrescription.AdjustDate), VM.PrescriptionCloseDate) > 0) ||
+        //DateTime.Compare(Convert.ToDateTime(EditedPrescription.AdjustDate), DateTime.Today) >= 0));
 
         public bool PriceReadOnly => !CanEdit;
 

@@ -355,7 +355,12 @@ namespace His_Pos.NewClass.Prescription.Service
             if (VM.PreAdjustDateControl)//新判斷
             {
                 List<Authority> auth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
-                if (auth.Contains(VM.CurrentUser.Authority) && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) < 0)//以上權限"可以 新增、修改、刪除 "調劑日">"處方關帳日"的處方
+
+                if (DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) > 0 && !prescription.PrescriptionStatus.IsAdjust && (type == 2 || type == 3))//調劑日>=關帳日 未調劑處方 可以修改、刪除
+                {
+                    return true;
+                }
+                else if (auth.Contains(VM.CurrentUser.Authority) && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) < 0)//以上權限"可以 新增、修改、刪除 "調劑日">"處方關帳日"的處方
                 {
                     return true;
                 }
@@ -385,7 +390,7 @@ namespace His_Pos.NewClass.Prescription.Service
                     }
                     else
                     {
-                        if (DateTime.Compare(DateTime.Today, Convert.ToDateTime(prescription.AdjustDate)) <= 0)
+                        if (DateTime.Compare(DateTime.Today, Convert.ToDateTime(prescription.AdjustDate)) <= 0)//調劑日>=今天 可以新增、刪除、修改
                         {
                             return true;
                         }
