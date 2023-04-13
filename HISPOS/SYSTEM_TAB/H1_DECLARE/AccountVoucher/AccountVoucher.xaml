@@ -175,12 +175,12 @@
                                         <RowDefinition Height="35" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="120" />
-                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="115" />
+                                        <ColumnDefinition Width="115" />
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding JouMas_ID}" FontSize="24"/>
                                     <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" Content="{Binding JouMas_Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" ContentStringFormat="{}{0:yyyy/MM/dd}" Foreground="RoyalBlue"/>
-                                    <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Content="{Binding DebitTotalAmount,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Foreground="IndianRed"/>
+                                    <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Content="{Binding DebitTotalAmount,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Right" FontSize="18" Foreground="IndianRed"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
