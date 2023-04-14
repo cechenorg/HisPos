@@ -351,6 +351,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 if (BtnVisibilty == Visibility.Hidden)
                 {
+                    if (DateTime.Compare(Convert.ToDateTime(CurrentVoucher.JouMas_Date), Convert.ToDateTime(ClosingDate)) < 0 && CurrentVoucher.JouMas_Status.Equals("F"))
+                    {
+                        MessageWindow.ShowMessage("已關帳，禁止修改", MessageType.WARNING);
+                        return;
+                    }
                     EditContent = "取消修改";
                     BtnVisibilty = Visibility.Visible;
                     IsCanEdit = true;
@@ -528,11 +533,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 BtnExportVisibilty = Visibility.Hidden;
                 DisplayVoidReason = Visibility.Visible;
                 IsCanEdit = false;
+                IsBtnEnable = false;
                 BtnName = "新增";
+
                 if (jm.JouMas_IsEnable == 0)
                 {
-                    IsBtnEnable = false;
-                    IsCanEdit = true;
                     return true;
                 }
             }
@@ -542,12 +547,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 BtnEditVisibilty = Visibility.Hidden;
                 BtnExportVisibilty = Visibility.Hidden;
                 DisplayVoidReason = Visibility.Hidden;
-                IsCanEdit = false;
+                IsCanEdit = true;
+                IsBtnEnable = true;
                 BtnName = "新增";
+
                 if (jm.JouMas_Status.Equals("T") && jm.JouMas_IsEnable == 1)
                 {
-                    IsBtnEnable = true;
-                    IsCanEdit = true;
                     return true;
                 }
             }
@@ -772,6 +777,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 if (CurrentVoucher.JouMas_IsEnable == 1)
                 {
+                    if (DateTime.Compare(Convert.ToDateTime(CurrentVoucher.JouMas_Date), Convert.ToDateTime(ClosingDate)) < 0 && CurrentVoucher.JouMas_Status.Equals("F"))
+                    {
+                        MessageWindow.ShowMessage("已關帳，禁止刪除", MessageType.WARNING);
+                        return;
+                    }
                     var invalidWindow = new InvalidWindow.InvalidWindow();
                     invalidWindow.ShowDialog();
                     bool isInvalid = ((InvalidViewModel)invalidWindow.DataContext).IsInvalid;
