@@ -25,11 +25,12 @@ namespace His_Pos.NewClass.Report.Accounts
             }
         }
 
-        public AccountsDetailReports(string name, decimal value, string id)
+        public AccountsDetailReports(string name, decimal value, string id, string memo)
         {
             Name = name;
             Value = value;
             ID = id;
+            Memo = memo;
         }
 
         public AccountsDetailReports()
@@ -98,6 +99,17 @@ namespace His_Pos.NewClass.Report.Accounts
             set
             {
                 Set(() => OrderID, ref orderID, value);
+            }
+        }
+
+        private string memo;
+
+        public string Memo
+        {
+            get => memo;
+            set
+            {
+                Set(() => Memo, ref memo, value);
             }
         }
     }

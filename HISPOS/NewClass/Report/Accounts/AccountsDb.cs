@@ -334,7 +334,7 @@ namespace His_Pos.NewClass.Report.Accounts
 
                 IF (@DetType = 'D' AND @DetAcctLvl1 = '2')
 	            BEGIN
-		            SELECT m.JouMas_Date,d.JouDet_ID,d.JouDet_Number,ISNULL(d.JouDet_SourceID,'') JouDet_SourceID,(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount, d.JouDet_Memo, d.JouDet_Source
+		            SELECT m.JouMas_Date,d.JouDet_ID,d.JouDet_Number,ISNULL(d.JouDet_SourceID,'') JouDet_SourceID,(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount, ISNULL(d.JouDet_Memo, '') JouDet_Memo, ISNULL(d.JouDet_Source, '') JouDet_Source
 		            FROM [{0}].[dbo].[JournalMaster] m
 		            INNER JOIN [{0}].[dbo].[JournalDetail] d on m.JouMas_ID = d.JouDet_ID
 		            LEFT JOIN (	SELECT JouDet_WriteOffID,JouDet_WriteOffNumber,JouDet_SourceID,SUM(JouDet_Amount) JouDet_Amount
@@ -362,7 +362,7 @@ namespace His_Pos.NewClass.Report.Accounts
 	            END
 	            ELSE IF (@DetType = 'C' AND @DetAcctLvl1='1')
 	            BEGIN
-		            SELECT m.JouMas_Date,d.JouDet_ID,d.JouDet_Number,ISNULL(d.JouDet_SourceID,'') JouDet_SourceID,(d.JouDet_Amount - ISNULL(c.JouDet_Amount,0) - ISNULL(w.JouDet_Amount,0)) JouDet_Amount, d.JouDet_Memo, d.JouDet_Source
+		            SELECT m.JouMas_Date,d.JouDet_ID,d.JouDet_Number,ISNULL(d.JouDet_SourceID,'') JouDet_SourceID,(d.JouDet_Amount - ISNULL(c.JouDet_Amount,0) - ISNULL(w.JouDet_Amount,0)) JouDet_Amount, ISNULL(d.JouDet_Memo, '') JouDet_Memo, ISNULL(d.JouDet_Source, '') JouDet_Source
 		            FROM [{0}].[dbo].[JournalMaster] m
 		            INNER JOIN [{0}].[dbo].[JournalDetail] d ON m.JouMas_ID = d.JouDet_ID
 		            LEFT JOIN [{0}].[dbo].[JournalDetail] c ON m.JouMas_ID = c.JouDet_ID
