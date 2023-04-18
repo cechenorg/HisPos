@@ -184,6 +184,7 @@
                             <Setter Property="Background" Value="{StaticResource Shadow}" />
                         </Trigger>
                     </Style.Triggers>
+                    <EventSetter Event="MouseDoubleClick" Handler="ShowRecordDetail" />
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="FontSize" Value="16" />
@@ -228,6 +229,20 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="200"
+                    Binding="{Binding Memo}"
+                    FontFamily="Segoe UI Semi"
+                    Header="摘要"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Margin" Value="20,0,0,0" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>

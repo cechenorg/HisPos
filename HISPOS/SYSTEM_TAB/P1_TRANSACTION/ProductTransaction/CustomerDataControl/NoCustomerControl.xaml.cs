@@ -79,26 +79,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
             AddNewCustomerWindow acw = new AddNewCustomerWindow();
-            acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
             acw.ShowDialog();
-        }
-
-        private void acw_RaiseCustomEvent(object sender, CustomEventArgs e)
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ID", int.Parse(e.Message)));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetCustomerByID]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
-
-            if (result.Rows.Count == 0)
-            {
-                MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
-            }
-            else
-            {
-                FillInCustomerData(result);
-            }
         }
 
         private void btnClearCustomer_Click(object sender, RoutedEventArgs e)

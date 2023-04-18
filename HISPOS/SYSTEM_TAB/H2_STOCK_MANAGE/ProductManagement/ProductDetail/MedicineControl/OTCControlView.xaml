@@ -340,6 +340,8 @@
                         FontSize="14"
                         Foreground="Black"
                         GotFocus="TextBox_OnGotFocus"
+                        InputScope="Number"
+                        PreviewTextInput="tbReward_PreviewTextInput"
                         InputMethod.IsInputMethodEnabled="True"
                         PreviewMouseLeftButtonDown="TextBox_OnPreviewMouseLeftButtonDown"
                         Text="{Binding RewardPercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">

@@ -368,7 +368,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 {
                     return true;
                 }
-                else if ((VM.CurrentUser.Authority == Authority.PharmacyManager || VM.CurrentUser.Authority == Authority.Admin) && type == 2 && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) >= 0)//藥局經理"可以 修改 "調劑日"<"處方關帳日"的處方，限欄位
+                else if ((VM.CurrentUser.Authority == Authority.PharmacyManager || VM.CurrentUser.Authority == Authority.MasterPharmacist || VM.CurrentUser.Authority == Authority.Admin) && type == 2 && DateTime.Compare(VM.PrescriptionCloseDate, Convert.ToDateTime(prescription.AdjustDate)) >= 0)//藥局經理"可以 修改 "調劑日"<"處方關帳日"的處方，限欄位
                 {
                     string errMsg = PharmacyManagerCheck(prescription);
                     if (!string.IsNullOrEmpty(errMsg))
