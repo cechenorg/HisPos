@@ -21,6 +21,10 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.InvalidWindow;
 using System.Diagnostics;
 using System.Windows.Forms;
 using ClosedXML.Excel;
+using System.Data.OleDb;
+using System.Data.Odbc;
+using System.Threading;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 {
@@ -30,7 +34,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         {
             return this;
         }
+        public void ShowOrderDetailByOrderID(string id)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(new Action(delegate
+            {
+                TabName = "傳票作業";
+                MainWindow.Instance.AddNewTab(TabName);
+                SearchID = id;
+                Type = Types.FirstOrDefault(w => w.JournalTypeID == 0);
+                VoucherCollectionView = CollectionViewSource.GetDefaultView(AccountsDb.GetJournalData(BeginDate, EndDate, string.IsNullOrEmpty(SearchID) ? string.Empty : SearchID, Account.acctLevel1, Account.acctLevel2, Account.acctLevel3, string.IsNullOrEmpty(keyWord) ? string.Empty : keyWord, 0, 0));
+                CurrentVoucher = VoucherCollectionView.CurrentItem as JournalMaster;
+                if (CurrentVoucher != null && (CurrentVoucher.JouMas_ID != null || CurrentVoucher.JouMas_ID != ""))
+                {
+                    BeginDate = Convert.ToDateTime(CurrentVoucher.JouMas_Date);
+                    EndDate = Convert.ToDateTime(CurrentVoucher.JouMas_Date);
+                    GetDetailData(CurrentVoucher.JouMas_ID);
+                }
+            }));
+        }
         public AccountVoucherViewModel()
+        {
+            Command();
+            GetData();
+        }
+        private void Command()
         {
             SubmitCommand = new RelayCommand(SubmitAction);
             ClearCommand = new RelayCommand(ClearAction);
@@ -45,8 +72,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             DeleteDetailCommand = new RelayCommand<string>(DeleteDetailAction);
             AddNewDetailCommand = new RelayCommand<string>(AddNewDetailAction);
             ClickDetailCommand = new RelayCommand<string>(ClickDetailAction);
-            GetData();
-            
         }
         #region Command
         public RelayCommand CopyDataCommand { get; set; }
@@ -411,8 +436,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             if (Account is null)
                 Account = new JournalAccount();
 
-            VoucherCollectionView = CollectionViewSource.GetDefaultView(AccountsDb.GetJournalData(beginDate, endDate, string.IsNullOrEmpty(searchID)? string.Empty : searchID, Account.acctLevel1, Account.acctLevel2, Account.acctLevel3, string.IsNullOrEmpty(keyWord) ? string.Empty : keyWord, Type.JournalTypeID));
-            
+            VoucherCollectionView = CollectionViewSource.GetDefaultView(AccountsDb.GetJournalData(beginDate, endDate, string.IsNullOrEmpty(searchID) ? string.Empty : searchID, Account.acctLevel1, Account.acctLevel2, Account.acctLevel3, string.IsNullOrEmpty(keyWord) ? string.Empty : keyWord, Type.JournalTypeID, 1));
+
             VoucherCollectionView.Filter += VoucherFilter;
             CurrentVoucher = new JournalMaster();
             CurrentVoucher = VoucherCollectionView.CurrentItem as JournalMaster;
@@ -751,7 +776,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 SearchID = string.Empty;
                 KeyWord = string.Empty;
                 IsTemp = true;
-                IEnumerable<JournalMaster> journals = AccountsDb.GetJournalData(BeginDate, EndDate, SearchID, null, null, null, KeyWord, Type.JournalTypeID);
+                IEnumerable<JournalMaster> journals = AccountsDb.GetJournalData(BeginDate, EndDate, SearchID, null, null, null, KeyWord, Type.JournalTypeID, 1);
                 VoucherCollectionView = CollectionViewSource.GetDefaultView(journals);
                 foreach (var item in journals)
                 {

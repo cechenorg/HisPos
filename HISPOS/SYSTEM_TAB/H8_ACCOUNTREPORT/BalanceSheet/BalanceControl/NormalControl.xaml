@@ -184,6 +184,7 @@
                             <Setter Property="Background" Value="{StaticResource Shadow}" />
                         </Trigger>
                     </Style.Triggers>
+                    <EventSetter Event="MouseDoubleClick" Handler="ShowRecordDetail" />
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="FontSize" Value="16" />

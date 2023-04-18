@@ -137,7 +137,7 @@ namespace His_Pos.NewClass.Report.Accounts
             return result;
         }
 
-        public static IEnumerable<JournalMaster> GetJournalData(DateTime sdate, DateTime edate, string jouMas_ID, string acct1ID, string acct2ID, string acct3ID, string keyword, int source)
+        public static IEnumerable<JournalMaster> GetJournalData(DateTime sdate, DateTime edate, string jouMas_ID, string acct1ID, string acct2ID, string acct3ID, string keyword, int source, int isSearchDate)
         {
             IEnumerable<JournalMaster> result = default;
             SQLServerConnection.DapperQuery((conn) =>
@@ -152,7 +152,8 @@ namespace His_Pos.NewClass.Report.Accounts
                         acct2ID,
                         acct3ID,
                         keyword,
-                        source
+                        source,
+                        isSearchDate
                     },
                     commandType: CommandType.StoredProcedure);
             });
@@ -392,7 +393,7 @@ namespace His_Pos.NewClass.Report.Accounts
                     AND JouMas_Date <= @date
 		            ORDER BY 1,2,3
                 END", Properties.Settings.Default.SystemSerialNumber, type, acct1, acct2, acct3, endDate.ToString("yyyy -MM-dd"));
-            
+
             SQLServerConnection.DapperQuery((conn) =>
             {
                 var dapper = conn.Query(sql, commandType: CommandType.Text);
