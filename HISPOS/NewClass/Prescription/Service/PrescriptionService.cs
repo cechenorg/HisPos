@@ -483,7 +483,7 @@ namespace His_Pos.NewClass.Prescription.Service
                     if (totalAmount != amount)
                         return "已關帳，禁止異動申報點數";
 
-                    double totalPoint = Math.Round(totalAmount * (isPaySelf ? Convert.ToDouble(dr["PaySelfValue"]) : Convert.ToDouble(dr["Med_Price"])), 0);//總價
+                    double totalPoint = Math.Round(totalAmount * (isPaySelf ? Convert.ToDouble(dr["PaySelfValue"]) : Convert.ToDouble(dr["Med_Price"])), 0, MidpointRounding.AwayFromZero);//總價
                     double point = prescription.Medicines.Where(w => w.Order == Convert.ToInt32(dr["OrderNumber"])).FirstOrDefault().TotalPrice;
                     if (totalPoint != point)
                         return "已關帳，禁止異動申報點數";
