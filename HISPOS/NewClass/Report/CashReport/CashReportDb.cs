@@ -137,7 +137,7 @@ namespace His_Pos.NewClass.Report.CashReport
                             CashFlow_Value
                             from [{0}].[Report].[CashFlow] cash inner join [{0}].[His].[PrescriptionMaster] pre on CashFlow_Source = 'PreMasId' and　CashFlow_SourceID = cast(pre.PreMas_ID as nvarchar )
                             left join [{0}].[dbo].[View_PrescriptionCooCliType] View_PreCooCli on View_PreCooCli.PreMas_ID = pre.PreMas_ID
-                            left join [HIS_POS_Server].[DataSource].[Institution] ins on pre.PreMas_InstitutionID = ins.Ins_ID
+                            left join [{0}].[DataSource].[Institution] ins on pre.PreMas_InstitutionID = ins.Ins_ID
                             where 1 = 1 -- View_PreCooCli.CooCliType = -1 /* 合作跟非合作只差在這 */
                             and CAST(CashFlow_Time as Date) Between '{1}' and '{2}'
                             and CashFlow_Value <> 0 and CashFlow_IsEnable = 1) as c

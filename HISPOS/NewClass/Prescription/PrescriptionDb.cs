@@ -1265,10 +1265,10 @@ namespace His_Pos.NewClass.Prescription
                 INTO #tempDeclarePres
                 FROM [{0}].[HIS].[PrescriptionMaster] p
                 INNER JOIN [{0}].[Customer].[Master] c ON p.PreMas_CustomerID = c.Cus_ID
-                INNER JOIN HIS_POS_Server.DataSource.Institution i ON p.PreMas_InstitutionID = i.Ins_ID
-                INNER JOIN HIS_POS_Server.DataSource.Division d ON p.PreMas_DivisionID = d.Div_ID
+                INNER JOIN [{0}].DataSource.Institution i ON p.PreMas_InstitutionID = i.Ins_ID
+                INNER JOIN [{0}].DataSource.Division d ON p.PreMas_DivisionID = d.Div_ID
                 INNER JOIN [{0}].[Employee].[Master] e ON p.PreMas_PharmacistIDNumber = e.Emp_IDNumber
-                INNER JOIN HIS_POS_Server.DataSource.AdjustCase a ON  p.PreMas_AdjustCaseID = a.Adj_ID
+                INNER JOIN [{0}].DataSource.AdjustCase a ON  p.PreMas_AdjustCaseID = a.Adj_ID
                 WHERE p.PreMas_AdjustDate Between @sDate and @eDate
                 AND p.PreMas_IsDeposit = 0
                 AND p.PreMas_AdjustCaseID <> '0'
