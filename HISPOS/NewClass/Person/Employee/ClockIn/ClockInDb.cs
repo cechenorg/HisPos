@@ -26,11 +26,6 @@ namespace His_Pos.NewClass.Person.Employee.ClockIn
             parameterList.Add(new SqlParameter("WYear", year));
             parameterList.Add(new SqlParameter("WMonth", month));
             parameterList.Add(new SqlParameter("EmpId", account));
-
-            int IsDirectSale = 0;
-            if (string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false)
-                IsDirectSale = 1;
-            parameterList.Add(new SqlParameter("IsDirectSale", IsDirectSale));
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInLogByDate]", parameterList);
             return table;
         }

@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using DomainModel;
 using System.Data.SqlClient;
 using His_Pos.Database;
+using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 {
@@ -283,12 +284,20 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         public void SetStore()
         {
             CheckLines = new ObservableCollection<CommonBox>();
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Group", ViewModelMainWindow.CurrentPharmacy.GroupServerName);
-            DataTable dt = MainWindow.ServerConnection.ExecuteProc("[Get].[Pharmacy]", parameterList);
-            MainWindow.ServerConnection.CloseConnection();
+            HISPOSWebApiService hisposWebApiService = new HISPOSWebApiService();
+            var serverPharmacyInfo = hisposWebApiService.GetServerPharmacyInfo(ViewModelMainWindow.CurrentPharmacy.ID);
+            DataTable dt = new DataTable();
+            if (serverPharmacyInfo is null)
+                return;
 
+            DataColumn dc1 = new DataColumn("Namepath", typeof(string));
+            DataColumn dc2 = new DataColumn("Value", typeof(string));
+            dt.Columns.Add(dc1);
+            dt.Columns.Add(dc2);
+            DataRow newRow = dt.NewRow();
+            newRow["Namepath"] = serverPharmacyInfo.PHAMAS_NAME;
+            newRow["Value"] = serverPharmacyInfo.PHAMAS_VerifyKey;
+            dt.Rows.Add(newRow);
             if (SingInEmployee.Authority == Authority.Admin || SingInEmployee.Authority == Authority.PharmacyManager || SingInEmployee.Authority == Authority.AccountingStaff) //需要看見各店的人(系統管理員、藥局經理、會計人員)
             {
 
@@ -406,20 +415,23 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
                     var c = 0;int? cMin=0;
                     sw.WriteLine("日期" + "\t" + "店別" + "\t" + "員工編號" + "\t" + "姓名" + "\t" + "上班" + "\t" + "下班" + "\t" + "時數" + "\t" + "小計");
                     
-                    foreach (var row in ClockInLogsRpt)
+                    foreach (Employee emp in EmployeeCollection)
                     {
-                        string _str = row.Date.Substring(row.Date.Length - 3, 3);
-                        string days = "/" + DateTime.DaysInMonth(DateTime.Now.Year, int.Parse(SearchMonth)).ToString();
-
-                        sw.WriteLine(row.Date + "\t" + row.CurPha_Name + "\t" + row.EmpAccount + "\t" + row.EmpName + "\t" + row.Time + "\t" + row.Time2 + "\t" + row.WMin/60 + "\t"+ row.Type);
-                        cMin += row.WMin/60;
-
-                        if (_str == days)
+                        foreach (var row in ClockInLogsRpt)
+                        {
+                            if (row.EmpNo.Equals(emp.ID))
+                            {
+                                sw.WriteLine(row.Date + "\t" + row.CurPha_Name + "\t" + row.EmpAccount + "\t" + row.EmpName + "\t" + row.Time + "\t" + row.Time2 + "\t" + row.WMin / 60 + "\t" + row.Type);
+                                cMin += row.WMin / 60;
+                                c++;
+                            }
+                        }
+                        if (c > 0)
                         {
                             sw.WriteLine("----------\t----------\t---------\t---------\t 總計:  \t   " + cMin + " 小時 ");
                             cMin = 0;
+                            c = 0;
                         }
-                        c++;
                     }
                     sw.Close();
                     try

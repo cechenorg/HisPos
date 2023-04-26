@@ -329,7 +329,7 @@ namespace His_Pos.NewClass.Person.Employee
             {
                 result = conn.Query<Employee>(
                     $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[ClockInLogEmployees]",
-                    param: new { WYear, WMonth, StoreNo, Permit, Emp_ID = EmpId , IsDirectSale = isDirectSale },
+                    param: new { WYear, WMonth, StoreNo, Permit, Emp_ID = EmpId},
                     commandType: CommandType.StoredProcedure).ToList();
             });
 
