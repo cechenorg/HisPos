@@ -98,7 +98,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     MinWidth="100"
-                    Binding="{Binding CanUseAmount}"
+                    Binding="{Binding CanUseAmount, StringFormat=N0}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="14"
                     FontWeight="Bold"
