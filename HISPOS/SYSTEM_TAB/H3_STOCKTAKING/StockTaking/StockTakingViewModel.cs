@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using ClosedXML.Excel;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -509,31 +511,57 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         {
             StockTakingResult.StockTakingProductCollection = StockTakingProducts.GetStockTakingPlanProducts(CurrentPlan.StockTakingProductCollection, CurrentPlan.WareHouse.ID);
 
-            SaveFileDialog fdlg = new SaveFileDialog();
-            fdlg.Title = CurrentPlan.Name + "盤點單";
-            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
-            fdlg.Filter = "Csv檔案|*.csv";
-            fdlg.FileName = DateTime.Today.ToString("yyyyMMdd") + CurrentPlan.Name + "盤點單";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
+            SaveFileDialog fdlg = new SaveFileDialog
+            {
+                Title = CurrentPlan.Name + "盤點單",
+                InitialDirectory = @"c:\",
+                Filter = "XLSX檔案|*.xlsx",
+                FileName = DateTime.Today.ToString("yyyyMMdd") + CurrentPlan.Name + "盤點單",
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
                 Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
                 Properties.Settings.Default.Save();
                 try
                 {
-                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
-                    {
-                        file.WriteLine("庫名," + CurrentPlan.WareHouse.Name);
-                        file.WriteLine("商品代碼,藥品名稱,庫存,架上量,盤點量");
-                        foreach (var s in StockTakingResult.StockTakingProductCollection)
-                        {
-                            file.WriteLine($"{s.ID},{s.FullName},{s.Inventory},{s.OnTheFrame},");
-                        }
+                    XLWorkbook workbook = new XLWorkbook();
+                    IXLStyle style = XLWorkbook.DefaultStyle;
+                    style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+                    IXLWorksheet worksheet = workbook.Worksheets.Add(fdlg.Title);
+                    worksheet.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+                    worksheet.Cell("A1").Value = "庫名";
+                    worksheet.Cell("B1").Value = CurrentPlan.WareHouse.Name;
+                    worksheet.Cell("A2").Value = "商品代碼";
+                    worksheet.Cell("B2").Value = "藥品名稱";
+                    worksheet.Cell("C2").Value = "庫存";
+                    worksheet.Cell("D2").Value = "架上量";
+                    worksheet.Cell("E2").Value = "盤點量";
 
-                        file.Close();
-                        file.Dispose();
+                    DataTable table = new DataTable();
+                    table.Columns.Add("ID", typeof(string));
+                    table.Columns.Add("FullName", typeof(string));
+                    table.Columns.Add("Inventory", typeof(int));
+                    table.Columns.Add("OnTheFrame", typeof(int));
+                    foreach (var item in StockTakingResult.StockTakingProductCollection)
+                    {
+                        DataRow newRow = table.NewRow();
+                        newRow["ID"] = item.ID;
+                        newRow["FullName"] = item.FullName;
+                        newRow["Inventory"] = item.Inventory;
+                        newRow["OnTheFrame"] = item.OnTheFrame;
+                        table.Rows.Add(newRow);
                     }
+                    IXLRange rangeWithData = worksheet.Cell(3, 1).InsertData(table.AsEnumerable());
+                    //rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    //rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                    worksheet.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                    worksheet.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                    workbook.SaveAs(fdlg.FileName);
+
                     MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
                 }
                 catch (Exception ex)
