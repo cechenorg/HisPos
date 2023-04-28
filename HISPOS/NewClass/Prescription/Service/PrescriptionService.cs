@@ -428,10 +428,10 @@ namespace His_Pos.NewClass.Prescription.Service
                 if (count != newMedCount)
                     return "已關帳，禁止新增藥品";
 
-                var treatDate = Convert.ToDateTime(tableMaster.Rows[0]["TreatmentDate"]);//就醫日期
-                var newtreatDate = prescription.TreatDate;
-                if (treatDate.Date.CompareTo(newtreatDate) != 0)
-                    return "已關帳，禁止異動就醫日期";
+                //var treatDate = Convert.ToDateTime(tableMaster.Rows[0]["TreatmentDate"]);//就醫日期
+                //var newtreatDate = prescription.TreatDate;
+                //if (treatDate.Date.CompareTo(newtreatDate) != 0)
+                //    return "已關帳，禁止異動就醫日期";
 
                 var adjustDate = Convert.ToDateTime(tableMaster.Rows[0]["AdjustDate"]);//調劑日期
                 var newAdjustDate = prescription.AdjustDate;
