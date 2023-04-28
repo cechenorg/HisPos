@@ -264,7 +264,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         {
             Process myProcess = new Process();
             DataTable table = ControlMedicineDeclareDb.GetInventoryDataByDate(SDateTime, EDateTime, SelectedWareHouse.ID);
-            if (table.DataSet is null) return;
+            if (table is null || table.Rows.Count == 0) return;
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "管藥庫存";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
