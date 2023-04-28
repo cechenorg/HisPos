@@ -135,7 +135,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             if(SelectStockValue == null)
                 return;
 
-            EntryDetailWindow.EntryDetailWindow entryDetailWindow = new EntryDetailWindow.EntryDetailWindow(SelectStockValue.Date);
+            EntryDetailWindow.EntryDetailWindow entryDetailWindow = new EntryDetailWindow.EntryDetailWindow(SelectStockValue.Date, Convert.ToInt32(SelectedWareHouse.ID));
         }
 
         private void ExportCsv()
@@ -204,6 +204,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 TotalDailyStock.AdjustValue = DailyStockValueCollection.Sum(d => d.AdjustValue);
                 TotalDailyStock.FinalStockValue = DailyStockValueCollection[DailyStockValueCollection.Count - 1].FinalStockValue;
             }
+            else
+            {
+                TotalDailyStock.InitStockValue = 0;
+                TotalDailyStock.PurchaseValue = 0;
+                TotalDailyStock.ReturnValue = 0;
+                TotalDailyStock.MedUseValue = 0;
+                TotalDailyStock.MinusStockAdjustValue = 0;
+                TotalDailyStock.StockCheckValue = 0;
+                TotalDailyStock.TrashValue = 0;
+                TotalDailyStock.AdjustValue = 0;
+                TotalDailyStock.FinalStockValue = 0;
+            }
         }
 
         private void CaculateOTCTotalStock()
@@ -219,6 +231,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 TotalOTCDailyStock.StockCheckValue = DailyOTCStockValueCollection.Sum(d => d.StockCheckValue);
                 TotalOTCDailyStock.TrashValue = DailyOTCStockValueCollection.Sum(d => d.TrashValue);
                 TotalOTCDailyStock.FinalStockValue = DailyOTCStockValueCollection[DailyOTCStockValueCollection.Count - 1].FinalStockValue;
+            }
+            else
+            {
+                TotalOTCDailyStock.InitStockValue = 0;
+                TotalOTCDailyStock.PurchaseValue = 0;
+                TotalOTCDailyStock.ReturnValue = 0;
+                TotalOTCDailyStock.MedUseValue = 0;
+                TotalOTCDailyStock.MinusStockAdjustValue = 0;
+                TotalOTCDailyStock.AdjustValue = 0;
+                TotalOTCDailyStock.StockCheckValue = 0;
+                TotalOTCDailyStock.TrashValue = 0;
+                TotalOTCDailyStock.FinalStockValue = 0;
             }
         }
         private void DownloadAction()
