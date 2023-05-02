@@ -34,6 +34,7 @@ namespace His_Pos.NewClass.StockValue.StockEntry
             }
             SourceID = r.Field<string>("SourceID");
             Value = r.Field<double>("ValueDiff");
+            WareID = Convert.ToInt32(r["WareID"]);
         }
 
         public DateTime Date { get; set; }
@@ -41,5 +42,6 @@ namespace His_Pos.NewClass.StockValue.StockEntry
         public EntryDetailEnum Source { get; set; }
         public string SourceID { get; set; }
         public double Value { get; set; }
+        public int WareID { get; set; }
     }
 }

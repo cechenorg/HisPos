@@ -87,11 +87,22 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach.EntryDetailWindow
                 EntryCollectionViewSource.Filter += Filter;
             }
         }
+        private int wareID;
+
+        public int WareID
+        {
+            get { return wareID; }
+            set
+            {
+                Set(() => WareID, ref wareID, value);
+            }
+        }
 
         #endregion Var
 
-        public EntryDetailWindowViewModel(DateTime date)
+        public EntryDetailWindowViewModel(DateTime date, int wareID)
         {
+            WareID = wareID;
             EntryDetailCollection.GetDataByDate(date);
             EntryCollectionViewSource = new CollectionViewSource { Source = EntryDetailCollection };
             EntryCollectionView = EntryCollectionViewSource.View;
@@ -103,13 +114,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach.EntryDetailWindow
             if (e.Item is null) return;
             e.Accepted = false;
             StockEntry stockEntry = ((StockEntry)e.Item);
-            if (IsPurchaseCheck && stockEntry.Source == EntryDetailEnum.Purchase)
+            if (IsPurchaseCheck && stockEntry.Source == EntryDetailEnum.Purchase && stockEntry.WareID == WareID)
                 e.Accepted = true;
-            else if (IsReturnCheck && stockEntry.Source == EntryDetailEnum.Return)
+            else if (IsReturnCheck && stockEntry.Source == EntryDetailEnum.Return && stockEntry.WareID == WareID)
                 e.Accepted = true;
-            else if (IsAdjustCheck && stockEntry.Source == EntryDetailEnum.Adjust)
+            else if (IsAdjustCheck && stockEntry.Source == EntryDetailEnum.Adjust && stockEntry.WareID == WareID)
                 e.Accepted = true;
-            else if (IsStockTakingCheck && stockEntry.Source == EntryDetailEnum.StockTaking)
+            else if (IsStockTakingCheck && stockEntry.Source == EntryDetailEnum.StockTaking && stockEntry.WareID == WareID)
                 e.Accepted = true;
         }
     }

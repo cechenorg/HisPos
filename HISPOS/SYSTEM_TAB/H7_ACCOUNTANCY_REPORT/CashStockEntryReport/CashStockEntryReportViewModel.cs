@@ -2115,6 +2115,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 IsBusy = false;
             };
             IsBusy = true;
+            worker.RunWorkerAsync();
             CashflowSelectedItem = null;
         }
 
