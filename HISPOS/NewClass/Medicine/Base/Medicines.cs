@@ -301,7 +301,7 @@ namespace His_Pos.NewClass.Medicine.Base
 
         public int CountOralLiquidAgent()
         {
-            return Items.Count(m => m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Resources.口服液劑));
+            return Items.Count(m => m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Resources.口服液劑) && med.PaySelf == false);
         }
 
         public void AddMedicine(string medicineId, bool paySelf, int? selectedMedicinesIndex, string wareHouseId, DateTime? adjustDate)

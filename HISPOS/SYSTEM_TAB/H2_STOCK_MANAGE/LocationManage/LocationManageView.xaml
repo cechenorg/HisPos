@@ -4,8 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:s="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage"
-        xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage"
+    xmlns:service="clr-namespace:His_Pos.Service"
     d:DesignHeight="839"
     d:DesignWidth="1365"
     mc:Ignorable="d">
@@ -130,9 +130,7 @@
                 CellStyle="{StaticResource DataGridCellStyle}"
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 HorizontalScrollBarVisibility="Disabled"
-                SelectedValuePath="Pro_ID"
-                EnableRowVirtualization="False"
-                    AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}"
+                SelectedValuePath="Pro_ID" 
                 >
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -168,7 +166,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn
                             Width="60"
-                            Binding="{Binding AlternationIndex,Converter={StaticResource NumberConverter}, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                            Binding="{Binding RowNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                             Header="序"
                             IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>

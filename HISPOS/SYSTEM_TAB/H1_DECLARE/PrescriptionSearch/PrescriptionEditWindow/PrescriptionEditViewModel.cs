@@ -179,7 +179,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             !EditedPrescription.PrescriptionStatus.IsAdjust ||
             EditedPrescription.InsertTime != null &&
             EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.ID == 1 ||
-            VM.CurrentUser.IsPharmist();
+            VM.CurrentUser.IsPharmist() || authorities.Contains(VM.CurrentUser.Authority);
 
 
 
