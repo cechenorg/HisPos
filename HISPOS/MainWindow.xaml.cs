@@ -127,8 +127,8 @@ namespace His_Pos
                                 nameof(FeatureItem.每日總帳報表), 
                                 nameof(FeatureItem.會計總帳報表),
                                 nameof(FeatureItem.申報院所點數總表), 
+                                nameof(FeatureItem.舊損益報表),
                                 nameof(FeatureItem.損益報表),
-                                nameof(FeatureItem.新損益報表),
                                 nameof(FeatureItem.資產負債表) }));
 
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", nameof(FeatureTab.出勤管理),
