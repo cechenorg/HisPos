@@ -40,6 +40,7 @@
                 <RowDefinition Height="60" />
                 <RowDefinition Height="60" />
                 <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
                 <RowDefinition />
                 <RowDefinition Height="120" />
             </Grid.RowDefinitions>
@@ -72,6 +73,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
+                    MinWidth="150"
                     FontSize="25"
                     Foreground="DimGray"
                     Text="{Binding ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -86,12 +88,20 @@
                 Grid.Row="2"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="28"
+                    Foreground="DimGray"
+                    Text="門市電話" />
                 <TextBox
                     Margin="20,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     FontFamily="Segoe UI Semi"
+                    MinWidth="150"
                     FontSize="25"
                     Foreground="DimGray"
                     Text="{Binding Tel}">
@@ -106,6 +116,13 @@
                 Grid.Row="3"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="28"
+                    Foreground="DimGray"
+                    Text="門市地址" />
                 <TextBox
                     Margin="20,0,0,0"
                     HorizontalAlignment="Center"
@@ -113,6 +130,7 @@
                     HorizontalContentAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="25"
+                    MinWidth="150"
                     Foreground="DimGray"
                     Text="{Binding Address}">
                     <i:Interaction.Triggers>
@@ -122,7 +140,6 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-
             <StackPanel
                 Grid.Row="4"
                 HorizontalAlignment="Center"
@@ -136,7 +153,7 @@
                     Text="統一編號" />
                 <TextBox
                     Margin="20,0,0,0"
-                    Width="200"
+                    MinWidth="150"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
@@ -152,7 +169,7 @@
                 </TextBox>
             </StackPanel>
             <Grid
-                Grid.Row="5"
+                Grid.Row="6"
                 Margin="10"
                 Background="{StaticResource Shadow}">
                 <Grid.RowDefinitions>
