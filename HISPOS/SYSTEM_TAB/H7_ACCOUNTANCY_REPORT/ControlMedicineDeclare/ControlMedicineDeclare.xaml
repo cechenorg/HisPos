@@ -161,6 +161,7 @@
                 Background="DarkCyan"
                 BorderBrush="Transparent"
                 Command="{Binding PrintMasterInventoryCommand}"
+                Visibility="Hidden"
                 Content="列印盤點"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
