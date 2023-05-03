@@ -174,15 +174,15 @@ namespace His_Pos.ChromeTabViewModel
             {
                 if (table.Select("SysPar_Name = 'StoreOrderDays'").Count() > 0)
                 {
-                    StoreOrderDays = Convert.ToInt32(table.Select("SysPar_Name = 'StoreOrderDays'")[0]["SysPar_Value"]);
+                    StoreOrderDays = Convert.ToInt32(Convert.ToDouble(table.Select("SysPar_Name = 'StoreOrderDays'")[0]["SysPar_Value"]));
                 }
                 if (table.Select("SysPar_Name = 'PreAdjustDateControl'").Count() > 0)
                 {
-                    PreAdjustDateControl = Convert.ToBoolean(Convert.ToInt32(table.Select("SysPar_Name = 'PreAdjustDateControl'")[0]["SysPar_Value"]));
+                    PreAdjustDateControl = Convert.ToBoolean(Convert.ToInt32(Convert.ToDouble(table.Select("SysPar_Name = 'PreAdjustDateControl'")[0]["SysPar_Value"])));
                 }
                 if (table.Select("SysPar_Name = 'AutoAddJournal'").Count() > 0)
                 {
-                    AutoAddJournal = Convert.ToBoolean(Convert.ToInt32(table.Select("SysPar_Name = 'AutoAddJournal'")[0]["SysPar_Value"]));
+                    AutoAddJournal = Convert.ToBoolean(Convert.ToInt32(Convert.ToDouble(table.Select("SysPar_Name = 'AutoAddJournal'")[0]["SysPar_Value"])));
                 }
             }
 

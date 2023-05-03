@@ -77,7 +77,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SystemControl
         }
         private void Init()
         {
-            string sql = string.Format(@"Select SysPar_Value From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'AvgCost'",
+            string sql = string.Format(@"Select isnull(Cast(SysPar_Value as float), 0) From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'AvgCost'",
                 Properties.Settings.Default.SystemSerialNumber);
             int calculate = 0;
             SQLServerConnection.DapperQuery((conn) =>
