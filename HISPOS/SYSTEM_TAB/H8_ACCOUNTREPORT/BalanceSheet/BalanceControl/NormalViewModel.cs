@@ -778,7 +778,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                             jouDet_Amount = jouDet_Amount - bal;
                         }
                     }
-                    if (AccDataDetail.Where(w=>w.Name.Equals(ym)).Count() > 0)
+                    if (AccDataDetail.Where(w => w.Name.Equals(source)).Count() == 0 && !string.IsNullOrEmpty(source))
+                    {
+                        AccDataDetail.Add(new AccountsDetailReports(source, jouDet_Amount, string.Empty, memo));
+                    }
+                    else if (AccDataDetail.Where(w=>w.Name.Equals(ym)).Count() > 0)
                     {
                         AccDataDetail.Where(w => w.Name.Equals(ym)).First().Value += Convert.ToDecimal(jouDet_Amount);
                     }
@@ -813,6 +817,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
                 }
             }
+            var accOrderBy = AccDataDetail.OrderBy(o => o.Name);
+            var clone = new AccountsDetailReport();
+            foreach (var item in accOrderBy)
+            {
+                clone.Add(item);
+            }
+
+            AccDataDetail = clone;
         }
     }
 }
