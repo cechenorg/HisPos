@@ -90,7 +90,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 return;
             }
-            DataTable sourceTable = AccountsDb.GetSourceData(currentDetail);
+            DataTable sourceTable = AccountsDb.GetSourceData(currentDetail, DateTime.Today);
 
             if (sourceTable != null && sourceTable.Rows.Count > 0)
             {

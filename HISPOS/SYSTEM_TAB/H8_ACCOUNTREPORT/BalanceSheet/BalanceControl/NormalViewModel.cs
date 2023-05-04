@@ -768,9 +768,19 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                     int jouDet_Amount = Convert.ToInt32(item["JouDet_Amount"]);
                     string jouMas_ID = Convert.ToString(item["JouDet_ID"]);
                     string memo = Convert.ToString(item["JouDet_Memo"]);
+                    string source = Convert.ToString(item["JouDet_SourceID"]);
+                    string sourceNum = Convert.ToString(item["JouDet_Number"]);
+                    if (firstData != null && firstData.Rows.Count > 0)
+                    {
+                        if (firstData.Select(string.Format("AccBal_Date = '{0}'", source)).Count() > 0)
+                        {
+                            var bal = Convert.ToInt32(firstData.Select(string.Format("AccBal_Date = '{0}'", source)).FirstOrDefault()["AccBal_Amount"]);
+                            jouDet_Amount = jouDet_Amount - bal;
+                        }
+                    }
                     if (AccDataDetail.Where(w=>w.Name.Equals(ym)).Count() > 0)
                     {
-                        AccDataDetail.Where(w => w.Name.Equals(ym)).First().Value += Convert.ToDecimal(item["JouDet_Amount"]);
+                        AccDataDetail.Where(w => w.Name.Equals(ym)).First().Value += Convert.ToDecimal(jouDet_Amount);
                     }
                     else
                     {
@@ -780,20 +790,27 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
             else
             {
-                if (first != 0)
+                if (table != null && table.Rows.Count > 0)
+                {
+                    foreach (DataRow item in table.Rows)
+                    {
+                        string jouMas_Date = Convert.ToDateTime(item["JouMas_Date"]).ToString("yyyy/MM/dd");
+                        int jouDet_Amount = Convert.ToInt32(item["JouDet_Amount"]);
+                        string jouMas_ID = Convert.ToString(item["JouDet_ID"]);
+                        string memo = Convert.ToString(item["JouDet_Memo"]);
+                        if (jouDet_Amount != 0)
+                        {
+                            AccDataDetail.Add(new AccountsDetailReports(jouMas_Date, jouDet_Amount, jouMas_ID, memo));
+                        }
+                    }
+                }
+                else if (first != 0)
                 {
                     AccDataDetail.Add(new AccountsDetailReports(maxDate.ToString("yyyy/MM/dd"), first, "期初", string.Empty));
                 }
-                foreach (DataRow item in table.Rows)
+                else
                 {
-                    string jouMas_Date = Convert.ToDateTime(item["JouMas_Date"]).ToString("yyyy/MM/dd");
-                    int jouDet_Amount = Convert.ToInt32(item["JouDet_Amount"]);
-                    string jouMas_ID = Convert.ToString(item["JouDet_ID"]);
-                    string memo = Convert.ToString(item["JouDet_Memo"]);
-                    if (jouDet_Amount != 0)
-                    {
-                        AccDataDetail.Add(new AccountsDetailReports(jouMas_Date, jouDet_Amount, jouMas_ID, memo));
-                    }
+
                 }
             }
         }
