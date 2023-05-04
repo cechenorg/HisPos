@@ -332,7 +332,7 @@ namespace His_Pos.NewClass.Report.Accounts
             parameters.Add(new SqlParameter("DetType", type));
             parameters.Add(new SqlParameter("DetAcctLvl1", Convert.ToString(acct1).PadLeft(1, '0')));
             parameters.Add(new SqlParameter("DetAcctLvl2", Convert.ToString(acct2).PadLeft(4, '0')));
-            parameters.Add(new SqlParameter("DetAcctLvl3", string.IsNullOrEmpty(Convert.ToString(acct3)) ? null : Convert.ToString(acct3).PadLeft(4, '0')));
+            parameters.Add(new SqlParameter("DetAcctLvl3", string.IsNullOrEmpty(Convert.ToString(acct3)) ? string.Empty : Convert.ToString(acct3).PadLeft(4, '0')));
             parameters.Add(new SqlParameter("edate", endDate));
             DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[JournalWriteOff]", parameters);
             MainWindow.ServerConnection.CloseConnection();
