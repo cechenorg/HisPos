@@ -312,20 +312,11 @@ namespace His_Pos.NewClass.Report.Accounts
         }
         public static DataTable GetSourceData(JournalDetail detail, DateTime edate)
         {
-            //MainWindow.ServerConnection.OpenConnection();
-            //List<SqlParameter> parameters = new List<SqlParameter>();
-            //parameters.Add(new SqlParameter("DetType", detail.JouDet_Type));
-            //parameters.Add(new SqlParameter("DetAcctLvl1", Convert.ToString(detail.Account.acctLevel1).PadLeft(1, '0')));
-            //parameters.Add(new SqlParameter("DetAcctLvl2", Convert.ToString(detail.Account.acctLevel2).PadLeft(4, '0')));
-            //parameters.Add(new SqlParameter("DetAcctLvl3", string.IsNullOrEmpty(Convert.ToString(detail.Account.acctLevel3)) ? null : Convert.ToString(detail.Account.acctLevel3).PadLeft(4, '0')));
-            //parameters.Add(new SqlParameter("edate", edate));
-            //DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[JournalWriteOff]", parameters);
-            //MainWindow.ServerConnection.CloseConnection();
-            DataTable table = GetSourceDataInLocal(detail.JouDet_Type, detail.Account.acctLevel1, detail.Account.acctLevel2, detail.Account.acctLevel3, edate);
+            DataTable table = GetSourceDataInLocal(detail.JouDet_Type, detail.Account.acctLevel1, detail.Account.acctLevel2, detail.Account.acctLevel3, edate, detail.JouDet_ID);
             return table;
         }
 
-        public static DataTable GetSourceDataInLocal(string type, string acct1, string acct2, string acct3, DateTime endDate)
+        public static DataTable GetSourceDataInLocal(string type, string acct1, string acct2, string acct3, DateTime endDate, string currentVoucherID)
         {
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -334,19 +325,14 @@ namespace His_Pos.NewClass.Report.Accounts
             parameters.Add(new SqlParameter("DetAcctLvl2", Convert.ToString(acct2).PadLeft(4, '0')));
             parameters.Add(new SqlParameter("DetAcctLvl3", string.IsNullOrEmpty(Convert.ToString(acct3)) ? string.Empty : Convert.ToString(acct3).PadLeft(4, '0')));
             parameters.Add(new SqlParameter("edate", endDate));
+            if (!string.IsNullOrEmpty(currentVoucherID))
+                parameters.Add(new SqlParameter("DetID", currentVoucherID));
+
             DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[JournalWriteOff]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
 
-        public static DataTable GetSourceData()
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[JournalSourceWriteOff]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
-            return table;
-        }
         public static DataTable GetBalanceSheet(DateTime edate)
         {
             MainWindow.ServerConnection.OpenConnection();

@@ -711,7 +711,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             List<string> posNum = new List<string>() { "1", "5", "6", "8" };
             string type = posNum.Contains(acct1) ? "C" : "D";
-            DataTable table = AccountsDb.GetSourceDataInLocal(type, acct1, acct2, acct3, EndDate);//可沖帳
+            DataTable table = AccountsDb.GetSourceDataInLocal(type, acct1, acct2, acct3, EndDate, string.Empty);//可沖帳
             bool isMerge = false;
             foreach (DataRow dr in setMerge)
             {
