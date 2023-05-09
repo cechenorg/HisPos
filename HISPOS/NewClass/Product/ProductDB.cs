@@ -158,5 +158,22 @@ namespace His_Pos.NewClass.Product
         {
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateAllInventoryMedBagAmount]");
         }
+
+        public static DataTable GetAllProductsInventory()
+        {
+            var table = MainWindow.SingdeConnection.ExecuteProc($"call GetAllProductsInventory");
+            return table;
+        }
+
+        public static DataTable GetDataToUpdateSingdeStock()
+        {
+            var table = MainWindow.SingdeConnection.ExecuteProc($"call GetDataToUpdateSingdeStock");
+            return table;
+        }
+        public static DataTable GetDataToInsertSingdeOTC()
+        {
+            var table = MainWindow.SingdeConnection.ExecuteProc($"call GetDataToInsertSingdeOTC");
+            return table;
+        }
     }
 }

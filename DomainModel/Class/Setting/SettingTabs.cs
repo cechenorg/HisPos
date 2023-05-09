@@ -7,6 +7,7 @@
         CooperativeClinic = 3,
         WareHouse = 4,
         Invoice = 5,
-        System = 6
+        System = 6,
+        Sync = 7
     }
 }

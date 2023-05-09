@@ -1704,6 +1704,10 @@
     <Compile Include="ChromeTabViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ChromeTabViewModel\Win32.cs" />
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\SyncControl\SyncControl.xaml.cs">
+      <DependentUpon>SyncControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\SyncControl\SyncControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\SystemControl\SystemControl.xaml.cs">
       <DependentUpon>SystemControl.xaml</DependentUpon>
     </Compile>
@@ -2725,6 +2729,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl\PrinterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\SyncControl\SyncControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
