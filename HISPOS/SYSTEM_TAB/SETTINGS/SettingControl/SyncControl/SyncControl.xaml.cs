@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl.SyncControlViewModel;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl
 {
@@ -23,6 +24,12 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl
         public SyncControl()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+           ((SyncControlViewModel)DataContext).BtnSyncAction(((ApiBtnItem)button.DataContext).ItemID);
         }
     }
 }

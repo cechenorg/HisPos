@@ -50,8 +50,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
             if (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin)
             {
                 SettingTabCollection.Add(new SettingTabData(SettingTabs.System, "其他設定", "/Images/Management.png"));
+                SettingTabCollection.Add(new SettingTabData(SettingTabs.Sync, "同步設定", "/Images/Management.png"));
             }
-            SettingTabCollection.Add(new SettingTabData(SettingTabs.Sync, "同步設定", "/Images/Management.png"));
 
             SelectedSettingTab = SettingTabCollection[0];
         }

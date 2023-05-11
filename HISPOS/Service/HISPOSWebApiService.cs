@@ -108,6 +108,16 @@ namespace His_Pos.Service
             }
             return needUpdateList;
         }
+        public async Task<List<UpdateTimeDTO>> GetDataSourceUpdTime()
+        {
+            List<UpdateTimeDTO> updateList = new List<UpdateTimeDTO>();
+            var apiUpdateTimeList = await GetAPIDataAsync<UpdateTimeDTO>("GetDataSourceUpdateTime");
+            foreach (var apiUpdateTime in apiUpdateTimeList)
+            {
+                updateList.Add(apiUpdateTime);
+            }
+            return updateList;
+        }
 
         private async Task SyncSpecialMedicines()
         {
