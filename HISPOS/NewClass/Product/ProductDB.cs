@@ -1,8 +1,12 @@
-﻿using His_Pos.Database;
+﻿using DTO.WebService;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Database;
+using His_Pos.InfraStructure;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace His_Pos.NewClass.Product
 {
@@ -161,19 +165,64 @@ namespace His_Pos.NewClass.Product
 
         public static DataTable GetAllProductsInventory()
         {
+            MainWindow.SingdeConnection.OpenConnection();
             var table = MainWindow.SingdeConnection.ExecuteProc($"call GetAllProductsInventory");
+            MainWindow.SingdeConnection.CloseConnection();
             return table;
         }
 
         public static DataTable GetDataToUpdateSingdeStock()
         {
+            MainWindow.SingdeConnection.OpenConnection();
             var table = MainWindow.SingdeConnection.ExecuteProc($"call GetDataToUpdateSingdeStock");
+            MainWindow.SingdeConnection.CloseConnection();
             return table;
         }
         public static DataTable GetDataToInsertSingdeOTC()
         {
+            MainWindow.SingdeConnection.OpenConnection();
             var table = MainWindow.SingdeConnection.ExecuteProc($"call GetDataToInsertSingdeOTC");
+            MainWindow.SingdeConnection.CloseConnection();
             return table;
+        }
+
+        public static void UpdatePhamcyStock()
+        {
+            CommonDataRepository _commonDataRepository = new CommonDataRepository();
+            List<UpdateTimeDTO> updList = _commonDataRepository.GetCurrentUpdateTime();
+            IEnumerable<UpdateTimeDTO> updateTime = updList.Where(w => w.UpdTime_TableName.Equals("SyncStockToSingde"));
+            if (updateTime != null && updateTime.Count() > 0 && updateTime.FirstOrDefault().UpdTime_LastUpdateTime.CompareTo(DateTime.Today) == 0)
+                return;
+            
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[ProductStockToSingde]");
+            if (table != null && table.Rows.Count > 0)
+            {
+                string paramPro = string.Empty;
+                foreach (DataRow dr in table.Rows)
+                {
+                    string pro = Convert.ToString(dr["ProInv_ProductID"]);
+                    int qty = Convert.ToInt32(Math.Round(Convert.ToDouble(dr["Inv_Inventory"]), MidpointRounding.AwayFromZero));
+                    if (string.IsNullOrEmpty(paramPro))
+                    {
+                        paramPro += string.Format("{0},{1}", pro, qty);
+                    }
+                    else
+                    {
+                        paramPro += "+" + string.Format("{0},{1}", pro, qty);
+                    }
+                }
+                MainWindow.SingdeConnection.ExecuteProc(string.Format("call UpdatePhamcyStock('{0}', '{1}', {2})", ViewModelMainWindow.CurrentPharmacy.VerifyKey, paramPro, table.Rows.Count));
+                
+                List<UpdateTimeDTO> updateList = new List<UpdateTimeDTO>
+                {
+                    new UpdateTimeDTO
+                    {
+                        UpdTime_LastUpdateTime = DateTime.Today,
+                        UpdTime_TableName = "SyncStockToSingde"
+                    }
+                };
+                _commonDataRepository.SyncUpdateTime(updateList);
+            }
         }
     }
 }

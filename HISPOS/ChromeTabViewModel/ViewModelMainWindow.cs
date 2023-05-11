@@ -307,7 +307,7 @@ namespace His_Pos.ChromeTabViewModel
                 {
                     BusyContent = "回傳合作診所處方中...";
                 }
-
+                ProductDB.UpdatePhamcyStock();
                 PrintCooPre(cooperativePres);//列印還未列印藥袋
                 //骨科上傳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
