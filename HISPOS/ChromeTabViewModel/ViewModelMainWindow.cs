@@ -32,6 +32,7 @@ using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -191,7 +192,15 @@ namespace His_Pos.ChromeTabViewModel
             PrescriptionCloseDate = CurrentPharmacy.PrescriptionCloseDate;
 
             CurrentPharmacy.MedicalPersonnels = new Employees();
-            CooperativeInstitutionID = WebApi.GetCooperativeClinicId(CurrentPharmacy.ID);
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                CooperativeInstitutionID = WebApi.GetCooperativeClinicId(CurrentPharmacy.ID);
+            }
+            else
+            {
+                CooperativeInstitutionID = string.Empty;
+            }
+            
             MainWindow.ServerConnection.CloseConnection();
             CanMoveTabs = true;
             ShowAddButton = false;
@@ -221,9 +230,12 @@ namespace His_Pos.ChromeTabViewModel
             var worker = new BackgroundWorker();
             worker.DoWork +=  (o, ea) =>
             {
-                BusyContent = "同步中心資料";
-                HISPOSWebApiService webApiService = new HISPOSWebApiService();
-                webApiService.SyncData();
+                if (NetworkInterface.GetIsNetworkAvailable())
+                {
+                    BusyContent = "同步中心資料";
+                    HISPOSWebApiService webApiService = new HISPOSWebApiService();
+                    webApiService.SyncData();
+                }
 
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "取得庫別名";
@@ -232,26 +244,45 @@ namespace His_Pos.ChromeTabViewModel
                 Institutions = new Institutions(true);
                 BusyContent = StringRes.取得科別;
                 Divisions = new Divisions();
-                BusyContent = "取得合作院所設定";
+
                 CooperativeClinicSettings = new CooperativeClinicSettings();
                 CusPrePreviewBases cooperativePres = new CusPrePreviewBases();
-
                 CooperativeClinicSettings.Init();
-                var xDocs = new List<XDocument>();
-                var cusIdNumbers = new List<string>();
-                var paths = new List<string>();
-                foreach (var c in CooperativeClinicSettings)
+                if (CooperativeClinicSettings != null && CooperativeClinicSettings.Count > 0)
                 {
-                    if (Properties.Settings.Default.PrePrint == "True")
+                    BusyContent = "取得合作院所設定";
+
+                    var xDocs = new List<XDocument>();
+                    var cusIdNumbers = new List<string>();
+                    var paths = new List<string>();
+                    foreach (var c in CooperativeClinicSettings)
                     {
-                        if (c.AutoPrint == true)
+                        if (Properties.Settings.Default.PrePrint == "True")
                         {
-                            pathFile = c.FilePath;
-                            if (c.FilePath == null || Directory.Exists(c.FilePath) == false)
+                            if (c.AutoPrint == true)
                             {
-                                continue;
+                                pathFile = c.FilePath;
+                                if (c.FilePath == null || Directory.Exists(c.FilePath) == false)
+                                {
+                                    continue;
+                                }
+                                FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.txt");
+                                //開啟監聽
+                                watch.EnableRaisingEvents = true;
+                                //是否連子資料夾都要偵測
+                                watch.IncludeSubdirectories = false;
+
+                                watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+                                //新增時觸發事件
+                                watch.Created += new FileSystemEventHandler(watch_Created);
+                                //錯誤時觸發事件
+                                watch.Error += watch_Error;
                             }
-                            FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.txt");
+                        }
+
+                        if (c.TypeName != null && c.TypeName.Equals("展望") && Directory.Exists(c.FilePath))
+                        {
+                            FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.xml");
                             //開啟監聽
                             watch.EnableRaisingEvents = true;
                             //是否連子資料夾都要偵測
@@ -260,27 +291,14 @@ namespace His_Pos.ChromeTabViewModel
                             watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
                             //新增時觸發事件
                             watch.Created += new FileSystemEventHandler(watch_Created);
-                            //錯誤時觸發事件
-                            watch.Error += watch_Error;                        }
+                        }
                     }
 
-                    if (c.TypeName != null && c.TypeName.Equals("展望") && Directory.Exists(c.FilePath))
-                    {
-                        FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.xml");
-                        //開啟監聽
-                        watch.EnableRaisingEvents = true;
-                        //是否連子資料夾都要偵測
-                        watch.IncludeSubdirectories = false;
-
-                        watch.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-                        //新增時觸發事件
-                        watch.Created += new FileSystemEventHandler(watch_Created);
-                    }
+                    cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);//取得10天內的合作處方
+                    CooperativeClinicSettings.Init();//取得合作診所設定
+                    CooperativeClinicSettings.FilePurge();//打包檔案
                 }
-
-                cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);//取得10天內的合作處方
-                CooperativeClinicSettings.Init();//取得合作診所設定
-                CooperativeClinicSettings.FilePurge();//打包檔案
+                
                 BusyContent = StringRes.GetAdjustCases;
                 AdjustCases = new AdjustCases(true);
                 BusyContent = StringRes.取得給付類別;
@@ -302,12 +320,16 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = "取得員工";
                 EmployeeCollection = new Employees();
                 EmployeeCollection.Init();
-                BusyContent = "準備回傳合作診所拋轉資料";
-                while (WebApi.SendToCooperClinicLoop100())
+
+                if (NetworkInterface.GetIsNetworkAvailable())
                 {
-                    BusyContent = "回傳合作診所處方中...";
+                    BusyContent = "準備回傳合作診所拋轉資料";
+                    while (WebApi.SendToCooperClinicLoop100())
+                    {
+                        BusyContent = "回傳合作診所處方中...";
+                    }
+                    ProductDB.UpdatePhamcyStock();
                 }
-                ProductDB.UpdatePhamcyStock();
                 PrintCooPre(cooperativePres);//列印還未列印藥袋
                 //骨科上傳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);

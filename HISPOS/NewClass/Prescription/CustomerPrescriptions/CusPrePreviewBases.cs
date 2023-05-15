@@ -11,6 +11,7 @@ using System.Xml;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using System.Windows.Shell;
+using System.Net.NetworkInformation;
 
 namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 {
@@ -32,7 +33,10 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         public void GetCooperative(DateTime sDate, DateTime eDate)
         {
             NewFunction.GetXmlFiles();//.txt轉.xml
-            GetOrthopedics(sDate, eDate);
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                GetOrthopedics(sDate, eDate);
+            }
             var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(sDate, eDate);
             foreach (DataRow r in table.Rows)
             {
