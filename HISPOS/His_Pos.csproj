@@ -358,6 +358,7 @@
     <Compile Include="NewClass\Accounts\JournalType.cs" />
     <Compile Include="NewClass\Accounts\LedgerDetail.cs" />
     <Compile Include="NewClass\ClosingWork\ClosingWorkDB.cs" />
+    <Compile Include="NewClass\Encrypt\AES\AESEncrypt.cs" />
     <Compile Include="NewClass\Enum.cs" />
     <Compile Include="NewClass\Feature.cs" />
     <Compile Include="NewClass\Location\Location.cs" />

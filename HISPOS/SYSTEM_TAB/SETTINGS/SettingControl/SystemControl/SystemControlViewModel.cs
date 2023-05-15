@@ -2,6 +2,8 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.Database;
+using His_Pos.NewClass.Encrypt.AES;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,6 +19,15 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SystemControl
         public RelayCommand CancelChangeCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
 
+        private DateTime date;
+        public DateTime Date
+        {
+            get { return date; }
+            set
+            {
+                Set(() => Date, ref date, value);
+            }
+        }
         private bool isDataChanged;
         public bool IsDataChanged
         {
@@ -52,6 +63,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SystemControl
             ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsDataChanged);
             CancelChangeCommand = new RelayCommand(CancelChangeAction, IsDataChanged);
             DataChangedCommand = new RelayCommand(DataChangedAction);
+            GetValidDate();
             DisItem = new Dictionary<int, string>
             {
                 { 0, "0.先進先出" },
@@ -85,6 +97,22 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SystemControl
                 calculate = conn.Query<int>(sql, commandType: CommandType.Text).First();
             });
             SelectItem = calculate;
+        }
+        private void GetValidDate()
+        {
+            Pharmacy pharmacy = Pharmacy.GetCurrentPharmacy();
+            if (pharmacy != null)
+            {
+                DateTime validDate = new DateTime();
+                if (pharmacy.CurPha_PeriodDate != null)
+                {
+                    string decryptString = AESEncrypt.AESDecryptBase64(pharmacy.CurPha_PeriodDate, pharmacy.ID);
+                    if (DateTime.TryParse(decryptString, out validDate))
+                    {
+                        Date = validDate;
+                    }
+                }
+            }
         }
     }
 }

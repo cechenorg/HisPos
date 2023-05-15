@@ -34,6 +34,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             GroupServerName = r.Field<string>("GroupServerName");
             TAXNUM = r.Field<string>("PHAMAS_TAXNUM");
             VerifyKey = r.Field<string>("PHAMAS_VerifyKey");
+            CurPha_PeriodDate = r.Table.Columns.Contains("CurPha_PeriodDate") ? Convert.ToString(r["CurPha_PeriodDate"]) : string.Empty;
             MedicalPersonnels = new Employees();
             AllEmployees = new Employees();
 
@@ -125,6 +126,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         public DateTime ClosingDate { get; set; }
         [IgnoreFormat]
         public DateTime PrescriptionCloseDate { get; set; }
+
+        [IgnoreFormat]
+        public string CurPha_PeriodDate { get; set; }
         #region Function
 
         public static Pharmacy GetCurrentPharmacy()

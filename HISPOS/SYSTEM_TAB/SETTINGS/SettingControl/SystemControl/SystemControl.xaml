@@ -68,6 +68,19 @@
                 </i:Interaction.Triggers>
             </ComboBox>
         </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="有效日期"
+                FontFamily="Segoe UI Semibold"
+                FontSize="28"
+                Foreground="DimGray" />
+            <TextBox Margin="20,0,0,0" Width="110" Language="zh-cn" FontSize="18" IsEnabled="True"
+                    HorizontalContentAlignment="Center" VerticalAlignment="Center"
+                    Text="{Binding Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=yyyy/MM/dd}" >
+            </TextBox>
+        </StackPanel>
         <StackPanel Grid.Row="6" Orientation="Horizontal">
             <ContentControl Margin="415,0,0,0">
                 <ContentControl.Style>

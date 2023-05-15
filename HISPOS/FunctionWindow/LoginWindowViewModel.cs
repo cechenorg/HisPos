@@ -1,15 +1,23 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DTO.WebService;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass;
+using His_Pos.NewClass.Encrypt.AES;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Pharmacy;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using System.Xml;
 
 namespace His_Pos.FunctionWindow
 {
@@ -32,13 +40,14 @@ namespace His_Pos.FunctionWindow
             get { return isAccountValid; }
             set { Set(() => IsAccountWrong, ref isAccountValid, value); }
         }
+        public static string _MedicalNum { get; set; }
+        public bool _IsCanLogIn { get; set; }
 
         public string Version => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         #endregion ----- Define Variables -----
 
         private readonly IEmployeeService _employeeService;
-
         public LoginWindowViewModel()
         {
             _employeeService = new EmployeeService(new EmployeeDb());
@@ -54,6 +63,12 @@ namespace His_Pos.FunctionWindow
             {
                 ReadSettingFile();
             }
+            _IsCanLogIn = IsValidityPeriod();
+            
+            if (!_IsCanLogIn)
+            {
+                MessageWindow.ShowMessage("用戶已過期，請聯絡杏德", Class.MessageType.WARNING);
+            }
         }
 
         #region ----- Define Actions -----
@@ -67,7 +82,7 @@ namespace His_Pos.FunctionWindow
                 ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
                 isEnable = EmployeeDb.CheckEmployeeIsEnable(loginEmployee.ID);
             }
-            if (isEnable)
+            if ((_IsCanLogIn && isEnable) || (loginEmployee != null && loginEmployee.Authority == DomainModel.Enum.Authority.Admin))
             {
                 //LoadingWindow loadingWindow = new LoadingWindow();
                 //loadingWindow.GetNecessaryData(user);
@@ -78,7 +93,7 @@ namespace His_Pos.FunctionWindow
             }
             else
             {
-                IsAccountWrong = true; 
+                IsAccountWrong = true;
             }
         }
 
@@ -90,7 +105,48 @@ namespace His_Pos.FunctionWindow
         #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+        private bool IsValidityPeriod()
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                HISPOSWebApiService hisposWebApiService = new HISPOSWebApiService();
+                try
+                {
+                    PharmacyDTO serverPharmacyInfo = hisposWebApiService.GetServerPharmacyInfo(_MedicalNum);
+                    if (serverPharmacyInfo != null)
+                    {
+                        if (serverPharmacyInfo.PHAMAS_VALIDUSEDATE != null)
+                        {
+                            var encrypt = AESEncrypt.AESEncryptBase64(serverPharmacyInfo.PHAMAS_VALIDUSEDATE.ToString("yyyy-MM-dd"), serverPharmacyInfo.PHAMAS_MEDICALNUM);
+                            PharmacyDBService.SetPharmacyValidityPeriod(encrypt);
+                        }
+                    }
+                }
+                catch
+                {
 
+                }
+            }
+            Pharmacy pharmacy = Pharmacy.GetCurrentPharmacy();
+            if (pharmacy != null)
+            {
+                DateTime validDate = new DateTime();
+                if (pharmacy.CurPha_PeriodDate != null)
+                {
+                    string decryptString = AESEncrypt.AESDecryptBase64(pharmacy.CurPha_PeriodDate, pharmacy.ID);
+                    if (DateTime.TryParse(decryptString, out validDate))
+                    {
+                        if (DateTime.Compare(validDate, DateTime.Today) >= 0)
+                            return true;
+                    }
+                }
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static void ReadSettingFile()
         {
             var filePath = "C:\\Program Files\\HISPOS\\settings.singde";
@@ -103,12 +159,32 @@ namespace His_Pos.FunctionWindow
                 var repReg = new Regex(@"Rp (.*)");
                 var verifyKey = fileReader.ReadLine();
                 verifyKey = verifyKey.Substring(2, verifyKey.Length - 2);
+                XmlDocument xml = new XmlDocument();
+                if (NetworkInterface.GetIsNetworkAvailable())
+                {
+                    xml = WebApi.GetPharmacyInfoByVerify(verifyKey);
+                }
+                
+                /*
                 var xml = WebApi.GetPharmacyInfoByVerify(verifyKey);
                 var PharmacyName = xml.SelectSingleNode("CurrentPharmacyInfo/Name").InnerText;
                 var MedicalNum = xml.SelectSingleNode("CurrentPharmacyInfo/MedicalNum").InnerText;
                 var PharmacyTel = xml.SelectSingleNode("CurrentPharmacyInfo/Telphone").InnerText;
                 var PharmacyAddress = xml.SelectSingleNode("CurrentPharmacyInfo/Address").InnerText;
                 var dbtargetIp = xml.SelectSingleNode("CurrentPharmacyInfo/DbTargetIp").InnerText;
+                */
+                var dbtargetIp = "127.0.0.1";
+                if (xml != null && !string.IsNullOrEmpty(xml.InnerText))
+                {
+                    dbtargetIp = xml.SelectSingleNode("CurrentPharmacyInfo/DbTargetIp").InnerText;
+                    _MedicalNum = xml.SelectSingleNode("CurrentPharmacyInfo/MedicalNum").InnerText;
+                }
+                else
+                {
+                    Pharmacy pharmacy = Pharmacy.GetCurrentPharmacy();
+                    _MedicalNum = pharmacy.ID;
+                }
+                
                 Properties.Settings.Default.SQL_local =
                     $"Data Source={dbtargetIp};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword;"; 
                 Properties.Settings.Default.SQL_global =

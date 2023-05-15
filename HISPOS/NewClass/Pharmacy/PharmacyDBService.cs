@@ -1,7 +1,9 @@
-﻿using His_Pos.ChromeTabViewModel;
+﻿using Dapper;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +24,21 @@ namespace His_Pos.NewClass.Pharmacy
                     Properties.Settings.Default.SQL_global, ViewModelMainWindow.CurrentPharmacy.HISPOS_ServerName ); 
             } 
             return result;
+        }
+        /// <summary>
+        /// 設定藥局有效期
+        /// </summary>
+        /// <returns></returns>
+        public static void SetPharmacyValidityPeriod(string period)
+        {
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                _ = conn.Query<int>($"{Properties.Settings.Default.SystemSerialNumber}.[Set].[UpdatePharmacyValidityPeriod]",
+                    param: new
+                    {
+                        period = period
+                    }, commandType: CommandType.StoredProcedure);
+            });
         }
     }
 
