@@ -13,5 +13,6 @@ namespace His_Pos.NewClass.Accounts
         public string acctLevel3 { get; set; }
         public string AcctName { get; set; }
         public string AcctFullName { get; set; }
+        public bool AcctWriteOff { get; set; }
     }
 }

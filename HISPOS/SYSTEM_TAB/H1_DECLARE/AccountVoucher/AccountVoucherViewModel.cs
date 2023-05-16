@@ -605,55 +605,90 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         }
         private bool SourceCheck()
         {
-            DataTable table = AccountsDb.GetSourceData();
-
             foreach (JournalDetail item in CurrentVoucher.DebitDetails)
             {
-                if (!string.IsNullOrEmpty(item.JouDet_WriteOffID))
+                if (item.Account.acctLevel1.Equals("2"))
                 {
-                    int count = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID)).Count();
-                    if (count == 0)
+                    var isCheckSources = item.Accounts.Where(w => w.acctLevel1.Equals(item.Account.acctLevel1) && w.acctLevel2.Equals(item.Account.acctLevel2) && w.acctLevel3.Equals(item.Account.acctLevel3));
+                    bool isWriteOff = false;
+                    if (isCheckSources.Any())
                     {
-                        MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳來源不存在\r\n請確認來源", item.JouDet_RowNo), MessageType.ERROR);
+                        isWriteOff = isCheckSources.FirstOrDefault().AcctWriteOff;
+                    }
+                    if (isWriteOff && string.IsNullOrEmpty(item.JouDet_WriteOffID))
+                    {
+                        MessageWindow.ShowMessage(string.Format("借方項次{0} 必須選擇沖帳來源\r\n請確認", item.JouDet_Number), MessageType.ERROR);
                         return false;
+                    }
+                    else if (!isWriteOff)
+                    {
+                        return true;
                     }
                     else
                     {
-                        DataRow[] drs = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID));
-                        if (drs != null && drs.Length > 0)
+                        DataTable table = AccountsDb.GetSourceData(item, DateTime.Today);
+                        int count = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID)).Count();
+                        if (count == 0)
                         {
-                            int amount = Convert.ToInt32(drs[0]["JouDet_Amount"]);
-                            if (item.JouDet_Amount > amount)
+                            MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳來源不存在\r\n請確認來源", item.JouDet_RowNo), MessageType.ERROR);
+                            return false;
+                        }
+                        else
+                        {
+                            DataRow[] drs = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And JouDet_SourceID = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID));
+                            if (drs != null && drs.Length > 0)
                             {
-                                MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳金額超過來源金額\r\n請確認金額", item.JouDet_RowNo), MessageType.ERROR);
-                                return false;
+                                int amount = Convert.ToInt32(drs[0]["JouDet_Amount"]);
+                                if (item.JouDet_Amount > amount)
+                                {
+                                    MessageWindow.ShowMessage(string.Format("借方項次{0} 沖帳金額超過來源金額\r\n請確認金額", item.JouDet_RowNo), MessageType.ERROR);
+                                    return false;
+                                }
                             }
                         }
-                        
                     }
                 }
             }
             foreach (JournalDetail item in CurrentVoucher.CreditDetails)
             {
-                if (!string.IsNullOrEmpty(item.JouDet_WriteOffID))
+                if (item.Account.acctLevel1.Equals("1"))
                 {
-                    int count = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And Isnull(JouDet_SourceID, '') = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID)).Count();
-
-                    if (count == 0)
+                    var isCheckSources = item.Accounts.Where(w => w.acctLevel1.Equals(item.Account.acctLevel1) && w.acctLevel2.Equals(item.Account.acctLevel2) && w.acctLevel3.Equals(item.Account.acctLevel3));
+                    bool isWriteOff = false;
+                    if (isCheckSources.Any())
                     {
-                        MessageWindow.ShowMessage(string.Format("貸方項次{0} 沖帳來源不存在\r\n請確認來源", item.JouDet_Number), MessageType.ERROR);
+                        isWriteOff = isCheckSources.FirstOrDefault().AcctWriteOff;
+                    }
+                    if (isWriteOff && string.IsNullOrEmpty(item.JouDet_WriteOffID))
+                    {
+                        MessageWindow.ShowMessage(string.Format("貸方項次{0} 必須選擇沖帳來源\r\n請確認", item.JouDet_Number), MessageType.ERROR);
                         return false;
+                    }
+                    else if (!isWriteOff)
+                    {
+                        return true;
                     }
                     else
                     {
-                        DataRow[] drs = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And Isnull(JouDet_SourceID, '') = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID));
-                        if (drs != null && drs.Length > 0)
+                        DataTable table = AccountsDb.GetSourceData(item, DateTime.Today);
+                        int count = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And Isnull(JouDet_SourceID, '') = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID)).Count();
+
+                        if (count == 0)
                         {
-                            int amount = Convert.ToInt32(drs[0]["JouDet_Amount"]);
-                            if (item.JouDet_Amount > amount)
+                            MessageWindow.ShowMessage(string.Format("貸方項次{0} 沖帳來源不存在\r\n請確認來源", item.JouDet_Number), MessageType.ERROR);
+                            return false;
+                        }
+                        else
+                        {
+                            DataRow[] drs = table.Select(string.Format("JouDet_ID = '{0}' And JouDet_Number = {1} And Isnull(JouDet_SourceID, '') = '{2}'", item.JouDet_WriteOffID, item.JouDet_WriteOffNumber, item.JouDet_SourceID));
+                            if (drs != null && drs.Length > 0)
                             {
-                                MessageWindow.ShowMessage(string.Format("貸方項次{0} 沖帳金額超過來源金額\r\n請確認金額", item.JouDet_Number), MessageType.ERROR);
-                                return false;
+                                int amount = Convert.ToInt32(drs[0]["JouDet_Amount"]);
+                                if (item.JouDet_Amount > amount)
+                                {
+                                    MessageWindow.ShowMessage(string.Format("貸方項次{0} 沖帳金額超過來源金額\r\n請確認金額", item.JouDet_Number), MessageType.ERROR);
+                                    return false;
+                                }
                             }
                         }
                     }
@@ -671,13 +706,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     {
                         if (CheckData())
                         {
-                            if (btnName.Equals("新增"))
+                            if (!SourceCheck())
                             {
-                                if (!SourceCheck())
-                                {
-                                    return;
-                                }
+                                return;
                             }
+
                             AccountsDb.UpdateJournalData(btnName, CurrentVoucher);
                             if (btnName.Equals("修改"))
                             {

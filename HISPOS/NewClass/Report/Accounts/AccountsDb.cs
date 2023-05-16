@@ -310,107 +310,29 @@ namespace His_Pos.NewClass.Report.Accounts
             }
             return table;
         }
-        public static DataTable GetSourceData(JournalDetail detail)
+        public static DataTable GetSourceData(JournalDetail detail, DateTime edate)
+        {
+            DataTable table = GetSourceDataInLocal(detail.JouDet_Type, detail.Account.acctLevel1, detail.Account.acctLevel2, detail.Account.acctLevel3, edate, detail.JouDet_ID);
+            return table;
+        }
+
+        public static DataTable GetSourceDataInLocal(string type, string acct1, string acct2, string acct3, DateTime endDate, string currentVoucherID)
         {
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("DetType", detail.JouDet_Type));
-            parameters.Add(new SqlParameter("DetAcctLvl1", Convert.ToString(detail.Account.acctLevel1).PadLeft(1, '0')));
-            parameters.Add(new SqlParameter("DetAcctLvl2", Convert.ToString(detail.Account.acctLevel2).PadLeft(4, '0')));
-            parameters.Add(new SqlParameter("DetAcctLvl3", string.IsNullOrEmpty(Convert.ToString(detail.Account.acctLevel3)) ? null : Convert.ToString(detail.Account.acctLevel3).PadLeft(4, '0')));
+            parameters.Add(new SqlParameter("DetType", type));
+            parameters.Add(new SqlParameter("DetAcctLvl1", Convert.ToString(acct1).PadLeft(1, '0')));
+            parameters.Add(new SqlParameter("DetAcctLvl2", Convert.ToString(acct2).PadLeft(4, '0')));
+            parameters.Add(new SqlParameter("DetAcctLvl3", string.IsNullOrEmpty(Convert.ToString(acct3)) ? string.Empty : Convert.ToString(acct3).PadLeft(4, '0')));
+            parameters.Add(new SqlParameter("edate", endDate));
+            if (!string.IsNullOrEmpty(currentVoucherID))
+                parameters.Add(new SqlParameter("DetID", currentVoucherID));
+
             DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[JournalWriteOff]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
-        public static DataTable GetSourceDataInLocal(string type, string acct1, string acct2, string acct3, DateTime endDate)
-        {
-            DataTable table = new DataTable();
-            string sql = string.Format(@"
 
-                 Declare @DetType varchar(1) = '{1}'
-		         Declare @DetAcctLvl1 varchar(1) = '{2}'
-		         Declare @DetAcctLvl2 varchar(4) = '{3}'
-		         Declare @DetAcctLvl3 varchar(4) = '{4}'
-		         Declare @date date = '{5}'
-
-                IF (@DetType = 'D' AND @DetAcctLvl1 = '2')
-	            BEGIN
-		            SELECT m.JouMas_Date,d.JouDet_ID,d.JouDet_Number,ISNULL(d.JouDet_SourceID,'') JouDet_SourceID,(d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) JouDet_Amount, ISNULL(d.JouDet_Memo, '') JouDet_Memo, ISNULL(d.JouDet_Source, '') JouDet_Source
-		            FROM [{0}].[dbo].[JournalMaster] m
-		            INNER JOIN [{0}].[dbo].[JournalDetail] d on m.JouMas_ID = d.JouDet_ID
-		            LEFT JOIN (	SELECT JouDet_WriteOffID,JouDet_WriteOffNumber,JouDet_SourceID,SUM(JouDet_Amount) JouDet_Amount
-					FROM [{0}].[dbo].[JournalMaster] wm
-					INNER JOIN [{0}].[dbo].[JournalDetail] wd on wm.JouMas_ID = wd.JouDet_ID
-					WHERE wm.JouMas_Status = 'F'
-					  AND wm.JouMas_IsEnable = 1
-					  AND wd.JouDet_Type = 'D'
-					  AND JouDet_AcctLvl1 = @DetAcctLvl1
-					  AND JouDet_AcctLvl2 = @DetAcctLvl2
-					  AND ISNULL(JouDet_AcctLvl3,'') = ISNULL(@DetAcctLvl3,'')
-					  AND ISNULL(wd.JouDet_WriteOffID,'') <> '' AND ISNULL(wd.JouDet_WriteOffNumber,0) > 0
-                      AND JouMas_Date <= @date
-					GROUP BY JouDet_WriteOffID,JouDet_WriteOffNumber,JouDet_SourceID
-		            ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber AND ISNULL(d.JouDet_SourceID,'') = ISNULL(w.JouDet_SourceID,'')
-		            WHERE JouMas_Status = 'F'
-			            AND JouMas_IsEnable = 1
- 			            AND JouDet_Type = 'C'
-			            AND JouDet_AcctLvl1 = @DetAcctLvl1
-			            AND JouDet_AcctLvl2 = @DetAcctLvl2
-			            AND ISNULL(JouDet_AcctLvl3,'') = ISNULL(@DetAcctLvl3,'')
-			            AND (d.JouDet_Amount - ISNULL(w.JouDet_Amount,0)) <> 0
-                        AND JouMas_Date <= @date
-		            ORDER BY 1,2,3
-	            END
-	            ELSE IF (@DetType = 'C' AND @DetAcctLvl1='1')
-	            BEGIN
-		            SELECT m.JouMas_Date,d.JouDet_ID,d.JouDet_Number,ISNULL(d.JouDet_SourceID,'') JouDet_SourceID,(d.JouDet_Amount - ISNULL(c.JouDet_Amount,0) - ISNULL(w.JouDet_Amount,0)) JouDet_Amount, ISNULL(d.JouDet_Memo, '') JouDet_Memo, ISNULL(d.JouDet_Source, '') JouDet_Source
-		            FROM [{0}].[dbo].[JournalMaster] m
-		            INNER JOIN [{0}].[dbo].[JournalDetail] d ON m.JouMas_ID = d.JouDet_ID
-		            LEFT JOIN [{0}].[dbo].[JournalDetail] c ON m.JouMas_ID = c.JouDet_ID
-		            AND c.JouDet_Type = 'C' AND c.JouDet_AcctLvl1 = @DetAcctLvl1
-		            AND c.JouDet_AcctLvl2 = @DetAcctLvl2
-		            AND ISNULL(c.JouDet_AcctLvl3,'') = ISNULL(@DetAcctLvl3,'')
-		            LEFT JOIN (	SELECT JouDet_WriteOffID,JouDet_WriteOffNumber,JouDet_SourceID,SUM(JouDet_Amount) JouDet_Amount
-					FROM [{0}].[dbo].[JournalMaster] wm
-					INNER JOIN [{0}].[dbo].[JournalDetail] wd on wm.JouMas_ID = wd.JouDet_ID
-					WHERE wm.JouMas_Status = 'F'
-					  AND wm.JouMas_IsEnable = 1
-					  AND wd.JouDet_Type = 'C'
-					  AND JouDet_AcctLvl1 = @DetAcctLvl1
-					  AND JouDet_AcctLvl2 = @DetAcctLvl2
-					  AND ISNULL(JouDet_AcctLvl3,'') = ISNULL(@DetAcctLvl3,'')
-					  AND ISNULL(wd.JouDet_WriteOffID,'') <> '' AND ISNULL(wd.JouDet_WriteOffNumber,0) > 0
-                      AND JouMas_Date <= @date
-					GROUP BY JouDet_WriteOffID,JouDet_WriteOffNumber,JouDet_SourceID
-		            ) w ON d.JouDet_ID = w.JouDet_WriteOffID AND d.JouDet_Number = w.JouDet_WriteOffNumber AND ISNULL(d.JouDet_SourceID,'') = ISNULL(w.JouDet_SourceID,'')
-		            WHERE m.JouMas_Status = 'F'
-			        AND m.JouMas_IsEnable = 1
- 			        AND d.JouDet_Type = 'D'
-			        AND d.JouDet_AcctLvl1 = @DetAcctLvl1
-			        AND d.JouDet_AcctLvl2 = @DetAcctLvl2
-			        AND ISNULL(d.JouDet_AcctLvl3,'') = ISNULL(@DetAcctLvl3,'')
-			        AND (d.JouDet_Amount - ISNULL(c.JouDet_Amount,0) - ISNULL(w.JouDet_Amount,0)) <> 0
-                    AND JouMas_Date <= @date
-		            ORDER BY 1,2,3
-                END", Properties.Settings.Default.SystemSerialNumber, type, acct1, acct2, acct3, endDate.ToString("yyyy -MM-dd"));
-
-            SQLServerConnection.DapperQuery((conn) =>
-            {
-                var dapper = conn.Query(sql, commandType: CommandType.Text);
-                string json = JsonConvert.SerializeObject(dapper);//序列化成JSON
-                table = JsonConvert.DeserializeObject<DataTable>(json);//反序列化成DataTable
-            });
-            return table;
-        }
-
-        public static DataTable GetSourceData()
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[JournalSourceWriteOff]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
-            return table;
-        }
         public static DataTable GetBalanceSheet(DateTime edate)
         {
             MainWindow.ServerConnection.OpenConnection();

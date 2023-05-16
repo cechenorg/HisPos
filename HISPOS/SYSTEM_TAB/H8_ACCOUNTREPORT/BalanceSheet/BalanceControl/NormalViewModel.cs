@@ -699,9 +699,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         {
             AccDataDetail = new AccountsDetailReport();
             DataRow[] setCollapsed = acountSettingDB.Select("acct_BSDisplayMode = 0");
-            //var setCollapsed = acountSettingDB.Select("acct_BSDisplayMode = 0").ToList();
             DataRow[] setMerge = acountSettingDB.Select("acct_BSDisplayMode = 2");
-
             foreach (DataRow dr in setCollapsed)
             {
                 string act1 = Convert.ToString(dr["acct1"]);
@@ -713,37 +711,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             List<string> posNum = new List<string>() { "1", "5", "6", "8" };
             string type = posNum.Contains(acct1) ? "C" : "D";
-            DataTable firstData = AccountsDb.GetAccountBalFirst(acct1, acct2, acct3, EndDate, type);
-            int first = 0;
-            DateTime maxDate = new DateTime();
-            DataRow drs = firstData.NewRow();
-            if (firstData != null && firstData.Rows.Count > 0)
-            {
-                if (firstData.Rows.Count == 1)
-                {
-                    maxDate = Convert.ToDateTime(firstData.Rows[0]["AccBal_Date"]);
-                    first = Convert.ToInt32(firstData.Rows[0]["AccBal_Amount"]);
-                }
-                else
-                { 
-                    foreach (DataRow item in firstData.Rows)
-                    {
-                        string jouMas_Date = Convert.ToString(item["AccBal_Date"]);
-                        int jouDet_Amount = Convert.ToInt32(item["AccBal_Amount"]);
-                        if (jouDet_Amount != 0)
-                        {
-                            AccDataDetail.Add(new AccountsDetailReports(jouMas_Date, jouDet_Amount, string.Empty, string.Empty));
-                        }
-                    }                
-                }
-            }
-            else
-            {
-                first = 0;
-            }
-
-            DataTable table = AccountsDb.GetSourceDataInLocal(type, acct1, acct2, acct3, EndDate);//可沖帳
-
+            DataTable table = AccountsDb.GetSourceDataInLocal(type, acct1, acct2, acct3, EndDate, string.Empty);//可沖帳
             bool isMerge = false;
             foreach (DataRow dr in setMerge)
             {
@@ -758,19 +726,21 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
             if (isMerge)
             {
-                if (first != 0)
-                {
-                    AccDataDetail.Add(new AccountsDetailReports(maxDate.ToString("yyyy/MM/dd"), first, "期初", string.Empty));
-                }
                 foreach (DataRow item in table.Rows)
                 {
                     string ym = Convert.ToDateTime(item["JouMas_Date"]).ToString("yyyy/MM");
                     int jouDet_Amount = Convert.ToInt32(item["JouDet_Amount"]);
                     string jouMas_ID = Convert.ToString(item["JouDet_ID"]);
                     string memo = Convert.ToString(item["JouDet_Memo"]);
-                    if (AccDataDetail.Where(w=>w.Name.Equals(ym)).Count() > 0)
+                    string source = Convert.ToString(item["JouDet_SourceID"]);
+                    string sourceNum = Convert.ToString(item["JouDet_Number"]);
+                    if (AccDataDetail.Where(w => w.Name.Equals(source)).Count() == 0 && !string.IsNullOrEmpty(source))
                     {
-                        AccDataDetail.Where(w => w.Name.Equals(ym)).First().Value += Convert.ToDecimal(item["JouDet_Amount"]);
+                        AccDataDetail.Add(new AccountsDetailReports(source, jouDet_Amount, string.Empty, memo));
+                    }
+                    else if (AccDataDetail.Where(w=>w.Name.Equals(ym)).Count() > 0)
+                    {
+                        AccDataDetail.Where(w => w.Name.Equals(ym)).First().Value += Convert.ToDecimal(jouDet_Amount);
                     }
                     else
                     {
@@ -780,22 +750,29 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
             else
             {
-                if (first != 0)
+                if (table != null && table.Rows.Count > 0)
                 {
-                    AccDataDetail.Add(new AccountsDetailReports(maxDate.ToString("yyyy/MM/dd"), first, "期初", string.Empty));
-                }
-                foreach (DataRow item in table.Rows)
-                {
-                    string jouMas_Date = Convert.ToDateTime(item["JouMas_Date"]).ToString("yyyy/MM/dd");
-                    int jouDet_Amount = Convert.ToInt32(item["JouDet_Amount"]);
-                    string jouMas_ID = Convert.ToString(item["JouDet_ID"]);
-                    string memo = Convert.ToString(item["JouDet_Memo"]);
-                    if (jouDet_Amount != 0)
+                    foreach (DataRow item in table.Rows)
                     {
-                        AccDataDetail.Add(new AccountsDetailReports(jouMas_Date, jouDet_Amount, jouMas_ID, memo));
+                        string jouMas_Date = Convert.ToDateTime(item["JouMas_Date"]).ToString("yyyy/MM/dd");
+                        int jouDet_Amount = Convert.ToInt32(item["JouDet_Amount"]);
+                        string jouMas_ID = Convert.ToString(item["JouDet_ID"]);
+                        string memo = Convert.ToString(item["JouDet_Memo"]);
+                        if (jouDet_Amount != 0)
+                        {
+                            AccDataDetail.Add(new AccountsDetailReports(jouMas_Date, jouDet_Amount, jouMas_ID, memo));
+                        }
                     }
                 }
             }
+            var accOrderBy = AccDataDetail.OrderBy(o => o.Name);
+            var clone = new AccountsDetailReport();
+            foreach (var item in accOrderBy)
+            {
+                clone.Add(item);
+            }
+
+            AccDataDetail = clone;
         }
     }
 }
