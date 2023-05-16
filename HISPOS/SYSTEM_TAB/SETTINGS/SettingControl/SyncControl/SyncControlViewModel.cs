@@ -22,7 +22,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl
 {
     public class SyncControlViewModel : ViewModelBase
     {
-        private readonly Dictionary<string, string> btnItemValue = new Dictionary<string, string>()
+        public static readonly Dictionary<string, string> btnItemValue = new Dictionary<string, string>()
         {
             { "SynControlMedData", "管藥資料" },
             { "SynSingdeStockData", "杏德門市商品資料(價格及庫存量)"},
@@ -79,7 +79,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl
                 if (updateTime != null && updateTime.Count() > 0)
                     item.UpdateTime = updateTime.FirstOrDefault().UpdTime_LastUpdateTime;
 
-                IEnumerable<UpdateTimeDTO> updateSourceTime = _updList.Where(w => w.UpdTime_TableName.Equals(pair.Key));
+                IEnumerable<UpdateTimeDTO> updateSourceTime = _updSouceList.Where(w => w.UpdTime_TableName.Equals(pair.Key));
                 if (updateSourceTime != null && updateTime.Count() > 0)
                     item.SourceUpdateTime = updateSourceTime.FirstOrDefault().UpdTime_LastUpdateTime;
 
@@ -192,7 +192,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl
                     });
                     SQLServerConnection.DapperQuery((conn) =>
                     {
-                        conn.Query<int>($"{Properties.Settings.Default.SystemSerialNumber}.[Set].[OTCProductImport]", commandType: CommandType.StoredProcedure);
+                        conn.Query<string>($"{Properties.Settings.Default.SystemSerialNumber}.[Set].[OTCProductImport]", commandType: CommandType.StoredProcedure);
                     });
                     Application.Current.Dispatcher.Invoke(() =>
                     {

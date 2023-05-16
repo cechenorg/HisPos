@@ -12,6 +12,7 @@ using His_Pos.InfraStructure;
 using Newtonsoft.Json;
 using WebServiceDTO;
 using System.Collections;
+using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl;
 
 namespace His_Pos.Service
 {
@@ -37,8 +38,19 @@ namespace His_Pos.Service
 
         public void SyncData()
         {
-
             var updateList = GetNeededUpdateTimeList();
+            var settingBtn = SyncControlViewModel.btnItemValue;
+            foreach (KeyValuePair<string, string> keyValue in settingBtn)
+            {
+                IEnumerable<UpdateTimeDTO> deleteItem = updateList.Result.Where(w => w.UpdTime_TableName.Equals(keyValue.Key));
+                if (deleteItem != null && deleteItem.Count() > 0)
+                {
+                    foreach (UpdateTimeDTO item in deleteItem.ToArray())
+                    {
+                        updateList.Result.Remove(item);
+                    }
+                }
+            }
             updateList.Wait();
 
             List<Task> taskList = GetNeededSyncTask(updateList.Result);
