@@ -64,7 +64,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
             CommonHospitalsCollection.GetCommon();
             CommonHospitalsCollectionViewSource = new CollectionViewSource { Source = CommonHospitalsCollection };
             CommonHospitalsCollectionView = CommonHospitalsCollectionViewSource.View;
-            SelectedInstitution = (Institution)CommonHospitalsCollectionView.Cast<object>().First();
+            SelectedInstitution = (Institution)CommonHospitalsCollectionView.Cast<object>().FirstOrDefault();
         }
 
         private void FocusUpDownAction(string direction)
