@@ -319,7 +319,7 @@ namespace His_Pos.NewClass.Trade
                 Declare @ProName nvarchar(50) = '{9}'
                 Declare @sProfitPercent float = {10}
                 Declare @eProfitPercent float = {11}
-                Declare @IsAvgCost int = (Select SysPar_Value From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'AvgCost')
+                Declare @IsAvgCost int = (Select isnull(cast(SysPar_Value as float), 0) From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'AvgCost')
 
                 Select TD.TraDet_ProductID, M.Pro_ChineseName as TraDet_ProductName, Sum(TD.TraDet_Amount) as TraDet_Amount, 
                 Sum(TD.TraDet_PriceSum) as TraDet_PriceSum, isnull(case when @IsAvgCost = 0 then InvRec_ValueDifference else InvRec_ChangeValue end, 0) as InvRec_ValueDifference
@@ -379,7 +379,7 @@ namespace His_Pos.NewClass.Trade
                 Declare @sProfitPercent float = {8}
                 Declare @eProfitPercent float = {9}
                 Declare @Cashier int = {10}
-                Declare @IsAvgCost int = (Select SysPar_Value From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'AvgCost')
+                Declare @IsAvgCost int = (Select isnull(cast(SysPar_Value as float), 0) From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'AvgCost')
                 
                 if @sInvoice is null
 	            Begin
