@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using His_Pos.NewClass.StoreOrder;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView
 {
@@ -23,6 +25,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView
 
         public void Reload(object sender, int i)
         {
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = (MenuItem)sender;
+            NormalViewModel normal = new NormalViewModel();
+            if (item.DataContext is PurchaseOrder)
+            {
+                PurchaseOrder order = (PurchaseOrder)item.DataContext;
+                normal.CurrentStoreOrder = order;
+            }
+            if (item.DataContext is ReturnOrder)
+            {
+                ReturnOrder order = (ReturnOrder)item.DataContext;
+                normal.CurrentStoreOrder = order;
+            }
+            normal.ExportOrderDataAction();
         }
     }
 }

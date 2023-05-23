@@ -331,8 +331,7 @@
                                             <Grid.ContextMenu>
                                                 <ContextMenu TextBlock.TextAlignment="Center">
                                                     <MenuItem
-                                                        Command="{Binding Data.ExportOrderDataCommand, Source={StaticResource proxy}}"
-                                                        CommandParameter="S"
+                                                        Click="MenuItem_Click"
                                                         Header="匯出選取訂單資料" />
                                                 </ContextMenu>
                                             </Grid.ContextMenu>

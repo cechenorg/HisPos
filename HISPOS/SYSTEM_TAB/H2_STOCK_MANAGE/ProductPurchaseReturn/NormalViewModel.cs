@@ -48,7 +48,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand ReturnOrderRePurchaseCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand NoSingdeCommand { get; set; }
-        public RelayCommand ExportOrderDataCommand { get; set; }
         public RelayCommand<string> RealAmountMouseDoubleClickCommand { get; set; }
 
         #endregion ----- Define Command -----
@@ -550,7 +549,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 CurrentStoreOrder.SaveOrder();
         }
 
-        private void ExportOrderDataAction()
+        public void ExportOrderDataAction()
         {
             if (CurrentStoreOrder.OrderStatus == OrderStatusEnum.WAITING)
             {
@@ -647,7 +646,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             CloseTabCommand = new RelayCommand(CloseTabAction);
             ReturnOrderCalculateReturnAmountCommand = new RelayCommand(ReturnOrderCalculateReturnAmountAction);
             ReturnOrderRePurchaseCommand = new RelayCommand(ReturnOrderRePurchaseAction);
-            ExportOrderDataCommand = new RelayCommand(ExportOrderDataAction);
             RealAmountMouseDoubleClickCommand = new RelayCommand<string>(DoubleClickRealAmount);
             CheckAllCommand = new RelayCommand(OnCheckAll);
             CheckCommand = new RelayCommand(OnCheck);
