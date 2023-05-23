@@ -1,12 +1,16 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Pharmacy;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using System;
+using System.Data;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
@@ -27,6 +31,7 @@ namespace His_Pos.FunctionWindow
         public string Account { get; set; }
         private bool isAccountValid = false;
 
+        private bool isCanLogin;
         public bool IsAccountWrong
         {
             get { return isAccountValid; }
@@ -54,6 +59,14 @@ namespace His_Pos.FunctionWindow
             {
                 ReadSettingFile();
             }
+
+            DataTable verifyKey = PharmacyDBService.GetPharmacyVerifyKey();
+            DataRow[] drs = verifyKey.Select(string.Format("PHAMAS_VerifyKey = '{0}'", Properties.Settings.Default.SystemSerialNumber));
+            isCanLogin = drs is null || drs.Length == 0 ? false : true;
+            if (!isCanLogin)
+            {
+                MessageWindow.ShowMessage("用戶已過期，請聯絡杏德", MessageType.WARNING);
+            }
         }
 
         #region ----- Define Actions -----
@@ -62,12 +75,12 @@ namespace His_Pos.FunctionWindow
         {
             bool isEnable = false;
             Employee loginEmployee = _employeeService.Login(Account, (sender as PasswordBox)?.Password);
-            if (loginEmployee != null) 
+            if (loginEmployee != null)
             {
                 ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
                 isEnable = EmployeeDb.CheckEmployeeIsEnable(loginEmployee.ID);
             }
-            if (isEnable)
+            if (isEnable && (isCanLogin || (loginEmployee != null && loginEmployee.Authority == Authority.Admin)))
             {
                 //LoadingWindow loadingWindow = new LoadingWindow();
                 //loadingWindow.GetNecessaryData(user);
