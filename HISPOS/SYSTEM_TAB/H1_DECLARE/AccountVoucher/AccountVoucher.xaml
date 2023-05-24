@@ -291,10 +291,7 @@
                                     </DataGridTemplateColumn.HeaderTemplate>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Name="DeleteDot" Width="14" Source="/Images/DeleteDot.png"  Visibility="{Binding Path=DataContext.BtnVisibilty, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
-                                                <Image.InputBindings>
-                                                    <MouseBinding CommandParameter="0" Command="{Binding Path=DataContext.DeleteDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick" />
-                                                </Image.InputBindings>
+                                            <Image Name="DeleteDot" Width="14" Source="/Images/DeleteDot.png"  Visibility="{Binding Path=DataContext.BtnVisibilty, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseUp="DeleteDot_MouseUp" >
                                             </Image>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -440,10 +437,7 @@
                                     </DataGridTemplateColumn.HeaderTemplate>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Name="DeleteDot" Width="14" Source="/Images/DeleteDot.png" Visibility="{Binding Path=DataContext.BtnVisibilty, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
-                                                <Image.InputBindings>
-                                                    <MouseBinding CommandParameter="1" Command="{Binding Path=DataContext.DeleteDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick" />
-                                                </Image.InputBindings>
+                                            <Image Name="DeleteDot" Width="14" Source="/Images/DeleteDot.png" Visibility="{Binding Path=DataContext.BtnVisibilty, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseUp="DeleteDot_MouseUp">
                                             </Image>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>

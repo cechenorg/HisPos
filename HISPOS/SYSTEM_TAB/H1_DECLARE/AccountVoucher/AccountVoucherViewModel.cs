@@ -69,7 +69,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             VisibilityBtnCommand = new RelayCommand(VisibilityBtnAction);
             ExportCommand = new RelayCommand(ExportAction);
             FilterCommand = new RelayCommand<string>(FilterAction);
-            DeleteDetailCommand = new RelayCommand<string>(DeleteDetailAction);
             AddNewDetailCommand = new RelayCommand<string>(AddNewDetailAction);
             ClickDetailCommand = new RelayCommand<string>(ClickDetailAction);
         }
@@ -77,7 +76,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
         public RelayCommand CopyDataCommand { get; set; }
         public RelayCommand StrikeCommand { get; set; }
         public RelayCommand<string> FilterCommand { get; set; }
-        public RelayCommand<string> DeleteDetailCommand { get; set; }
         public RelayCommand<string> AddNewDetailCommand { get; set; }
         public RelayCommand<string> ClickDetailCommand { get; set; }
         public RelayCommand VisibilityBtnCommand { get; set; }
@@ -473,7 +471,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 }
             }
         }
-        private void DeleteDetailAction(string gridCondition)
+        public void DeleteDetailAction(string gridCondition)
         {
             if (CurrentVoucher != null)
             {

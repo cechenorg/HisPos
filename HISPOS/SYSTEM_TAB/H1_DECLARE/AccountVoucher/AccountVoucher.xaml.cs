@@ -275,5 +275,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 e.Handled = true;
             }
         }
+
+        private void DeleteDot_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Image image = (Image)sender;
+            JournalDetail detail = (JournalDetail)image.DataContext;
+            AccountVoucherViewModel viewModel = new AccountVoucherViewModel();
+            viewModel = (AccountVoucherViewModel)DataContext;
+            viewModel.DeleteDetailAction(detail.JouDet_Type == "D" ? "0" : "1");
+        }
     }
 }
