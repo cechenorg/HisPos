@@ -23,9 +23,9 @@ namespace His_Pos.NewClass.StoreOrder.ExportOrderRecord
 
             DataTable products = PurchaseReturnProductDB.GetProductsByStoreOrderIDForExport((Source as StoreOrder).ID);
             Settings.Add(new ExportDataTableExcelSetting(products, 4, 2));
-
+            int len = (Source as StoreOrder).OrderType == OrderTypeEnum.RETURN ? 7 : 8;
             int productRows = products.Rows.Count + 1;
-            Settings.Add(new ExportSpecialExcelSetting((Source as StoreOrder).TotalPrice.ToString("####"), productRows + 4, 8).SetFontColor(Color.SteelBlue).SetFontSize(15).SetIsBold(true));
+            Settings.Add(new ExportSpecialExcelSetting((Source as StoreOrder).TotalPrice.ToString("####"), productRows + 4, len).SetFontColor(Color.SteelBlue).SetFontSize(15).SetIsBold(true));
         }
 
         public override string GetSheetName()
