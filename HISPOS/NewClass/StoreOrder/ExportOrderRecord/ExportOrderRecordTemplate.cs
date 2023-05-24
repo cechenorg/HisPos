@@ -13,7 +13,7 @@ namespace His_Pos.NewClass.StoreOrder.ExportOrderRecord
             if ((Source as StoreOrder).OrderStatus == OrderStatusEnum.SCRAP)
                 Settings.Add(new ExportSpecialExcelSetting("已作廢", 1, 1).SetFontColor(Color.Red).SetFontSize(15).SetIsBold(true));
 
-            Settings.Add(new ExportSpecialExcelSetting((Source as StoreOrder).OrderType == OrderTypeEnum.PURCHASE ? "進貨" : "退貨", 2, 2).SetFontColor((Source as StoreOrder).OrderType == OrderTypeEnum.PURCHASE ? Color.Green : Color.Red).SetIsBold(true).SetFontSize(15));
+            Settings.Add(new ExportSpecialExcelSetting((Source as StoreOrder).OrderType == OrderTypeEnum.RETURN ? "退貨" : "進貨", 2, 2).SetFontColor((Source as StoreOrder).OrderType == OrderTypeEnum.PURCHASE ? Color.Green : Color.Red).SetIsBold(true).SetFontSize(15));
             Settings.Add(new ExportSpecialExcelSetting(((Source as StoreOrder).ReceiveID is null) ? (Source as StoreOrder).ID : (Source as StoreOrder).ReceiveID, 2, 3).SetFontColor(Color.DarkBlue).SetFontSize(15).SetIsBold(true));
             Settings.Add(new ExportSpecialExcelSetting((Source as StoreOrder).OrderManufactory.GetName, 2, 4).SetIsBold(true));
             Settings.Add(new ExportSpecialExcelSetting("收貨員工:", 3, 2));
@@ -25,7 +25,7 @@ namespace His_Pos.NewClass.StoreOrder.ExportOrderRecord
             Settings.Add(new ExportDataTableExcelSetting(products, 4, 2));
 
             int productRows = products.Rows.Count + 1;
-            Settings.Add(new ExportSpecialExcelSetting((Source as StoreOrder).TotalPrice.ToString("####"), productRows + 4, 7).SetFontColor(Color.SteelBlue).SetFontSize(15).SetIsBold(true));
+            Settings.Add(new ExportSpecialExcelSetting((Source as StoreOrder).TotalPrice.ToString("####"), productRows + 4, 8).SetFontColor(Color.SteelBlue).SetFontSize(15).SetIsBold(true));
         }
 
         public override string GetSheetName()
