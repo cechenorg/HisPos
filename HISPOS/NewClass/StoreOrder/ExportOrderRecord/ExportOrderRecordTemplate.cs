@@ -14,7 +14,7 @@ namespace His_Pos.NewClass.StoreOrder.ExportOrderRecord
                 Settings.Add(new ExportSpecialExcelSetting("已作廢", 1, 1).SetFontColor(Color.Red).SetFontSize(15).SetIsBold(true));
 
             Settings.Add(new ExportSpecialExcelSetting((Source as StoreOrder).OrderType == OrderTypeEnum.RETURN ? "退貨" : "進貨", 2, 2).SetFontColor((Source as StoreOrder).OrderType == OrderTypeEnum.PURCHASE ? Color.Green : Color.Red).SetIsBold(true).SetFontSize(15));
-            Settings.Add(new ExportSpecialExcelSetting(((Source as StoreOrder).ReceiveID is null) ? (Source as StoreOrder).ID : (Source as StoreOrder).ReceiveID, 2, 3).SetFontColor(Color.DarkBlue).SetFontSize(15).SetIsBold(true));
+            Settings.Add(new ExportSpecialExcelSetting(((Source as StoreOrder).ReceiveID is null) ? (Source as StoreOrder).ID : (Source as StoreOrder).ID, 2, 3).SetFontColor(Color.DarkBlue).SetFontSize(15).SetIsBold(true));
             Settings.Add(new ExportSpecialExcelSetting((Source as StoreOrder).OrderManufactory.GetName, 2, 4).SetIsBold(true));
             Settings.Add(new ExportSpecialExcelSetting("收貨員工:", 3, 2));
             Settings.Add(new ExportSpecialExcelSetting((Source as StoreOrder).ReceiveEmployeeName, 3, 3));
