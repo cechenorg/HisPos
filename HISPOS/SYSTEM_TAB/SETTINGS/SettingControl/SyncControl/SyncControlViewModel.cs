@@ -28,6 +28,20 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl
             { "SynSingdeStockData", "杏德門市商品資料(價格及庫存量)"},
             { "SynSingdeMedData", "杏德藥品"}
         };
+        public static readonly Dictionary<string, string> btnAPIItemValue = new Dictionary<string, string>()
+        {
+            { "AdjustCase", "調劑案件" },
+            { "DiseaseCode", "診斷碼"},
+            { "Division", "杏德特殊藥品"},
+            { "Institution", "醫療機構"},
+            { "Medicine", "藥品"},
+            { "SmokeMedicine", "戒菸藥品"},
+            { "SpecialMedicine", "特殊藥品"},
+            { "DiseaseCodeMapping", "診斷碼Mapping"},
+            { "MedicineForm", "藥品種類"},
+            { "MedicineNHISingde", "杏德藥品"},
+            { "Accounts", "會計科目"}
+        };
         private string busyContent;
         public string BusyContent
         {
@@ -85,6 +99,21 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl
 
                 CurrentApiItem.Add(item);
             }
+            foreach (KeyValuePair<string, string> pair in btnAPIItemValue)
+            {
+                ApiBtnItem item = new ApiBtnItem();
+                item.ItemID = pair.Key;
+                item.ItemName = pair.Value;
+                IEnumerable<UpdateTimeDTO> updateTime = _updList.Where(w => w.UpdTime_TableName.Equals(pair.Key));
+                if (updateTime != null && updateTime.Count() > 0)
+                    item.UpdateTime = updateTime.FirstOrDefault().UpdTime_LastUpdateTime;
+
+                IEnumerable<UpdateTimeDTO> updateSourceTime = _updSouceList.Where(w => w.UpdTime_TableName.Equals(pair.Key));
+                if (updateSourceTime != null && updateTime.Count() > 0)
+                    item.SourceUpdateTime = updateSourceTime.FirstOrDefault().UpdTime_LastUpdateTime;
+
+                CurrentApiItem.Add(item);
+            }
         }
         public void BtnSyncAction(string name)
         {
@@ -92,6 +121,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl
 
             worker.DoWork += (o, ea) =>
             {
+                HISPOSWebApiService service = new HISPOSWebApiService();
                 BusyContent = "同步資料中";
                 switch (name)
                 {
@@ -108,6 +138,33 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SyncControl
                     case "SynSingdeMedData":
                         if (CheckDate())
                             BtnSyncSingdeStockAction(name);
+                        break;
+
+                    case "AdjustCase":
+                    case "DiseaseCode":
+                    case "Division":
+                    case "Institution":
+                    case "Medicine":
+                    case "SmokeMedicine":
+                    case "SpecialMedicine":
+                    case "DiseaseCodeMapping":
+                    case "MedicineForm":
+                    case "MedicineNHISingde":
+                    case "Accounts":
+                        if (CheckDate())
+                        {
+                            List<UpdateTimeDTO> updateList = new List<UpdateTimeDTO>
+                            {
+                                new UpdateTimeDTO
+                                {
+                                    UpdTime_LastUpdateTime = DateTime.Today,
+                                    UpdTime_TableName = name
+                                }
+                            };
+
+                            service.GetNeededSyncTask(updateList);
+                            SetUpdateRecord(name);
+                        }
                         break;
 
                     default:

@@ -59,7 +59,7 @@ namespace His_Pos.Service
             _commonDataRepository.SyncUpdateTime(updateList.Result);
         }
 
-        private List<Task> GetNeededSyncTask(List<UpdateTimeDTO> updateTimeList)
+        public List<Task> GetNeededSyncTask(List<UpdateTimeDTO> updateTimeList)
         {
             List<Task> taskList = new List<Task>();
 
