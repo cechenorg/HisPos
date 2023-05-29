@@ -8,7 +8,11 @@
 
         public double JAPrice { get; set; }
 
+        public double JASPrice { get; set; }
+
         public double JNPrice { get; set; }
+
+        public double JNSPrice { get; set; }
 
         public double BasePrice { get; set; }
     }
