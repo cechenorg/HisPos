@@ -12,6 +12,7 @@
     Width="600"
     Height="500"
     WindowStartupLocation="CenterScreen"
+    ResizeMode="NoResize"
     mc:Ignorable="d">
     <Window.Resources>
         <Style x:Key="MyHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">

@@ -12,6 +12,7 @@
     Width="320"
     Height="400"
     WindowStartupLocation="CenterScreen"
+    ResizeMode="NoResize"
     mc:Ignorable="d">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />

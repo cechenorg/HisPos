@@ -10,6 +10,7 @@
         mc:Ignorable="d"
         FontFamily="Segoe UI Semibold"
         WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
         Title="新增顧客" Height="500" Width="770">
     <Grid>
         <Grid.Resources>

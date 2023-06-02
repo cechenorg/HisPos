@@ -18,6 +18,7 @@
     FontFamily="Segoe UI Semibold"
     Left="{Binding StartLeft, Mode=TwoWay}"
     Top="{Binding StartTop, Mode=TwoWay}"
+    ResizeMode="NoResize"
     mc:Ignorable="d">
     <Window.Background>
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg" />

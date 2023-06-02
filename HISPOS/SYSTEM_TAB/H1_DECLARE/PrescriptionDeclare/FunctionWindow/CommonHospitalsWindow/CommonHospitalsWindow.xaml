@@ -12,6 +12,7 @@
     Width="600"
     Height="365"
     Icon="/Images/common.ico"
+    ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>

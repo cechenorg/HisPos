@@ -6,7 +6,8 @@
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.INDEX.CustomerPrescriptionChangedWindow"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="顧客處方修改紀錄"
-    Width="400"
+    ResizeMode="NoResize"
+    Width="450"
     Height="400"
     mc:Ignorable="d">
     <Grid>

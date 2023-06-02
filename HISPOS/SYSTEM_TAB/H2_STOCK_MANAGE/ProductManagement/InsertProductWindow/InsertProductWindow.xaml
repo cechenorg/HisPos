@@ -10,6 +10,7 @@
     Width="350"
     Height="280"
     WindowStartupLocation="CenterScreen"
+    ResizeMode="NoResize"
     mc:Ignorable="d">
     <Window.DataContext>
         <local:InsertProductWindowViewModel />

@@ -18,6 +18,7 @@
     FontFamily="Segoe UI Semibold"
     Left="{Binding StartLeft, Mode=TwoWay}"
     Top="{Binding StartTop, Mode=TwoWay}"
+    ResizeMode="NoResize"
     d:DataContext="{d:DesignInstance Type=local:PrescriptionEditViewModel}"
     mc:Ignorable="d">
     <Window.Background>

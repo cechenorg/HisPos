@@ -9,6 +9,7 @@
     Width="300"
     Height="250"
     WindowStartupLocation="CenterScreen"
+    ResizeMode="NoResize"
     mc:Ignorable="d">
     <Window.DataContext>
         <local:ControlMedicineEditInputViewModel />

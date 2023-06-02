@@ -10,6 +10,7 @@
     Width="500"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterScreen"
+    ResizeMode="NoResize"
     mc:Ignorable="d">
     <Window.DataContext>
         <local:AddNewOrderWindowViewModel />

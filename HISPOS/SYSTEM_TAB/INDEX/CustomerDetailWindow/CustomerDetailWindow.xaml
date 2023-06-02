@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
     Title="顧客資料編輯"
+    ResizeMode="NoResize"
     Width="1350"
     Height="630"
     d:DataContext="{d:DesignInstance Type=local:CustomerDetailWindowViewModel}"

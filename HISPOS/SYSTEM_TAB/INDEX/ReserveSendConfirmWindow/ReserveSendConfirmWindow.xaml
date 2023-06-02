@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
     Title="預約慢箋處方確認"
+    ResizeMode="NoResize"
     Width="1000"
     Height="625"
     WindowStartupLocation="CenterScreen"
