@@ -23,6 +23,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
                 Instance = new ProductDetailWindow();
 
             Instance.Activate();
+            Instance.WindowState = WindowState.Normal;
         }
 
         private void ProductDetailWindow_OnClosed(object sender, EventArgs e)
