@@ -27,10 +27,10 @@
                 VerticalAlignment="Center"
                 Content="資料庫備份檔案路徑"
                 FontFamily="Segoe UI Semibold"
-                FontSize="24"
+                FontSize="20"
                 Foreground="DimGray" />
-            <TextBox Width="500" Margin="5,0,0,0" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Text="{Binding DisplayFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <Button Width="50" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Background="DimGray" BorderThickness="0" Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Content="..." FontFamily="Segoe UI Semibold" FontSize="18" />
+            <TextBox Width="500" Margin="5,0,0,0" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" Text="{Binding DisplayFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Width="40" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Background="DimGray" BorderThickness="0" Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Content="..." FontFamily="Segoe UI Semibold" FontSize="12" />
         </StackPanel>
         <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
             <Button
