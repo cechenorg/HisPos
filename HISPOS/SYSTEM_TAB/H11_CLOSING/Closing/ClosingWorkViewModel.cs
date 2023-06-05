@@ -2,6 +2,7 @@
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
 using His_Pos.NewClass.AccountReport.ClosingAccountReport;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,17 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             }
         }
         private DateTime startDate = DateTime.Today;
+
+        private DeclarePreviewOfMonth declareFile;
+
+        public DeclarePreviewOfMonth DeclareFile
+        {
+            get => declareFile;
+            set
+            {
+                Set(() => DeclareFile, ref declareFile, value);
+            }
+        }
 
         public int Trade
         {
@@ -672,6 +684,13 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         /// </summary>
         private void InsertJournal()
         {
+            var closeDate = (DateTime)StartDate;
+            DeclareFile = new DeclarePreviewOfMonth();
+            DeclareFile.GetSearchPrescriptions(closeDate, closeDate, ViewModelMainWindow.CurrentPharmacy.ID);
+            MainWindow.ServerConnection.OpenConnection();
+            DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
+            MainWindow.ServerConnection.CloseConnection();
+
             ClosingWorkDB.SetClosingWorkToJournal(StartDate);
         }
         private void ClearCheckBox()
