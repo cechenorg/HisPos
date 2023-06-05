@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Setting;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -52,6 +53,13 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
                 SettingTabCollection.Add(new SettingTabData(SettingTabs.System, "其他設定", "/Images/Management.png"));
                 SettingTabCollection.Add(new SettingTabData(SettingTabs.Sync, "同步設定", "/Images/Management.png"));
             }
+
+            List<Authority> backupAuth = new List<Authority>() { Authority.Admin, Authority.PharmacyManager, Authority.MasterPharmacist };
+            if (backupAuth.Contains(ViewModelMainWindow.CurrentUser.Authority))
+            {
+                SettingTabCollection.Add(new SettingTabData(SettingTabs.Backup, "資料庫備份", "/Images/Management.png"));
+            }
+
 
             SelectedSettingTab = SettingTabCollection[0];
         }

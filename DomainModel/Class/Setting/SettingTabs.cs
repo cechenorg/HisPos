@@ -8,6 +8,7 @@
         WareHouse = 4,
         Invoice = 5,
         System = 6,
-        Sync = 7
+        Sync = 7,
+        Backup = 8
     }
 }

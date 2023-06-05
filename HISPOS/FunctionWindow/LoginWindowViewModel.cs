@@ -208,6 +208,7 @@ namespace His_Pos.FunctionWindow
                 var inumE = fileReader.ReadLine();
                 var pP = fileReader.ReadLine();
                 var rpf = fileReader.ReadLine();
+                var backup = fileReader.ReadLine();
                 var match = medReg.Match(medBagPrinter);
                 Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
                 if (receiptPrinter.Contains("$"))
@@ -239,6 +240,7 @@ namespace His_Pos.FunctionWindow
                 }
                 
                 Properties.Settings.Default.ReportFormat = string.IsNullOrEmpty(rpf) ? "" : rpf.Substring(4);
+                Properties.Settings.Default.BackupPath = string.IsNullOrEmpty(backup) ? string.Empty : backup;
                 Properties.Settings.Default.Save();
             }
         }

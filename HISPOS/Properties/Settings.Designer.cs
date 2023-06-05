@@ -297,5 +297,20 @@ namespace His_Pos.Properties {
                 this["ReportFormat"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BackupPath
+        {
+            get
+            {
+                return ((string)(this["BackupPath"]));
+            }
+            set
+            {
+                this["BackupPath"] = value;
+            }
+        }
     }
 }

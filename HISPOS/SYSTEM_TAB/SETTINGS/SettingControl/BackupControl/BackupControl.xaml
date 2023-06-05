@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.BackupControl.BackupControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.BackupControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" 
+             d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:BackupViewModel/>
+    </UserControl.DataContext>
+    <Grid Background="LightGray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="70" />
+            <RowDefinition />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="資料庫備份檔案路徑"
+                FontFamily="Segoe UI Semibold"
+                FontSize="24"
+                Foreground="DimGray" />
+            <TextBox Width="500" Margin="5,0,0,0" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Text="{Binding DisplayFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Width="50" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Background="DimGray" BorderThickness="0" Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Content="..." FontFamily="Segoe UI Semibold" FontSize="18" />
+        </StackPanel>
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+            <Button
+                Width="150"
+                Background="IndianRed"
+                BorderThickness="0"
+                Command="{Binding ConfirmCommand}"
+                Content="執行備份"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -122,6 +122,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
                 fileWriter.WriteLine("INumE " + Properties.Settings.Default.InvoiceNumberEng);
                 fileWriter.WriteLine("PP " + Properties.Settings.Default.PrePrint);
                 fileWriter.WriteLine("RPF " + Properties.Settings.Default.ReportFormat);
+                fileWriter.WriteLine("BAK " + Properties.Settings.Default.BackupPath);
             }
 
             IsDataChanged = false;
