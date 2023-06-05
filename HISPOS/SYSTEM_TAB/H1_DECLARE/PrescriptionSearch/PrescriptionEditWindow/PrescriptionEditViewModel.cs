@@ -1034,6 +1034,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 var table = MedicineDb.GetUsableAmountByPrescriptionID(EditedPrescription.ID);
                 inventories = new Inventorys(table);
+                List<string> addNewMed = new List<string>();
+                foreach (Medicine med in EditedPrescription.Medicines)
+                {
+                    DataRow[] drs = table.Select(string.Format("Inv_ID = '{0}'", Convert.ToString(med.InventoryID)));
+                    if (drs.Length == 0)
+                    {
+                        addNewMed.Add(med.ID);
+                    }
+                }
+                if (addNewMed != null && addNewMed.Count > 0)
+                {
+                    Inventorys elseMed = Inventorys.GetAllInventoryByProIDs(addNewMed, EditedPrescription.WareHouse?.ID);
+                    foreach (Inventory item in elseMed)
+                    {
+                        inventories.Add(item);
+                    }
+                }
             }
             else
             {
