@@ -11,9 +11,11 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
@@ -63,6 +65,7 @@ namespace His_Pos.FunctionWindow
             {
                 ReadSettingFile();
             }
+            ExecSQLCmd();
             _IsCanLogIn = IsValidityPeriod();
             
             if (!_IsCanLogIn)
@@ -298,6 +301,80 @@ namespace His_Pos.FunctionWindow
                     File.Delete(targetFile);
                 }
                 File.Copy(sourceFile, targetFile, true);
+            }
+        }
+
+        private void ExecSQLCmd()
+        {
+            string path = @"C:\Program Files\HISPOS\SQLPackage\";
+
+            try
+            {
+                string pgVersion = Version;//目前程式更新版號
+                string sqlVersion = PharmacyDBService.GetSysemVersion();//目前資料庫更新版號
+                if (string.Compare(pgVersion, sqlVersion) == 0)
+                    return;
+
+                string[] files = Directory.GetFiles(@"SQLPackage");
+                Array.Sort(files);
+                if (files != null && files.Length > 0)
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    foreach (string file in files)
+                    {
+                        string filePath = file;
+                        string outputFilePath = string.Format(@"C:\Program Files\HISPOS\{0}", file);
+                        string searchString = "DB_Local";
+                        string replacementString = Properties.Settings.Default.SystemSerialNumber;
+                        try
+                        {
+                            string fileVersion = file.Replace(@"SQLPackage\", string.Empty).Replace(".sql", string.Empty).Trim();
+                            if (string.Compare(pgVersion, fileVersion) <= 0 && string.Compare(sqlVersion, fileVersion) < 0)//取得比目前程式版本小且比資料庫版號大的差異檔
+                            {
+                                string sqlContent = File.ReadAllText(filePath);
+                                string modifiedSqlContent = sqlContent.Replace(searchString, replacementString);
+                                File.WriteAllText(outputFilePath, modifiedSqlContent);
+                            } 
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                    string[] updFiles = Directory.GetFiles(path);
+                    Array.Sort(updFiles);
+
+                    Process process = new Process();
+                    process.StartInfo.FileName = "cmd.exe";
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.RedirectStandardInput = true;
+                    process.StartInfo.CreateNoWindow = true;
+                    process.Start();
+                    foreach (string file in updFiles)
+                    {
+                        string cmdText = string.Format(@"sqlcmd.exe -U sa -P ""123456a@"" -S ""127.0.0.1, 1433"" -f 65001 -d {0} -i ""{1}""",
+                                Properties.Settings.Default.SystemSerialNumber,
+                                file);
+                        process.StandardInput.WriteLine(cmdText);
+                    }
+                    process.StandardInput.WriteLine("exit");
+                    process.WaitForExit();
+                    process.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                if (Directory.Exists(path))
+                        Directory.Delete(path, true);
+
+                PharmacyDBService.SetSysemVersion(Version);
             }
         }
     }

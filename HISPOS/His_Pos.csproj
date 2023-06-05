@@ -2961,6 +2961,7 @@
     <Folder Include="NewClass\Trade\LeavingProductRecord\" />
     <Folder Include="NewClass\Trade\PrescriptionRecord\" />
     <Folder Include="packages\" />
+    <Folder Include="SQLPackage\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

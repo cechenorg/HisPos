@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,6 +38,33 @@ namespace His_Pos.NewClass.Pharmacy
                     param: new
                     {
                         period = period
+                    }, commandType: CommandType.StoredProcedure);
+            });
+        }
+
+        public static string GetSysemVersion()
+        {
+            IEnumerable<string> version = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                version = conn.Query<string>($"{Properties.Settings.Default.SystemSerialNumber}.[Set].[UpdateSysemVersion]",
+                    param: new
+                    {
+                        Type = 0
+                    }, commandType: CommandType.StoredProcedure);
+            });
+            return version.FirstOrDefault();
+        }
+
+        public static void SetSysemVersion(string version)
+        {
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                _ = conn.Query<int>($"{Properties.Settings.Default.SystemSerialNumber}.[Set].[UpdateSysemVersion]",
+                    param: new
+                    {
+                        Type = 1,
+                        Version = version
                     }, commandType: CommandType.StoredProcedure);
             });
         }
