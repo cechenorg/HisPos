@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.Service;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -71,8 +72,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.BackupControl
         }
         private void ConfirmAction()
         {
-            bool isSuccess = true;
-
             if (string.IsNullOrEmpty(DisplayFilePath))
             {
                 MessageWindow.ShowMessage("請選擇備份路徑", MessageType.WARNING);
@@ -94,6 +93,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.BackupControl
                 file = files[0];
 
             string outputFilePath = string.Format(@"C:\Program Files\HISPOS\{0}", file);
+            string output = string.Empty;
             try
             {
                 string sqlContent = File.ReadAllText(files[0]);
@@ -113,19 +113,35 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.BackupControl
                 process.StandardInput.WriteLine(cmdText);
                 process.StandardInput.WriteLine("exit");
                 process.WaitForExit();
+                output = process.StandardOutput.ReadToEnd();
                 process.Close();
             }
             catch (Exception ex)
             {
-                isSuccess = false;
+                MessageWindow.ShowMessage("備份失敗", MessageType.WARNING);
             }
             finally
             {
                 if (Directory.Exists(path))
+                {
+                    string msg = string.Empty;
+                    string filePath = displayFilePath + string.Format(@"\Full_{0}.bak", DateTime.Today.ToString("yyyyMMdd"));
+                    if (File.Exists(filePath))
+                    {
+                        msg = "備份完成";
+                        MessageWindow.ShowMessage(msg, MessageType.SUCCESS);
+                    }
+                    else
+                    {
+                        string[] lines = output.Split(new string[] {"\r\n" }, StringSplitOptions.None);
+                        msg = "備份失敗";
+                        NewFunction.ExceptionLog(lines[6]);
+                        MessageWindow.ShowMessage(msg, MessageType.WARNING);
+                    }
+
                     Directory.Delete(path, true);
+                }
             }
-            if (isSuccess)
-                MessageWindow.ShowMessage("備份完成", MessageType.SUCCESS);
         }
     }
 }

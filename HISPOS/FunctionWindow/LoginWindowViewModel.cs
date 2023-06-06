@@ -240,7 +240,7 @@ namespace His_Pos.FunctionWindow
                 }
                 
                 Properties.Settings.Default.ReportFormat = string.IsNullOrEmpty(rpf) ? "" : rpf.Substring(4);
-                Properties.Settings.Default.BackupPath = string.IsNullOrEmpty(backup) ? string.Empty : backup;
+                Properties.Settings.Default.BackupPath = string.IsNullOrEmpty(backup) ? string.Empty : backup.Substring(4);
                 Properties.Settings.Default.Save();
             }
         }
