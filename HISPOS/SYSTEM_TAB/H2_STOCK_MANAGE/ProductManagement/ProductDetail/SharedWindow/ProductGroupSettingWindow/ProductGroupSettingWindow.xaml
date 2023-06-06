@@ -9,6 +9,7 @@
     Title="商品群組設定"
     Width="450"
     Height="400"
+    ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 

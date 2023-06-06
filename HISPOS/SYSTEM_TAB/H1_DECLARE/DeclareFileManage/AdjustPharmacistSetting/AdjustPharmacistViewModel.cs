@@ -268,7 +268,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                     IsEdit = true;
                 }, (DateTime)MySelectedDate
             );
-            addPharmacistScheduleItemWindow.Show();
+            addPharmacistScheduleItemWindow.ShowDialog();
         }
 
         private void SavePharmacistScheduleItemAction()

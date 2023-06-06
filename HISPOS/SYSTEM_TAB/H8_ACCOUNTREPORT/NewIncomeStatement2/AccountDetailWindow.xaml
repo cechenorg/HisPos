@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement2"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:AccountDetailViewModel}" WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
         Title="損益詳細" Height="450" Width="850">
     <Grid>
         <Grid.RowDefinitions>

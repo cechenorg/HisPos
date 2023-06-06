@@ -11,6 +11,7 @@
     Title="管制藥品編輯"
     Width="820"
     Height="450"
+    ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>

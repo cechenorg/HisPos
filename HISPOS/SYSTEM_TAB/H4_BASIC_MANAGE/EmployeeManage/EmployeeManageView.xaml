@@ -236,8 +236,8 @@
                         <Run Text="{Binding SelectedEmployee.CashierID}"></Run>
                         </TextBlock>
 
-                        <Button Content="更改帳號密碼" Background="RoyalBlue" BorderThickness="0" Width="150" Height="30" FontSize="18" Grid.Column="2" 
-                            Command="{Binding ChangePassWordCommand}" Cursor="Hand"/>
+                        <Button Content="更改密碼" Background="RoyalBlue" BorderThickness="0" Width="120" Height="30" FontSize="18" Grid.Column="2" 
+                            Command="{Binding ChangePassWordCommand}" Cursor="Hand" Margin="30,0,0,0"/>
                     </Grid>
 
                     <Grid  Grid.Row="1" Margin="10,0,0,0">

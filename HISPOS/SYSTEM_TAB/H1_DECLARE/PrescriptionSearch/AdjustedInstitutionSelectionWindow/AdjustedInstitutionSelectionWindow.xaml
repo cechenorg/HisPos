@@ -10,6 +10,7 @@
         Title="已調劑院所篩選" 
         Width="800" Height="400"
         WindowStartupLocation="CenterScreen" mc:Ignorable="d"
+        ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance Type=local:AdjustedInstitutionSelectionViewModel}" >
     <Window.Resources>
         <Style x:Key="TextInMiddleCellStyle" TargetType="{x:Type TextBlock}">
