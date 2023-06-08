@@ -75,7 +75,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             if (!IsMergeValid()) return;
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將 {mergeProductStruct.ID} 併入群組\n合併後庫存量為 {mergeProductStruct.Inventory + TotalInventory}", "");
+            string msg = string.Format("是否確認將{0}併入群組\r\n並設定{1}為主要商品代碼\r\n合併後庫存量為{2}", 
+                mergeProductStruct.ID,
+                productGroupSettingCollection != null && productGroupSettingCollection.Count > 0 ? productGroupSettingCollection[0].ID : mergeProductStruct.ID,
+                mergeProductStruct.Inventory + TotalInventory);
+
+            ConfirmWindow confirmWindow = new ConfirmWindow(msg, string.Empty);
 
             if (!(bool)confirmWindow.DialogResult) return;
 
