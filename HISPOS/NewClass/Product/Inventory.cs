@@ -13,7 +13,7 @@ namespace His_Pos.NewClass.Product
             OnTheWayAmount = r.Table.Columns.Contains("Inv_OnTheWay") ? r.Field<double>("Inv_OnTheWay") : 0;
             MegBagAmount = r.Table.Columns.Contains("MegBagAmount") ? r.Field<double>("MegBagAmount") : 0;
             OnTheFrame = r.Table.Columns.Contains("OnTheFrame") ? r.Field<double>("OnTheFrame") : 0;
-            CanUseAmount = r.Table.Columns.Contains("CanUseAmount") ? r.Field<double>("CanUseAmount") : 0;
+            CanUseAmount = r.Table.Columns.Contains("CanUseAmount") ? r.Field<double>("CanUseAmount") : OnTheFrame;
             Med_Price = r.Table.Columns.Contains("Med_Price") ? Convert.ToDouble(r["Med_Price"]) : 0;
         }
 
