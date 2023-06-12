@@ -465,6 +465,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void ExportDetailAction()
         {
+            DeclarePreviewOfMonth declarePreview = new DeclarePreviewOfMonth();
+            declarePreview.GetSearchPrescriptions(Convert.ToDateTime(DeclareDateStart), Convert.ToDateTime(DeclareDateEnd), ViewModelMainWindow.CurrentPharmacy.ID);
+            MainWindow.ServerConnection.OpenConnection();
+            declarePreview.DeclarePres.AdjustMedicalServiceAndSerialNumber();
+            MainWindow.ServerConnection.CloseConnection();
+
             DataTable table = PrescriptionDb.GetDuplicateExport(Convert.ToDateTime(DeclareDateStart), Convert.ToDateTime(DeclareDateEnd), SelectedPharmacy.ID);
             if (table is null || table.Rows.Count == 0)
                 return;
