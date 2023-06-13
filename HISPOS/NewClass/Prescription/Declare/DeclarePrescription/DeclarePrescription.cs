@@ -54,6 +54,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             MedicineDays = r.Field<byte>("PreMas_MedicineDays");
             MedicalServiceID = r.Field<string>("PreMas_MedicalServiceID");
             SerialNumber = r.Field<int?>("PreMas_SerialNumber");
+            MedicalNumber = r.Field<string>("PreMas_MedicalNumber");
         }
 
         public int ID { get; }
@@ -207,5 +208,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
         public string MedicalServiceID { get; set; }
         public SqlXml DeclareContent { get; set; }
         public int? SerialNumber { get; set; }
+        public string MedicalNumber { get; set; }
     }
 }
