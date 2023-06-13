@@ -60,7 +60,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 p.FileContent.Dhead.D18 = totalPoint.ToString().PadLeft(8, '0');
                 p.FileContent.Dhead.D16 = (int.Parse(p.FileContent.Dhead.D18) - int.Parse(p.FileContent.Dhead.D17)).ToString().PadLeft(8, '0');
                 p.FileContent.Dhead.D8 = p.MainDiseaseID;
-                p.FileContent.Dhead.D9 = p.MainDiseaseID;
+                p.FileContent.Dhead.D9 = p.SecondDiseaseID;
                 p.ApplyPoint = int.Parse(p.FileContent.Dhead.D16);
                 p.TotalPoint = int.Parse(p.FileContent.Dhead.D18);
             }
