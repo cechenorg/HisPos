@@ -42,14 +42,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 for (var i = 1; i <= p.FileContent.Dbody.Pdata.Count; i++)
                 {
                     p.FileContent.Dbody.Pdata[i - 1].P10 = (i.ToString()).PadLeft(3, '0');
-                    if (p.FileContent.Dbody.Pdata[i - 1].P1 == "1" || p.FileContent.Dbody.Pdata[i - 1].P1 == "4")
-                    {
-                        p.FileContent.Dbody.Pdata[i - 1].P11 = p.MedicineDays.ToString().PadLeft(2, '0');
-                    }
-                    else
-                    {
-                        p.FileContent.Dbody.Pdata[i - 1].P11 = string.Empty;
-                    }
                 }
                 p.FileContent.Dbody.D31 = p.FileContent.Dbody.Pdata.Where(pd => !pd.PaySelf && pd.P1.Equals("3")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(7, '0');
                 p.FileContent.Dbody.D32 = p.FileContent.Dbody.Pdata.Where(pd => !pd.PaySelf && pd.P1.Equals("2")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(8, '0');
