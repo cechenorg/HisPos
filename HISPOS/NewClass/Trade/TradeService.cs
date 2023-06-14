@@ -319,7 +319,7 @@ namespace His_Pos.NewClass.Trade
                 Declare @ProName nvarchar(50) = '{9}'
                 Declare @sProfitPercent float = {10}
                 Declare @eProfitPercent float = {11}
-                Declare @IsAvgCost int = (Select SysPar_Value From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'AvgCost')
+                Declare @IsAvgCost nvarchar(1) = (Select SysPar_Value From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'AvgCost')
 
                 SELECT TM.TraMas_ID,TD.TraDet_ProductID, M.Pro_ChineseName as TraDet_ProductName,TD.TraDet_Amount,TD.TraDet_PriceSum
                 into #tempTra
@@ -337,40 +337,65 @@ namespace His_Pos.NewClass.Trade
                   and ((@ShowReturn = 0 and TM.TraMas_IsEnable = 1) or (@ShowReturn = 1 and TM.TraMas_IsEnable = 0)) 
                   and (@ShowIrregular = 0 or (@ShowIrregular = 1 and (TraMas_DiscountAmt <> 0 or TD.TraDet_IsGift = 1)))
 
-                SELECT c.ProductID,SUM(c.CostValue) AS InvRec_ValueDifference
-                into #tempCost
-                FROM (  SELECT @IsAvgCost as CostType, inv.InvRecSourceID AS SourceID, inv.InvRec_InventoryID, inv.InvRec_ValueDifference AS CostValue
-                              ,ISNULL(pinv.ProInv_ProductID,minv.MerSplRec_ProductID) as ProductID
-                		FROM [{0}].[Product].[InventoryRecord] inv WITH (NOLOCK)
-                		  LEFT JOIN [{0}].[Product].[ProductInventory] pinv WITH (NOLOCK) ON inv.InvRec_InventoryID = pinv.ProInv_InventoryID 
-                		  LEFT JOIN [{0}].[Product].[MergeSplitRecord] minv WITH (NOLOCK) on inv.InvRec_InventoryID = minv.MerSplRec_OldInvID
-                		WHERE @IsAvgCost = 0 
-                			and Cast(InvRec_Time as date) between @sDate and @eDate 
+				SELECT ProID,InvID INTO #ProdInv
+				FROM
+				( SELECT ProInv_ProductID as ProID,ProInv_InventoryID as InvID
+				  FROM [{0}].[Product].[ProductInventory] WITH(NOLOCK)
+				  WHERE ProInv_ProductID IN (SELECT TraDet_ProductID FROM #tempTra) AND ProInv_WareHouseID = 0
+				  UNION 
+				  SELECT MerSplRec_ProductID as ProID,MerSplRec_OldInvID as InvID
+				  FROM [{0}].[Product].[MergeSplitRecord] WITH(NOLOCK)			   
+				  WHERE MerSplRec_ProductID IN (SELECT TraDet_ProductID FROM #tempTra) AND MerSplRec_WareHouseID = 0
+				  UNION
+				  SELECT MerSplRec_ProductID as ProID,MerSplRec_NewInvID as InvID
+				  FROM [{0}].[Product].[MergeSplitRecord] WITH(NOLOCK)			   
+				  WHERE MerSplRec_ProductID IN (SELECT TraDet_ProductID FROM #tempTra) AND MerSplRec_WareHouseID = 0
+				) pinv
+								
+				SELECT inv.SourceID, inv.InvRec_InventoryID
+				,CASE @IsAvgCost WHEN '0' THEN ISNULL(inv.CostValue,0) WHEN '1' THEN ISNULL(invMA.CostValue,inv.CostValue) END AS CostValue
+				,CASE @IsAvgCost WHEN '0' THEN ISNULL(inv.ChangeStock,0) WHEN '1' THEN ISNULL(invMA.ChangeStock,inv.ChangeStock) END AS ChangeStock
+				INTO #tempCost
+				FROM 
+				(	SELECT i.InvRecSourceID AS SourceID, i.InvRec_InventoryID, SUM(ISNULL(i.InvRec_ValueDifference,0)) AS CostValue
+						,SUM((i.InvRec_OldStock - i.InvRec_NewStock)) AS ChangeStock
+					FROM [{0}].[Product].[InventoryRecord] i WITH (NOLOCK)
+					WHERE Cast(InvRec_Time as date) between @sDate and @eDate
+					  and i.InvRec_Source = 'TraMasId'
+					  and i.InvRec_Type not in ('銷售退貨', '銷售刪單')
+					  and i.InvRecSourceID  in (SELECT DISTINCT TraMas_ID from #tempTra)
+					  and i.InvRec_InventoryID in (SELECT DISTINCT InvID FROM #ProdInv )
+					GROUP BY i.InvRecSourceID, i.InvRec_InventoryID
+				) inv
+				LEFT JOIN 
+				(	SELECT im.InvRec_SourceID AS SourceID, im.InvRec_InventoryID, SUM(ISNULL(im.InvRec_ChangeValue,0)) AS CostValue
+						,SUM(ABS(im.InvRec_ChangeStock)) AS ChangeStock 
+                	FROM [{0}].[Product].[InventoryRecordMA] im WITH (NOLOCK)
+                	WHERE Cast(InvRec_Time as date) between @sDate and @eDate
                 			and InvRec_Source = 'TraMasId'
                 			and InvRec_Type not in ('銷售退貨', '銷售刪單') 
-                			and InvRecSourceID in (SELECT distinct TraMas_ID from #tempTra)
-                		UNION ALL
-                		SELECT @IsAvgCost as CostType, invMA.InvRec_SourceID AS SourceID, invMA.InvRec_InventoryID, invMA.InvRec_ChangeValue AS CostValue
-                				,ISNULL(pinv.ProInv_ProductID,minv.MerSplRec_ProductID) as ProductID
-                		FROM [{0}].[Product].[InventoryRecordMA] invMA WITH (NOLOCK)
-                		LEFT JOIN [{0}].[Product].[ProductInventory] pinv WITH (NOLOCK) ON invMA.InvRec_InventoryID = pinv.ProInv_InventoryID
-                		LEFT JOIN [{0}].[Product].[MergeSplitRecord] minv WITH (NOLOCK) on invMA.InvRec_InventoryID = minv.MerSplRec_OldInvID
-                		WHERE @IsAvgCost = 1
-                			and Cast(InvRec_Time as date) between @sDate and @eDate 
-                			and InvRec_Source = 'TraMasId'
-                			and InvRec_Type not in ('銷售退貨', '銷售刪單') 
-                			and InvRec_SourceID in (SELECT distinct TraMas_ID from #tempTra)
-                			) c
-                GROUP BY c.ProductID
+							and im.InvRec_SourceID in (SELECT DISTINCT TraMas_ID from #tempTra) 
+							and InvRec_InventoryID in (SELECT DISTINCT InvID FROM #ProdInv )
+					GROUP BY im.InvRec_SourceID, im.InvRec_InventoryID
+                ) invMA ON inv.SourceID = invMA.SourceID AND inv.InvRec_InventoryID = invMA.InvRec_InventoryID
 
-                SELECT t.*,ISNULL(c.InvRec_ValueDifference,0) AS InvRec_ValueDifference 
-                into #tempTraCost
-                FROM (	SELECT TraDet_ProductID, TraDet_ProductName, SUM(TraDet_Amount) as TraDet_Amount, SUM(TraDet_PriceSum) as TraDet_PriceSum
-                		FROM #tempTra GROUP BY TraDet_ProductID, TraDet_ProductName
-                	  ) t
-                LEFT JOIN #tempCost c ON t.TraDet_ProductID = c.ProductID 
+				
+				SELECT t.TraDet_ProductID, t.TraDet_ProductName, SUM(t.TraDet_Amount) as TraDet_Amount, SUM(t.TraDet_PriceSum) as TraDet_PriceSum,SUM(ISNULL(tc.CostValue,0)) AS InvRec_ValueDifference 
+				,SUM(ISNULL(tc.ChangeStock,0)) ChangeStock
+				INTO #tempTraCost
+				FROM (	SELECT TraMas_ID, TraDet_ProductID,TraDet_ProductName, SUM(TraDet_Amount) as TraDet_Amount, SUM(TraDet_PriceSum) as TraDet_PriceSum
+                		FROM #tempTra GROUP BY TraMas_ID, TraDet_ProductID,TraDet_ProductName ) t
+				LEFT JOIN 
+					 (	SELECT t.TraMas_ID,t.TraDet_ProductID,SUM(ISNULL(c.CostValue,0)) CostValue,SUM(ISNULL(c.ChangeStock,0)) ChangeStock
+						FROM ( SELECT DISTINCT TraMas_ID, TraDet_ProductID FROM #tempTra ) t
+						LEFT JOIN #ProdInv pinv ON t.TraDet_ProductID = pinv.ProID 
+						LEFT JOIN #tempCost c ON t.TraMas_ID = c.SourceID AND pinv.InvID = c.InvRec_InventoryID 
+						GROUP BY t.TraMas_ID,t.TraDet_ProductID
+					  ) tc ON t.TraMas_ID = tc.TraMas_ID AND t.TraDet_ProductID = tc.TraDet_ProductID 
+				GROUP BY t.TraDet_ProductID, t.TraDet_ProductName
 
                 drop table #tempTra
+				drop table #ProdInv
                 drop table #tempCost
 
                 SELECT TraDet_ProductID, TraDet_ProductName, TraDet_Amount, TraDet_PriceSum, ABS(InvRec_ValueDifference) as TotalCost,
