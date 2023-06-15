@@ -1,10 +1,27 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord.ProductTransactionRecordView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:command="http://www.galasoft.ch/mvvmlight" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:service="clr-namespace:His_Pos.Service" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" VerticalAlignment="Center" d:DesignHeight="839" d:DesignWidth="1365" FontFamily="Segoe UI Semibold" mc:Ignorable="d">
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord.ProductTransactionRecordView" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:command="http://www.galasoft.ch/mvvmlight" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:s="clr-namespace:System;assembly=mscorlib" 
+             xmlns:service="clr-namespace:His_Pos.Service" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
+             VerticalAlignment="Center" 
+             d:DesignHeight="839" 
+             d:DesignWidth="1365" 
+             FontFamily="Segoe UI Semibold" 
+             mc:Ignorable="d">
     <UserControl.DataContext>
         <local:ProductTransactionRecordViewModel />
     </UserControl.DataContext>
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:NumberConverter x:Key="NumberConverter" />
+        <service:NullableDateTimeConverter x:Key="NullableDateTimeConverter" />
         <Image x:Key="Add" Source="/Images/cross.png" />
     </UserControl.Resources>
 
@@ -112,7 +129,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="180" Binding="{Binding TraMas_ChkoutTime,StringFormat=yyyy-MM-dd HH:mm}" Header="結帳時間" IsReadOnly="True">
+                        <DataGridTextColumn Width="180" Binding="{Binding TraMas_ChkoutTime, Converter={StaticResource NullableDateTimeConverter}}" Header="結帳時間" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -186,7 +203,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="220" Binding="{Binding TraMas_UpdateTime,StringFormat=yyyy-MM-dd HH:mm}" Header="最後編輯時間" IsReadOnly="True">
+                        <DataGridTextColumn Width="220" Binding="{Binding TraMas_UpdateTime, Converter={StaticResource NullableDateTimeConverter}}" Header="最後編輯時間" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -246,7 +263,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="190" Binding="{Binding TraMas_ChkoutTime,StringFormat=yyyy-MM-dd HH:mm}" Header="結帳時間" IsReadOnly="True">
+                        <DataGridTextColumn Width="190" Binding="{Binding TraMas_ChkoutTime, Converter={StaticResource NullableDateTimeConverter}}" Header="結帳時間" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />

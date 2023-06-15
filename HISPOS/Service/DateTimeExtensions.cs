@@ -148,7 +148,7 @@ namespace His_Pos.Service
             return new DateTime(year, month, day, hour, min, sec);
         }
 
-        public static string ToStringWithSecond(DateTime d)
+        public static string ToStringWithSecond(DateTime d, bool needSplit = false)
         {
             var year = (d.Year - 1911).ToString().PadLeft(3, '0');
             var month = (d.Month).ToString().PadLeft(2, '0');
@@ -156,7 +156,7 @@ namespace His_Pos.Service
             var hour = (d.Hour).ToString().PadLeft(2, '0');
             var minute = (d.Minute).ToString().PadLeft(2, '0');
             var sec = (d.Second).ToString().PadLeft(2, '0');
-            return year + month + day + hour + minute + sec;
+            return needSplit ? $"{year}/{month}/{day} {hour}:{minute}:{sec}" : year + month + day + hour + minute + sec;
         }
 
         public static string ConvertDateStringSplitToChinese(string date)

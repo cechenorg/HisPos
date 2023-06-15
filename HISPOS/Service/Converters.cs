@@ -183,6 +183,55 @@ namespace His_Pos.Service
         }
     }
 
+    public class NullableDateTimeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null || string.IsNullOrEmpty(value.ToString()))
+                return string.Empty;
+            string result = value.ConvertTo<DateTime>().Year > 1911
+                ? DateTimeExtensions.ToStringWithSecond(value.ConvertTo<DateTime>(), true)
+                : string.Empty;
+            return result;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            DateTime input = (DateTime)value;
+
+            DateTime? result = null;
+            if (value == null) return result;
+            var dateStr = value.ToString().Replace("/", "").Replace("-", "").Trim();
+            int year, month, date, hour, min, sec;
+            switch (dateStr.Length)
+            {
+                case 0:
+                    result = null;
+                    break;
+
+                case 9:
+                    year = input.Year + 1911;
+                    month = input.Month;
+                    date = input.Day;
+                    hour = input.Hour;
+                    min = input.Minute;
+                    sec = input.Second;
+                    string dt = year.ToString() + "/" + month.ToString() + "/" + date.ToString() + " " + hour.ToString().PadLeft(2, '0') + ":" + min.ToString().PadLeft(2, '0') + ":" + sec.ToString().PadLeft(2, '0');
+                    if (DateTime.TryParse(dt, out DateTime res))
+                    {
+                        result = res;
+                    }
+                    else
+                    {
+                        result = null;
+                    }
+                    break;
+            }
+
+            return result;
+        }
+    }
+
     public class DoubleToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
