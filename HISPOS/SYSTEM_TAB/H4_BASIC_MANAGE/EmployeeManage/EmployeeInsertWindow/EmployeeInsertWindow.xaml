@@ -39,6 +39,7 @@
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semi"
                 FontSize="18" 
+                MaxLength="10"
                 Text="{Binding Employee.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -53,7 +54,17 @@
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semi"
                 FontSize="18" 
-                Text="{Binding Employee.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                MaxLength="15"
+                InputMethod.IsInputMethodEnabled="False"
+                Text="{Binding Employee.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputScope>
+                    <InputScope>
+                        <InputScope.Names>
+                            <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                        </InputScope.Names>
+                    </InputScope>
+                </TextBox.InputScope>
+            </TextBox>
             <Button
                 Grid.Row="0"
                 Width="80"
@@ -78,7 +89,17 @@
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18"
-                Text="{Binding Employee.Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                MaxLength="15"
+                InputMethod.IsInputMethodEnabled="False"
+                Text="{Binding Employee.Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputScope>
+                    <InputScope>
+                        <InputScope.Names>
+                            <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                        </InputScope.Names>
+                    </InputScope>
+                </TextBox.InputScope>
+            </TextBox>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <Label
@@ -92,7 +113,17 @@
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
-                Text="{Binding Employee.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                MaxLength="15"
+                InputMethod.IsInputMethodEnabled="False"
+                Text="{Binding Employee.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputScope>
+                    <InputScope>
+                        <InputScope.Names>
+                            <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                        </InputScope.Names>
+                    </InputScope>
+                </TextBox.InputScope>
+            </TextBox>
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <Label

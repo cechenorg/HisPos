@@ -120,7 +120,7 @@
 
                         <DataGridTextColumn
                             Width="160" Header="到職日"
-                            Binding="{Binding StartDate, StringFormat={}{0:yyyy-MM-dd}}"
+                            Binding="{Binding StartDate, StringFormat={}{0:yyy-MM-dd} ,Converter={StaticResource NullableDateConverter}}"
                             FontFamily="Segoe UI Semibold" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -132,7 +132,7 @@
 
                         <DataGridTextColumn
                             Width="160" Header="離職日"
-                            Binding="{Binding LeaveDate, StringFormat={}{0:yyyy-MM-dd}}"
+                            Binding="{Binding LeaveDate, StringFormat={}{0:yyy-MM-dd}, Converter={StaticResource NullableDateConverter}}"
                             FontFamily="Segoe UI Semibold" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -299,13 +299,13 @@
 
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <TextBlock Text="手　機" VerticalAlignment="Center" />
-                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding DisplayEmployeeCellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                     InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown"/>
+                            <TextBox VerticalAlignment="Center" Margin="5,0,0,0" Width="150" Text="{Binding DisplayEmployeeCellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                     InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown" MaxLength="15"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right" Width="445">
-                            <TextBlock Text="Line　" VerticalAlignment="Center"/>
-                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.Line}"/>
+                            <TextBlock Text="Line" VerticalAlignment="Center"/>
+                            <TextBox VerticalAlignment="Center" InputMethod.IsInputMethodEnabled="False" Margin="30,0,0,0" Width="150" Text="{Binding SelectedEmployee.Line}" MaxLength="30"/>
                         </StackPanel>
                     </Grid>
 
@@ -318,12 +318,12 @@
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="電子信箱" VerticalAlignment="Center"/>
-                            <TextBox VerticalAlignment="Center" Margin="5,0,0,0" Width="300" Text="{Binding SelectedEmployee.Email}"/>
+                            <TextBox VerticalAlignment="Center" InputMethod.IsInputMethodEnabled="False" Margin="5,0,0,0" Width="300" Text="{Binding SelectedEmployee.Email}" MaxLength="50"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <TextBlock Text="住　址" VerticalAlignment="Center" />
-                            <TextBox VerticalAlignment="Center" Margin="5,0,0,0" Width="300" Text="{Binding SelectedEmployee.Address}"/>
+                            <TextBox VerticalAlignment="Center" Margin="5,0,0,0" Width="300" Text="{Binding SelectedEmployee.Address}" MaxLength="100"/>
                         </StackPanel>
                     </Grid>
                     <Grid   Grid.Row="4" Margin="10,0,0,0">
@@ -350,12 +350,13 @@
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <TextBlock  Text="到職日" VerticalAlignment="Center"/>
                             <xctk:MaskedTextBox 
-                                                                    Width="100" HorizontalContentAlignment="Center" FontSize="20"
-                                                                    VerticalAlignment="Center" Margin="5,0,0,0"
-                                                                    Foreground="{StaticResource ForeGround}"
-                                                                    InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
-                                                                    Style="{StaticResource MaterialDesignTextBox}"
-                                                                    ValueDataType="xctk:DateTimeFormat" InputMethod.IsInputMethodEnabled="False"             PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
+                                Width="100" HorizontalContentAlignment="Center" FontSize="20"
+                                VerticalAlignment="Center" Margin="5,0,0,0"
+                                Foreground="{StaticResource ForeGround}"
+                                InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
+                                Style="{StaticResource MaterialDesignTextBox}"
+                                ValueDataType="xctk:DateTimeFormat" InputMethod.IsInputMethodEnabled="False"
+                                PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding
                                     Converter="{StaticResource NullableDateConverter}"
@@ -372,12 +373,13 @@
                         <StackPanel Orientation="Horizontal" Grid.Column="2">
                             <TextBlock  Text="離職日" VerticalAlignment="Center"/>
                             <xctk:MaskedTextBox 
-                                                                     Width="100" HorizontalContentAlignment="Center" FontSize="20"
-                                                                     VerticalAlignment="Center" Margin="5,0,0,0"
-                                                                     Foreground="{StaticResource ForeGround}"
-                                                                     InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
-                                                                     Style="{StaticResource MaterialDesignTextBox}"
-                                                                     ValueDataType="xctk:DateTimeFormat" InputMethod.IsInputMethodEnabled="False"             PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
+                                Width="100" HorizontalContentAlignment="Center" FontSize="20"
+                                VerticalAlignment="Center" Margin="5,0,0,0"
+                                Foreground="{StaticResource ForeGround}"
+                                InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
+                                Style="{StaticResource MaterialDesignTextBox}"
+                                ValueDataType="xctk:DateTimeFormat" InputMethod.IsInputMethodEnabled="False"
+                                PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding
                                     Converter="{StaticResource NullableDateConverter}"
@@ -402,7 +404,7 @@
                         <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="2">
                             <TextBlock HorizontalAlignment="Center"  VerticalAlignment="Center"  
                             Text="備　註　"   Foreground="Black" />
-                            <TextBox Width="840" Margin="5,0,0,0"
+                            <TextBox Width="840" Margin="5,0,0,0" MaxLength="500"
                             VerticalContentAlignment="Top" AcceptsReturn="True" Background="{StaticResource LightForeGround}" 
                             Text="{Binding SelectedEmployee.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             TextWrapping="Wrap" VerticalScrollBarVisibility="Visible">
