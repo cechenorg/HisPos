@@ -140,6 +140,18 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
+        private bool isCanEdit;//是否可以修改資料
+
+        [IgnoreFormat]
+        public virtual bool IsCanEdit
+        {
+            get => isCanEdit;
+            set
+            {
+                Set(() => IsCanEdit, ref isCanEdit, value);
+            }
+        }
+
         private ObservableCollection<GroupAuthority> groupPharmacyEmployeeList = new ObservableCollection<GroupAuthority>();//在其他加盟藥局對應的職位
 
         [IgnoreFormat]

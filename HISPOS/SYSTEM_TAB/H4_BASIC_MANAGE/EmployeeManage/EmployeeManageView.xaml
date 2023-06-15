@@ -419,7 +419,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel  Orientation="Horizontal" Grid.Column="1" Margin="5">
                             <Button Width="120" Background="Gray" BorderThickness="0" Content="取消"  FontSize="18" Command="{Binding CancelCommand}" HorizontalAlignment="Right" />
-                            <Button Width="120" Background="IndianRed" BorderThickness="0" Content="確認" FontSize="18" Margin="5,0,0,0" Command="{Binding SubmitCommand}"  HorizontalAlignment="Right"  />
+                            <Button Width="120" Background="IndianRed" BorderThickness="0" Content="確認" FontSize="18" Margin="5,0,0,0" IsEnabled="{Binding SelectedEmployee.IsCanEdit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SubmitCommand}"  HorizontalAlignment="Right"  />
                         </StackPanel>
                     </Grid>
                 </Grid>

@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using His_Pos.Extention;
+using His_Pos.Class;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 {
@@ -104,7 +105,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
-        public Employees _filterEmployeeCollection;
+        private Employees _filterEmployeeCollection;
 
         public Employees FilterEmployeeCollection
         {
@@ -114,7 +115,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 Set(() => FilterEmployeeCollection, ref _filterEmployeeCollection, value);
             }
         }
-         
+
         private bool localCheck;
 
         public bool LocalCheck
@@ -172,7 +173,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         private bool _isEnableEditAuthority =
             string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
-            (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || 
+            (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin ||
              ViewModelMainWindow.CurrentUser.Authority == Authority.PharmacyManager ||
              ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff);
 
@@ -209,7 +210,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         private void UpdateGroupPharmacyAuthorityAction()
         {
             _employeeService.Update(SelectedEmployee);
-            MessageWindow.ShowMessage("權限修改成功!",Class.MessageType.SUCCESS);
+            MessageWindow.ShowMessage("權限修改成功!", MessageType.SUCCESS);
             var tempID = SelectedEmployee.ID;
             ReloadData();
             SelectedEmployee = EmployeeCollection.SingleOrDefault(_ => _.ID == tempID);
@@ -219,11 +220,64 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         {
             SelectedEmployee = _employeeService.GetDataByID(SelectedEmployee.ID);
         }
+        private bool CheckAuth(Employee emp)
+        {
+            switch (ViewModelMainWindow.CurrentUser.Authority)
+            {
+                case Authority.Admin://所有人員的權限及員工資料皆可調整
+                    return true;
 
+                case Authority.PharmacyManager:
+                    if (emp.ID != ViewModelMainWindow.CurrentUser.ID && emp.Authority == Authority.PharmacyManager)//不能修改自己以外的經理
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+
+                case Authority.AccountingStaff:
+                    if (emp.ID != ViewModelMainWindow.CurrentUser.ID && (emp.Authority == Authority.PharmacyManager || emp.Authority == Authority.AccountingStaff))//不能修改自己以外的經理&會計
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+
+                case Authority.StoreManager:
+                case Authority.MasterPharmacist:
+                    List<Authority> canUpAuth = new List<Authority>() { Authority.StoreEmployee, Authority.NormalPharmacist, Authority.SupportPharmacist };
+                    if (canUpAuth.Contains(emp.Authority) || emp.ID == ViewModelMainWindow.CurrentUser.ID)//店長&負責藥師只可以修改自己或578權限
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                case Authority.StoreEmployee:
+                case Authority.NormalPharmacist:
+                case Authority.SupportPharmacist:
+                    return false;
+                default:
+                    return false;
+            }
+        }
         private void SubmitAction()
         {
-            _employeeService.Update(SelectedEmployee); 
-            MessageWindow.ShowMessage("修改成功", Class.MessageType.SUCCESS);
+            bool isCanEdit = IsCanEdit();
+            if (!isCanEdit)
+            {
+                MessageWindow.ShowMessage("禁止修改權限", MessageType.WARNING);
+                return;
+            }
+
+            _employeeService.Update(SelectedEmployee);
+            MessageWindow.ShowMessage("修改成功", MessageType.SUCCESS);
             var tempID = SelectedEmployee.ID;
             ReloadData();
             SelectedEmployee = EmployeeCollection.SingleOrDefault(_ => _.ID == tempID);
@@ -234,8 +288,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             ConfirmWindow confirmWindow = new ConfirmWindow("是否刪除員工? 刪除後無法恢復 請慎重確認", "員工刪除");
             if ((bool)confirmWindow.DialogResult)
             {
-                _employeeService.Delete(SelectedEmployee); 
-                MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
+                _employeeService.Delete(SelectedEmployee);
+                MessageWindow.ShowMessage("刪除成功!", MessageType.SUCCESS);
                 Init();
             }
         }
@@ -262,7 +316,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             FilterEmployee();
             ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList = PharmacyDBService.GetPharmacyListByGroupServerName();
             SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
-             
         }
 
         private void ReloadData()
@@ -272,10 +325,13 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
             FilterEmployeeCollection = new Employees();
 
-            foreach (var employeedata in EmployeeCollection)
+            foreach (Employee employeedata in EmployeeCollection)
             {
+                bool isCanEdit = CheckAuth(employeedata);
+                employeedata.IsCanEdit = isCanEdit;
                 FilterEmployeeCollection.Add(employeedata);
             }
+            FilterEmployee();
         }
 
         private void FilterEmployee()
@@ -316,8 +372,47 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
            
             SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
         }
+        private bool IsCanEdit()
+        {
+            switch (ViewModelMainWindow.CurrentUser.Authority)
+            {
+                case Authority.Admin:
+                    return true;
 
-         
+                case Authority.PharmacyManager:
+                    if (SelectedEmployee.Authority == Authority.PharmacyManager)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                case Authority.AccountingStaff:
+                    if (SelectedEmployee.Authority == Authority.PharmacyManager || SelectedEmployee.Authority == Authority.AccountingStaff)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                case Authority.StoreManager:
+                case Authority.MasterPharmacist:
+                    List<Authority> canUpdate = new List<Authority>() { Authority.StoreEmployee, Authority.NormalPharmacist, Authority.SupportPharmacist };
+                    if (canUpdate.Contains(SelectedEmployee.Authority))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                default:
+                    return false;
+            }
+        }
+
         #endregion Function
     }
 }

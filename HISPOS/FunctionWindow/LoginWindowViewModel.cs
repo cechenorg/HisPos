@@ -82,16 +82,22 @@ namespace His_Pos.FunctionWindow
             }
             if (isEnable && (isCanLogin || (loginEmployee != null && loginEmployee.Authority == Authority.Admin)))
             {
-                //LoadingWindow loadingWindow = new LoadingWindow();
-                //loadingWindow.GetNecessaryData(user);
-                NewFunction.ExceptionLog(loginEmployee.Name + " Login");
-                MainWindow mainWindow = new MainWindow(loginEmployee);
-                mainWindow.Show();
-                Messenger.Default.Send(new NotificationMessage("CloseLogin"));
+                if (loginEmployee.LeaveDate is null || DateTime.Compare(Convert.ToDateTime(loginEmployee.LeaveDate), DateTime.Today) >= 0)
+                {
+                    NewFunction.ExceptionLog(loginEmployee.Name + " Login");
+                    MainWindow mainWindow = new MainWindow(loginEmployee);
+                    mainWindow.Show();
+                    Messenger.Default.Send(new NotificationMessage("CloseLogin"));
+                }
+                else
+                {
+                    IsAccountWrong = true;
+                }
+                
             }
             else
             {
-                IsAccountWrong = true; 
+                IsAccountWrong = true;
             }
         }
 
