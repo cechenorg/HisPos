@@ -47,10 +47,13 @@
                     FontSize="18"
                     FontStretch="UltraExpanded"
                     Foreground="{StaticResource ForeGround}"
+                    InputMethod.IsInputMethodEnabled="False"
+                    InputScope="Number"
                     InsertKeyMode="Overwrite"
                     Mask="000/00/00"
                     PromptChar="-"
                     Style="{StaticResource MaterialDesignTextBox}"
+                    MouseDoubleClick="MaskedTextBox_MouseDoubleClick"
                     ValueDataType="xctk:DateTimeFormat">
                     <xctk:MaskedTextBox.Text>
                         <Binding
@@ -78,10 +81,13 @@
                     FontSize="18"
                     FontStretch="UltraExpanded"
                     Foreground="{StaticResource ForeGround}"
+                    InputMethod.IsInputMethodEnabled="False"
+                    InputScope="Number"
                     InsertKeyMode="Overwrite"
                     Mask="000/00/00"
                     PromptChar="-"
                     Style="{StaticResource MaterialDesignTextBox}"
+                    MouseDoubleClick="MaskedTextBox_MouseDoubleClick"
                     ValueDataType="xctk:DateTimeFormat">
                     <xctk:MaskedTextBox.Text>
                         <Binding

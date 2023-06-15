@@ -1,7 +1,11 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Extention;
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 {
@@ -28,6 +32,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             //pro.StartInfo.FileName = "iexplore.exe";
             pro.StartInfo.Arguments = url;
             pro.Start();
+        }
+
+        private void MaskedTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MaskedTextBox textBox = (MaskedTextBox)sender;
+            if (textBox != null)
+            {
+                textBox.Text = DateTimeFormatExtention.ToTaiwanDateTime(DateTime.Today);
+            }
         }
     }
 }
