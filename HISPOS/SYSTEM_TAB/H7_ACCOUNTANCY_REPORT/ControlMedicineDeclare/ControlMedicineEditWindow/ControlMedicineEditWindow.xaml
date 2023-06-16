@@ -141,7 +141,7 @@
                                     FontSize="18"
                                     InputMethod.IsInputMethodEnabled="False"
                                     InputScope="Number"
-                                    MaxLength="9"
+                                    MaxLength="8"
                                     GotFocus="InputTextbox_OnGotFocus"
                                     PreviewTextInput="TextBox_PreviewTextInput"
                                     PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"

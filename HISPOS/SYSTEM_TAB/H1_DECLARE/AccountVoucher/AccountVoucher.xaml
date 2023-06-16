@@ -331,7 +331,7 @@
                                             <TextBox 
                                                 HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" 
                                                 IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
-                                                Text="{Binding JouDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" MaxLength="9"
+                                                Text="{Binding JouDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" MaxLength="8"
                                                 PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"
                                                 InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput"
                                                 KeyUp="DebitGrid_TextBox_KeyUp" MouseDoubleClick="DebitGrid_TextBox_MouseDoubleClick">
@@ -478,7 +478,7 @@
                                         <DataTemplate>
                                             <TextBox 
                                                 HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" IsEnabled="{Binding Path=DataContext.IsCanEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
-                                                InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" MaxLength="9"
+                                                InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" MaxLength="8"
                                                 PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"
                                                 Text="{Binding JouDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                                                 KeyUp="CreditGrid_TextBox_KeyUp" MouseDoubleClick="CreditGrid_TextBox_MouseDoubleClick">
