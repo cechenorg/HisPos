@@ -6,6 +6,7 @@ using His_Pos.NewClass.StockTaking.StockTaking;
 using His_Pos.NewClass.WareHouse;
 using System;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductManageWindows
@@ -184,5 +185,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
 
         #endregion ----- Define PropertyChanged -----
+
+        private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            var regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
     }
 }

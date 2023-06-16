@@ -39,11 +39,14 @@
             Grid.Row="0"
             Grid.Column="1"
             Width="120"
+            InputMethod.IsInputMethodEnabled="False" 
+            MaxLength="8"
             VerticalAlignment="Center"
             HorizontalContentAlignment="Center"
             FontFamily="Segoe UI Semibold"
             FontSize="20"
             Foreground="Black"
+            PreviewTextInput="TextBox_PreviewTextInput"
             Text="{Binding NewInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <Label
             Margin="10,0,10,0"
@@ -108,6 +111,9 @@
             FontFamily="Segoe UI Semibold"
             FontSize="20"
             Foreground="Black"
+            InputMethod.IsInputMethodEnabled="False" 
+            MaxLength="8"
+            PreviewTextInput="TextBox_PreviewTextInput"
             IsEnabled="{Binding IsOverage, UpdateSourceTrigger=PropertyChanged}"
             Text="{Binding NewPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <Button
