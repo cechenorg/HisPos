@@ -1,7 +1,10 @@
 ﻿using His_Pos.Class;
+using His_Pos.Extention;
 using His_Pos.FunctionWindow;
+using System;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 {
@@ -21,6 +24,15 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             e.Handled = true;
             textBox.Focus();
             ((TextBox)sender).SelectAll();
+        }
+
+        private void StartDate_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MaskedTextBox textBox = (MaskedTextBox)sender;
+            if (textBox != null)
+            {
+                textBox.Text = DateTimeFormatExtention.ToTaiwanDateTime(DateTime.Today);
+            }
         }
 
         //private void Button_PreviewMouseDown(object sender, MouseButtonEventArgs e)

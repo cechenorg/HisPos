@@ -51,6 +51,8 @@
                         Mask="000/00/00"
                         PromptChar="-"
                         Style="{StaticResource MaterialDesignTextBox}"
+                        InputMethod.IsInputMethodEnabled="False"
+                        MouseDoubleClick="StartDate_MouseDoubleClick"
                         ValueDataType="xctk:DateTimeFormat">
                         <xctk:MaskedTextBox.Text>
                             <Binding

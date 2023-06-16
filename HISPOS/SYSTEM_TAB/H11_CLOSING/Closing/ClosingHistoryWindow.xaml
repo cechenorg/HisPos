@@ -4,13 +4,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
+    xmlns:service="clr-namespace:His_Pos.Service"
     Title="歷史資料"
     Width="900"
     Height="450"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <Window.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
+    </Window.Resources>
     <Grid>
         <Grid Background="{StaticResource GridBackGround}">
             <Grid.RowDefinitions>
@@ -18,25 +23,17 @@
                 <RowDefinition Height="390"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Name="lbStrikeDate" VerticalAlignment="Center" Content="查詢日期:" FontSize="18" FontWeight="Black" HorizontalAlignment="Left" />
-            <DatePicker
-                HorizontalAlignment="Left"
-                Margin="85,10,0,0"
-                Grid.Row="0"
-                Language="zh-cn"
-                Width="120"
-                Focusable="False"
-                FontSize="18"
-                Text="{Binding BeginDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <xctk:MaskedTextBox Width="120" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="{StaticResource ForeGround}" 
+                                InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00"  
+                                PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" Margin="90,0,0,0"
+                                Text="{Binding BeginDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}"
+                                MouseDoubleClick="MaskedTextBox_MouseDoubleClick"/>
             <Label FontFamily="Segoe UI Semibold" Width="20" Content="~" HorizontalAlignment="Left" Grid.Row="0" Margin="210,10,0,0"/>
-            <DatePicker
-                Margin="235,10,0,0"
-                HorizontalAlignment="Left"
-                Grid.Row="0"
-                Language="zh-cn"
-                Width="120"
-                Focusable="False"
-                FontSize="18"
-                Text="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <xctk:MaskedTextBox Width="120" HorizontalAlignment="Left"  HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                                InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00"  
+                                PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" Margin="230,0,0,0"
+                                Text="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}"
+                                MouseDoubleClick="MaskedTextBox_MouseDoubleClick"/>
             <Button
                 Margin="0,0,10,0"
                 HorizontalAlignment="Right"
