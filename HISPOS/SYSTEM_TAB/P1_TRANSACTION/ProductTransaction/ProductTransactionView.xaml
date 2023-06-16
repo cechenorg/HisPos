@@ -53,7 +53,7 @@
                     <RowDefinition Height="390" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-                    <TextBox x:Name="tbSearch" Width="180" Margin="10,0,0,2" VerticalAlignment="Center" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機 / 家電 / 姓名 / 生日" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Gray" KeyDown="tbSearch_KeyDown" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox x:Name="tbSearch" MaxLength="15" Width="180" Margin="10,0,0,2" VerticalAlignment="Center" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機 / 家電 / 姓名 / 生日" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Gray" KeyDown="tbSearch_KeyDown" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox x:Name="tbCUS" TextChanged="tbCUS_TextChanged" Visibility="Collapsed" />
                     <TextBox x:Name="tbFromHIS" TextChanged="tbFromHIS_TextChanged" Visibility="Collapsed" />
                     <Button x:Name="btnAddCustomer" Width="100" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" Click="btnAddCustomer_Click" Content="新增顧客" FontFamily="Segoe UI Semibold" FontSize="17" />
@@ -228,7 +228,7 @@
 
                     <Label Margin="32,0,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Center" Content="整單折價 $" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" />
 
-                    <TextBox x:Name="tbDiscountAmt" Width="75" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" GotFocus="tbDiscountAmt_GotFocus" KeyDown="tbDiscountAmt_KeyDown" LostFocus="tbDiscountAmt_LostFocus" Text="0" TextChanged="tbDiscountAmt_TextChanged">
+                    <TextBox x:Name="tbDiscountAmt" Width="75" InputMethod.IsInputMethodEnabled="False" MaxLength="9" PreviewTextInput="TextBox_PreviewTextInput" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" GotFocus="tbDiscountAmt_GotFocus" KeyDown="tbDiscountAmt_KeyDown" LostFocus="tbDiscountAmt_LostFocus" Text="0" TextChanged="tbDiscountAmt_TextChanged">
                         <TextBox.InputScope>
                             <InputScope>
                                 <InputScope.Names>
@@ -353,7 +353,7 @@
                             <DataTemplate>
                                 <TextBox x:Name="Price" Width="60" Margin="0,0,0,2" HorizontalContentAlignment="Center"
                                          FontFamily="Segoe UI Semi" FontSize="18" IsEnabled="{Binding Path=Pro_TypeID}" LostFocus="Price_LostFocus" PreviewKeyDown="Price_PreviewKeyDown"
-                                         PreviewMouseLeftButtonDown="Price_OnPreviewMouseLeftButtonDown" 
+                                         PreviewMouseLeftButtonDown="Price_OnPreviewMouseLeftButtonDown" InputMethod.IsInputMethodEnabled="False" MaxLength="9" PreviewTextInput="TextBox_PreviewTextInput"
                                          Text="{Binding Path=CurrentPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="Price_TextChanged">
                                     <TextBox.InputScope>
                                         <InputScope>
@@ -380,7 +380,7 @@
                             <DataTemplate>
                                 <TextBox x:Name="Amount" Width="50" Margin="0,0,0,2"
                                          HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" LostFocus="Amount_LostFocus"
-                                         PreviewMouseLeftButtonDown="Amount_OnPreviewMouseLeftButtonDown"
+                                         PreviewMouseLeftButtonDown="Amount_OnPreviewMouseLeftButtonDown" InputMethod.IsInputMethodEnabled="False" MaxLength="9" PreviewTextInput="TextBox_PreviewTextInput"
                                          PreviewKeyDown="Amount_PreviewKeyDown" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="Amount_TextChanged">
                                     <TextBox.InputScope>
                                         <InputScope>
@@ -412,7 +412,7 @@
                     <DataGridTemplateColumn x:Name="DepositColumn" Width="65" Header="寄庫" Visibility="Hidden">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="Deposit" Width="40" Margin="0,0,0,2" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" LostFocus="Deposit_LostFocus" PreviewKeyDown="Deposit_PreviewKeyDown" Text="{Binding Path=Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="Deposit_TextChanged">
+                                <TextBox x:Name="Deposit" Width="40" Margin="0,0,0,2" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" LostFocus="Deposit_LostFocus" PreviewKeyDown="Deposit_PreviewKeyDown" Text="{Binding Path=Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="Deposit_TextChanged" InputMethod.IsInputMethodEnabled="False" MaxLength="9" PreviewTextInput="TextBox_PreviewTextInput">
                                     <TextBox.InputScope>
                                         <InputScope>
                                             <InputScope.Names>

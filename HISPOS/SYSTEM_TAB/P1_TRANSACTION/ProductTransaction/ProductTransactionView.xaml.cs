@@ -1673,5 +1673,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
             }
         }
+
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
     }
 }
