@@ -702,7 +702,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                 {
                     if (CurrentVoucher.JouMas_IsEnable == 1)
                     {
-                        if (CheckData())
+                        if (CheckData() && CheckCloseDate())
                         {
                             if (!SourceCheck())
                             {
@@ -1025,6 +1025,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
                     }
                 }
             }
+        }
+
+        private bool CheckCloseDate()
+        {
+            if (DateTime.Compare(CurrentVoucher.JouMas_Date, Convert.ToDateTime(ClosingDate)) < 0)
+            {
+                MessageWindow.ShowMessage("已關帳，請調整傳票日期!", MessageType.WARNING);
+                return false;
+            }
+            return true;
         }
         #endregion
     }

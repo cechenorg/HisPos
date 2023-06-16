@@ -22,6 +22,8 @@ using His_Pos.FunctionWindow;
 using His_Pos.Class;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using Xceed.Wpf.Toolkit;
+using His_Pos.Extention;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
 {
@@ -283,6 +285,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             AccountVoucherViewModel viewModel = new AccountVoucherViewModel();
             viewModel = (AccountVoucherViewModel)DataContext;
             viewModel.DeleteDetailAction(detail.JouDet_Type == "D" ? "0" : "1");
+        }
+
+        private void TextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is TextBox textBox))
+                return;
+
+            e.Handled = true;
+            textBox.Focus();
+        }
+
+        private void MaskedTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MaskedTextBox textBox = (MaskedTextBox)sender;
+            if (textBox != null)
+            {
+                textBox.Text = DateTimeFormatExtention.ToTaiwanDateTime(DateTime.Today);
+            }
         }
     }
 }

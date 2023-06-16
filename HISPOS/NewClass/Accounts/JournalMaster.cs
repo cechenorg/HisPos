@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.Accounts
             }
         }
         private string jouMas_ID;
-        public DateTime? JouMas_Date
+        public DateTime JouMas_Date
         {
             get => jouMas_Date;
             set
@@ -28,7 +28,7 @@ namespace His_Pos.NewClass.Accounts
                 Set(() => JouMas_Date, ref jouMas_Date, value);
             }
         }
-        private DateTime? jouMas_Date;
+        private DateTime jouMas_Date;
         public string JouMas_Status
         {
             get => jouMas_Status;

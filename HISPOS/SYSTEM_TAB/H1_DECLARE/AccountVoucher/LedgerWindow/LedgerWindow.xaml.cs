@@ -1,4 +1,5 @@
-﻿using His_Pos.NewClass.Accounts;
+﻿using His_Pos.Extention;
+using His_Pos.NewClass.Accounts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.LedgerWindow
 {
@@ -63,6 +65,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.LedgerWindow
         {
             ComboBox cob = (ComboBox)sender;
             cob.Background = Brushes.Transparent;
+        }
+
+        private void MaskedTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MaskedTextBox textBox = (MaskedTextBox)sender;
+            if (textBox != null)
+            {
+                textBox.Text = DateTimeFormatExtention.ToTaiwanDateTime(DateTime.Today);
+            }
         }
     }
 }

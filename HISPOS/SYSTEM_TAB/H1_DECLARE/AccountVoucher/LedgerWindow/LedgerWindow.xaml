@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher.LedgerWindow"
         mc:Ignorable="d"
-        xmlns:service="clr-namespace:His_Pos.Service"
+        xmlns:service="clr-namespace:His_Pos.Service" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="{Binding Title}"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         Height="840" Width="1500">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <service:NullableDateTimeConverter x:Key="NullableDateTimeConverter" />
     </Window.Resources>
     <Window.DataContext>
         <local:LedgerViewModel />
@@ -25,11 +26,17 @@
             <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                 <Label Margin="5,0,0,0" VerticalAlignment="Center"
                 Content="日期:" FontFamily="Segoe UI Semibold" FontSize="22" />
-                <DatePicker Width="120" Language="zh-cn" Margin="5,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
-                        FontSize="18" SelectedDate="{Binding BeginDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <xctk:MaskedTextBox Width="120" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="{StaticResource ForeGround}" 
+                                InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00"  
+                                PromptChar="-" Style="{StaticResource MaterialDesignTextBox}"
+                                Text="{Binding BeginDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}"
+                                MouseDoubleClick="MaskedTextBox_MouseDoubleClick" />
                 <Label Margin="5,0,0,0" VerticalAlignment="Center"  Content="~" FontFamily="Segoe UI Semibold" FontSize="22" />
-                <DatePicker Width="120" Language="zh-cn" Margin="5,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
-                        FontSize="18" SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <xctk:MaskedTextBox Width="120" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="{StaticResource ForeGround}" 
+                                InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00"  
+                                PromptChar="-" Style="{StaticResource MaterialDesignTextBox}"
+                                Text="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}"
+                                MouseDoubleClick="MaskedTextBox_MouseDoubleClick" />
                 <Label Margin="5,0,0,0" VerticalAlignment="Center"
                 Content="會計科目:" FontFamily="Segoe UI Semibold" FontSize="22" />
                 <ComboBox Width="450" Height="45" FontSize="18" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" IsEditable="True"
@@ -104,7 +111,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn 
                         Width="150"
-                        Binding="{Binding Path=JouMas_Date, StringFormat={}{0:yyyy-MM-dd}}"
+                        Binding="{Binding Path=JouMas_Date, Converter={StaticResource NullableDateConverter}}"
                         Header="傳票日期"
                         IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -259,7 +266,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn
                         Width="200"
-                        Binding="{Binding Path=JouMas_InsertTime, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                        Binding="{Binding Path=JouMas_InsertTime, Converter={StaticResource NullableDateTimeConverter}}"
                         Header="登錄時間"
                         IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
@@ -283,7 +290,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn
                         Width="200"
-                        Binding="{Binding Path=JouMas_ModifyTime, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                        Binding="{Binding Path=JouMas_ModifyTime, Converter={StaticResource NullableDateTimeConverter}}"
                         Header="最後修改時間"
                         IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
@@ -358,7 +365,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn 
                         Width="200"
-                        Binding="{Binding Path=JouMas_Date, StringFormat={}{0:yyyy-MM-dd}}"
+                        Binding="{Binding Path=JouMas_Date, Converter={StaticResource NullableDateConverter}}"
                         Header="傳票日期"
                         IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -514,7 +521,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn
                         Width="200"
-                        Binding="{Binding Path=JouMas_InsertTime, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                        Binding="{Binding Path=JouMas_InsertTime, Converter={StaticResource NullableDateTimeConverter}}"
                         Header="登錄時間"
                         IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
@@ -538,7 +545,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn
                         Width="200"
-                        Binding="{Binding Path=JouMas_ModifyTime, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                        Binding="{Binding Path=JouMas_ModifyTime, Converter={StaticResource NullableDateTimeConverter}}"
                         Header="最後修改時間"
                         IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
