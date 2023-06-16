@@ -323,7 +323,7 @@
                                          MouseLeftButtonUp="ProductIDTextbox_OnMouseLeftButtonUp"
                                          PreviewMouseLeftButtonDown="ProductIDTextbox_OnPreviewMouseLeftButtonDown"
                                          Text="{Binding Path=Pro_ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                         TextChanged="ProductIDTextbox_TextChanged">
+                                         TextChanged="ProductIDTextbox_TextChanged" MaxLength="16">
 
                                 </TextBox>
                             </DataTemplate>
