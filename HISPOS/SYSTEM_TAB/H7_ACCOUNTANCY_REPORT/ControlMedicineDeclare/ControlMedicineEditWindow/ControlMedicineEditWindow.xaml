@@ -139,7 +139,11 @@
                                     HorizontalContentAlignment="Center"
                                     FontFamily="Segoe UI Semi"
                                     FontSize="18"
+                                    InputMethod.IsInputMethodEnabled="False"
+                                    InputScope="Number"
+                                    MaxLength="9"
                                     GotFocus="InputTextbox_OnGotFocus"
+                                    PreviewTextInput="TextBox_PreviewTextInput"
                                     PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                     Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
