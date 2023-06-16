@@ -190,7 +190,7 @@ namespace His_Pos.Service
             if (value is null || string.IsNullOrEmpty(value.ToString()))
                 return string.Empty;
             string result = value.ConvertTo<DateTime>().Year > 1911
-                ? DateTimeExtensions.ToStringWithSecond(value.ConvertTo<DateTime>(), true)
+                ? DateTimeExtensions.ConvertToTaiwanCalenderWithTime(value.ConvertTo<DateTime>(), true)
                 : string.Empty;
             return result;
         }
@@ -202,7 +202,7 @@ namespace His_Pos.Service
             DateTime? result = null;
             if (value == null) return result;
             var dateStr = value.ToString().Replace("/", "").Replace("-", "").Trim();
-            int year, month, date, hour, min, sec;
+            int year, month, date, hour, min;
             switch (dateStr.Length)
             {
                 case 0:
@@ -215,8 +215,7 @@ namespace His_Pos.Service
                     date = input.Day;
                     hour = input.Hour;
                     min = input.Minute;
-                    sec = input.Second;
-                    string dt = year.ToString() + "/" + month.ToString() + "/" + date.ToString() + " " + hour.ToString().PadLeft(2, '0') + ":" + min.ToString().PadLeft(2, '0') + ":" + sec.ToString().PadLeft(2, '0');
+                    string dt = year.ToString() + "/" + month.ToString() + "/" + date.ToString() + " " + hour.ToString().PadLeft(2, '0') + ":" + min.ToString().PadLeft(2, '0');
                     if (DateTime.TryParse(dt, out DateTime res))
                     {
                         result = res;
