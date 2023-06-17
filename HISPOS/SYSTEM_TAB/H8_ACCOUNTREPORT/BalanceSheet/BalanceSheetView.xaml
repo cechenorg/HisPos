@@ -51,7 +51,8 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Margin="10,0,10,10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="40" />
                     <RowDefinition />
                     <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
@@ -61,9 +62,8 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel
                     Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Orientation="Horizontal">
+                    Grid.Column="0" 
+                    Grid.ColumnSpan="2">
                     <Label
                         Margin="10,0,0,0"
                         VerticalAlignment="Top"
@@ -72,7 +72,8 @@
                         FontSize="35" />
                     <Button
                         Width="130"
-                        Margin="30,-35,0,0"
+                        Margin="0,-35,150,0"
+                        HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Background="RoyalBlue"
                         BorderThickness="0"
@@ -80,7 +81,7 @@
                         Content="重新整理"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18" />
-                    <Button
+                    <!--<Button
                         Width="130"
                         Margin="10,-35,0,0"
                         VerticalAlignment="Center"
@@ -99,45 +100,51 @@
                         Command="{Binding AccountManageCommand}"
                         Content="科目管理"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="18" />
+                        FontSize="18" Cursor="Hand" />-->
                     <Button
                         Width="130"
-                        Margin="10,-35,0,0"
+                        Margin="0,-35,10,0"
                         VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
                         Background="DarkCyan"
                         BorderThickness="0"
                         Command="{Binding ExportCSVCommand}"
                         Content="匯出Excel"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18" />
-                    <Label Name="lbEndDate" Margin="-200,65,0,0" Content="結算日期" FontSize="18" FontWeight="Black">
-                    </Label>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1" >
+                    <Label HorizontalAlignment="Right" Margin="0,0,100,0" Content="結算日期" FontSize="18" FontWeight="Black" />
                     <xctk:MaskedTextBox
-                        x:Name="EndDate"
                         Width="100"
                         Height="35"
-                        Margin="-130,50,0,0"
+                        Margin="0,-35,0,0"
                         HorizontalContentAlignment="Center"
+                        HorizontalAlignment="Right"
                         FontSize="16"
                         InputMethod.IsInputMethodEnabled="False"
                         InputScope="Number"
                         InsertKeyMode="Overwrite"
-                        Mask="0000/00/00"
+                        Mask="000/00/00"
                         PromptChar="-"
-                        Style="{StaticResource MaterialDesignTextBox}">
+                        Style="{StaticResource MaterialDesignTextBox}"
+                        MouseDoubleClick="MaskedTextBox_MouseDoubleClick">
                         <Binding 
                             Mode="TwoWay"
                             NotifyOnValidationError="True"
-                            StringFormat="yyyy/MM/dd"
+                            StringFormat="yyy/MM/dd"
                             Path="EndDate"
                             UpdateSourceTrigger="PropertyChanged"
+                             Converter="{StaticResource NullableDateConverter}"
                             ValidatesOnDataErrors="True">
                         </Binding>
                     </xctk:MaskedTextBox>
                 </StackPanel>
                 <DataGrid
                     x:Name="dg_Left"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="0"
                     AutoGenerateColumns="False"
                     Background="{StaticResource GridBackGround}"
@@ -231,7 +238,7 @@
                 </DataGrid>
                 <DataGrid
                     x:Name="dg_Right"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="1"
                     AutoGenerateColumns="False"
                     Background="{StaticResource GridBackGround}"
@@ -324,7 +331,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.Column="0"
                     Background="{StaticResource GridBackGround}"
                     Orientation="Horizontal">
@@ -342,7 +349,7 @@
                         Text="{Binding LeftTotal, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.Column="1"
                     Background="{StaticResource GridBackGround}"
                     Orientation="Horizontal">
