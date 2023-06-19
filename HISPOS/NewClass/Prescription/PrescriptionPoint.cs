@@ -196,9 +196,79 @@ namespace His_Pos.NewClass.Prescription
             ApplyPoint = TotalPoint - CopaymentPoint;//計算申請點數
         }
 
-        public int CopaymentValue
+        public void Count(List<Pdata> details)
         {
-            get
+            MedicinePoint = details.Count(p => p.P1.Equals("1")) > 0 ? details.Where(p => p.P1.Equals("1")).Sum(p => int.Parse(p.P9)) : 0;
+            SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+            ApplyPoint = MedicinePoint + MedicalServicePoint + SpecialMaterialPoint;//計算申請點數
+            TotalPoint = ApplyPoint + CopaymentPoint;
+        }
+
+        public int GetCopaymentValue(string institutionLevelType, bool isChronic = false)
+        {
+            //非(醫學中心or區域醫院or地區醫院or基層院所)不計算部分負擔
+            if (institutionLevelType != "1" && institutionLevelType != "2" && institutionLevelType != "3" && institutionLevelType != "4")
+                return 0;
+
+            //醫學中心or區域醫院or地區醫院第一次慢箋
+            if (institutionLevelType == "1" || institutionLevelType == "2")
+            {
+                switch (MedicinePoint)
+                {
+                    case int n when n <= 100:
+                        return 10;
+
+                    case int n when n >= 101 && n <= 200:
+                        return 20;
+
+                    case int n when n >= 201 && n <= 300:
+                        return 40;
+
+                    case int n when n >= 301 && n <= 400:
+                        return 60;
+
+                    case int n when n >= 401 && n <= 500:
+                        return 80;
+
+                    case int n when n >= 501 && n <= 600:
+                        return 100;
+
+                    case int n when n >= 601 && n <= 700:
+                        return 120;
+
+                    case int n when n >= 701 && n <= 800:
+                        return 140;
+
+                    case int n when n >= 801 && n <= 900:
+                        return 160;
+
+                    case int n when n >= 901 && n <= 1000:
+                        return 180;
+
+                    case int n when n >= 1001 && n <= 1100:
+                        return 200;
+
+                    case int n when n >= 1101 && n <= 1200:
+                        return 220;
+
+                    case int n when n >= 1201 && n <= 1300:
+                        return 240;
+
+                    case int n when n >= 1301 && n <= 1400:
+                        return 260;
+
+                    case int n when n >= 1401 && n <= 1500:
+                        return 280;
+
+                    default:
+                        return 300;
+                }
+            }
+            else if (institutionLevelType == "4" && isChronic)
+            {
+                return 0;
+            }
+            else
             {
                 switch (MedicinePoint)
                 {
@@ -236,14 +306,6 @@ namespace His_Pos.NewClass.Prescription
                         return 200;
                 }
             }
-        }
-
-        public void Count(List<Pdata> details)
-        {
-            MedicinePoint = details.Count(p => p.P1.Equals("1")) > 0 ? details.Where(p => p.P1.Equals("1")).Sum(p => int.Parse(p.P9)) : 0;
-            SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
-            ApplyPoint = MedicinePoint + MedicalServicePoint + SpecialMaterialPoint;//計算申請點數
-            TotalPoint = ApplyPoint + CopaymentPoint;
         }
     }
 }
