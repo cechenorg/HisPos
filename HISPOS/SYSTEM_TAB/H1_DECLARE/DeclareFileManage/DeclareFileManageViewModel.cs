@@ -447,20 +447,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void Refresh()
         {
-            worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
+            System.Windows.Application.Current.Dispatcher.Invoke(new Action(delegate
             {
-                MainWindow.ServerConnection.OpenConnection();
-                BusyContent = StringRes.取得歷史處方;
-                GetPrescriptions();
-                MainWindow.ServerConnection.CloseConnection();
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+                worker = new BackgroundWorker();
+                worker.DoWork += (o, ea) =>
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    BusyContent = StringRes.取得歷史處方;
+                    GetPrescriptions();
+                    MainWindow.ServerConnection.CloseConnection();
+                };
+                worker.RunWorkerCompleted += (o, ea) =>
+                {
+                    IsBusy = false;
+                };
+                IsBusy = true;
+                worker.RunWorkerAsync();
+            }));
         }
 
         private void ExportDetailAction()
@@ -470,6 +473,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             MainWindow.ServerConnection.OpenConnection();
             declarePreview.DeclarePres.AdjustMedicalServiceAndSerialNumber();
             MainWindow.ServerConnection.CloseConnection();
+            Refresh();
 
             DataTable table = PrescriptionDb.GetDuplicateExport(Convert.ToDateTime(DeclareDateStart), Convert.ToDateTime(DeclareDateEnd), SelectedPharmacy.ID);
             if (table is null || table.Rows.Count == 0)
@@ -529,7 +533,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 }
             }
         }
-
         #endregion Functions
     }
 }
