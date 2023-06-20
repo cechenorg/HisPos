@@ -368,6 +368,7 @@ namespace His_Pos.NewClass.Medicine.Base
             var errorMsg = string.Empty;
             errorMsg += CheckIDEmpty();
             errorMsg += CheckAmountZero();
+            errorMsg += CheckMedicineDaysZero();
             return errorMsg;
         }
 
@@ -386,6 +387,13 @@ namespace His_Pos.NewClass.Medicine.Base
                 return Resources.MedicineEmpty;
             return Items.Count(m => m.Amount == 0) == 0 ? string.Empty :
                 Items.Where(m => !(m is MedicineVirtual) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
+        }
+        private string CheckMedicineDaysZero()
+        {
+            if (!Items.Any())
+                return Resources.MedicineEmpty;
+            return Items.Count(m => m.Days == null ) == 0 ? string.Empty :
+                Items.Where(m => !(m is MedicineVirtual) && m.PaySelf == false &&  m.Days == null).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "給藥天數不可為空。\r\n"));
         }
 
         public void Update(bool buckle, int id, PrescriptionType type, DateTime? adjustDate = null, string wareHouseID = null)
