@@ -846,6 +846,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
                 case "TreatDateTextBox":
                     CurrentPrescription.TreatDate = DateTime.Today;
+                    if (CurrentPrescription.Medicines != null && CurrentPrescription.Medicines.Count() > 0)
+                        CurrentPrescription.MedicineDays = (int)CurrentPrescription.Medicines.Where(m => m.CanCountMedicineDays()).Max(m => m.Days);
+
+                    CurrentPrescription.CheckCopaymentRule();
+                    CurrentPrescription.CountCopaymentPoint();
                     break;
             }
         }
@@ -1051,7 +1056,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.CountPrescriptionPoint();
             CurrentPrescription.CountSelfPay();
             CurrentPrescription.PrescriptionPoint.CountAmountsPay();
+            CurrentPrescription.CountCopaymentPoint();
             CheckDeclareStatus();
+            
         }
 
         private void ShowPrescriptionEditWindowAction()
@@ -1078,6 +1085,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ID = 0;
             CheckDeclareStatus();
             CountMedicinePointAction();
+            if (CurrentPrescription.Medicines != null && CurrentPrescription.Medicines.Count() > 0)
+                CurrentPrescription.MedicineDays = (int)CurrentPrescription.Medicines.Where(m => m.CanCountMedicineDays()).Max(m => m.Days);
         }
 
         private void EditMedicineSetAction(string mode)

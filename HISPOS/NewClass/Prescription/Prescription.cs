@@ -447,6 +447,8 @@ namespace His_Pos.NewClass.Prescription
             set
             {
                 Set(() => TreatDate, ref treatDate, value);
+                CheckCopaymentRule();
+                CountCopaymentPoint();
             }
         }
 
@@ -894,8 +896,9 @@ namespace His_Pos.NewClass.Prescription
             return false;
         }
 
-        private int CountCopaymentPoint()
+        public int CountCopaymentPoint()
         {
+            DateTime date = TreatDate is null ? DateTime.Today : Convert.ToDateTime(TreatDate);
             bool isChronic = false;
             if (AdjustCase != null)
             {
@@ -904,7 +907,7 @@ namespace His_Pos.NewClass.Prescription
 
             if (!CheckFreeCopayment())
             {
-                if (DateTime.Compare(Convert.ToDateTime(TreatDate), new DateTime(2023, 7, 1)) < 0)//2023-07-01使用舊制
+                if (DateTime.Compare(date, new DateTime(2023, 7, 1)) < 0)//2023-07-01使用舊制
                 {
                     return PrescriptionPoint.GetCopaymentValueOld(Institution.LevelType, isChronic);
                 }
@@ -919,7 +922,7 @@ namespace His_Pos.NewClass.Prescription
                     PrescriptionPoint.AdministrativeAssistanceCopaymentPoint = PrescriptionPoint.CopaymentValue;
 
                 int copaymentValue = 0;
-                if (DateTime.Compare(Convert.ToDateTime(TreatDate), new DateTime(2023, 7, 1)) < 0)//2023-07-01使用舊制
+                if (DateTime.Compare(date, new DateTime(2023, 7, 1)) < 0)//2023-07-01使用舊制
                 {
                     copaymentValue = PrescriptionPoint.GetCopaymentValueOld(Institution.LevelType, isChronic);
                 }
@@ -2093,9 +2096,10 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        private void CheckCopaymentRule()
+        public void CheckCopaymentRule()
         {
-            if (DateTime.Compare(Convert.ToDateTime(TreatDate), new DateTime(2023, 7, 1)) < 0)
+            DateTime date = TreatDate is null ? DateTime.Today : Convert.ToDateTime(TreatDate);
+            if (DateTime.Compare(date, new DateTime(2023, 7, 1)) < 0)
             {
                 if (CheckIsChronic() && MedicineDays >= 28)
                     Copayment = VM.GetCopayment("I22");
@@ -2116,7 +2120,7 @@ namespace His_Pos.NewClass.Prescription
                     {
                         Copayment = VM.GetCopayment("I20");
                     }
-                    if (Institution.LevelType == "4")
+                    else if (Institution.LevelType == "4")
                     {
                         Copayment = VM.GetCopayment("I22");
                     }

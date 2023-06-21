@@ -212,6 +212,7 @@ namespace His_Pos.NewClass.Medicine.Base
             {
                 Set(() => Days, ref days, value);
                 CalculateAmount();
+                CanCountMedicineDays();
             }
         }
 
