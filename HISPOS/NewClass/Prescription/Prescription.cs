@@ -2115,8 +2115,12 @@ namespace His_Pos.NewClass.Prescription
             {
                 if (ChronicSeq == 1)
                 {
+                    if (MedicineDays < 28)
+                    {
+                        Copayment = VM.GetCopayment("I22");
+                    }
                     //醫學中心or區域醫院
-                    if (Institution.LevelType == "1" || Institution.LevelType == "2")
+                    else if (Institution.LevelType == "1" || Institution.LevelType == "2")
                     {
                         Copayment = VM.GetCopayment("I20");
                     }
