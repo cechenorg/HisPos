@@ -112,7 +112,7 @@ namespace His_Pos.FunctionWindow
                     IsAccountWrong = true;
                     return;
                 }
-                if (!isCanLogin || loginEmployee.Authority != Authority.Admin)
+                if (!isCanLogin && loginEmployee.Authority != Authority.Admin)
                 {
                     ErrMsg = "合作日期已失效，請聯絡杏德";
                     IsAccountWrong = true;
