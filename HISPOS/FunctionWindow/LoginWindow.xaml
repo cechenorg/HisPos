@@ -32,7 +32,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="32,25,0,0" Visibility="{Binding IsAccountWrong, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <materialDesign:PackIcon Kind ="Alert" Foreground="Red" Height="22" Width="22" Margin="1.5,0,1.5,6" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" />
-                    <Label Content="帳 號 或 密 碼 錯 誤" Foreground="Red" FontWeight="Bold" FontSize="20" />
+                    <Label Content="{Binding ErrMsg, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Red" FontWeight="Bold" FontSize="20" />
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
                     <Button Content="登入" Width="220" Height="45" BorderThickness="0" Background="RoyalBlue" Margin="0,30,0,0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontFamily="Microsoft YaHei UI" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Password}" Opacity="0.8" />

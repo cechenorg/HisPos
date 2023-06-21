@@ -38,6 +38,17 @@ namespace His_Pos.FunctionWindow
             set { Set(() => IsAccountWrong, ref isAccountValid, value); }
         }
 
+        private string errMsg;
+        /// <summary>
+        /// 錯誤訊息
+        /// </summary>
+        public string ErrMsg
+        {
+            get { return errMsg; }
+            set { Set(() => ErrMsg, ref errMsg, value); }
+        }
+
+
         public string Version => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         #endregion ----- Define Variables -----
@@ -73,31 +84,54 @@ namespace His_Pos.FunctionWindow
 
         private void LoginAction(object sender)
         {
-            bool isEnable = false;
+            if (string.IsNullOrEmpty(Account) || string.IsNullOrEmpty((sender as PasswordBox)?.Password))
+            {
+                ErrMsg = "請輸入帳號密碼";
+                IsAccountWrong = true;
+                return;
+            }
+
             Employee loginEmployee = _employeeService.Login(Account, (sender as PasswordBox)?.Password);
             if (loginEmployee != null)
             {
-                ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
-                isEnable = EmployeeDb.CheckEmployeeIsEnable(loginEmployee.ID);
-            }
-            if (isEnable && (isCanLogin || (loginEmployee != null && loginEmployee.Authority == Authority.Admin)))
-            {
-                if (loginEmployee.LeaveDate is null || DateTime.Compare(Convert.ToDateTime(loginEmployee.LeaveDate), DateTime.Today) >= 0)
+                if (!loginEmployee.IsEnable)
                 {
-                    NewFunction.ExceptionLog(loginEmployee.Name + " Login");
-                    MainWindow mainWindow = new MainWindow(loginEmployee);
-                    mainWindow.Show();
-                    Messenger.Default.Send(new NotificationMessage("CloseLogin"));
-                }
-                else
-                {
+                    ErrMsg = "帳號已停用";
                     IsAccountWrong = true;
+                    return;
                 }
-                
+                if (loginEmployee.Password != (sender as PasswordBox)?.Password)
+                {
+                    ErrMsg = "密碼輸入錯誤";
+                    IsAccountWrong = true;
+                    return;
+                }
+                if (loginEmployee.LeaveDate != null && DateTime.Compare(Convert.ToDateTime(loginEmployee.LeaveDate), DateTime.Today) < 0)
+                {
+                    ErrMsg = "使用者已離職，禁止登入";
+                    IsAccountWrong = true;
+                    return;
+                }
+                if (!isCanLogin || loginEmployee.Authority != Authority.Admin)
+                {
+                    ErrMsg = "合作日期已失效，請聯絡杏德";
+                    IsAccountWrong = true;
+                    return;
+                }
             }
             else
             {
+                ErrMsg = "使用者帳號不存在";
                 IsAccountWrong = true;
+                return;
+            }
+
+            if (loginEmployee != null)
+            {
+                NewFunction.ExceptionLog(loginEmployee.Name + " Login");
+                MainWindow mainWindow = new MainWindow(loginEmployee);
+                mainWindow.Show();
+                Messenger.Default.Send(new NotificationMessage("CloseLogin"));
             }
         }
 
