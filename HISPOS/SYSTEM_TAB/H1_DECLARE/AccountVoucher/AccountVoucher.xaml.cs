@@ -287,15 +287,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             viewModel.DeleteDetailAction(detail.JouDet_Type == "D" ? "0" : "1");
         }
 
-        private void TextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!(sender is TextBox textBox))
-                return;
-
-            e.Handled = true;
-            textBox.Focus();
-        }
-
         private void MaskedTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             MaskedTextBox textBox = (MaskedTextBox)sender;
@@ -303,6 +294,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountVoucher
             {
                 textBox.Text = DateTimeFormatExtention.ToTaiwanDateTime(DateTime.Today);
             }
+        }
+
+        private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            textBox.Focus();
+            textBox.SelectAll();
         }
     }
 }
