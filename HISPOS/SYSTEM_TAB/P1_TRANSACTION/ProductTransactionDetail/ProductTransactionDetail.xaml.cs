@@ -88,7 +88,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             {
                 btnDelete.IsEnabled = false;
             }
-            if (DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), dt) < 0)
+            DateTime TradeReturnDate = DateTime.Today.AddDays(ViewModelMainWindow.TradeReturnDays * -1);
+            if (DateTime.Compare(TradeReturnDate, dt) < 0)
             {
                 btnReturn.IsEnabled = true;
             }

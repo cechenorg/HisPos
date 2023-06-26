@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Setting;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -47,6 +48,12 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
                 new SettingTabData(SettingTabs.CooperativeClinic, "合作診所設定", "/Images/Cooperate.png"),
                 new SettingTabData(SettingTabs.WareHouse, "庫別設定", "/Images/StockTaking.png")
             };
+
+            List<Authority> auths = new List<Authority>() {Authority.Admin, Authority.PharmacyManager, Authority.AccountingStaff };
+            if (auths.Contains(ViewModelMainWindow.CurrentUser.Authority))
+            {
+                SettingTabCollection.Add(new SettingTabData(SettingTabs.Param, "藥局參數設定", "/Images/Management.png"));
+            }
             if (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin)
             {
                 SettingTabCollection.Add(new SettingTabData(SettingTabs.System, "其他設定", "/Images/Management.png"));
