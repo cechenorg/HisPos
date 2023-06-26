@@ -2106,6 +2106,12 @@ namespace His_Pos.NewClass.Prescription
 
         public void CheckCopaymentRule()
         {
+            if (AdjustCase != null && AdjustCase.ID == "0")
+            {
+                Copayment = VM.GetCopayment("I21");
+                return;
+            }
+
             DateTime date = TreatDate is null ? DateTime.Today : Convert.ToDateTime(TreatDate);
             if (DateTime.Compare(date, new DateTime(2023, 7, 1)) < 0)
             {
