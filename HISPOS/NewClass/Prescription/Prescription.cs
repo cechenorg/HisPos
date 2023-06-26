@@ -909,10 +909,18 @@ namespace His_Pos.NewClass.Prescription
             {
                 if (DateTime.Compare(date, new DateTime(2023, 7, 1)) < 0)//2023-07-01使用舊制
                 {
+                    if (Institution is null || Institution.LevelType is null)
+                    {
+                        return 0;
+                    }
                     return PrescriptionPoint.GetCopaymentValueOld(Institution.LevelType, isChronic);
                 }
                 else
                 {
+                    if (Institution is null || Institution.LevelType is null)
+                    {
+                        return 0;
+                    }
                     return PrescriptionPoint.GetCopaymentValue(Institution.LevelType, isChronic);
                 } 
             }
