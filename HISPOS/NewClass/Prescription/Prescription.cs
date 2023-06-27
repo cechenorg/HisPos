@@ -913,7 +913,7 @@ namespace His_Pos.NewClass.Prescription
                     {
                         return 0;
                     }
-                    return PrescriptionPoint.GetCopaymentValueOld(Institution.LevelType, isChronic);
+                    return PrescriptionPoint.GetCopaymentValueOld(isChronic);
                 }
                 else
                 {
@@ -921,8 +921,9 @@ namespace His_Pos.NewClass.Prescription
                     {
                         return 0;
                     }
-                    return PrescriptionPoint.GetCopaymentValue(Institution.LevelType, isChronic);
-                } 
+                    int seq = chronicSeq is null ? 0 : (int)chronicSeq;
+                    return PrescriptionPoint.GetCopaymentValue(Institution.LevelType, seq);
+                }
             }
             if (CheckIsAdministrativeAssistanceCopayment())
             {
@@ -932,11 +933,12 @@ namespace His_Pos.NewClass.Prescription
                 int copaymentValue = 0;
                 if (DateTime.Compare(date, new DateTime(2023, 7, 1)) < 0)//2023-07-01使用舊制
                 {
-                    copaymentValue = PrescriptionPoint.GetCopaymentValueOld(Institution.LevelType, isChronic);
+                    copaymentValue = PrescriptionPoint.GetCopaymentValueOld(isChronic);
                 }
                 else
                 {
-                    copaymentValue = PrescriptionPoint.GetCopaymentValue(Institution.LevelType, isChronic);
+                    int seq = chronicSeq is null ? 0 : (int)chronicSeq;
+                    copaymentValue = PrescriptionPoint.GetCopaymentValue(Institution.LevelType, seq);
                 }
 
                 if (copaymentValue > 0)
@@ -2152,15 +2154,12 @@ namespace His_Pos.NewClass.Prescription
                         Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
                     }
                 }
-                else
+                else//慢箋非第一次都免收
                     Copayment = VM.GetCopayment("I22");
             }
             else
             {
-                if (MedicineDays < 28)
-                    Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
-
-                Copayment = VM.GetCopayment(Institution.LevelType == "4" ? "I22" : Copayment.Id);
+                Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
             }
         }
     }

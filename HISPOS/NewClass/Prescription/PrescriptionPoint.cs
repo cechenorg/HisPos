@@ -208,17 +208,13 @@ namespace His_Pos.NewClass.Prescription
         /// <summary>
         /// 2023-07部分負擔新制
         /// </summary>
-        /// <param name="institutionLevelType"></param>
-        /// <param name="isChronic"></param>
+        /// <param name="institutionLevelType">醫療院所等級</param>
+        /// <param name="chronicSeq">慢箋領取次數</param>
         /// <returns></returns>
-        public int GetCopaymentValue(string institutionLevelType, bool isChronic = false)
+        public int GetCopaymentValue(string institutionLevelType, int chronicSeq)
         {
-            //非(醫學中心or區域醫院or地區醫院or基層院所)不計算部分負擔
-            if (institutionLevelType != "1" && institutionLevelType != "2" && institutionLevelType != "3" && institutionLevelType != "4")
-                return 0;
-
-            //醫學中心or區域醫院or地區醫院第一次慢箋
-            if (institutionLevelType == "1" || institutionLevelType == "2")
+            //(醫學中心or區域醫院) and chronicSeq = 0 一般調劑 chronicSeq = 1 慢箋第一次領藥
+            if ((institutionLevelType == "1" || institutionLevelType == "2") && chronicSeq < 2)
             {
                 switch (MedicinePoint)
                 {
@@ -271,10 +267,6 @@ namespace His_Pos.NewClass.Prescription
                         return 300;
                 }
             }
-            else if (institutionLevelType == "4")
-            {
-                return 0;
-            }
             else
             {
                 switch (MedicinePoint)
@@ -317,14 +309,10 @@ namespace His_Pos.NewClass.Prescription
         /// <summary>
         /// 部分負擔舊制
         /// </summary>
-        /// <param name="institutionLevelType"></param>
-        /// <param name="isChronic"></param>
+        /// <param name="isChronic">是否慢箋</param>
         /// <returns></returns>
-        public int GetCopaymentValueOld(string institutionLevelType, bool isChronic = false)
+        public int GetCopaymentValueOld(bool isChronic = false)
         {
-            if (institutionLevelType != "1" && institutionLevelType != "2" && institutionLevelType != "3" && institutionLevelType != "4")
-                return 0;
-
             if (isChronic)//慢箋免收
                 return 0;
 
