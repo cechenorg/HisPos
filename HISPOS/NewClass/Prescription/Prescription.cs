@@ -2118,7 +2118,12 @@ namespace His_Pos.NewClass.Prescription
                 if (CheckIsChronic() && MedicineDays >= 28)
                     Copayment = VM.GetCopayment("I22");
                 else
-                    Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
+                {
+                    if (!CheckFreeCopayment())
+                    {
+                        Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
+                    }
+                }
 
                 return;
             }
