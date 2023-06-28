@@ -2157,63 +2157,62 @@ namespace His_Pos.NewClass.Prescription
             #endregion
             #region 新制 2023/7/1
             bool isChronic = CheckIsChronic();
-
-            if (isChronic)//慢箋調劑
+            if (!CheckFreeCopayment())
             {
-                if (ChronicSeq == 1)//第一次領藥
+                if (isChronic)//慢箋調劑
                 {
-                    if (Institution.LevelType == "1" || Institution.LevelType == "2")//醫學中心、區域醫院第一次領藥不管天數須收取部分負擔
+                    if (ChronicSeq == 1)//第一次領藥
                     {
-                        Copayment = VM.GetCopayment("I20");
-                    }
-                    else
-                    {
-                        if (Institution.LevelType == "3")//地區醫院第一次領藥不管天數須收取部分負擔
+                        if (Institution.LevelType == "1" || Institution.LevelType == "2")//醫學中心、區域醫院第一次領藥不管天數須收取部分負擔
                         {
-                            Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
+                            Copayment = VM.GetCopayment("I20");
                         }
                         else
                         {
-                            if (Institution.LevelType == "4" && MedicineDays >= 28)//基層院所28天慢箋處方免收
+                            if (Institution.LevelType == "3")//地區醫院第一次領藥不管天數須收取部分負擔
+                            {
+                                Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
+                            }
+                            else
+                            {
+                                if (Institution.LevelType == "4" && MedicineDays >= 28)//基層院所28天慢箋處方免收
+                                {
+                                    Copayment = VM.GetCopayment("I22");
+                                }
+                                else//其他依藥品點數判斷
+                                {
+                                    Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
+                                }
+                            }
+                        }
+                    }
+                    else//慢箋非第一次領藥
+                    {
+                        if (Institution.LevelType == "1" || Institution.LevelType == "2")//醫學中心、區域醫院第一次領藥不管天數須收取部分負擔
+                        {
+                            if (MedicineDays >= 28)
                             {
                                 Copayment = VM.GetCopayment("I22");
                             }
-                            else//其他依藥品點數判斷
+                            else
+                            {
+                                Copayment = VM.GetCopayment("I20");
+                            }
+                        }
+                        else
+                        {
+                            if (MedicineDays >= 28)
+                            {
+                                Copayment = VM.GetCopayment("I22");
+                            }
+                            else
                             {
                                 Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
                             }
                         }
                     }
                 }
-                else//慢箋非第一次領藥
-                {
-                    if (Institution.LevelType == "1" || Institution.LevelType == "2")//醫學中心、區域醫院第一次領藥不管天數須收取部分負擔
-                    {
-                        if (MedicineDays >= 28)
-                        {
-                            Copayment = VM.GetCopayment("I22");
-                        }
-                        else
-                        {
-                            Copayment = VM.GetCopayment("I20");
-                        }
-                    }
-                    else
-                    {
-                        if (MedicineDays >= 28)
-                        {
-                            Copayment = VM.GetCopayment("I22");
-                        }
-                        else
-                        {
-                            Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
-                        }
-                    }
-                }
-            }
-            else//一般調劑
-            {
-                if (!CheckFreeCopayment())
+                else//一般調劑
                 {
                     if (Institution.LevelType == "1" || Institution.LevelType == "2")
                     {
@@ -2225,6 +2224,7 @@ namespace His_Pos.NewClass.Prescription
                     }
                 }
             }
+            
             #endregion
         }
     }
