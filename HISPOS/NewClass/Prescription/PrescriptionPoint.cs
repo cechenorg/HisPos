@@ -205,105 +205,62 @@ namespace His_Pos.NewClass.Prescription
             ApplyPoint = MedicinePoint + MedicalServicePoint + SpecialMaterialPoint;//計算申請點數
             TotalPoint = ApplyPoint + CopaymentPoint;
         }
+
         /// <summary>
         /// 2023-07部分負擔新制
         /// </summary>
-        /// <param name="institutionLevelType">醫療院所等級</param>
-        /// <param name="chronicSeq">慢箋領取次數</param>
         /// <returns></returns>
-        public int GetCopaymentValue(string institutionLevelType, int chronicSeq)
+        public int GetCopaymentValue()
         {
-            //(醫學中心or區域醫院) and chronicSeq = 0 一般調劑 chronicSeq = 1 慢箋第一次領藥
-            if ((institutionLevelType == "1" || institutionLevelType == "2") && chronicSeq < 2)
+            switch (MedicinePoint)
             {
-                switch (MedicinePoint)
-                {
-                    case int n when n <= 100:
-                        return 10;
+                case int n when n <= 100:
+                    return 10;
 
-                    case int n when n >= 101 && n <= 200:
-                        return 20;
+                case int n when n >= 101 && n <= 200:
+                    return 20;
 
-                    case int n when n >= 201 && n <= 300:
-                        return 40;
+                case int n when n >= 201 && n <= 300:
+                    return 40;
 
-                    case int n when n >= 301 && n <= 400:
-                        return 60;
+                case int n when n >= 301 && n <= 400:
+                    return 60;
 
-                    case int n when n >= 401 && n <= 500:
-                        return 80;
+                case int n when n >= 401 && n <= 500:
+                    return 80;
 
-                    case int n when n >= 501 && n <= 600:
-                        return 100;
+                case int n when n >= 501 && n <= 600:
+                    return 100;
 
-                    case int n when n >= 601 && n <= 700:
-                        return 120;
+                case int n when n >= 601 && n <= 700:
+                    return 120;
 
-                    case int n when n >= 701 && n <= 800:
-                        return 140;
+                case int n when n >= 701 && n <= 800:
+                    return 140;
 
-                    case int n when n >= 801 && n <= 900:
-                        return 160;
+                case int n when n >= 801 && n <= 900:
+                    return 160;
 
-                    case int n when n >= 901 && n <= 1000:
-                        return 180;
+                case int n when n >= 901 && n <= 1000:
+                    return 180;
 
-                    case int n when n >= 1001 && n <= 1100:
-                        return 200;
+                case int n when n >= 1001 && n <= 1100:
+                    return 200;
 
-                    case int n when n >= 1101 && n <= 1200:
-                        return 220;
+                case int n when n >= 1101 && n <= 1200:
+                    return 220;
 
-                    case int n when n >= 1201 && n <= 1300:
-                        return 240;
+                case int n when n >= 1201 && n <= 1300:
+                    return 240;
 
-                    case int n when n >= 1301 && n <= 1400:
-                        return 260;
+                case int n when n >= 1301 && n <= 1400:
+                    return 260;
 
-                    case int n when n >= 1401 && n <= 1500:
-                        return 280;
+                case int n when n >= 1401 && n <= 1500:
+                    return 280;
 
-                    default:
-                        return 300;
-                }
-            }
-            else
-            {
-                switch (MedicinePoint)
-                {
-                    case int n when n <= 100:
-                        return 0;
-
-                    case int n when n >= 101 && n <= 200:
-                        return 20;
-
-                    case int n when n >= 201 && n <= 300:
-                        return 40;
-
-                    case int n when n >= 301 && n <= 400:
-                        return 60;
-
-                    case int n when n >= 401 && n <= 500:
-                        return 80;
-
-                    case int n when n >= 501 && n <= 600:
-                        return 100;
-
-                    case int n when n >= 601 && n <= 700:
-                        return 120;
-
-                    case int n when n >= 701 && n <= 800:
-                        return 140;
-
-                    case int n when n >= 801 && n <= 900:
-                        return 160;
-
-                    case int n when n >= 901 && n <= 1000:
-                        return 180;
-
-                    default:
-                        return 200;
-                }
+                default:
+                    return 300;
             }
         }
         /// <summary>
@@ -316,6 +273,11 @@ namespace His_Pos.NewClass.Prescription
             if (isChronic)//慢箋免收
                 return 0;
 
+            return GetCopaymentValue_Old();
+        }
+
+        public int GetCopaymentValue_Old()
+        {
             switch (MedicinePoint)
             {
                 case int n when n <= 100:
