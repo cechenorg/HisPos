@@ -2157,6 +2157,9 @@ namespace His_Pos.NewClass.Prescription
             #endregion
             #region 新制 2023/7/1
             bool isChronic = CheckIsChronic();
+            if (Institution is null)
+                return;
+
             if (!CheckFreeCopayment())
             {
                 if (isChronic)//慢箋調劑
