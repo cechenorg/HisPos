@@ -557,6 +557,7 @@ namespace His_Pos.NewClass.Prescription
                 if (adjustCase == null || Medicines is null) return;
                 MedicineDays = Medicines.CountMedicineDays();
                 CheckVariableByAdjustCase();
+                CountCopaymentPoint();
             }
         }
 
@@ -897,18 +898,22 @@ namespace His_Pos.NewClass.Prescription
             if (AdjustCase != null)
             {
                 isChronic = (AdjustCase.ID == "2" && MedicineDays >= 28) ? true : false;
+
+                if (AdjustCase.ID == "0")
+                {
+                    PrescriptionPoint.CopaymentPointPayable = 0;
+                    return 0;
+                }
             }
-            if (Institution is null || Institution.LevelType is null)
+
+            if (Institution is null)
             {
-                if (Institution != null)
-                {
-                    Institution.LevelType = "4";
-                }
-                else
-                {
-                    Institution = new Institution();
-                    Institution.LevelType = "4";
-                }
+                Institution = new Institution();
+            }
+
+            if (Institution.LevelType is null)
+            {
+                Institution.LevelType = "4";
             }
             bool isChronicDay = (isChronic && seq > 1) || (Institution.LevelType == "4" && isChronic && seq == 1) ? true : false;//新制慢箋領藥2次後免收or基層院所
 
@@ -2137,6 +2142,16 @@ namespace His_Pos.NewClass.Prescription
                 return;
             }
 
+            if (Institution is null)
+            {
+                Institution = new Institution();
+            }
+
+            if (Institution.LevelType is null)
+            {
+                Institution.LevelType = "4";
+            }
+
             DateTime date = TreatDate is null ? DateTime.Today : Convert.ToDateTime(TreatDate);
             #region 舊制
             if (DateTime.Compare(date, new DateTime(2023, 7, 1)) < 0)
@@ -2157,8 +2172,6 @@ namespace His_Pos.NewClass.Prescription
             #endregion
             #region 新制 2023/7/1
             bool isChronic = CheckIsChronic();
-            if (Institution is null)
-                return;
 
             if (!CheckFreeCopayment())
             {
