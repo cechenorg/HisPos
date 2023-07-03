@@ -911,7 +911,7 @@ namespace His_Pos.NewClass.Prescription
                 Institution = new Institution();
             }
 
-            if (Institution.LevelType is null)
+            if (string.IsNullOrEmpty(Institution.LevelType))
             {
                 Institution.LevelType = "4";
             }
@@ -2147,7 +2147,7 @@ namespace His_Pos.NewClass.Prescription
                 Institution = new Institution();
             }
 
-            if (Institution.LevelType is null)
+            if (string.IsNullOrEmpty(Institution.LevelType))
             {
                 Institution.LevelType = "4";
             }
