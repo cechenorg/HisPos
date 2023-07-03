@@ -395,7 +395,7 @@
                   <TextRun>
                     <Value>=Parameters!AdjustDay.Value</Value>
                     <Style>
-                      <FontSize>34pt</FontSize>
+                      <FontSize>18pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -427,11 +427,13 @@
                     <Value>=Parameters!PatientName.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>36pt</FontSize>
+                      <FontSize>18pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style />
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
@@ -442,7 +444,7 @@
             <ZIndex>12</ZIndex>
             <Style>
               <Border />
-              <VerticalAlign>Middle</VerticalAlign>
+              <VerticalAlign>Bottom</VerticalAlign>
               <WritingMode>Vertical</WritingMode>
             </Style>
           </Textbox>
@@ -455,7 +457,7 @@
                     <Value>=Parameters!PatientName.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>36pt</FontSize>
+                      <FontSize>18pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -472,6 +474,7 @@
             <ZIndex>13</ZIndex>
             <Style>
               <Border />
+              <VerticalAlign>Bottom</VerticalAlign>
               <WritingMode>Rotate270</WritingMode>
             </Style>
           </Textbox>
@@ -484,7 +487,7 @@
                   <TextRun>
                     <Value>=Parameters!AdjustDay.Value</Value>
                     <Style>
-                      <FontSize>34pt</FontSize>
+                      <FontSize>18pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
